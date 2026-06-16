@@ -123,14 +123,17 @@ function FeatureCard({
         transition: { duration: 0.2 }
       }}
       style={{
-        background: "var(--card)",
-        border: "1px solid var(--border)",
+        background: "rgba(255, 255, 255, 0.03)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        border: "1px solid rgba(255, 255, 255, 0.08)",
         borderRadius: 14,
         position: "relative",
         overflow: "hidden",
         cursor: "default",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
       }}
-      className="p-5 md:p-[24px_22px]"
+      className="feature-card"
     >
       {/* Background glow */}
       <div
@@ -143,31 +146,32 @@ function FeatureCard({
       />
 
       <div style={{ position: "relative", zIndex: 1 }}>
-        <div
-          className="mb-3 md:mb-4"
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: 10,
-            background: `${color}15`,
-            border: `1px solid ${color}30`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Icon size={20} color={color} strokeWidth={2} />
-        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }} className="feature-header">
+          <div
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 10,
+              background: `${color}15`,
+              border: `1px solid ${color}30`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <Icon size={20} color={color} strokeWidth={2} />
+          </div>
 
-        <h3 
-          className="mb-0 md:mb-2"
-          style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text)", lineHeight: 1.3 }}
-        >
-          {title}
-        </h3>
+          <h3 
+            style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text)", margin: 0, lineHeight: 1.3 }}
+          >
+            {title}
+          </h3>
+        </div>
         <p 
-          className="hidden md:block"
-          style={{ fontSize: "0.84rem", color: "var(--text-secondary)", lineHeight: 1.6, margin: 0 }}
+          className="feature-desc"
+          style={{ fontSize: "0.84rem", color: "var(--text-secondary)", lineHeight: 1.6, margin: 0, marginTop: 12 }}
         >
           {desc}
         </p>
@@ -187,6 +191,20 @@ function FeatureCard({
         whileHover={{ scaleY: 1 }}
         transition={{ duration: 0.25 }}
       />
+
+      <style>{`
+        .feature-card {
+          padding: 24px 22px;
+        }
+        @media (max-width: 768px) {
+          .feature-card {
+            padding: 16px;
+          }
+          .feature-desc {
+            display: none;
+          }
+        }
+      `}</style>
     </motion.div>
   );
 }

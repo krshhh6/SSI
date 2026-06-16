@@ -226,8 +226,11 @@ export default function BoschAdvantage() {
                     gap: 12,
                     padding: "10px 14px",
                     borderRadius: 8,
-                    background: "var(--card)",
-                    border: "1px solid var(--border)",
+                    background: "rgba(255, 255, 255, 0.03)",
+                    backdropFilter: "blur(16px)",
+                    WebkitBackdropFilter: "blur(16px)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
                   }}
                 >
                   <motion.div

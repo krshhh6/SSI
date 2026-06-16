@@ -38,10 +38,11 @@ export default function SignInClient() {
         await signInWithEmailAndPassword(auth, email, password);
       }
       // Router push happens in useEffect when user changes
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
+      const e = err as { message?: string };
       // Clean up Firebase error messages
-      const msg = err.message || "Authentication failed.";
+      const msg = e.message || "Authentication failed.";
       if (msg.includes("email-already-in-use")) setError("This email is already registered. Please sign in.");
       else if (msg.includes("wrong-password") || msg.includes("invalid-credential")) setError("Invalid email or password.");
       else if (msg.includes("weak-password")) setError("Password should be at least 6 characters.");
@@ -55,13 +56,14 @@ export default function SignInClient() {
     try {
       setError("");
       await signInWithGoogle();
-    } catch (err: any) {
+    } catch (err) {
       console.error("Google Auth Error:", err);
-      if (err.code === "auth/unauthorized-domain") {
+      const e = err as { code?: string };
+      if (e.code === "auth/unauthorized-domain") {
         setError("Domain not authorized. Please add this URL to Firebase > Auth > Settings > Authorized domains.");
-      } else if (err.code === "auth/operation-not-allowed") {
+      } else if (e.code === "auth/operation-not-allowed") {
         setError("Google Sign-In is not enabled. Please enable it in Firebase Console.");
-      } else if (err.code === "auth/popup-closed-by-user") {
+      } else if (e.code === "auth/popup-closed-by-user") {
         setError("Sign-in popup was closed before completing.");
       } else {
         setError("Google Sign-In failed. Please try again.");

@@ -1,19 +1,33 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Phone, Menu, X, Wrench, LogIn, User, LogOut, CalendarDays } from "lucide-react";
+import { Phone, Menu, X, Wrench, LogIn, User, LogOut, CalendarDays, ChevronDown } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
 
+type NavLinkDef = {
+  label: string;
+  href: string;
+  isPage: boolean;
+  dropdown?: Omit<NavLinkDef, "dropdown">[];
+};
+
 // Links with isPage=true go to a new route; isPage=false scroll within the homepage
-const NAV_LINKS = [
+const NAV_LINKS: NavLinkDef[] = [
   { label: "Home",             href: "/",                 isPage: true  },
   { label: "Services",         href: "/#services",        isPage: false },
   { label: "Bosch Advantage",  href: "/bosch-advantage",  isPage: true  },
-  { label: "Why Different",    href: "/why-different",    isPage: true  },
-  { label: "Sustainability",   href: "/sustainability",   isPage: true  },
-  { label: "Gallery",          href: "/gallery",          isPage: true  },
+  { 
+    label: "About", 
+    href: "#", 
+    isPage: false,
+    dropdown: [
+      { label: "Why Different",    href: "/why-different",    isPage: true  },
+      { label: "Sustainability",   href: "/sustainability",   isPage: true  },
+      { label: "Gallery",          href: "/gallery",          isPage: true  },
+    ]
+  },
   { label: "Booking",          href: "/booking",          isPage: true  },
   { label: "Contact",          href: "/#contact",         isPage: false },
 ];
@@ -34,7 +48,7 @@ export default function Navbar() {
   // Close menu when route changes
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
-  const handleNavClick = (e: React.MouseEvent, link: typeof NAV_LINKS[0]) => {
+  const handleNavClick = (e: React.MouseEvent, link: Omit<NavLinkDef, "dropdown">) => {
     e.preventDefault();
     setMenuOpen(false);
 
@@ -51,7 +65,7 @@ export default function Navbar() {
     }
   };
 
-  const isActive = (link: typeof NAV_LINKS[0]) => {
+  const isActive = (link: Omit<NavLinkDef, "dropdown">) => {
     if (link.href === "/") return pathname === "/";
     return pathname.startsWith(link.href.split("#")[0]) && link.href !== "/";
   };
@@ -117,9 +131,17 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <div style={{ display: "flex", alignItems: "center", gap: 2 }} className="hidden-mobile">
-            {NAV_LINKS.map((link) => (
-              <NavLink key={link.href} link={link} active={isActive(link)} onClick={handleNavClick} />
-            ))}
+            {NAV_LINKS.map((link) => {
+              if (link.dropdown) {
+                const isDropdownActive = link.dropdown.some(sublink => isActive(sublink));
+                return (
+                  <NavDropdown key={link.label} link={link} active={isDropdownActive} onClick={handleNavClick} />
+                );
+              }
+              return (
+                <NavLink key={link.href} link={link} active={isActive(link)} onClick={handleNavClick} />
+              );
+            })}
           </div>
 
           {/* Right side */}
@@ -233,28 +255,72 @@ export default function Navbar() {
           borderBottom: "1px solid var(--glass-border)", overflow: "hidden",
         }}
       >
-        <div style={{ padding: "16px 24px 24px" }}>
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={(e) => handleNavClick(e, link)}
-              style={{
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-                width: "100%", padding: "13px 0",
-                borderBottom: "1px solid var(--border)",
-                color: isActive(link) ? "var(--accent)" : "var(--text)",
-                fontSize: "0.95rem", fontWeight: isActive(link) ? 700 : 500,
-                cursor: "pointer", fontFamily: "Inter, sans-serif",
-                textDecoration: "none",
-              }}
-            >
-              {link.label}
-              {isActive(link) && (
-                <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent)", display: "block" }} />
-              )}
-            </a>
-          ))}
+        <div style={{ padding: "16px 24px 24px", maxHeight: "calc(100vh - 72px)", overflowY: "auto" }}>
+          {NAV_LINKS.map((link) => {
+            if (link.dropdown) {
+              return (
+                <div key={link.label}>
+                  <div
+                    style={{
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      width: "100%", padding: "13px 0",
+                      borderBottom: "1px solid var(--border)",
+                      color: "var(--text-secondary)",
+                      fontSize: "0.95rem", fontWeight: 500,
+                      fontFamily: "Inter, sans-serif",
+                    }}
+                  >
+                    {link.label}
+                  </div>
+                  <div style={{ paddingLeft: 16 }}>
+                    {link.dropdown.map((sublink) => (
+                      <a
+                        key={sublink.href}
+                        href={sublink.href}
+                        onClick={(e) => handleNavClick(e, sublink)}
+                        style={{
+                          display: "flex", alignItems: "center", justifyContent: "space-between",
+                          width: "100%", padding: "10px 0",
+                          borderBottom: "1px solid var(--border)",
+                          color: isActive(sublink) ? "var(--accent)" : "var(--text)",
+                          fontSize: "0.9rem", fontWeight: isActive(sublink) ? 700 : 500,
+                          cursor: "pointer", fontFamily: "Inter, sans-serif",
+                          textDecoration: "none",
+                        }}
+                      >
+                        {sublink.label}
+                        {isActive(sublink) && (
+                          <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--accent)", display: "block" }} />
+                        )}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link)}
+                style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  width: "100%", padding: "13px 0",
+                  borderBottom: "1px solid var(--border)",
+                  color: isActive(link) ? "var(--accent)" : "var(--text)",
+                  fontSize: "0.95rem", fontWeight: isActive(link) ? 700 : 500,
+                  cursor: "pointer", fontFamily: "Inter, sans-serif",
+                  textDecoration: "none",
+                }}
+              >
+                {link.label}
+                {isActive(link) && (
+                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent)", display: "block" }} />
+                )}
+              </a>
+            );
+          })}
+
           <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 10 }}>
             <ThemeToggle />
 
@@ -329,9 +395,9 @@ export default function Navbar() {
 function NavLink({
   link, active, onClick,
 }: {
-  link: typeof NAV_LINKS[0];
+  link: Omit<NavLinkDef, "dropdown">;
   active: boolean;
-  onClick: (e: React.MouseEvent, link: typeof NAV_LINKS[0]) => void;
+  onClick: (e: React.MouseEvent, link: Omit<NavLinkDef, "dropdown">) => void;
 }) {
   return (
     <motion.a
@@ -361,5 +427,83 @@ function NavLink({
         transition={{ duration: 0.2 }}
       />
     </motion.a>
+  );
+}
+
+function NavDropdown({
+  link, active, onClick,
+}: {
+  link: NavLinkDef;
+  active: boolean;
+  onClick: (e: React.MouseEvent, link: Omit<NavLinkDef, "dropdown">) => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div 
+      style={{ position: "relative" }}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <div
+        style={{
+          background: "none", border: "none",
+          color: active ? "var(--text)" : "var(--text-secondary)",
+          fontSize: "0.82rem", fontWeight: active ? 600 : 500,
+          padding: "6px 12px", borderRadius: 6,
+          cursor: "pointer", position: "relative",
+          fontFamily: "Inter, sans-serif", letterSpacing: "0.01em",
+          display: "flex", alignItems: "center", gap: 4,
+          transition: "color 0.2s ease",
+        }}
+      >
+        {link.label}
+        <ChevronDown size={14} style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }} />
+      </div>
+
+      <motion.div
+        initial={false}
+        animate={{ opacity: open ? 1 : 0, y: open ? 0 : 10, pointerEvents: open ? "auto" : "none" }}
+        transition={{ duration: 0.2 }}
+        style={{
+          position: "absolute",
+          top: "100%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          background: "var(--card)",
+          border: "1px solid var(--border)",
+          borderRadius: 12,
+          padding: 8,
+          minWidth: 160,
+          boxShadow: "0 10px 40px rgba(0,0,0,0.3)",
+          display: "flex",
+          flexDirection: "column",
+          gap: 4,
+          zIndex: 100,
+        }}
+      >
+        {link.dropdown?.map((sublink) => (
+          <a
+            key={sublink.href}
+            href={sublink.href}
+            onClick={(e) => onClick(e, sublink)}
+            style={{
+              padding: "10px 16px",
+              borderRadius: 8,
+              color: "var(--text)",
+              fontSize: "0.85rem",
+              fontWeight: 500,
+              textDecoration: "none",
+              transition: "background 0.2s",
+              display: "block",
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-secondary)"}
+            onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+          >
+            {sublink.label}
+          </a>
+        ))}
+      </motion.div>
+    </div>
   );
 }

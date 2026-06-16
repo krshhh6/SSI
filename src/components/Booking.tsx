@@ -1,7 +1,11 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import { Send, CalendarCheck, User, Phone, Car, Wrench, MessageSquare } from "lucide-react";
+import { Send, CalendarCheck, User, Phone, Car, Wrench, MessageSquare, LogIn } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 const VEHICLE_BRANDS = [
   "Maruti Suzuki", "Hyundai", "Honda", "Toyota", "Tata",
@@ -18,6 +22,8 @@ const SERVICES = [
 export default function Booking() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const { user } = useAuth();
+  const router = useRouter();
 
   const [form, setForm] = useState({
     name: "", phone: "", brand: "", model: "",
@@ -26,10 +32,28 @@ export default function Booking() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Auto-fill name if user is signed in
+  useEffect(() => {
+    if (user?.displayName) {
+      setForm((prev) => ({ ...prev, name: prev.name || user.displayName || "" }));
+    }
+  }, [user]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1500));
+    try {
+      await addDoc(collection(db, "bookings"), {
+        ...form,
+        userId: user?.uid || "guest",
+        userEmail: user?.email || "",
+        userName: user?.displayName || form.name,
+        status: "pending",
+        createdAt: serverTimestamp(),
+      });
+    } catch (err) {
+      console.error("Firestore error:", err);
+    }
     setLoading(false);
     setSubmitted(true);
   };
@@ -157,13 +181,31 @@ export default function Booking() {
               <p style={{ color: "var(--text-secondary)", maxWidth: 380, margin: "0 auto 28px", lineHeight: 1.7 }}>
                 We&apos;ll confirm your appointment at <strong style={{ color: "var(--text)" }}>+91 90283 84499</strong> within 2 hours.
               </p>
-              <button
-                onClick={() => setSubmitted(false)}
-                className="btn-secondary"
-                style={{ margin: "0 auto" }}
-              >
-                Book Another Service
-              </button>
+              <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+                <button
+                  onClick={() => setSubmitted(false)}
+                  className="btn-secondary"
+                >
+                  Book Another Service
+                </button>
+                {user && (
+                  <motion.button
+                    onClick={() => router.push("/my-bookings")}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    style={{
+                      padding: "12px 24px", borderRadius: 10,
+                      background: "var(--accent)", color: "white",
+                      border: "none", cursor: "pointer",
+                      fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.9rem",
+                      display: "flex", alignItems: "center", gap: 8,
+                    }}
+                  >
+                    <LogIn size={16} />
+                    View My Bookings
+                  </motion.button>
+                )}
+              </div>
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit}>
@@ -341,6 +383,13 @@ export default function Booking() {
               <p style={{ textAlign: "center", color: "var(--text-muted)", fontSize: "0.8rem", marginTop: 16 }}>
                 🔒 Your information is safe. We&apos;ll confirm via WhatsApp or call within 2 hours.
               </p>
+              {!user && (
+                <div style={{ textAlign: "center", marginTop: 12, padding: "12px 16px", borderRadius: 10, background: "rgba(0,102,255,0.06)", border: "1px solid rgba(0,102,255,0.15)" }}>
+                  <span style={{ fontSize: "0.82rem", color: "var(--text-secondary)", fontFamily: "Inter, sans-serif" }}>
+                    💡 <button onClick={() => router.push("/sign-in")} style={{ background: "none", border: "none", color: "var(--accent)", cursor: "pointer", fontWeight: 600, fontSize: "0.82rem", fontFamily: "Inter, sans-serif" }}>Sign in</button> to track your booking status in real time.
+                  </span>
+                </div>
+              )}
             </form>
           )}
         </motion.div>

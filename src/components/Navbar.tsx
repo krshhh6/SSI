@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Phone, Menu, X, Wrench } from "lucide-react";
+import { Phone, Menu, X, Wrench, LogIn, User, LogOut, CalendarDays } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
+import { useAuth } from "@/context/AuthContext";
 
 // Links with isPage=true go to a new route; isPage=false scroll within the homepage
 const NAV_LINKS = [
@@ -22,6 +23,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
@@ -121,10 +123,71 @@ export default function Navbar() {
           </div>
 
           {/* Right side */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div className="hidden-mobile">
               <ThemeToggle />
             </div>
+
+            {/* Auth button — desktop */}
+            {user ? (
+              <div className="hidden-mobile" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <motion.button
+                  onClick={() => router.push("/my-bookings")}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 6,
+                    background: "rgba(0,102,255,0.08)",
+                    border: "1px solid rgba(0,102,255,0.25)",
+                    color: "var(--accent)", padding: "9px 16px", borderRadius: 7,
+                    cursor: "pointer", fontWeight: 600, fontSize: "0.82rem", letterSpacing: "0.02em",
+                    fontFamily: "Inter, sans-serif",
+                  }}
+                >
+                  {user.photoURL ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={user.photoURL} alt="" style={{ width: 20, height: 20, borderRadius: "50%", objectFit: "cover" }} />
+                  ) : (
+                    <User size={14} />
+                  )}
+                  My Bookings
+                </motion.button>
+                <motion.button
+                  onClick={async () => { await logout(); router.push("/"); }}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 6,
+                    background: "rgba(226,0,26,0.08)",
+                    border: "1px solid rgba(226,0,26,0.20)",
+                    color: "#E2001A", padding: "9px 14px", borderRadius: 7,
+                    cursor: "pointer", fontWeight: 600, fontSize: "0.82rem",
+                    fontFamily: "Inter, sans-serif",
+                  }}
+                >
+                  <LogOut size={14} />
+                </motion.button>
+              </div>
+            ) : (
+              <motion.button
+                className="hidden-mobile"
+                onClick={() => router.push("/sign-in")}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  display: "flex", alignItems: "center", gap: 6,
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  color: "var(--text)", padding: "9px 16px", borderRadius: 7,
+                  cursor: "pointer", fontWeight: 600, fontSize: "0.82rem", letterSpacing: "0.02em",
+                  fontFamily: "Inter, sans-serif",
+                }}
+              >
+                <LogIn size={14} />
+                Sign In
+              </motion.button>
+            )}
+
             <motion.a
               href="tel:+919028384499"
               className="hidden-mobile"
@@ -192,14 +255,55 @@ export default function Navbar() {
               )}
             </a>
           ))}
-          <div style={{ marginTop: 16, display: "flex", gap: 12, alignItems: "center" }}>
+          <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 10 }}>
             <ThemeToggle />
+
+            {user ? (
+              <div style={{ display: "flex", gap: 10 }}>
+                <button
+                  onClick={() => { setMenuOpen(false); router.push("/my-bookings"); }}
+                  style={{
+                    flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                    background: "rgba(0,102,255,0.08)", border: "1px solid rgba(0,102,255,0.25)",
+                    color: "var(--accent)", padding: "11px 16px", borderRadius: 7,
+                    fontWeight: 600, fontSize: "0.9rem", cursor: "pointer", fontFamily: "Inter, sans-serif",
+                  }}
+                >
+                  <CalendarDays size={16} /> My Bookings
+                </button>
+                <button
+                  onClick={async () => { setMenuOpen(false); await logout(); router.push("/"); }}
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                    background: "rgba(226,0,26,0.08)", border: "1px solid rgba(226,0,26,0.2)",
+                    color: "#E2001A", padding: "11px 16px", borderRadius: 7,
+                    fontWeight: 600, fontSize: "0.9rem", cursor: "pointer", fontFamily: "Inter, sans-serif",
+                  }}
+                >
+                  <LogOut size={16} /> Sign Out
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setMenuOpen(false); router.push("/sign-in"); }}
+                style={{
+                  display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                  background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)",
+                  color: "var(--text)", padding: "11px 20px", borderRadius: 7,
+                  fontWeight: 600, fontSize: "0.9rem", cursor: "pointer", fontFamily: "Inter, sans-serif",
+                }}
+              >
+                <LogIn size={16} /> Sign In
+              </button>
+            )}
+
             <a
               href="tel:+919028384499"
               style={{
                 flex: 1, background: "var(--bosch-red)", color: "white",
                 padding: "11px 20px", borderRadius: 7, fontWeight: 600,
                 fontSize: "0.9rem", textDecoration: "none", textAlign: "center",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
               }}
             >
               Book Service

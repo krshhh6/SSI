@@ -3,15 +3,16 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { Mail, Lock, AlertCircle } from "lucide-react";
+import { Mail, Lock, AlertCircle, User as UserIcon } from "lucide-react";
 
 export default function SignInClient() {
   const { user, loading, signInWithGoogle } = useAuth();
   const router = useRouter();
 
   const [isSignUp, setIsSignUp] = useState(false);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
@@ -29,7 +30,10 @@ export default function SignInClient() {
     setError("");
     try {
       if (isSignUp) {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        if (name) {
+          await updateProfile(userCred.user, { displayName: name });
+        }
       } else {
         await signInWithEmailAndPassword(auth, email, password);
       }
@@ -44,6 +48,24 @@ export default function SignInClient() {
       else setError("Authentication failed. Please check your details.");
     } finally {
       setAuthLoading(false);
+    }
+  };
+
+  const handleGoogleAuth = async () => {
+    try {
+      setError("");
+      await signInWithGoogle();
+    } catch (err: any) {
+      console.error("Google Auth Error:", err);
+      if (err.code === "auth/unauthorized-domain") {
+        setError("Domain not authorized. Please add this URL to Firebase > Auth > Settings > Authorized domains.");
+      } else if (err.code === "auth/operation-not-allowed") {
+        setError("Google Sign-In is not enabled. Please enable it in Firebase Console.");
+      } else if (err.code === "auth/popup-closed-by-user") {
+        setError("Sign-in popup was closed before completing.");
+      } else {
+        setError("Google Sign-In failed. Please try again.");
+      }
     }
   };
 
@@ -131,10 +153,30 @@ export default function SignInClient() {
           </p>
 
           <form onSubmit={handleEmailAuth} style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 24 }}>
-            {error && (
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} style={{ background: "rgba(226,0,26,0.1)", border: "1px solid rgba(226,0,26,0.2)", borderRadius: 10, padding: "10px 14px", display: "flex", alignItems: "center", gap: 10, color: "#ff4d4d", fontSize: "0.85rem", fontFamily: "Inter, sans-serif" }}>
-                <AlertCircle size={16} />
-                {error}
+            <AnimatePresence>
+              {error && (
+                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} style={{ overflow: "hidden" }}>
+                  <div style={{ background: "rgba(226,0,26,0.1)", border: "1px solid rgba(226,0,26,0.2)", borderRadius: 10, padding: "10px 14px", display: "flex", alignItems: "flex-start", gap: 10, color: "#ff4d4d", fontSize: "0.85rem", fontFamily: "Inter, sans-serif", lineHeight: 1.4 }}>
+                    <AlertCircle size={16} style={{ flexShrink: 0, marginTop: 2 }} />
+                    <span>{error}</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {isSignUp && (
+              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} style={{ position: "relative" }}>
+                <UserIcon size={18} color="var(--text-muted)" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }} />
+                <input
+                  type="text"
+                  required
+                  placeholder="Full Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  style={inputStyle}
+                  onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.background = "rgba(0,102,255,0.03)"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "rgba(255,255,255,0.1)"; e.target.style.background = "rgba(255,255,255,0.04)"; }}
+                />
               </motion.div>
             )}
 
@@ -212,7 +254,7 @@ export default function SignInClient() {
 
           {/* Google sign in button */}
           <motion.button
-            onClick={signInWithGoogle}
+            onClick={handleGoogleAuth}
             whileHover={{ scale: 1.02, background: "rgba(255,255,255,0.08)" }}
             whileTap={{ scale: 0.98 }}
             style={{

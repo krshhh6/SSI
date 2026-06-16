@@ -184,7 +184,7 @@ function ServiceCard({
         overflow: "hidden",
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
       }}
-      className="p-5 md:p-7 service-card"
+      className="service-card"
     >
       {/* Corner glow */}
       <div
@@ -200,40 +200,45 @@ function ServiceCard({
         }}
       />
 
-      {/* Icon */}
-      <div
-        className="mb-3 md:mb-[18px]"
-        style={{
-          width: 50,
-          height: 50,
-          borderRadius: 12,
-          background: `${color}18`,
-          border: `1px solid ${color}33`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          transition: "all 0.3s ease",
-        }}
-      >
-        <Icon size={22} color={color} strokeWidth={2} />
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }} className="service-header">
+        {/* Icon */}
+        <div
+          style={{
+            width: 50,
+            height: 50,
+            borderRadius: 12,
+            background: `${color}18`,
+            border: `1px solid ${color}33`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 0.3s ease",
+            flexShrink: 0,
+          }}
+        >
+          <Icon size={24} color={color} strokeWidth={2} />
+        </div>
+
+        <h3
+          style={{
+            fontSize: "1.05rem",
+            fontWeight: 700,
+            letterSpacing: "-0.01em",
+            color: "var(--text)",
+            margin: 0,
+            lineHeight: 1.3,
+          }}
+        >
+          {title}
+        </h3>
       </div>
 
-      <h3
-        className="text-[var(--text)] mb-0 md:mb-[10px]"
-        style={{
-          fontSize: "1rem",
-          fontWeight: 700,
-          letterSpacing: "-0.01em",
-        }}
-      >
-        {title}
-      </h3>
       <p
-        className="hidden md:block"
+        className="service-desc"
         style={{
           fontSize: "0.875rem",
           color: "var(--text-secondary)",
-          lineHeight: 1.65,
+          lineHeight: 1.6,
           margin: 0,
         }}
       >
@@ -257,9 +262,26 @@ function ServiceCard({
       />
 
       <style>{`
+        .service-card {
+          padding: 24px;
+        }
+        .service-header {
+          margin-bottom: 16px;
+        }
         .service-card:hover {
           border-color: ${color}44 !important;
           box-shadow: 0 10px 40px ${color}18, 0 0 0 1px ${color}22 !important;
+        }
+        @media (max-width: 768px) {
+          .service-card {
+            padding: 16px;
+          }
+          .service-header {
+            margin-bottom: 0;
+          }
+          .service-desc {
+            display: none;
+          }
         }
       `}</style>
     </motion.div>

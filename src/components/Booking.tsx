@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import { Send, CalendarCheck, User, Phone, Car, Wrench, MessageSquare, LogIn } from "lucide-react";
+import { Send, CalendarCheck, User, Phone, Car, Wrench, MessageSquare, LogIn, Lock } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
@@ -151,7 +151,43 @@ export default function Booking() {
             }}
           />
 
-          {submitted ? (
+          {!user ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              style={{ textAlign: "center", padding: "40px 0" }}
+            >
+              <div
+                style={{
+                  width: 80, height: 80, borderRadius: "50%",
+                  background: "rgba(0,102,255,0.08)", border: "1px solid rgba(0,102,255,0.2)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  margin: "0 auto 24px", color: "var(--accent)",
+                }}
+              >
+                <Lock size={32} />
+              </div>
+              <h3 style={{ fontSize: "1.75rem", fontWeight: 800, color: "var(--text)", marginBottom: 12, fontFamily: "Outfit, sans-serif" }}>
+                Sign In Required
+              </h3>
+              <p style={{ color: "var(--text-secondary)", maxWidth: 400, margin: "0 auto 28px", lineHeight: 1.6 }}>
+                To secure your appointment and track its status in real-time, please sign in or create an account.
+              </p>
+              <motion.button
+                onClick={() => router.push("/sign-in")}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                style={{
+                  padding: "14px 32px", borderRadius: 12, background: "var(--accent)", color: "white",
+                  border: "none", cursor: "pointer", fontFamily: "Outfit, sans-serif", fontSize: "1rem", fontWeight: 700,
+                  boxShadow: "0 8px 30px rgba(0,102,255,0.3)", display: "inline-flex", alignItems: "center", gap: 10,
+                }}
+              >
+                <LogIn size={18} />
+                Sign In / Sign Up
+              </motion.button>
+            </motion.div>
+          ) : submitted ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -188,23 +224,21 @@ export default function Booking() {
                 >
                   Book Another Service
                 </button>
-                {user && (
-                  <motion.button
-                    onClick={() => router.push("/my-bookings")}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    style={{
-                      padding: "12px 24px", borderRadius: 10,
-                      background: "var(--accent)", color: "white",
-                      border: "none", cursor: "pointer",
-                      fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.9rem",
-                      display: "flex", alignItems: "center", gap: 8,
-                    }}
-                  >
-                    <LogIn size={16} />
-                    View My Bookings
-                  </motion.button>
-                )}
+                <motion.button
+                  onClick={() => router.push("/my-bookings")}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    padding: "12px 24px", borderRadius: 10,
+                    background: "var(--accent)", color: "white",
+                    border: "none", cursor: "pointer",
+                    fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.9rem",
+                    display: "flex", alignItems: "center", gap: 8,
+                  }}
+                >
+                  <CalendarCheck size={16} />
+                  View My Bookings
+                </motion.button>
               </div>
             </motion.div>
           ) : (
@@ -383,13 +417,6 @@ export default function Booking() {
               <p style={{ textAlign: "center", color: "var(--text-muted)", fontSize: "0.8rem", marginTop: 16 }}>
                 🔒 Your information is safe. We&apos;ll confirm via WhatsApp or call within 2 hours.
               </p>
-              {!user && (
-                <div style={{ textAlign: "center", marginTop: 12, padding: "12px 16px", borderRadius: 10, background: "rgba(0,102,255,0.06)", border: "1px solid rgba(0,102,255,0.15)" }}>
-                  <span style={{ fontSize: "0.82rem", color: "var(--text-secondary)", fontFamily: "Inter, sans-serif" }}>
-                    💡 <button onClick={() => router.push("/sign-in")} style={{ background: "none", border: "none", color: "var(--accent)", cursor: "pointer", fontWeight: 600, fontSize: "0.82rem", fontFamily: "Inter, sans-serif" }}>Sign in</button> to track your booking status in real time.
-                  </span>
-                </div>
-              )}
             </form>
           )}
         </motion.div>

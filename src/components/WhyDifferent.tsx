@@ -126,11 +126,11 @@ function FeatureCard({
         background: "var(--card)",
         border: "1px solid var(--border)",
         borderRadius: 14,
-        padding: "24px 22px",
         position: "relative",
         overflow: "hidden",
         cursor: "default",
       }}
+      className="p-5 md:p-[24px_22px]"
     >
       {/* Background glow */}
       <div
@@ -144,6 +144,7 @@ function FeatureCard({
 
       <div style={{ position: "relative", zIndex: 1 }}>
         <div
+          className="mb-3 md:mb-4"
           style={{
             width: 44,
             height: 44,
@@ -153,16 +154,21 @@ function FeatureCard({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            marginBottom: 16,
           }}
         >
           <Icon size={20} color={color} strokeWidth={2} />
         </div>
 
-        <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text)", marginBottom: 8, lineHeight: 1.3 }}>
+        <h3 
+          className="mb-0 md:mb-2"
+          style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text)", lineHeight: 1.3 }}
+        >
           {title}
         </h3>
-        <p style={{ fontSize: "0.84rem", color: "var(--text-secondary)", lineHeight: 1.6, margin: 0 }}>
+        <p 
+          className="hidden md:block"
+          style={{ fontSize: "0.84rem", color: "var(--text-secondary)", lineHeight: 1.6, margin: 0 }}
+        >
           {desc}
         </p>
       </div>

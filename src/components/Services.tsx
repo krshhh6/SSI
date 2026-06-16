@@ -179,13 +179,12 @@ function ServiceCard({
         background: "var(--card)",
         border: "1px solid var(--border)",
         borderRadius: 16,
-        padding: 28,
         cursor: "default",
         position: "relative",
         overflow: "hidden",
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
       }}
-      className="service-card"
+      className="p-5 md:p-7 service-card"
     >
       {/* Corner glow */}
       <div
@@ -203,6 +202,7 @@ function ServiceCard({
 
       {/* Icon */}
       <div
+        className="mb-3 md:mb-[18px]"
         style={{
           width: 50,
           height: 50,
@@ -212,7 +212,6 @@ function ServiceCard({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginBottom: 18,
           transition: "all 0.3s ease",
         }}
       >
@@ -220,17 +219,17 @@ function ServiceCard({
       </div>
 
       <h3
+        className="text-[var(--text)] mb-0 md:mb-[10px]"
         style={{
           fontSize: "1rem",
           fontWeight: 700,
-          color: "var(--text)",
-          marginBottom: 10,
           letterSpacing: "-0.01em",
         }}
       >
         {title}
       </h3>
       <p
+        className="hidden md:block"
         style={{
           fontSize: "0.875rem",
           color: "var(--text-secondary)",

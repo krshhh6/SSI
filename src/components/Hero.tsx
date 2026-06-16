@@ -202,8 +202,8 @@ export default function Hero() {
               width: "100%",
               height: "auto",
               objectFit: "contain",
-              mixBlendMode: "luminosity",
-              filter: "drop-shadow(0 30px 80px rgba(0, 102, 255, 0.3)) drop-shadow(0 0 40px rgba(0, 0, 0, 0.5))",
+              mixBlendMode: "screen",
+              filter: "drop-shadow(0 20px 60px rgba(0, 102, 255, 0.4))",
             }}
             priority
           />
@@ -472,8 +472,8 @@ export default function Hero() {
               width: "100%",
               height: "auto",
               objectFit: "contain",
-              mixBlendMode: "luminosity",
-              filter: "drop-shadow(0 20px 50px rgba(0, 102, 255, 0.25))",
+              mixBlendMode: "screen",
+              filter: "drop-shadow(0 16px 40px rgba(0, 102, 255, 0.3))",
             }}
           />
         </div>

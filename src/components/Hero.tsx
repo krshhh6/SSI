@@ -202,8 +202,7 @@ export default function Hero() {
               width: "100%",
               height: "auto",
               objectFit: "contain",
-              mixBlendMode: "screen",
-              filter: "drop-shadow(0 20px 60px rgba(0, 102, 255, 0.4))",
+              filter: "drop-shadow(0 20px 60px rgba(0, 102, 255, 0.5))",
             }}
             priority
           />
@@ -472,8 +471,7 @@ export default function Hero() {
               width: "100%",
               height: "auto",
               objectFit: "contain",
-              mixBlendMode: "screen",
-              filter: "drop-shadow(0 16px 40px rgba(0, 102, 255, 0.3))",
+              filter: "drop-shadow(0 16px 40px rgba(0, 102, 255, 0.35))",
             }}
           />
         </div>

@@ -68,6 +68,7 @@ export default function Hero() {
         overflow: "hidden",
         background: "var(--bg)",
       }}
+      className="hero-section"
     >
       {/* Ambient Background */}
       <div
@@ -155,15 +156,16 @@ export default function Hero() {
       {/* Particles */}
       <FloatingParticles />
 
-      {/* Car render — scroll animated */}
+      {/* Car render — desktop: absolute scroll-animated | mobile: inline below text */}
       <motion.div
+        className="hero-car-desktop"
         style={{
           position: "absolute",
           right: 0,
           top: "50%",
           translateY: "-50%",
-          width: "65%",
-          maxWidth: 900,
+          width: "58%",
+          maxWidth: 860,
           x: carX,
           scale: carScale,
           opacity: rawCarOpacity,
@@ -174,7 +176,6 @@ export default function Hero() {
           pointerEvents: "none",
         }}
       >
-        {/* Car glow underneath */}
         <div
           style={{
             position: "absolute",
@@ -195,12 +196,13 @@ export default function Hero() {
           <Image
             src="/images/hero-car.png"
             alt="Premium luxury car - Bosch SAM Wheels Patna"
-            width={900}
-            height={500}
+            width={860}
+            height={480}
             style={{
               width: "100%",
               height: "auto",
               objectFit: "contain",
+              mixBlendMode: "luminosity",
               filter: "drop-shadow(0 30px 80px rgba(0, 102, 255, 0.3)) drop-shadow(0 0 40px rgba(0, 0, 0, 0.5))",
             }}
             priority
@@ -220,6 +222,7 @@ export default function Hero() {
           paddingBottom: 80,
           width: "100%",
         }}
+        className="hero-content"
       >
         <motion.div
           style={{ y: headlineY, opacity: headlineOpacity }}
@@ -310,8 +313,7 @@ export default function Hero() {
             style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 56 }}
           >
             <motion.a
-              href="#booking"
-              onClick={(e) => { e.preventDefault(); document.querySelector("#booking")?.scrollIntoView({ behavior: "smooth" }); }}
+              href="/booking"
               className="btn-primary"
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
@@ -381,6 +383,7 @@ export default function Hero() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 1.0 }}
+        className="hero-stats"
         style={{
           position: "absolute",
           bottom: 0,
@@ -396,11 +399,12 @@ export default function Hero() {
           style={{
             maxWidth: 1280,
             margin: "0 auto",
-            padding: "24px 24px",
+            padding: "20px 24px",
             display: "grid",
             gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 16,
+            gap: 12,
           }}
+          className="hero-stats-grid"
         >
           {STATS.map((stat, i) => (
             <motion.div
@@ -408,11 +412,11 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1.1 + i * 0.1 }}
-              style={{ textAlign: "center", padding: "8px 0" }}
+              style={{ textAlign: "center", padding: "6px 0" }}
             >
               <div
                 style={{
-                  fontSize: "clamp(1.5rem, 3vw, 2rem)",
+                  fontSize: "clamp(1.3rem, 3vw, 2rem)",
                   fontWeight: 900,
                   color: "var(--accent)",
                   fontFamily: "Outfit, sans-serif",
@@ -427,13 +431,53 @@ export default function Hero() {
                   decimals={stat.decimals}
                 />
               </div>
-              <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: 500 }}>
+              <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 500 }}>
                 {stat.label}
               </div>
             </motion.div>
           ))}
         </div>
       </motion.div>
+
+      {/* Mobile-only car image (shown inline below text on small screens) */}
+      <div
+        className="hero-car-mobile"
+        style={{
+          display: "none",
+          position: "relative",
+          zIndex: 3,
+          width: "100%",
+          padding: "0 16px 120px",
+          marginTop: "-20px",
+        }}
+      >
+        <div style={{ position: "relative" }}>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "5%",
+              left: "15%",
+              right: "15%",
+              height: "20px",
+              background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.3) 0%, transparent 70%)",
+              filter: "blur(15px)",
+            }}
+          />
+          <Image
+            src="/images/hero-car.png"
+            alt="Premium luxury car - Bosch SAM Wheels Patna"
+            width={600}
+            height={340}
+            style={{
+              width: "100%",
+              height: "auto",
+              objectFit: "contain",
+              mixBlendMode: "luminosity",
+              filter: "drop-shadow(0 20px 50px rgba(0, 102, 255, 0.25))",
+            }}
+          />
+        </div>
+      </div>
     </section>
   );
 }

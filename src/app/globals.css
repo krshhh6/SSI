@@ -450,7 +450,7 @@ body {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-top: 1px solid var(--border);
-  padding: 12px 16px 20px 16px; /* safe bottom padding for mobile home indicator */
+  padding: 12px 16px 20px 16px;
   box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
 }
 
@@ -465,3 +465,54 @@ body {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 24px var(--accent-glow);
   }
 }
+
+/* ─── Hero Mobile Layout ─────────────────────────── */
+@media (max-width: 768px) {
+  /* Stack hero vertically on mobile */
+  .hero-section {
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: auto;
+    padding-bottom: 0;
+  }
+
+  /* Hero text block: full width, reduced top padding */
+  .hero-content {
+    padding-top: 90px !important;
+    padding-bottom: 24px !important;
+  }
+
+  /* Hide desktop absolute-positioned car on mobile */
+  .hero-car-desktop {
+    display: none !important;
+  }
+
+  /* Show the inline mobile car block */
+  .hero-car-mobile {
+    display: block !important;
+  }
+
+  /* Stats bar: 2-column grid on mobile */
+  .hero-stats {
+    position: relative !important;
+    bottom: auto !important;
+  }
+
+  .hero-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    padding: 16px !important;
+  }
+}
+
+/* ─── Sub-page hero padding ─────────────────────── */
+.subpage-hero {
+  padding-top: 100px;
+}
+
+@media (max-width: 768px) {
+  .subpage-hero {
+    padding-top: 80px;
+  }
+}
+

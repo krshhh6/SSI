@@ -105,11 +105,11 @@ export default function Navbar() {
             >
               <Wrench size={18} color="white" strokeWidth={2.5} />
             </div>
-            <div>
+            <div style={{ whiteSpace: "nowrap" }}>
               <div style={{ fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.06em", color: "var(--text)", lineHeight: 1.1, fontFamily: "Outfit, sans-serif" }}>
                 BOSCH CAR SERVICE
               </div>
-              <div style={{ fontSize: "0.65rem", fontWeight: 500, letterSpacing: "0.12em", color: "var(--accent)", lineHeight: 1, textTransform: "uppercase" }}>
+              <div style={{ fontSize: "0.65rem", fontWeight: 500, letterSpacing: "0.12em", color: "var(--accent)", lineHeight: 1, textTransform: "uppercase", marginTop: 2 }}>
                 SAM Wheels Pvt Ltd
               </div>
             </div>

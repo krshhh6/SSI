@@ -118,6 +118,28 @@ export default function AdminClient() {
   const [offlineLoading, setOfflineLoading] = useState(false);
   const [offlineSuccess, setOfflineSuccess] = useState("");
 
+  // Edit booking form state
+  const [editBookingId, setEditBookingId] = useState("");
+  const [editForm, setEditForm] = useState({
+    name: "", phone: "", brand: "", model: "", service: "", date: "", status: "pending" as Booking["status"]
+  });
+  const [editLoading, setEditLoading] = useState(false);
+  const [editSuccess, setEditSuccess] = useState("");
+
+  // Populate edit form when a booking is selected
+  useEffect(() => {
+    const b = bookings.find(x => x.id === editBookingId);
+    if (b) {
+      setEditForm({
+        name: b.name || "", phone: b.phone || "", brand: b.brand || "", 
+        model: b.model || "", service: b.service || "", date: b.date || "", 
+        status: b.status || "pending"
+      });
+    } else {
+      setEditForm({ name: "", phone: "", brand: "", model: "", service: "", date: "", status: "pending" });
+    }
+  }, [editBookingId, bookings]);
+
   // Auth listener
   useEffect(() => {
     const unsub = auth.onAuthStateChanged(u => {
@@ -204,6 +226,26 @@ export default function AdminClient() {
       alert("Error adding offline booking: " + (err instanceof Error ? err.message : String(err)));
     }
     setOfflineLoading(false);
+  };
+
+  const submitEditBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editBookingId) return;
+    if (editForm.phone.length !== 10) {
+      alert("Please enter exactly 10 digits for the phone number.");
+      return;
+    }
+    setEditLoading(true);
+    setEditSuccess("");
+    try {
+      await updateDoc(doc(db, "bookings", editBookingId), editForm);
+      setEditSuccess("Booking successfully updated!");
+      loadData();
+      setTimeout(() => setEditSuccess(""), 4000);
+    } catch (err: unknown) {
+      alert("Error updating booking: " + (err instanceof Error ? err.message : String(err)));
+    }
+    setEditLoading(false);
   };
 
   // Stats
@@ -805,19 +847,84 @@ service cloud.firestore {
                 </form>
               </GlassCard>
 
-              {/* More settings placeholders */}
-              <GlassCard title="⚙️ System Settings">
-                <div style={{ display: "flex", flexDirection: "column", gap: 16, opacity: 0.5 }}>
-                  <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.6)" }}>Additional website and app settings can be configured here in future updates.</p>
-                  <div style={{ padding: "16px", borderRadius: 12, border: "1px dashed rgba(255,255,255,0.2)" }}>
-                    <h4 style={{ margin: "0 0 4px 0", fontSize: "0.9rem" }}>Website Content</h4>
-                    <span style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)" }}>Coming soon</span>
+              {/* Edit Existing Booking */}
+              <GlassCard title="✏️ Edit Existing Booking">
+                <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.5)", marginBottom: 20 }}>
+                  Select an existing booking from the list to modify its details. All changes will be saved to the database instantly.
+                </p>
+
+                {editSuccess && (
+                  <div style={{ padding: "12px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", color: "#10B981", borderRadius: 8, fontSize: "0.85rem", marginBottom: 16 }}>
+                    ✓ {editSuccess}
                   </div>
-                  <div style={{ padding: "16px", borderRadius: 12, border: "1px dashed rgba(255,255,255,0.2)" }}>
-                    <h4 style={{ margin: "0 0 4px 0", fontSize: "0.9rem" }}>Pricing Configuration</h4>
-                    <span style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)" }}>Coming soon</span>
-                  </div>
+                )}
+
+                <div style={{ marginBottom: 16 }}>
+                  <select value={editBookingId} onChange={e => setEditBookingId(e.target.value)}
+                    style={{ width: "100%", padding: "12px 16px", borderRadius: 10, background: "rgba(0,102,255,0.1)", border: "1px solid rgba(0,102,255,0.3)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
+                    <option value="" style={{ color: "black" }}>-- Select a Booking to Edit --</option>
+                    {bookings.slice().sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)).map(b => (
+                      <option key={b.id} value={b.id} style={{ color: "black" }}>
+                        {b.name} - {b.service} ({b.date || "No date"})
+                      </option>
+                    ))}
+                  </select>
                 </div>
+
+                {editBookingId ? (
+                  <form onSubmit={submitEditBooking} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                      <input required placeholder="Customer Name" value={editForm.name} onChange={e => setEditForm({...editForm, name: e.target.value})}
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                      <input required placeholder="Phone Number" value={editForm.phone} 
+                        onChange={e => {
+                          const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+                          setEditForm({...editForm, phone: val});
+                        }}
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                    </div>
+                    
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                      <input required placeholder="Car Brand (e.g. BMW)" value={editForm.brand} onChange={e => setEditForm({...editForm, brand: e.target.value})}
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                      <input required placeholder="Car Model (e.g. X5)" value={editForm.model} onChange={e => setEditForm({...editForm, model: e.target.value})}
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                    </div>
+
+                    <select required value={editForm.service} onChange={e => setEditForm({...editForm, service: e.target.value})}
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
+                      <option value="" disabled style={{ color: "black" }}>Select Service Type</option>
+                      <option value="Periodic Maintenance" style={{ color: "black" }}>Periodic Maintenance</option>
+                      <option value="AC Service & Repair" style={{ color: "black" }}>AC Service & Repair</option>
+                      <option value="Denting & Painting" style={{ color: "black" }}>Denting & Painting</option>
+                      <option value="Engine Diagnostics" style={{ color: "black" }}>Engine Diagnostics</option>
+                      <option value="Wheel Care" style={{ color: "black" }}>Wheel Care</option>
+                      <option value="Car Detailing" style={{ color: "black" }}>Car Detailing</option>
+                      <option value="Other / Custom Service" style={{ color: "black" }}>Other / Custom Service</option>
+                    </select>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                      <input type="date" required value={editForm.date} onChange={e => setEditForm({...editForm, date: e.target.value})}
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }} />
+                      <select required value={editForm.status} onChange={e => setEditForm({...editForm, status: e.target.value as Booking["status"]})}
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
+                        <option value="pending" style={{ color: "black" }}>Status: Pending</option>
+                        <option value="confirmed" style={{ color: "black" }}>Status: Confirmed</option>
+                        <option value="completed" style={{ color: "black" }}>Status: Completed</option>
+                        <option value="cancelled" style={{ color: "black" }}>Status: Cancelled</option>
+                      </select>
+                    </div>
+
+                    <button type="submit" disabled={editLoading}
+                      style={{ padding: "14px", borderRadius: 10, background: "#10B981", border: "none", color: "white", fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.95rem", cursor: editLoading ? "wait" : "pointer", marginTop: 8 }}>
+                      {editLoading ? "Saving..." : "Save Changes"}
+                    </button>
+                  </form>
+                ) : (
+                  <div style={{ padding: "40px 0", textAlign: "center", opacity: 0.5 }}>
+                    <p style={{ fontSize: "0.85rem" }}>Select a booking above to edit its details.</p>
+                  </div>
+                )}
               </GlassCard>
             </div>
           </motion.div>

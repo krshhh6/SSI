@@ -3,7 +3,7 @@ import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import {
-  collection, getDocs, doc, updateDoc, query, orderBy, deleteDoc, Timestamp,
+  collection, getDocs, doc, updateDoc, query, orderBy, deleteDoc, Timestamp, addDoc,
 } from "firebase/firestore";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
@@ -11,7 +11,7 @@ import {
   LayoutDashboard, Users, CalendarDays, LogOut, Search, RefreshCw,
   Trash2, CheckCircle2, Clock, XCircle, AlertCircle, Wrench, Mail,
   Phone, Car, Eye, Download, Bell, TrendingUp, Filter, X,
-  MessageSquare, ChevronDown, ChevronUp,
+  MessageSquare, ChevronDown, ChevronUp, Settings,
 } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip,
@@ -97,7 +97,7 @@ export default function AdminClient() {
   const [loginError, setLoginError] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-  const [tab, setTab] = useState<"overview" | "bookings" | "users" | "analytics">("overview");
+  const [tab, setTab] = useState<"overview" | "bookings" | "users" | "analytics" | "advanced">("overview");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [users, setUsers] = useState<UserRecord[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
@@ -110,6 +110,13 @@ export default function AdminClient() {
   const [sortField, setSortField] = useState<"createdAt" | "name" | "date">("createdAt");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [notifOpen, setNotifOpen] = useState(false);
+
+  // Offline booking form state
+  const [offlineForm, setOfflineForm] = useState({
+    name: "", phone: "", brand: "", model: "", service: "", date: "", status: "completed" as Booking["status"]
+  });
+  const [offlineLoading, setOfflineLoading] = useState(false);
+  const [offlineSuccess, setOfflineSuccess] = useState("");
 
   // Auth listener
   useEffect(() => {
@@ -164,6 +171,35 @@ export default function AdminClient() {
     await deleteDoc(doc(db, "bookings", id));
     setBookings(prev => prev.filter(b => b.id !== id));
     setSelectedBooking(null);
+  };
+
+  const submitOfflineBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setOfflineLoading(true);
+    setOfflineSuccess("");
+    try {
+      // 1. Create a placeholder user if they don't exist
+      const userRef = await addDoc(collection(db, "users"), {
+        name: offlineForm.name,
+        email: "offline_customer@local",
+        role: "offline_user",
+        createdAt: Timestamp.now()
+      });
+      // 2. Create the booking
+      await addDoc(collection(db, "bookings"), {
+        ...offlineForm,
+        message: "Manually added by Admin",
+        userId: userRef.id,
+        userEmail: "offline_customer@local",
+        createdAt: Timestamp.now()
+      });
+      setOfflineSuccess("Offline booking and customer successfully added!");
+      setOfflineForm({ name: "", phone: "", brand: "", model: "", service: "", date: "", status: "completed" });
+      loadData(); // Refresh everything
+    } catch (err: unknown) {
+      alert("Error adding offline booking: " + (err instanceof Error ? err.message : String(err)));
+    }
+    setOfflineLoading(false);
   };
 
   // Stats
@@ -314,6 +350,7 @@ export default function AdminClient() {
               { id: "bookings",  label: "Bookings",  icon: CalendarDays    },
               { id: "users",     label: "Users",     icon: Users           },
               { id: "analytics", label: "Analytics", icon: TrendingUp      },
+              { id: "advanced",  label: "Advanced",  icon: Settings        },
             ] as const).map(item => (
               <button key={item.id} onClick={() => setTab(item.id)}
                 style={{ padding: "7px 14px", borderRadius: 8, border: "none", background: tab === item.id ? "rgba(255,255,255,0.1)" : "transparent", color: tab === item.id ? "white" : "rgba(255,255,255,0.45)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", display: "flex", alignItems: "center", gap: 7, transition: "all 0.2s" }}>
@@ -695,6 +732,86 @@ service cloud.firestore {
                 ))}
               </div>
             </GlassCard>
+          </motion.div>
+        )}
+
+        {/* ────────────────────── ADVANCED ────────────────────── */}
+        {tab === "advanced" && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+              
+              {/* Add Offline Booking */}
+              <GlassCard title="➕ Record Offline Booking & Customer">
+                <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.5)", marginBottom: 20 }}>
+                  Manually register walk-in or call-in customers. This automatically creates a customer profile and adds their appointment to the bookings list and analytics.
+                </p>
+                
+                {offlineSuccess && (
+                  <div style={{ padding: "12px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", color: "#10B981", borderRadius: 8, fontSize: "0.85rem", marginBottom: 16 }}>
+                    ✓ {offlineSuccess}
+                  </div>
+                )}
+
+                <form onSubmit={submitOfflineBooking} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                    <input required placeholder="Customer Name" value={offlineForm.name} onChange={e => setOfflineForm({...offlineForm, name: e.target.value})}
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                    <input required placeholder="Phone Number" value={offlineForm.phone} onChange={e => setOfflineForm({...offlineForm, phone: e.target.value})}
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                  </div>
+                  
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                    <input required placeholder="Car Brand (e.g. BMW)" value={offlineForm.brand} onChange={e => setOfflineForm({...offlineForm, brand: e.target.value})}
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                    <input required placeholder="Car Model (e.g. X5)" value={offlineForm.model} onChange={e => setOfflineForm({...offlineForm, model: e.target.value})}
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                  </div>
+
+                  <select required value={offlineForm.service} onChange={e => setOfflineForm({...offlineForm, service: e.target.value})}
+                    style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
+                    <option value="" disabled style={{ color: "black" }}>Select Service Type</option>
+                    <option value="Periodic Maintenance" style={{ color: "black" }}>Periodic Maintenance</option>
+                    <option value="AC Service & Repair" style={{ color: "black" }}>AC Service & Repair</option>
+                    <option value="Denting & Painting" style={{ color: "black" }}>Denting & Painting</option>
+                    <option value="Engine Diagnostics" style={{ color: "black" }}>Engine Diagnostics</option>
+                    <option value="Wheel Care" style={{ color: "black" }}>Wheel Care</option>
+                    <option value="Car Detailing" style={{ color: "black" }}>Car Detailing</option>
+                    <option value="Other / Custom Service" style={{ color: "black" }}>Other / Custom Service</option>
+                  </select>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                    <input type="date" required value={offlineForm.date} onChange={e => setOfflineForm({...offlineForm, date: e.target.value})}
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }} />
+                    <select required value={offlineForm.status} onChange={e => setOfflineForm({...offlineForm, status: e.target.value as Booking["status"]})}
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
+                      <option value="pending" style={{ color: "black" }}>Status: Pending</option>
+                      <option value="confirmed" style={{ color: "black" }}>Status: Confirmed</option>
+                      <option value="completed" style={{ color: "black" }}>Status: Completed</option>
+                    </select>
+                  </div>
+
+                  <button type="submit" disabled={offlineLoading}
+                    style={{ padding: "14px", borderRadius: 10, background: "#0066FF", border: "none", color: "white", fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.95rem", cursor: offlineLoading ? "wait" : "pointer", marginTop: 8 }}>
+                    {offlineLoading ? "Adding..." : "Add Offline Booking"}
+                  </button>
+                </form>
+              </GlassCard>
+
+              {/* More settings placeholders */}
+              <GlassCard title="⚙️ System Settings">
+                <div style={{ display: "flex", flexDirection: "column", gap: 16, opacity: 0.5 }}>
+                  <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.6)" }}>Additional website and app settings can be configured here in future updates.</p>
+                  <div style={{ padding: "16px", borderRadius: 12, border: "1px dashed rgba(255,255,255,0.2)" }}>
+                    <h4 style={{ margin: "0 0 4px 0", fontSize: "0.9rem" }}>Website Content</h4>
+                    <span style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)" }}>Coming soon</span>
+                  </div>
+                  <div style={{ padding: "16px", borderRadius: 12, border: "1px dashed rgba(255,255,255,0.2)" }}>
+                    <h4 style={{ margin: "0 0 4px 0", fontSize: "0.9rem" }}>Pricing Configuration</h4>
+                    <span style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)" }}>Coming soon</span>
+                  </div>
+                </div>
+              </GlassCard>
+            </div>
           </motion.div>
         )}
       </main>

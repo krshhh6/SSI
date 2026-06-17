@@ -609,17 +609,17 @@ service cloud.firestore {
                   onFocus={e => e.target.style.borderColor = "rgba(0,102,255,0.5)"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.08)"} />
               </div>
               <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-                style={{ padding: "13px 16px", borderRadius: 12, border: "1px solid var(--border)", background: "rgba(20,20,25,0.9)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", cursor: "pointer", outline: "none" }}>
-                <option value="all">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="confirmed">Confirmed</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
+                style={{ padding: "13px 16px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", cursor: "pointer", outline: "none", colorScheme: "inherit" }}>
+                <option value="all" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>All Status</option>
+                <option value="pending" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Pending</option>
+                <option value="confirmed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Confirmed</option>
+                <option value="completed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Completed</option>
+                <option value="cancelled" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Cancelled</option>
               </select>
               <div style={{ position: "relative" }}>
                 <Filter size={14} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
                 <input type="date" value={dateFilter} onChange={e => setDateFilter(e.target.value)}
-                  style={{ paddingLeft: 34, paddingRight: 12, paddingTop: 13, paddingBottom: 13, borderRadius: 12, border: "1px solid var(--border)", background: "rgba(20,20,25,0.9)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", cursor: "pointer", outline: "none",  }} />
+                  style={{ paddingLeft: 34, paddingRight: 12, paddingTop: 13, paddingBottom: 13, borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", cursor: "pointer", outline: "none", colorScheme: "inherit" }} />
               </div>
               {(search || statusFilter !== "all" || dateFilter) && (
                 <button onClick={() => { setSearch(""); setStatusFilter("all"); setDateFilter(""); }}
@@ -628,7 +628,7 @@ service cloud.firestore {
                 </button>
               )}
               <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.85rem" }}>{filtered.length} results</span>
+                <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>{filtered.length} results</span>
                 <button onClick={() => exportCSV(filtered)}
                   style={{ padding: "11px 16px", borderRadius: 12, border: "1px solid rgba(0,200,150,0.25)", background: "rgba(0,200,150,0.08)", color: "#00C896", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", display: "flex", alignItems: "center", gap: 7 }}>
                   <Download size={14} />Export CSV

@@ -13,6 +13,7 @@ import {
   Phone, Car, Eye, Download, Bell, TrendingUp, Filter, X,
   MessageSquare, ChevronDown, ChevronUp, Settings,
 } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip,
   ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, CartesianGrid,
@@ -414,6 +415,9 @@ export default function AdminClient() {
               {stats.todayCount} today
             </div>
           )}
+
+          {/* Theme Toggle */}
+          <ThemeToggle />
 
           {/* Notification bell */}
           <div style={{ position: "relative" }}>

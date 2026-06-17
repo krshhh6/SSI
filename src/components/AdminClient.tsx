@@ -340,17 +340,17 @@ export default function AdminClient() {
 
   // ─── LOGIN ───────────────────────────────────────────────────────────────
   if (!authed) return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#050505", padding: 24, position: "relative", overflow: "hidden" }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 24, position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", top: "5%", left: "5%", width: 600, height: 600, background: "radial-gradient(circle, rgba(0,102,255,0.07) 0%, transparent 60%)", filter: "blur(60px)", borderRadius: "50%", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: "5%", right: "5%", width: 500, height: 500, background: "radial-gradient(circle, rgba(226,0,26,0.05) 0%, transparent 60%)", filter: "blur(60px)", borderRadius: "50%", pointerEvents: "none" }} />
-      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} style={{ width: "100%", maxWidth: 420, background: "rgba(15,17,21,0.65)", backdropFilter: "blur(40px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 32, padding: "48px 40px", position: "relative", zIndex: 10, boxShadow: "0 24px 80px rgba(0,0,0,0.5)" }}>
+      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} style={{ width: "100%", maxWidth: 420, background: "var(--card)", backdropFilter: "blur(40px)", border: "1px solid var(--border)", borderRadius: 32, padding: "48px 40px", position: "relative", zIndex: 10, boxShadow: "0 24px 80px rgba(0,0,0,0.5)" }}>
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "linear-gradient(90deg, #E2001A, #0066FF)", borderRadius: "32px 32px 0 0" }} />
         <div style={{ textAlign: "center", marginBottom: 36 }}>
           <div style={{ width: 60, height: 60, borderRadius: 16, background: "var(--bosch-red)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", boxShadow: "0 0 32px rgba(226,0,26,0.4)" }}>
             <Wrench size={28} color="white" />
           </div>
-          <h1 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.9rem", color: "white", marginBottom: 6 }}>Admin Portal</h1>
-          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.9rem" }}>SAM Wheels · Bosch Car Service</p>
+          <h1 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.9rem", color: "var(--text)", marginBottom: 6 }}>Admin Portal</h1>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>SAM Wheels · Bosch Car Service</p>
         </div>
         {loginError && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 12, padding: "12px 16px", marginBottom: 24, display: "flex", alignItems: "center", gap: 8, color: "#EF4444", fontSize: "0.85rem" }}>
@@ -359,13 +359,13 @@ export default function AdminClient() {
         )}
         <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <input type="email" required value={emailInput} onChange={e => setEmailInput(e.target.value)} placeholder="Admin Email Address"
-            style={{ width: "100%", padding: "15px 18px", borderRadius: 12, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "white", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none" }}
+            style={{ width: "100%", padding: "15px 18px", borderRadius: 12, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none" }}
             onFocus={e => { e.target.style.borderColor = "var(--accent)"; }} onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.1)"; }} />
           <input type="password" required value={passwordInput} onChange={e => setPasswordInput(e.target.value)} placeholder="Password"
-            style={{ width: "100%", padding: "15px 18px", borderRadius: 12, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "white", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none" }}
+            style={{ width: "100%", padding: "15px 18px", borderRadius: 12, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none" }}
             onFocus={e => { e.target.style.borderColor = "var(--accent)"; }} onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.1)"; }} />
           <motion.button type="submit" disabled={loginLoading} whileHover={!loginLoading ? { scale: 1.01 } : {}} whileTap={!loginLoading ? { scale: 0.99 } : {}}
-            style={{ marginTop: 8, padding: "16px", borderRadius: 12, background: loginLoading ? "rgba(226,0,26,0.5)" : "#E2001A", color: "white", border: "none", cursor: loginLoading ? "wait" : "pointer", fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1rem", letterSpacing: "0.06em", boxShadow: "0 8px 28px rgba(226,0,26,0.35)" }}>
+            style={{ marginTop: 8, padding: "16px", borderRadius: 12, background: loginLoading ? "rgba(226,0,26,0.5)" : "#E2001A", color: "var(--text)", border: "none", cursor: loginLoading ? "wait" : "pointer", fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1rem", letterSpacing: "0.06em", boxShadow: "0 8px 28px rgba(226,0,26,0.35)" }}>
             {loginLoading ? "Authenticating…" : "Sign In to Admin"}
           </motion.button>
         </form>
@@ -376,19 +376,19 @@ export default function AdminClient() {
 
   // ─── DASHBOARD ───────────────────────────────────────────────────────────
   return (
-    <div style={{ minHeight: "100vh", background: "#050505", color: "white" }}>
+    <div style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
       {/* Background glows */}
       <div style={{ position: "fixed", top: "-10%", right: "-5%", width: "60vw", height: "60vw", background: "radial-gradient(circle, rgba(0,102,255,0.025) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
 
       {/* ── NAV ── */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(5,5,5,0.8)", backdropFilter: "blur(24px)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "0 28px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(5,5,5,0.8)", backdropFilter: "blur(24px)", borderBottom: "1px solid var(--border)", padding: "0 28px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         {/* Left */}
         <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: "#E2001A", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 14px rgba(226,0,26,0.4)" }}>
               <Wrench size={16} color="white" />
             </div>
-            <span style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "0.95rem", color: "white", letterSpacing: "0.04em" }}>SAM WHEELS ADMIN</span>
+            <span style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "0.95rem", color: "var(--text)", letterSpacing: "0.04em" }}>SAM WHEELS ADMIN</span>
           </div>
           {/* Tabs */}
           <div style={{ display: "flex", gap: 4 }}>
@@ -422,10 +422,10 @@ export default function AdminClient() {
           {/* Notification bell */}
           <div style={{ position: "relative" }}>
             <button onClick={() => setNotifOpen(o => !o)}
-              style={{ width: 36, height: 36, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", position: "relative" }}>
+              style={{ width: 36, height: 36, borderRadius: "50%", border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", position: "relative" }}>
               <Bell size={16} />
               {pendingBookings.length > 0 && (
-                <span style={{ position: "absolute", top: -3, right: -3, width: 16, height: 16, borderRadius: "50%", background: "#F59E0B", color: "white", fontSize: "0.6rem", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ position: "absolute", top: -3, right: -3, width: 16, height: 16, borderRadius: "50%", background: "#F59E0B", color: "var(--text)", fontSize: "0.6rem", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {pendingBookings.length > 9 ? "9+" : pendingBookings.length}
                 </span>
               )}
@@ -433,26 +433,26 @@ export default function AdminClient() {
             <AnimatePresence>
               {notifOpen && (
                 <motion.div initial={{ opacity: 0, y: 8, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.97 }}
-                  style={{ position: "absolute", right: 0, top: 46, width: 320, background: "rgba(15,17,21,0.95)", backdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 16, overflow: "hidden", boxShadow: "0 16px 40px rgba(0,0,0,0.5)", zIndex: 200 }}>
-                  <div style={{ padding: "14px 18px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  style={{ position: "absolute", right: 0, top: 46, width: 320, background: "var(--card)", backdropFilter: "blur(24px)", border: "1px solid var(--border)", borderRadius: 16, overflow: "hidden", boxShadow: "0 16px 40px rgba(0,0,0,0.5)", zIndex: 200 }}>
+                  <div style={{ padding: "14px 18px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <span style={{ fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "0.95rem" }}>Pending Bookings</span>
-                    <button onClick={() => setNotifOpen(false)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", cursor: "pointer" }}><X size={15} /></button>
+                    <button onClick={() => setNotifOpen(false)} style={{ background: "none", border: "none", color: "var(--text-secondary)", cursor: "pointer" }}><X size={15} /></button>
                   </div>
                   {pendingBookings.length === 0 ? (
                     <div style={{ padding: "24px", textAlign: "center", color: "rgba(255,255,255,0.35)", fontSize: "0.88rem" }}>All caught up! ✓</div>
                   ) : (
                     <div style={{ maxHeight: 280, overflowY: "auto" }}>
                       {pendingBookings.slice(0, 6).map(b => (
-                        <div key={b.id} onClick={() => { setSelectedBooking(b); setNotifOpen(false); }} style={{ padding: "12px 18px", borderBottom: "1px solid rgba(255,255,255,0.04)", cursor: "pointer", transition: "background 0.15s" }}
+                        <div key={b.id} onClick={() => { setSelectedBooking(b); setNotifOpen(false); }} style={{ padding: "12px 18px", borderBottom: "1px solid var(--border)", cursor: "pointer", transition: "background 0.15s" }}
                           onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.04)"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                          <div style={{ fontWeight: 600, fontSize: "0.88rem", color: "white", marginBottom: 3 }}>{b.name}</div>
-                          <div style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.4)" }}>{b.service} · {b.brand} {b.model}</div>
+                          <div style={{ fontWeight: 600, fontSize: "0.88rem", color: "var(--text)", marginBottom: 3 }}>{b.name}</div>
+                          <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)" }}>{b.service} · {b.brand} {b.model}</div>
                         </div>
                       ))}
                     </div>
                   )}
-                  <div style={{ padding: "12px 18px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                  <div style={{ padding: "12px 18px", borderTop: "1px solid var(--border)" }}>
                     <button onClick={() => { setTab("bookings"); setStatusFilter("pending"); setNotifOpen(false); }}
                       style={{ width: "100%", padding: "8px", borderRadius: 8, border: "none", background: "rgba(245,158,11,0.12)", color: "#F59E0B", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.82rem", cursor: "pointer" }}>
                       View All Pending →
@@ -463,11 +463,11 @@ export default function AdminClient() {
             </AnimatePresence>
           </div>
 
-          <button onClick={loadData} style={{ width: 36, height: 36, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+          <button onClick={loadData} style={{ width: 36, height: 36, borderRadius: "50%", border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
             <RefreshCw size={15} className={dataLoading ? "animate-spin" : ""} />
           </button>
 
-          <div style={{ width: 1, height: 24, background: "rgba(255,255,255,0.1)" }} />
+          <div style={{ width: 1, height: 24, background: "var(--border)" }} />
 
           <button onClick={handleLogout} style={{ padding: "8px 16px", borderRadius: 100, border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.08)", color: "#EF4444", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", display: "flex", alignItems: "center", gap: 7 }}>
             <LogOut size={14} />Sign Out
@@ -487,7 +487,7 @@ export default function AdminClient() {
                 <>
                   <div style={{ fontWeight: 700, fontSize: "1rem", color: "#EF4444", marginBottom: 8, fontFamily: "Outfit, sans-serif" }}>Firestore Rules Not Published</div>
                   <p style={{ color: "rgba(255,180,180,0.9)", fontSize: "0.88rem", marginBottom: 12 }}>Firebase is blocking all database reads. Go to Firebase Console → Firestore → Rules tab and replace the rules with:</p>
-                  <pre style={{ background: "rgba(0,0,0,0.4)", borderRadius: 10, padding: "14px 16px", color: "#A8FF78", fontSize: "0.8rem", overflowX: "auto", border: "1px solid rgba(255,255,255,0.07)", marginBottom: 12 }}>
+                  <pre style={{ background: "rgba(0,0,0,0.4)", borderRadius: 10, padding: "14px 16px", color: "#A8FF78", fontSize: "0.8rem", overflowX: "auto", border: "1px solid var(--border)", marginBottom: 12 }}>
 {`rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -518,11 +518,11 @@ service cloud.firestore {
                 { label: "Completed",   value: stats.completed,      color: "#10B981", sub: `${stats.completionRate}% rate`  },
                 { label: "Cancelled",   value: stats.cancelled,      color: "#EF4444", sub: "Lost bookings"                  },
               ].map(c => (
-                <div key={c.label} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 20, padding: "20px", position: "relative", overflow: "hidden", cursor: "pointer" }}
+                <div key={c.label} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid var(--border)", borderRadius: 20, padding: "20px", position: "relative", overflow: "hidden", cursor: "pointer" }}
                   onClick={() => { if (c.label !== "Total") { setTab("bookings"); setStatusFilter(c.label.toLowerCase()); } else setTab("bookings"); }}>
                   <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${c.color}, transparent)` }} />
-                  <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 12 }}>{c.label}</div>
-                  <div style={{ fontSize: "2.6rem", fontWeight: 800, color: "white", lineHeight: 1, marginBottom: 6, fontFamily: "Outfit, sans-serif" }}>{dataLoading ? "—" : c.value}</div>
+                  <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "var(--text-secondary)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 12 }}>{c.label}</div>
+                  <div style={{ fontSize: "2.6rem", fontWeight: 800, color: "var(--text)", lineHeight: 1, marginBottom: 6, fontFamily: "Outfit, sans-serif" }}>{dataLoading ? "—" : c.value}</div>
                   <div style={{ fontSize: "0.75rem", color: c.color, fontWeight: 600 }}>{c.sub}</div>
                 </div>
               ))}
@@ -536,7 +536,7 @@ service cloud.firestore {
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
                     <XAxis dataKey="date" stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} />
                     <YAxis stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
-                    <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, color: "white" }} />
+                    <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
                     <Line type="monotone" dataKey="bookings" stroke="#0066FF" strokeWidth={2.5} dot={{ fill: "#0066FF", r: 4 }} activeDot={{ r: 6 }} />
                   </LineChart>
                 </ResponsiveContainer>
@@ -549,13 +549,13 @@ service cloud.firestore {
                       <Pie data={statusData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={4} dataKey="value" stroke="none">
                         {statusData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                       </Pie>
-                      <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, color: "white" }} />
+                      <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
                   {statusData.map(s => (
-                    <div key={s.name} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.78rem", color: "rgba(255,255,255,0.5)" }}>
+                    <div key={s.name} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.78rem", color: "var(--text-secondary)" }}>
                       <div style={{ width: 8, height: 8, borderRadius: "50%", background: s.color }} />{s.name}: <span style={{ color: s.color, fontWeight: 700 }}>{s.value}</span>
                     </div>
                   ))}
@@ -569,13 +569,13 @@ service cloud.firestore {
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   {todayBookings.map(b => (
                     <div key={b.id} onClick={() => setSelectedBooking(b)}
-                      style={{ display: "flex", alignItems: "center", gap: 16, padding: "12px 16px", borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)", cursor: "pointer", transition: "background 0.15s" }}
+                      style={{ display: "flex", alignItems: "center", gap: 16, padding: "12px 16px", borderRadius: 12, background: "var(--bg-secondary)", border: "1px solid var(--border)", cursor: "pointer", transition: "background 0.15s" }}
                       onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
                       onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}>
                       <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(0,102,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Car size={18} color="#0066FF" /></div>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontWeight: 600, fontSize: "0.95rem", color: "white" }}>{b.name}</div>
-                        <div style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)" }}>{b.service} · {b.brand} {b.model}</div>
+                        <div style={{ fontWeight: 600, fontSize: "0.95rem", color: "var(--text)" }}>{b.name}</div>
+                        <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>{b.service} · {b.brand} {b.model}</div>
                       </div>
                       <StatusBadge status={b.status} />
                       {b.status === "pending" && (
@@ -603,13 +603,13 @@ service cloud.firestore {
             {/* Toolbar */}
             <div style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
               <div style={{ position: "relative", flex: 1, minWidth: 260 }}>
-                <Search size={15} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,0.3)" }} />
+                <Search size={15} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
                 <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, phone, vehicle, service…"
-                  style={{ width: "100%", paddingLeft: 40, paddingRight: 14, paddingTop: 13, paddingBottom: 13, borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)", color: "white", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", outline: "none" }}
+                  style={{ width: "100%", paddingLeft: 40, paddingRight: 14, paddingTop: 13, paddingBottom: 13, borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", outline: "none" }}
                   onFocus={e => e.target.style.borderColor = "rgba(0,102,255,0.5)"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.08)"} />
               </div>
               <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-                style={{ padding: "13px 16px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)", background: "rgba(20,20,25,0.9)", color: "white", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", cursor: "pointer", outline: "none" }}>
+                style={{ padding: "13px 16px", borderRadius: 12, border: "1px solid var(--border)", background: "rgba(20,20,25,0.9)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", cursor: "pointer", outline: "none" }}>
                 <option value="all">All Status</option>
                 <option value="pending">Pending</option>
                 <option value="confirmed">Confirmed</option>
@@ -617,9 +617,9 @@ service cloud.firestore {
                 <option value="cancelled">Cancelled</option>
               </select>
               <div style={{ position: "relative" }}>
-                <Filter size={14} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,0.3)" }} />
+                <Filter size={14} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
                 <input type="date" value={dateFilter} onChange={e => setDateFilter(e.target.value)}
-                  style={{ paddingLeft: 34, paddingRight: 12, paddingTop: 13, paddingBottom: 13, borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)", background: "rgba(20,20,25,0.9)", color: "white", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", cursor: "pointer", outline: "none", colorScheme: "dark" }} />
+                  style={{ paddingLeft: 34, paddingRight: 12, paddingTop: 13, paddingBottom: 13, borderRadius: 12, border: "1px solid var(--border)", background: "rgba(20,20,25,0.9)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", cursor: "pointer", outline: "none",  }} />
               </div>
               {(search || statusFilter !== "all" || dateFilter) && (
                 <button onClick={() => { setSearch(""); setStatusFilter("all"); setDateFilter(""); }}
@@ -649,9 +649,9 @@ service cloud.firestore {
               <div style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                   <thead>
-                    <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                    <tr style={{ borderBottom: "1px solid var(--border)" }}>
                       {["Customer", "Email", "Bookings", "Role", "Joined"].map(h => (
-                        <th key={h} style={{ padding: "14px 20px", textAlign: "left", fontSize: "0.72rem", fontWeight: 700, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{h}</th>
+                        <th key={h} style={{ padding: "14px 20px", textAlign: "left", fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -660,7 +660,7 @@ service cloud.firestore {
                       const uBookings = bookings.filter(b => b.userId === u.id);
                       return (
                         <motion.tr key={u.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }}
-                          style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", transition: "background 0.15s" }}
+                          style={{ borderBottom: "1px solid var(--border)", transition: "background 0.15s" }}
                           onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                           <td style={{ padding: "15px 20px" }}>
@@ -668,10 +668,10 @@ service cloud.firestore {
                               <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(0,102,255,0.12)", border: "1px solid rgba(0,102,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", color: "#0066FF", fontWeight: 800, fontSize: "0.9rem" }}>
                                 {(u.name || "?")[0].toUpperCase()}
                               </div>
-                              <span style={{ fontWeight: 600, color: "white", fontSize: "0.92rem" }}>{u.name || "—"}</span>
+                              <span style={{ fontWeight: 600, color: "var(--text)", fontSize: "0.92rem" }}>{u.name || "—"}</span>
                             </div>
                           </td>
-                          <td style={{ padding: "15px 20px", color: "rgba(255,255,255,0.5)", fontSize: "0.88rem" }}>{u.email}</td>
+                          <td style={{ padding: "15px 20px", color: "var(--text-secondary)", fontSize: "0.88rem" }}>{u.email}</td>
                           <td style={{ padding: "15px 20px" }}>
                             <div style={{ display: "flex", gap: 6 }}>
                               {uBookings.length === 0 ? <span style={{ color: "rgba(255,255,255,0.25)", fontSize: "0.85rem" }}>No bookings</span> : (
@@ -687,13 +687,13 @@ service cloud.firestore {
                               {u.role || "user"}
                             </span>
                           </td>
-                          <td style={{ padding: "15px 20px", color: "rgba(255,255,255,0.3)", fontSize: "0.85rem" }}>
+                          <td style={{ padding: "15px 20px", color: "var(--text-muted)", fontSize: "0.85rem" }}>
                             {u.createdAt?.seconds ? fmtDate(u.createdAt.seconds) : "—"}
                           </td>
                         </motion.tr>
                       );
                     })}
-                    {users.length === 0 && <tr><td colSpan={5} style={{ padding: 50, textAlign: "center", color: "rgba(255,255,255,0.2)" }}>No registered users yet.</td></tr>}
+                    {users.length === 0 && <tr><td colSpan={5} style={{ padding: 50, textAlign: "center", color: "var(--text-muted)" }}>No registered users yet.</td></tr>}
                   </tbody>
                 </table>
               </div>
@@ -711,7 +711,7 @@ service cloud.firestore {
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
                     <XAxis dataKey="name" stroke="rgba(255,255,255,0.25)" fontSize={10} tickLine={false} axisLine={false} angle={-35} textAnchor="end" interval={0} />
                     <YAxis stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
-                    <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, color: "white" }} />
+                    <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
                     <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                       {serviceData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
                     </Bar>
@@ -725,7 +725,7 @@ service cloud.firestore {
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" horizontal={false} />
                     <XAxis type="number" stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
                     <YAxis type="category" dataKey="name" stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} width={80} />
-                    <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, color: "white" }} />
+                    <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
                     <Bar dataKey="value" radius={[0, 6, 6, 0]} fill="#0066FF" />
                   </BarChart>
                 </ResponsiveContainer>
@@ -737,7 +737,7 @@ service cloud.firestore {
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
                     <XAxis dataKey="date" stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} />
                     <YAxis stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
-                    <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, color: "white" }} />
+                    <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
                     <Line type="monotone" dataKey="bookings" stroke="#00C896" strokeWidth={2.5} dot={{ fill: "#00C896", r: 4 }} />
                   </LineChart>
                 </ResponsiveContainer>
@@ -750,13 +750,13 @@ service cloud.firestore {
                       <Pie data={statusData} cx="50%" cy="50%" innerRadius={65} outerRadius={95} paddingAngle={4} dataKey="value" stroke="none">
                         {statusData.map((e, i) => <Cell key={i} fill={e.color} />)}
                       </Pie>
-                      <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, color: "white" }} />
+                      <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 8 }}>
                   {statusData.map(s => (
-                    <div key={s.name} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: "0.85rem", color: "rgba(255,255,255,0.6)" }}>
+                    <div key={s.name} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: "0.85rem", color: "var(--text-secondary)" }}>
                       <div style={{ width: 10, height: 10, borderRadius: "50%", background: s.color, flexShrink: 0 }} />
                       {s.name}: <strong style={{ color: s.color }}>{s.value}</strong>
                     </div>
@@ -774,10 +774,10 @@ service cloud.firestore {
                   { label: "Registered Users",   value: users.length,                color: "#8B5CF6", desc: "Accounts created" },
                   { label: "Services Offered",   value: serviceData.length,          color: "#F59E0B", desc: "Unique services booked" },
                 ].map(m => (
-                  <div key={m.label} style={{ background: "rgba(255,255,255,0.02)", borderRadius: 16, padding: "20px", border: "1px solid rgba(255,255,255,0.05)", textAlign: "center" }}>
+                  <div key={m.label} style={{ background: "var(--bg-secondary)", borderRadius: 16, padding: "20px", border: "1px solid var(--border)", textAlign: "center" }}>
                     <div style={{ fontSize: "2.2rem", fontWeight: 800, color: m.color, fontFamily: "Outfit, sans-serif", marginBottom: 6 }}>{m.value}</div>
-                    <div style={{ fontWeight: 700, color: "white", fontSize: "0.9rem", marginBottom: 4 }}>{m.label}</div>
-                    <div style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.3)" }}>{m.desc}</div>
+                    <div style={{ fontWeight: 700, color: "var(--text)", fontSize: "0.9rem", marginBottom: 4 }}>{m.label}</div>
+                    <div style={{ fontSize: "0.78rem", color: "var(--text-muted)" }}>{m.desc}</div>
                   </div>
                 ))}
               </div>
@@ -792,7 +792,7 @@ service cloud.firestore {
               
               {/* Add Offline Booking */}
               <GlassCard title="➕ Record Offline Booking & Customer">
-                <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.5)", marginBottom: 20 }}>
+                <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: 20 }}>
                   Manually register walk-in or call-in customers. This automatically creates a customer profile and adds their appointment to the bookings list and analytics.
                 </p>
                 
@@ -805,47 +805,47 @@ service cloud.firestore {
                 <form onSubmit={submitOfflineBooking} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                     <input required placeholder="Customer Name" value={offlineForm.name} onChange={e => setOfflineForm({...offlineForm, name: e.target.value})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
                     <input required placeholder="Phone Number" value={offlineForm.phone} 
                       onChange={e => {
                         const val = e.target.value.replace(/\D/g, "").slice(0, 10);
                         setOfflineForm({...offlineForm, phone: val});
                       }}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
                   </div>
                   
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                     <input required placeholder="Car Brand (e.g. BMW)" value={offlineForm.brand} onChange={e => setOfflineForm({...offlineForm, brand: e.target.value})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
                     <input required placeholder="Car Model (e.g. X5)" value={offlineForm.model} onChange={e => setOfflineForm({...offlineForm, model: e.target.value})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
                   </div>
 
                   <select required value={offlineForm.service} onChange={e => setOfflineForm({...offlineForm, service: e.target.value})}
-                    style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
-                    <option value="" disabled style={{ color: "black" }}>Select Service Type</option>
-                    <option value="Periodic Maintenance" style={{ color: "black" }}>Periodic Maintenance</option>
-                    <option value="AC Service & Repair" style={{ color: "black" }}>AC Service & Repair</option>
-                    <option value="Denting & Painting" style={{ color: "black" }}>Denting & Painting</option>
-                    <option value="Engine Diagnostics" style={{ color: "black" }}>Engine Diagnostics</option>
-                    <option value="Wheel Care" style={{ color: "black" }}>Wheel Care</option>
-                    <option value="Car Detailing" style={{ color: "black" }}>Car Detailing</option>
-                    <option value="Other / Custom Service" style={{ color: "black" }}>Other / Custom Service</option>
+                    style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
+                    <option value="" disabled >Select Service Type</option>
+                    <option value="Periodic Maintenance" >Periodic Maintenance</option>
+                    <option value="AC Service & Repair" >AC Service & Repair</option>
+                    <option value="Denting & Painting" >Denting & Painting</option>
+                    <option value="Engine Diagnostics" >Engine Diagnostics</option>
+                    <option value="Wheel Care" >Wheel Care</option>
+                    <option value="Car Detailing" >Car Detailing</option>
+                    <option value="Other / Custom Service" >Other / Custom Service</option>
                   </select>
 
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                     <input type="date" required value={offlineForm.date} onChange={e => setOfflineForm({...offlineForm, date: e.target.value})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }} />
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem",  }} />
                     <select required value={offlineForm.status} onChange={e => setOfflineForm({...offlineForm, status: e.target.value as Booking["status"]})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
-                      <option value="pending" style={{ color: "black" }}>Status: Pending</option>
-                      <option value="confirmed" style={{ color: "black" }}>Status: Confirmed</option>
-                      <option value="completed" style={{ color: "black" }}>Status: Completed</option>
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
+                      <option value="pending" >Status: Pending</option>
+                      <option value="confirmed" >Status: Confirmed</option>
+                      <option value="completed" >Status: Completed</option>
                     </select>
                   </div>
 
                   <button type="submit" disabled={offlineLoading}
-                    style={{ padding: "14px", borderRadius: 10, background: "#0066FF", border: "none", color: "white", fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.95rem", cursor: offlineLoading ? "wait" : "pointer", marginTop: 8 }}>
+                    style={{ padding: "14px", borderRadius: 10, background: "#0066FF", border: "none", color: "var(--text)", fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.95rem", cursor: offlineLoading ? "wait" : "pointer", marginTop: 8 }}>
                     {offlineLoading ? "Adding..." : "Add Offline Booking"}
                   </button>
                 </form>
@@ -853,7 +853,7 @@ service cloud.firestore {
 
               {/* Edit Existing Booking */}
               <GlassCard title="✏️ Edit Existing Booking">
-                <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.5)", marginBottom: 20 }}>
+                <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: 20 }}>
                   Select an existing booking from the list to modify its details. All changes will be saved to the database instantly.
                 </p>
 
@@ -865,10 +865,10 @@ service cloud.firestore {
 
                 <div style={{ marginBottom: 16 }}>
                   <select value={editBookingId} onChange={e => setEditBookingId(e.target.value)}
-                    style={{ width: "100%", padding: "12px 16px", borderRadius: 10, background: "rgba(0,102,255,0.1)", border: "1px solid rgba(0,102,255,0.3)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
-                    <option value="" style={{ color: "black" }}>-- Select a Booking to Edit --</option>
+                    style={{ width: "100%", padding: "12px 16px", borderRadius: 10, background: "rgba(0,102,255,0.1)", border: "1px solid rgba(0,102,255,0.3)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
+                    <option value="" >-- Select a Booking to Edit --</option>
                     {bookings.slice().sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)).map(b => (
-                      <option key={b.id} value={b.id} style={{ color: "black" }}>
+                      <option key={b.id} value={b.id} >
                         {b.name} - {b.service} ({b.date || "No date"})
                       </option>
                     ))}
@@ -879,48 +879,48 @@ service cloud.firestore {
                   <form onSubmit={submitEditBooking} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                       <input required placeholder="Customer Name" value={editForm.name} onChange={e => setEditForm({...editForm, name: e.target.value})}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
                       <input required placeholder="Phone Number" value={editForm.phone} 
                         onChange={e => {
                           const val = e.target.value.replace(/\D/g, "").slice(0, 10);
                           setEditForm({...editForm, phone: val});
                         }}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
                     </div>
                     
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                       <input required placeholder="Car Brand (e.g. BMW)" value={editForm.brand} onChange={e => setEditForm({...editForm, brand: e.target.value})}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
                       <input required placeholder="Car Model (e.g. X5)" value={editForm.model} onChange={e => setEditForm({...editForm, model: e.target.value})}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
                     </div>
 
                     <select required value={editForm.service} onChange={e => setEditForm({...editForm, service: e.target.value})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
-                      <option value="" disabled style={{ color: "black" }}>Select Service Type</option>
-                      <option value="Periodic Maintenance" style={{ color: "black" }}>Periodic Maintenance</option>
-                      <option value="AC Service & Repair" style={{ color: "black" }}>AC Service & Repair</option>
-                      <option value="Denting & Painting" style={{ color: "black" }}>Denting & Painting</option>
-                      <option value="Engine Diagnostics" style={{ color: "black" }}>Engine Diagnostics</option>
-                      <option value="Wheel Care" style={{ color: "black" }}>Wheel Care</option>
-                      <option value="Car Detailing" style={{ color: "black" }}>Car Detailing</option>
-                      <option value="Other / Custom Service" style={{ color: "black" }}>Other / Custom Service</option>
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
+                      <option value="" disabled >Select Service Type</option>
+                      <option value="Periodic Maintenance" >Periodic Maintenance</option>
+                      <option value="AC Service & Repair" >AC Service & Repair</option>
+                      <option value="Denting & Painting" >Denting & Painting</option>
+                      <option value="Engine Diagnostics" >Engine Diagnostics</option>
+                      <option value="Wheel Care" >Wheel Care</option>
+                      <option value="Car Detailing" >Car Detailing</option>
+                      <option value="Other / Custom Service" >Other / Custom Service</option>
                     </select>
 
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                       <input type="date" required value={editForm.date} onChange={e => setEditForm({...editForm, date: e.target.value})}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }} />
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem",  }} />
                       <select required value={editForm.status} onChange={e => setEditForm({...editForm, status: e.target.value as Booking["status"]})}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
-                        <option value="pending" style={{ color: "black" }}>Status: Pending</option>
-                        <option value="confirmed" style={{ color: "black" }}>Status: Confirmed</option>
-                        <option value="completed" style={{ color: "black" }}>Status: Completed</option>
-                        <option value="cancelled" style={{ color: "black" }}>Status: Cancelled</option>
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
+                        <option value="pending" >Status: Pending</option>
+                        <option value="confirmed" >Status: Confirmed</option>
+                        <option value="completed" >Status: Completed</option>
+                        <option value="cancelled" >Status: Cancelled</option>
                       </select>
                     </div>
 
                     <button type="submit" disabled={editLoading}
-                      style={{ padding: "14px", borderRadius: 10, background: "#10B981", border: "none", color: "white", fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.95rem", cursor: editLoading ? "wait" : "pointer", marginTop: 8 }}>
+                      style={{ padding: "14px", borderRadius: 10, background: "#10B981", border: "none", color: "var(--text)", fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.95rem", cursor: editLoading ? "wait" : "pointer", marginTop: 8 }}>
                       {editLoading ? "Saving..." : "Save Changes"}
                     </button>
                   </form>
@@ -943,21 +943,21 @@ service cloud.firestore {
             style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", backdropFilter: "blur(12px)", zIndex: 300, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
             <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
               onClick={e => e.stopPropagation()}
-              style={{ background: "rgba(12,14,18,0.95)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 28, padding: "36px", width: "100%", maxWidth: 560, position: "relative", boxShadow: "0 24px 80px rgba(0,0,0,0.7)", maxHeight: "90vh", overflowY: "auto" }}>
+              style={{ background: "rgba(12,14,18,0.95)", border: "1px solid var(--border)", borderRadius: 28, padding: "36px", width: "100%", maxWidth: 560, position: "relative", boxShadow: "0 24px 80px rgba(0,0,0,0.7)", maxHeight: "90vh", overflowY: "auto" }}>
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "linear-gradient(90deg, #E2001A, #0066FF)", borderRadius: "28px 28px 0 0" }} />
 
               {/* Header */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
                 <div>
-                  <h2 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.5rem", color: "white", marginBottom: 6 }}>{selectedBooking.name}</h2>
+                  <h2 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.5rem", color: "var(--text)", marginBottom: 6 }}>{selectedBooking.name}</h2>
                   <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-                    <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.85rem", color: "rgba(255,255,255,0.4)" }}><Mail size={13} />{selectedBooking.userEmail || "—"}</span>
-                    <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.85rem", color: "rgba(255,255,255,0.4)" }}><Phone size={13} />{selectedBooking.phone}</span>
+                    <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.85rem", color: "var(--text-secondary)" }}><Mail size={13} />{selectedBooking.userEmail || "—"}</span>
+                    <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.85rem", color: "var(--text-secondary)" }}><Phone size={13} />{selectedBooking.phone}</span>
                   </div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
                   <StatusBadge status={selectedBooking.status} size="lg" />
-                  <button onClick={() => setSelectedBooking(null)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer", padding: 4 }}><X size={18} /></button>
+                  <button onClick={() => setSelectedBooking(null)} style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", padding: 4 }}><X size={18} /></button>
                 </div>
               </div>
 
@@ -969,25 +969,25 @@ service cloud.firestore {
                   { icon: CalendarDays,label: "Pref. Date",  value: selectedBooking.date || "Not specified" },
                   { icon: Clock,       label: "Booked On",   value: selectedBooking.createdAt ? `${fmtDate(selectedBooking.createdAt.seconds)} · ${fmtTime(selectedBooking.createdAt.seconds)}` : "—" },
                 ].map(item => (
-                  <div key={item.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, padding: "14px 16px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5, color: "rgba(255,255,255,0.3)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                  <div key={item.label} style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 14, padding: "14px 16px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5, color: "var(--text-muted)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
                       <item.icon size={12} />{item.label}
                     </div>
-                    <div style={{ color: "white", fontWeight: 600, fontSize: "0.92rem", wordBreak: "break-word" }}>{item.value}</div>
+                    <div style={{ color: "var(--text)", fontWeight: 600, fontSize: "0.92rem", wordBreak: "break-word" }}>{item.value}</div>
                   </div>
                 ))}
               </div>
 
               {selectedBooking.message && (
-                <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, padding: "14px 16px", marginBottom: 24 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, color: "rgba(255,255,255,0.3)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}><MessageSquare size={12} />Additional Message</div>
+                <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 14, padding: "14px 16px", marginBottom: 24 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, color: "var(--text-muted)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}><MessageSquare size={12} />Additional Message</div>
                   <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.92rem", lineHeight: 1.6 }}>{selectedBooking.message}</p>
                 </div>
               )}
 
               {/* Status update */}
               <div style={{ marginBottom: 24 }}>
-                <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>Update Status</div>
+                <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>Update Status</div>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                   {(["pending", "confirmed", "completed", "cancelled"] as Booking["status"][]).map(s => {
                     const c = STATUS_CFG[s];
@@ -1003,13 +1003,13 @@ service cloud.firestore {
               </div>
 
               {/* Actions */}
-              <div style={{ display: "flex", gap: 10, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+              <div style={{ display: "flex", gap: 10, paddingTop: 20, borderTop: "1px solid var(--border)" }}>
                 <button onClick={() => deleteBooking(selectedBooking.id)}
                   style={{ display: "flex", alignItems: "center", gap: 7, padding: "11px 18px", borderRadius: 12, border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.08)", color: "#EF4444", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.88rem", cursor: "pointer" }}>
                   <Trash2 size={15} />Delete Booking
                 </button>
                 <button onClick={() => setSelectedBooking(null)}
-                  style={{ marginLeft: "auto", padding: "11px 24px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "white", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.88rem", cursor: "pointer" }}>
+                  style={{ marginLeft: "auto", padding: "11px 24px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.88rem", cursor: "pointer" }}>
                   Close
                 </button>
               </div>
@@ -1026,10 +1026,10 @@ service cloud.firestore {
 // ─── GlassCard ───────────────────────────────────────────────────────────────
 function GlassCard({ title, action, children, style }: { title?: string, action?: React.ReactNode, children: React.ReactNode, style?: React.CSSProperties }) {
   return (
-    <div style={{ background: "rgba(255,255,255,0.02)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 20, overflow: "hidden", ...style }}>
+    <div style={{ background: "var(--bg-secondary)", backdropFilter: "blur(20px)", border: "1px solid var(--border)", borderRadius: 20, overflow: "hidden", ...style }}>
       {title && (
-        <div style={{ padding: "18px 24px", borderBottom: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h3 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "white", margin: 0 }}>{title}</h3>
+        <div style={{ padding: "18px 24px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <h3 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "var(--text)", margin: 0 }}>{title}</h3>
           {action}
         </div>
       )}
@@ -1047,7 +1047,7 @@ function BookingTable({ bookings, onSelect, onStatus, updatingId, sortField, sor
     <div style={{ overflowX: "auto" }}>
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
-          <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+          <tr style={{ borderBottom: "1px solid var(--border)" }}>
             {[
               { label: "Customer", field: "name" as const },
               { label: "Vehicle",  field: null },
@@ -1057,7 +1057,7 @@ function BookingTable({ bookings, onSelect, onStatus, updatingId, sortField, sor
               { label: "Status",   field: null },
               { label: "Actions",  field: null },
             ].map(h => (
-              <th key={h.label} onClick={() => h.field && onSort(h.field)} style={{ padding: "13px 20px", textAlign: "left", fontSize: "0.72rem", fontWeight: 700, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", textTransform: "uppercase", whiteSpace: "nowrap", cursor: h.field ? "pointer" : "default", userSelect: "none" }}>
+              <th key={h.label} onClick={() => h.field && onSort(h.field)} style={{ padding: "13px 20px", textAlign: "left", fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase", whiteSpace: "nowrap", cursor: h.field ? "pointer" : "default", userSelect: "none" }}>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>{h.label} {h.field && <SortIcon field={h.field} />}</span>
               </th>
             ))}
@@ -1066,26 +1066,26 @@ function BookingTable({ bookings, onSelect, onStatus, updatingId, sortField, sor
         <tbody>
           {bookings.map((b, i) => (
             <motion.tr key={b.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.02 }}
-              style={{ borderBottom: "1px solid rgba(255,255,255,0.03)", transition: "background 0.15s", cursor: "pointer" }}
+              style={{ borderBottom: "1px solid var(--border)", transition: "background 0.15s", cursor: "pointer" }}
               onClick={() => onSelect(b)}
               onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}
               onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
               <td style={{ padding: "14px 20px" }}>
-                <div style={{ fontWeight: 600, color: "white", fontSize: "0.92rem" }}>{b.name}</div>
-                <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.78rem" }}>{b.phone}</div>
+                <div style={{ fontWeight: 600, color: "var(--text)", fontSize: "0.92rem" }}>{b.name}</div>
+                <div style={{ color: "var(--text-muted)", fontSize: "0.78rem" }}>{b.phone}</div>
               </td>
               <td style={{ padding: "14px 20px", color: "rgba(255,255,255,0.8)", fontSize: "0.88rem" }}>{b.brand} {b.model}</td>
               <td style={{ padding: "14px 20px", maxWidth: 160 }}>
                 <div style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.88rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{b.service}</div>
               </td>
-              <td style={{ padding: "14px 20px", color: "rgba(255,255,255,0.4)", fontSize: "0.85rem", whiteSpace: "nowrap" }}>{b.date || "—"}</td>
-              <td style={{ padding: "14px 20px", color: "rgba(255,255,255,0.3)", fontSize: "0.82rem", whiteSpace: "nowrap" }}>
+              <td style={{ padding: "14px 20px", color: "var(--text-secondary)", fontSize: "0.85rem", whiteSpace: "nowrap" }}>{b.date || "—"}</td>
+              <td style={{ padding: "14px 20px", color: "var(--text-muted)", fontSize: "0.82rem", whiteSpace: "nowrap" }}>
                 {b.createdAt ? new Date(b.createdAt.seconds * 1000).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "—"}
               </td>
               <td style={{ padding: "14px 20px" }}><StatusBadge status={b.status} /></td>
               <td style={{ padding: "14px 20px" }}>
                 <div style={{ display: "flex", gap: 6 }} onClick={e => e.stopPropagation()}>
-                  <button onClick={() => onSelect(b)} style={{ padding: "7px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.7)", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: "0.82rem", fontFamily: "Inter, sans-serif", fontWeight: 600 }}>
+                  <button onClick={() => onSelect(b)} style={{ padding: "7px 12px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text-secondary)", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: "0.82rem", fontFamily: "Inter, sans-serif", fontWeight: 600 }}>
                     <Eye size={13} />View
                   </button>
                   {b.status === "pending" && (
@@ -1099,7 +1099,7 @@ function BookingTable({ bookings, onSelect, onStatus, updatingId, sortField, sor
             </motion.tr>
           ))}
           {bookings.length === 0 && (
-            <tr><td colSpan={7} style={{ padding: 60, textAlign: "center", color: "rgba(255,255,255,0.2)", fontFamily: "Inter, sans-serif" }}>No bookings match your filters.</td></tr>
+            <tr><td colSpan={7} style={{ padding: 60, textAlign: "center", color: "var(--text-muted)", fontFamily: "Inter, sans-serif" }}>No bookings match your filters.</td></tr>
           )}
         </tbody>
       </table>

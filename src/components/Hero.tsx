@@ -274,7 +274,7 @@ export default function Hero() {
               BOSCH CERTIFIED
             </span>
             <span
-              className="gradient-text"
+              className="gradient-text-blue"
               style={{ display: "block", lineHeight: 1, textShadow: "0 4px 30px var(--bg)" }}
             >
               CAR CARE

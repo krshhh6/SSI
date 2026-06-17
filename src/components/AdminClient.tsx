@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import {
@@ -8,10 +8,14 @@ import {
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import {
-  LayoutDashboard, Users, CalendarDays, LogOut, ChevronDown,
+  LayoutDashboard, Users, CalendarDays, LogOut,
   Search, RefreshCw, Trash2, CheckCircle2, Clock, XCircle, AlertCircle,
-  Wrench, Mail, Phone, Car, TrendingUp, Eye,
+  Wrench, Mail, Phone, Car, Eye,
 } from "lucide-react";
+import {
+  BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer,
+  PieChart, Pie, Cell
+} from "recharts";
 
 const ADMIN_EMAIL = "test01samwheels@gmail.com";
 
@@ -39,11 +43,13 @@ type UserRecord = {
 };
 
 const STATUS_CONFIG = {
-  pending:   { color: "#F59E0B", bg: "rgba(245,158,11,0.12)",  icon: Clock,         label: "Pending"   },
-  confirmed: { color: "#3B82F6", bg: "rgba(59,130,246,0.12)",  icon: CheckCircle2,  label: "Confirmed" },
-  completed: { color: "#10B981", bg: "rgba(16,185,129,0.12)",  icon: CheckCircle2,  label: "Completed" },
-  cancelled: { color: "#EF4444", bg: "rgba(239,68,68,0.12)",   icon: XCircle,       label: "Cancelled" },
+  pending:   { color: "#F59E0B", bg: "rgba(245,158,11,0.15)",  icon: Clock,         label: "Pending"   },
+  confirmed: { color: "#3B82F6", bg: "rgba(59,130,246,0.15)",  icon: CheckCircle2,  label: "Confirmed" },
+  completed: { color: "#10B981", bg: "rgba(16,185,129,0.15)",  icon: CheckCircle2,  label: "Completed" },
+  cancelled: { color: "#EF4444", bg: "rgba(239,68,68,0.15)",   icon: XCircle,       label: "Cancelled" },
 };
+
+const PIE_COLORS = ["#0066FF", "#00C896", "#F59E0B", "#8B5CF6", "#EC4899", "#E2001A"];
 
 export default function AdminClient() {
   const router = useRouter();
@@ -53,7 +59,7 @@ export default function AdminClient() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [tab, setTab] = useState<"dashboard" | "bookings" | "users">("dashboard");
+  const [tab, setTab] = useState<"overview" | "bookings" | "users">("overview");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [users, setUsers] = useState<UserRecord[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
@@ -62,7 +68,6 @@ export default function AdminClient() {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  // Check if already signed in as admin
   useEffect(() => {
     const unsub = auth.onAuthStateChanged((u) => {
       if (u && u.email === ADMIN_EMAIL) {
@@ -144,97 +149,126 @@ export default function AdminClient() {
     completed: bookings.filter(b => b.status === "completed").length,
   };
 
+  // Analytics Data Prep
+  const serviceData = useMemo(() => {
+    const counts: Record<string, number> = {};
+    bookings.forEach(b => {
+      counts[b.service] = (counts[b.service] || 0) + 1;
+    });
+    return Object.entries(counts).map(([name, value]) => ({ name, value })).sort((a,b) => b.value - a.value);
+  }, [bookings]);
+
+  const trendData = useMemo(() => {
+    const last7Days = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      return d.toLocaleDateString("en-IN", { month: "short", day: "numeric" });
+    }).reverse();
+    
+    const counts: Record<string, number> = {};
+    last7Days.forEach(date => counts[date] = 0);
+
+    bookings.forEach(b => {
+      if (!b.createdAt) return;
+      const d = new Date(b.createdAt.seconds * 1000).toLocaleDateString("en-IN", { month: "short", day: "numeric" });
+      if (counts[d] !== undefined) counts[d]++;
+    });
+
+    return Object.entries(counts).map(([date, bookings]) => ({ date, bookings }));
+  }, [bookings]);
+
   // ─── Login Screen ────────────────────────────────────────────
   if (!authed) {
     return (
       <div style={{
         minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
-        background: "var(--bg)", padding: 24,
+        background: "var(--bg)", padding: 24, position: "relative", overflow: "hidden"
       }}>
+        {/* Ambient Glows */}
+        <div style={{ position: "absolute", top: "10%", left: "10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(0,102,255,0.08) 0%, transparent 60%)", filter: "blur(60px)", borderRadius: "50%", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: "10%", right: "10%", width: 500, height: 500, background: "radial-gradient(circle, rgba(226,0,26,0.05) 0%, transparent 60%)", filter: "blur(60px)", borderRadius: "50%", pointerEvents: "none" }} />
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           style={{
             width: "100%", maxWidth: 420,
-            background: "var(--card)", border: "1px solid var(--border)",
-            borderRadius: 24, padding: 48, position: "relative", overflow: "hidden",
+            background: "rgba(15,17,21,0.6)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
+            border: "1px solid rgba(255,255,255,0.08)", borderRadius: 32, padding: "48px 40px",
+            position: "relative", zIndex: 10, boxShadow: "0 24px 60px rgba(0,0,0,0.4)"
           }}
         >
-          <div style={{
-            position: "absolute", top: 0, left: 0, right: 0, height: 3,
-            background: "linear-gradient(90deg, var(--bosch-red), var(--accent))",
-          }} />
           <div style={{ textAlign: "center", marginBottom: 36 }}>
             <div style={{
-              width: 60, height: 60, borderRadius: 14,
+              width: 56, height: 56, borderRadius: 16,
               background: "var(--bosch-red)", display: "flex", alignItems: "center",
               justifyContent: "center", margin: "0 auto 20px",
-              boxShadow: "0 0 24px var(--bosch-red-glow)",
+              boxShadow: "0 0 30px var(--bosch-red-glow)",
             }}>
-              <Wrench size={28} color="white" />
+              <Wrench size={26} color="white" />
             </div>
-            <h1 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.6rem", color: "var(--text)", marginBottom: 6 }}>
-              Admin Portal
+            <h1 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.8rem", color: "white", marginBottom: 8 }}>
+              Admin Access
             </h1>
-            <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>SAM Wheels – Bosch Car Service</p>
+            <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>SAM Wheels Protected Portal</p>
           </div>
 
           {loginError && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               style={{
                 background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)",
-                borderRadius: 10, padding: "12px 16px", marginBottom: 20,
+                borderRadius: 12, padding: "12px 16px", marginBottom: 24,
                 display: "flex", alignItems: "center", gap: 8, color: "#EF4444", fontSize: "0.85rem",
               }}>
               <AlertCircle size={16} /> {loginError}
             </motion.div>
           )}
 
-          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             <div>
-              <label style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--text-secondary)", letterSpacing: "0.08em", display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-                <Mail size={12} /> EMAIL ADDRESS
-              </label>
               <input
                 type="email" required value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="admin@samwheels.com"
+                placeholder="Email Address"
                 style={{
-                  width: "100%", padding: "13px 16px", borderRadius: 10,
-                  background: "var(--bg)", border: "1px solid var(--border)",
-                  color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", outline: "none",
+                  width: "100%", padding: "16px 20px", borderRadius: 14,
+                  background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)",
+                  color: "white", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none",
+                  transition: "all 0.2s"
                 }}
+                onFocus={e => { e.target.style.borderColor = "var(--accent)"; e.target.style.background = "rgba(0,102,255,0.05)"; }}
+                onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.1)"; e.target.style.background = "rgba(0,0,0,0.2)"; }}
               />
             </div>
             <div>
-              <label style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--text-secondary)", letterSpacing: "0.08em", display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-                <Wrench size={12} /> PASSWORD
-              </label>
               <input
                 type="password" required value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="Password"
                 style={{
-                  width: "100%", padding: "13px 16px", borderRadius: 10,
-                  background: "var(--bg)", border: "1px solid var(--border)",
-                  color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", outline: "none",
+                  width: "100%", padding: "16px 20px", borderRadius: 14,
+                  background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)",
+                  color: "white", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none",
+                  transition: "all 0.2s"
                 }}
+                onFocus={e => { e.target.style.borderColor = "var(--accent)"; e.target.style.background = "rgba(0,102,255,0.05)"; }}
+                onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.1)"; e.target.style.background = "rgba(0,0,0,0.2)"; }}
               />
             </div>
             <motion.button
               type="submit" disabled={loginLoading}
-              whileHover={!loginLoading ? { scale: 1.01 } : {}}
-              whileTap={!loginLoading ? { scale: 0.99 } : {}}
+              whileHover={!loginLoading ? { scale: 1.02 } : {}}
+              whileTap={!loginLoading ? { scale: 0.98 } : {}}
               style={{
-                marginTop: 8, padding: "14px", borderRadius: 10,
+                marginTop: 12, padding: "16px", borderRadius: 14,
                 background: loginLoading ? "rgba(226,0,26,0.5)" : "var(--bosch-red)",
                 color: "white", border: "none", cursor: loginLoading ? "wait" : "pointer",
-                fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1rem",
+                fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1.05rem",
                 letterSpacing: "0.05em", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                boxShadow: "0 8px 24px var(--bosch-red-glow)",
+                boxShadow: "0 12px 30px var(--bosch-red-glow)", transition: "all 0.2s"
               }}
             >
-              {loginLoading ? "Signing In..." : "Sign In to Admin"}
+              {loginLoading ? "Authenticating..." : "Sign In"}
             </motion.button>
           </form>
         </motion.div>
@@ -244,164 +278,181 @@ export default function AdminClient() {
 
   // ─── Dashboard ────────────────────────────────────────────────
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex" }}>
-      {/* Sidebar */}
-      <div style={{
-        width: 240, flexShrink: 0, background: "var(--card)",
-        borderRight: "1px solid var(--border)", display: "flex", flexDirection: "column",
-        padding: "24px 0", position: "fixed", top: 0, left: 0, bottom: 0, zIndex: 100,
+    <div style={{ minHeight: "100vh", background: "var(--bg)", position: "relative" }}>
+      {/* Ambient Backgrounds */}
+      <div style={{ position: "fixed", top: "-20%", right: "-10%", width: "80vw", height: "80vw", background: "radial-gradient(circle, rgba(0,102,255,0.03) 0%, transparent 60%)", pointerEvents: "none" }} />
+
+      {/* Top Navigation */}
+      <nav style={{
+        position: "sticky", top: 0, zIndex: 50,
+        background: "rgba(5,5,5,0.7)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
+        borderBottom: "1px solid rgba(255,255,255,0.05)", padding: "16px 32px",
+        display: "flex", alignItems: "center", justifyContent: "space-between"
       }}>
-        <div style={{ padding: "0 20px 24px", borderBottom: "1px solid var(--border)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: 8, background: "var(--bosch-red)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              boxShadow: "0 0 12px var(--bosch-red-glow)",
-            }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 40 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 8, background: "var(--bosch-red)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 16px var(--bosch-red-glow)" }}>
               <Wrench size={16} color="white" />
             </div>
             <div>
-              <div style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "0.82rem", color: "var(--text)" }}>ADMIN PANEL</div>
-              <div style={{ fontSize: "0.65rem", color: "var(--accent)", letterSpacing: "0.1em" }}>SAM WHEELS</div>
+              <div style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1rem", color: "white", lineHeight: 1.1 }}>ADMIN PANEL</div>
             </div>
+          </div>
+
+          <div style={{ display: "flex", gap: 8 }}>
+            {[
+              { id: "overview", label: "Overview", icon: LayoutDashboard },
+              { id: "bookings", label: "Bookings", icon: CalendarDays },
+              { id: "users",    label: "Users",    icon: Users },
+            ].map(item => (
+              <button
+                key={item.id}
+                onClick={() => setTab(item.id as typeof tab)}
+                style={{
+                  padding: "8px 16px", borderRadius: 100, border: "none",
+                  background: tab === item.id ? "rgba(255,255,255,0.1)" : "transparent",
+                  color: tab === item.id ? "white" : "var(--text-secondary)",
+                  fontFamily: "Inter, sans-serif", fontWeight: tab === item.id ? 600 : 500, fontSize: "0.9rem",
+                  cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.2s"
+                }}
+              >
+                <item.icon size={16} /> {item.label}
+              </button>
+            ))}
           </div>
         </div>
 
-        <nav style={{ flex: 1, padding: "20px 12px", display: "flex", flexDirection: "column", gap: 4 }}>
-          {[
-            { id: "dashboard", label: "Dashboard",  icon: LayoutDashboard },
-            { id: "bookings",  label: "Bookings",   icon: CalendarDays    },
-            { id: "users",     label: "Users",       icon: Users           },
-          ].map(item => (
-            <button
-              key={item.id}
-              onClick={() => setTab(item.id as typeof tab)}
-              style={{
-                width: "100%", padding: "10px 14px", borderRadius: 10, border: "none",
-                background: tab === item.id ? "rgba(0,102,255,0.12)" : "transparent",
-                color: tab === item.id ? "var(--accent)" : "var(--text-secondary)",
-                fontFamily: "Inter, sans-serif", fontWeight: tab === item.id ? 600 : 500,
-                fontSize: "0.88rem", cursor: "pointer",
-                display: "flex", alignItems: "center", gap: 10, transition: "all 0.2s",
-                ...(tab === item.id ? { borderLeft: "3px solid var(--accent)" } : { borderLeft: "3px solid transparent" }),
-              }}
-            >
-              <item.icon size={16} /> {item.label}
-            </button>
-          ))}
-        </nav>
-
-        <div style={{ padding: "16px 12px", borderTop: "1px solid var(--border)" }}>
-          <div style={{ padding: "8px 14px", marginBottom: 8 }}>
-            <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginBottom: 2 }}>Signed in as</div>
-            <div style={{ fontSize: "0.78rem", color: "var(--text)", fontWeight: 600, wordBreak: "break-all" }}>{ADMIN_EMAIL}</div>
-          </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <button
+            onClick={loadData}
+            style={{
+              width: 36, height: 36, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.1)",
+              background: "rgba(255,255,255,0.03)", color: "white", display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", transition: "all 0.2s"
+            }}
+          >
+            <RefreshCw size={16} className={dataLoading ? "animate-spin" : ""} />
+          </button>
+          <div style={{ height: 24, width: 1, background: "rgba(255,255,255,0.1)" }} />
           <button
             onClick={handleLogout}
             style={{
-              width: "100%", padding: "10px 14px", borderRadius: 10, border: "none",
-              background: "rgba(239,68,68,0.08)", color: "#EF4444",
-              fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.88rem",
-              cursor: "pointer", display: "flex", alignItems: "center", gap: 10,
+              padding: "8px 16px", borderRadius: 100, border: "1px solid rgba(239,68,68,0.3)",
+              background: "rgba(239,68,68,0.1)", color: "#EF4444",
+              fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem",
+              cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.2s"
             }}
           >
-            <LogOut size={15} /> Sign Out
+            <LogOut size={14} /> Sign Out
           </button>
         </div>
-      </div>
+      </nav>
 
       {/* Main Content */}
-      <div style={{ marginLeft: 240, flex: 1, padding: "32px", overflowY: "auto" }}>
-        {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32 }}>
-          <div>
-            <h1 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.8rem", color: "var(--text)", marginBottom: 4 }}>
-              {tab === "dashboard" ? "Dashboard" : tab === "bookings" ? "Bookings" : "Users"}
-            </h1>
-            <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
-              {tab === "dashboard" ? "Overview of your service operations" : tab === "bookings" ? "Manage all customer appointments" : "Registered customer accounts"}
-            </p>
-          </div>
-          <motion.button
-            onClick={loadData} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}
-            style={{
-              display: "flex", alignItems: "center", gap: 8, padding: "10px 20px",
-              borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)",
-              color: "var(--text)", fontFamily: "Inter, sans-serif", fontWeight: 600,
-              fontSize: "0.85rem", cursor: "pointer",
-            }}
-          >
-            <RefreshCw size={15} className={dataLoading ? "animate-spin" : ""} />
-            Refresh
-          </motion.button>
-        </div>
-
-        {/* ── DASHBOARD TAB ── */}
-        {tab === "dashboard" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <main style={{ maxWidth: 1400, margin: "0 auto", padding: "40px 32px" }}>
+        
+        {/* ── OVERVIEW TAB ── */}
+        {tab === "overview" && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             {/* Stat Cards */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 32 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20, marginBottom: 32 }}>
               {[
-                { label: "Total Bookings",  value: stats.total,     color: "var(--accent)",  icon: CalendarDays  },
-                { label: "Pending",         value: stats.pending,   color: "#F59E0B",        icon: Clock         },
-                { label: "Confirmed",       value: stats.confirmed, color: "#3B82F6",        icon: CheckCircle2  },
-                { label: "Completed",       value: stats.completed, color: "#10B981",        icon: TrendingUp    },
+                { label: "Total Bookings",  value: stats.total,     color: "#0066FF" },
+                { label: "Pending",         value: stats.pending,   color: "#F59E0B" },
+                { label: "Confirmed",       value: stats.confirmed, color: "#3B82F6" },
+                { label: "Completed",       value: stats.completed, color: "#10B981" },
               ].map(card => (
-                <motion.div
-                  key={card.label}
-                  whileHover={{ y: -4 }}
-                  style={{
-                    background: "var(--card)", border: "1px solid var(--border)",
-                    borderRadius: 16, padding: "24px 20px",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                    <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--text-secondary)", letterSpacing: "0.05em" }}>{card.label}</span>
-                    <div style={{ width: 36, height: 36, borderRadius: 8, background: `${card.color}18`, display: "flex", alignItems: "center", justifyContent: "center", color: card.color }}>
-                      <card.icon size={16} />
-                    </div>
-                  </div>
-                  <div style={{ fontSize: "2.2rem", fontWeight: 800, color: card.color, fontFamily: "Outfit, sans-serif" }}>
-                    {dataLoading ? "—" : card.value}
-                  </div>
-                </motion.div>
+                <div key={card.label} style={{
+                  background: "rgba(255,255,255,0.02)", backdropFilter: "blur(20px)",
+                  border: "1px solid rgba(255,255,255,0.06)", borderRadius: 24, padding: "24px",
+                  position: "relative", overflow: "hidden"
+                }}>
+                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${card.color}, transparent)` }} />
+                  <div style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: 12 }}>{card.label}</div>
+                  <div style={{ fontSize: "3rem", fontWeight: 800, color: "white", fontFamily: "Outfit, sans-serif", lineHeight: 1 }}>{dataLoading ? "—" : card.value}</div>
+                </div>
               ))}
             </div>
 
-            {/* Recent Bookings */}
-            <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 20, overflow: "hidden" }}>
-              <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <h2 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1.1rem", color: "var(--text)" }}>Recent Bookings</h2>
-                <button onClick={() => setTab("bookings")} style={{ background: "none", border: "none", color: "var(--accent)", cursor: "pointer", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem" }}>View All →</button>
+            {/* Charts Row */}
+            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20, marginBottom: 32 }}>
+              {/* Trend Chart */}
+              <div style={{ background: "rgba(255,255,255,0.02)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 24, padding: "28px" }}>
+                <h3 style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.2rem", fontWeight: 700, color: "white", marginBottom: 24 }}>Booking Trends (Last 7 Days)</h3>
+                <div style={{ height: 300 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <XAxis dataKey="date" stroke="rgba(255,255,255,0.3)" fontSize={12} tickLine={false} axisLine={false} />
+                      <YAxis stroke="rgba(255,255,255,0.3)" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} />
+                      <RechartsTooltip cursor={{ fill: "rgba(255,255,255,0.05)" }} contentStyle={{ background: "rgba(10,10,15,0.9)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "white" }} />
+                      <Bar dataKey="bookings" fill="var(--accent)" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
-              <BookingTable bookings={bookings.slice(0, 5)} onSelect={setSelectedBooking} onStatus={updateStatus} onDelete={deleteBooking} updatingId={updatingId} />
+
+              {/* Service Breakdown */}
+              <div style={{ background: "rgba(255,255,255,0.02)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 24, padding: "28px" }}>
+                <h3 style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.2rem", fontWeight: 700, color: "white", marginBottom: 24 }}>Popular Services</h3>
+                <div style={{ height: 260 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={serviceData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value" stroke="none">
+                        {serviceData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.9)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "white" }} itemStyle={{ color: "white" }} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", marginTop: 10 }}>
+                  {serviceData.slice(0, 4).map((entry, index) => (
+                    <div key={entry.name} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.75rem", color: "var(--text-secondary)" }}>
+                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: PIE_COLORS[index % PIE_COLORS.length] }} />
+                      {entry.name.length > 15 ? entry.name.slice(0, 15) + "..." : entry.name}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Recent Bookings */}
+            <div style={{ background: "rgba(255,255,255,0.02)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 24, overflow: "hidden" }}>
+              <div style={{ padding: "24px 28px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <h2 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "white" }}>Recent Bookings</h2>
+                <button onClick={() => setTab("bookings")} style={{ background: "none", border: "none", color: "var(--accent)", cursor: "pointer", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem" }}>View All Directory →</button>
+              </div>
+              <BookingTable bookings={bookings.slice(0, 5)} onSelect={setSelectedBooking} onStatus={updateStatus} updatingId={updatingId} />
             </div>
           </motion.div>
         )}
 
         {/* ── BOOKINGS TAB ── */}
         {tab === "bookings" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             {/* Filters */}
-            <div style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
-              <div style={{ position: "relative", flex: 1, minWidth: 220 }}>
-                <Search size={15} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
+            <div style={{ display: "flex", gap: 16, marginBottom: 24, flexWrap: "wrap" }}>
+              <div style={{ position: "relative", flex: 1, minWidth: 260 }}>
+                <Search size={16} style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
                 <input
                   value={search} onChange={e => setSearch(e.target.value)}
-                  placeholder="Search by name, service, phone…"
+                  placeholder="Search by name, service, phone or vehicle..."
                   style={{
-                    width: "100%", paddingLeft: 40, paddingRight: 16, paddingTop: 11, paddingBottom: 11,
-                    borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)",
-                    color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.88rem", outline: "none",
+                    width: "100%", paddingLeft: 44, paddingRight: 16, paddingTop: 14, paddingBottom: 14,
+                    borderRadius: 16, border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)", backdropFilter: "blur(10px)",
+                    color: "white", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none", transition: "all 0.2s"
                   }}
+                  onFocus={e => e.target.style.borderColor = "var(--accent)"}
+                  onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.08)"}
                 />
               </div>
               <select
                 value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
                 style={{
-                  padding: "11px 16px", borderRadius: 10, border: "1px solid var(--border)",
-                  background: "var(--card)", color: "var(--text)",
-                  fontFamily: "Inter, sans-serif", fontSize: "0.88rem", cursor: "pointer", outline: "none",
+                  padding: "14px 20px", borderRadius: 16, border: "1px solid rgba(255,255,255,0.08)",
+                  background: "rgba(20,20,25,0.8)", color: "white", backdropFilter: "blur(10px)",
+                  fontFamily: "Inter, sans-serif", fontSize: "0.95rem", cursor: "pointer", outline: "none",
                 }}
               >
                 <option value="all">All Status</option>
@@ -410,62 +461,59 @@ export default function AdminClient() {
                 <option value="completed">Completed</option>
                 <option value="cancelled">Cancelled</option>
               </select>
-              <div style={{ padding: "11px 16px", borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)", color: "var(--text-secondary)", fontFamily: "Inter, sans-serif", fontSize: "0.85rem" }}>
-                {filtered.length} results
-              </div>
             </div>
 
-            <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 20, overflow: "hidden" }}>
-              <BookingTable bookings={filtered} onSelect={setSelectedBooking} onStatus={updateStatus} onDelete={deleteBooking} updatingId={updatingId} />
+            <div style={{ background: "rgba(255,255,255,0.02)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 24, overflow: "hidden" }}>
+              <BookingTable bookings={filtered} onSelect={setSelectedBooking} onStatus={updateStatus} updatingId={updatingId} />
             </div>
           </motion.div>
         )}
 
         {/* ── USERS TAB ── */}
         {tab === "users" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 20, overflow: "hidden" }}>
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+            <div style={{ background: "rgba(255,255,255,0.02)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 24, overflow: "hidden" }}>
               <div style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                   <thead>
-                    <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                      {["Name", "Email", "Role", "Joined"].map(h => (
-                        <th key={h} style={{ padding: "14px 20px", textAlign: "left", fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", letterSpacing: "0.08em", textTransform: "uppercase" }}>{h}</th>
+                    <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.01)" }}>
+                      {["Customer", "Email Address", "Role", "Joined Date"].map(h => (
+                        <th key={h} style={{ padding: "18px 28px", textAlign: "left", fontSize: "0.75rem", fontWeight: 700, color: "var(--text-secondary)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {users.map(u => (
-                      <tr key={u.id} style={{ borderBottom: "1px solid var(--border)" }}>
-                        <td style={{ padding: "14px 20px" }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                            <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(0,102,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--accent)", fontSize: "0.85rem", fontWeight: 700 }}>
+                    {users.map((u, i) => (
+                      <motion.tr key={u.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }}
+                        style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", transition: "background 0.2s" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.03)")}
+                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
+                        <td style={{ padding: "18px 28px" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                            <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(0,102,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--accent)", fontSize: "0.9rem", fontWeight: 700, border: "1px solid rgba(0,102,255,0.3)" }}>
                               {(u.name || "?")[0].toUpperCase()}
                             </div>
-                            <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, color: "var(--text)", fontSize: "0.9rem" }}>{u.name || "—"}</span>
+                            <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, color: "white", fontSize: "0.95rem" }}>{u.name || "—"}</span>
                           </div>
                         </td>
-                        <td style={{ padding: "14px 20px", color: "var(--text-secondary)", fontFamily: "Inter, sans-serif", fontSize: "0.88rem" }}>{u.email}</td>
-                        <td style={{ padding: "14px 20px" }}>
-                          <span style={{ padding: "4px 10px", borderRadius: 100, fontSize: "0.75rem", fontWeight: 700, background: u.role === "admin" ? "rgba(226,0,26,0.12)" : "rgba(0,102,255,0.1)", color: u.role === "admin" ? "var(--bosch-red)" : "var(--accent)" }}>
+                        <td style={{ padding: "18px 28px", color: "var(--text-secondary)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>{u.email}</td>
+                        <td style={{ padding: "18px 28px" }}>
+                          <span style={{ padding: "6px 14px", borderRadius: 100, fontSize: "0.75rem", fontWeight: 700, background: u.role === "admin" ? "rgba(226,0,26,0.15)" : "rgba(0,102,255,0.1)", border: `1px solid ${u.role === "admin" ? "rgba(226,0,26,0.3)" : "rgba(0,102,255,0.2)"}`, color: u.role === "admin" ? "#FF4D6A" : "#66A3FF", letterSpacing: "0.05em", textTransform: "uppercase" }}>
                             {u.role || "user"}
                           </span>
                         </td>
-                        <td style={{ padding: "14px 20px", color: "var(--text-muted)", fontFamily: "Inter, sans-serif", fontSize: "0.85rem" }}>
+                        <td style={{ padding: "18px 28px", color: "var(--text-muted)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
                           {u.createdAt?.seconds ? new Date(u.createdAt.seconds * 1000).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "—"}
                         </td>
-                      </tr>
+                      </motion.tr>
                     ))}
-                    {users.length === 0 && (
-                      <tr><td colSpan={4} style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>No users found.</td></tr>
-                    )}
                   </tbody>
                 </table>
               </div>
             </div>
           </motion.div>
         )}
-      </div>
+      </main>
 
       {/* Booking Detail Modal */}
       <AnimatePresence>
@@ -476,8 +524,8 @@ export default function AdminClient() {
             exit={{ opacity: 0 }}
             onClick={() => setSelectedBooking(null)}
             style={{
-              position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)",
-              backdropFilter: "blur(4px)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
+              position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)",
+              backdropFilter: "blur(12px)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
             }}
           >
             <motion.div
@@ -486,57 +534,59 @@ export default function AdminClient() {
               exit={{ scale: 0.95, y: 20 }}
               onClick={e => e.stopPropagation()}
               style={{
-                background: "var(--card)", border: "1px solid var(--border)", borderRadius: 24,
-                padding: 32, width: "100%", maxWidth: 520, position: "relative",
+                background: "rgba(15,17,21,0.85)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 32,
+                padding: 40, width: "100%", maxWidth: 560, position: "relative", overflow: "hidden",
+                boxShadow: "0 24px 60px rgba(0,0,0,0.6)"
               }}
             >
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg, var(--bosch-red), var(--accent))", borderRadius: "24px 24px 0 0" }} />
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "linear-gradient(90deg, var(--bosch-red), var(--accent))" }} />
+              
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
                 <div>
-                  <h2 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.3rem", color: "var(--text)", marginBottom: 4 }}>{selectedBooking.name}</h2>
-                  <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>{selectedBooking.userEmail}</p>
+                  <h2 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.5rem", color: "white", marginBottom: 4 }}>{selectedBooking.name}</h2>
+                  <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", display: "flex", alignItems: "center", gap: 6 }}><Mail size={14}/> {selectedBooking.userEmail}</p>
                 </div>
-                <StatusBadge status={selectedBooking.status} />
+                <StatusBadge status={selectedBooking.status} size="lg" />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 24 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 28 }}>
                 {[
                   { icon: Phone,       label: "Phone",   value: selectedBooking.phone   },
                   { icon: Car,         label: "Vehicle", value: `${selectedBooking.brand} ${selectedBooking.model}` },
                   { icon: Wrench,      label: "Service", value: selectedBooking.service },
                   { icon: CalendarDays,label: "Date",    value: selectedBooking.date || "—" },
                 ].map(item => (
-                  <div key={item.label} style={{ background: "var(--bg)", borderRadius: 12, padding: "12px 14px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, color: "var(--text-muted)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.06em" }}>
-                      <item.icon size={12} /> {item.label.toUpperCase()}
+                  <div key={item.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 16, padding: "16px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, color: "var(--text-secondary)", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                      <item.icon size={13} /> {item.label}
                     </div>
-                    <div style={{ color: "var(--text)", fontWeight: 600, fontSize: "0.9rem" }}>{item.value || "—"}</div>
+                    <div style={{ color: "white", fontWeight: 600, fontSize: "0.95rem" }}>{item.value || "—"}</div>
                   </div>
                 ))}
               </div>
 
               {selectedBooking.message && (
-                <div style={{ background: "var(--bg)", borderRadius: 12, padding: "12px 14px", marginBottom: 24 }}>
-                  <div style={{ color: "var(--text-muted)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.06em", marginBottom: 6 }}>MESSAGE</div>
-                  <p style={{ color: "var(--text)", fontSize: "0.88rem", lineHeight: 1.6 }}>{selectedBooking.message}</p>
+                <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 16, padding: "16px", marginBottom: 32 }}>
+                  <div style={{ color: "var(--text-secondary)", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.08em", marginBottom: 8, textTransform: "uppercase" }}>Additional Message</div>
+                  <p style={{ color: "rgba(255,255,255,0.9)", fontSize: "0.95rem", lineHeight: 1.6 }}>{selectedBooking.message}</p>
                 </div>
               )}
 
               {/* Status Actions */}
-              <div style={{ marginBottom: 16 }}>
-                <p style={{ color: "var(--text-muted)", fontSize: "0.78rem", fontWeight: 600, letterSpacing: "0.08em", marginBottom: 10 }}>UPDATE STATUS</p>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <div style={{ marginBottom: 32 }}>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.08em", marginBottom: 12, textTransform: "uppercase" }}>Update Status</p>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                   {(["pending", "confirmed", "completed", "cancelled"] as Booking["status"][]).map(s => (
                     <button
                       key={s}
                       onClick={() => updateStatus(selectedBooking.id, s)}
                       disabled={selectedBooking.status === s || updatingId === selectedBooking.id}
                       style={{
-                        padding: "8px 16px", borderRadius: 100, border: `1px solid ${STATUS_CONFIG[s].color}`,
+                        padding: "10px 20px", borderRadius: 100, border: `1px solid ${selectedBooking.status === s ? STATUS_CONFIG[s].color : 'rgba(255,255,255,0.1)'}`,
                         background: selectedBooking.status === s ? STATUS_CONFIG[s].bg : "transparent",
-                        color: STATUS_CONFIG[s].color, fontFamily: "Inter, sans-serif",
-                        fontWeight: 600, fontSize: "0.8rem", cursor: selectedBooking.status === s ? "default" : "pointer",
-                        opacity: updatingId === selectedBooking.id ? 0.5 : 1,
+                        color: selectedBooking.status === s ? STATUS_CONFIG[s].color : "var(--text-secondary)", fontFamily: "Inter, sans-serif",
+                        fontWeight: 600, fontSize: "0.85rem", cursor: selectedBooking.status === s ? "default" : "pointer",
+                        opacity: updatingId === selectedBooking.id ? 0.5 : 1, transition: "all 0.2s"
                       }}
                     >
                       {STATUS_CONFIG[s].label}
@@ -545,27 +595,27 @@ export default function AdminClient() {
                 </div>
               </div>
 
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 24 }}>
                 <button
                   onClick={() => deleteBooking(selectedBooking.id)}
                   style={{
-                    padding: "10px 18px", borderRadius: 10, border: "1px solid rgba(239,68,68,0.3)",
-                    background: "rgba(239,68,68,0.08)", color: "#EF4444",
-                    fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem",
-                    cursor: "pointer", display: "flex", alignItems: "center", gap: 6,
+                    padding: "12px 20px", borderRadius: 12, border: "1px solid rgba(239,68,68,0.3)",
+                    background: "rgba(239,68,68,0.1)", color: "#EF4444",
+                    fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.9rem",
+                    cursor: "pointer", display: "flex", alignItems: "center", gap: 6, transition: "all 0.2s"
                   }}
                 >
-                  <Trash2 size={14} /> Delete
+                  <Trash2 size={16} /> Delete
                 </button>
                 <button
                   onClick={() => setSelectedBooking(null)}
                   style={{
-                    padding: "10px 20px", borderRadius: 10, border: "1px solid var(--border)",
-                    background: "var(--bg)", color: "var(--text)",
-                    fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer",
+                    padding: "12px 28px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.1)",
+                    background: "rgba(255,255,255,0.05)", color: "white",
+                    fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.9rem", cursor: "pointer", transition: "all 0.2s"
                   }}
                 >
-                  Close
+                  Done
                 </button>
               </div>
             </motion.div>
@@ -576,81 +626,76 @@ export default function AdminClient() {
   );
 }
 
-function StatusBadge({ status }: { status: Booking["status"] }) {
+function StatusBadge({ status, size = "sm" }: { status: Booking["status"], size?: "sm" | "lg" }) {
   const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.pending;
   return (
     <span style={{
-      padding: "5px 12px", borderRadius: 100,
-      background: cfg.bg, color: cfg.color,
-      fontSize: "0.78rem", fontWeight: 700, letterSpacing: "0.04em",
-      display: "inline-flex", alignItems: "center", gap: 5,
+      padding: size === "lg" ? "6px 16px" : "4px 12px", borderRadius: 100,
+      background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.color}33`,
+      fontSize: size === "lg" ? "0.85rem" : "0.75rem", fontWeight: 700, letterSpacing: "0.05em",
+      display: "inline-flex", alignItems: "center", gap: 6, textTransform: "uppercase"
     }}>
-      <cfg.icon size={12} /> {cfg.label}
+      <cfg.icon size={size === "lg" ? 14 : 12} /> {cfg.label}
     </span>
   );
 }
 
-function BookingTable({ bookings, onSelect, onStatus, onDelete, updatingId }: {
+function BookingTable({ bookings, onSelect, onStatus, updatingId }: {
   bookings: Booking[];
   onSelect: (b: Booking) => void;
   onStatus: (id: string, status: Booking["status"]) => void;
-  onDelete: (id: string) => void;
   updatingId: string | null;
 }) {
   return (
     <div style={{ overflowX: "auto" }}>
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
-          <tr style={{ borderBottom: "1px solid var(--border)" }}>
+          <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.01)" }}>
             {["Customer", "Vehicle", "Service", "Date", "Status", "Actions"].map(h => (
-              <th key={h} style={{ padding: "14px 20px", textAlign: "left", fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", letterSpacing: "0.08em", textTransform: "uppercase", whiteSpace: "nowrap" }}>{h}</th>
+              <th key={h} style={{ padding: "16px 28px", textAlign: "left", fontSize: "0.75rem", fontWeight: 700, color: "var(--text-secondary)", letterSpacing: "0.1em", textTransform: "uppercase", whiteSpace: "nowrap" }}>{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {bookings.map(b => (
-            <tr key={b.id} style={{ borderBottom: "1px solid var(--border)", transition: "background 0.15s" }}
-              onMouseEnter={e => (e.currentTarget.style.background = "var(--bg)")}
+          {bookings.map((b, i) => (
+            <motion.tr key={b.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.03 }}
+              style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", transition: "background 0.2s", cursor: "pointer" }}
+              onClick={() => onSelect(b)}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.03)")}
               onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
-              <td style={{ padding: "14px 20px" }}>
-                <div style={{ fontWeight: 600, color: "var(--text)", fontSize: "0.9rem", fontFamily: "Inter, sans-serif" }}>{b.name}</div>
-                <div style={{ color: "var(--text-muted)", fontSize: "0.78rem" }}>{b.phone}</div>
+              <td style={{ padding: "16px 28px" }}>
+                <div style={{ fontWeight: 600, color: "white", fontSize: "0.95rem", fontFamily: "Inter, sans-serif" }}>{b.name}</div>
+                <div style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>{b.phone}</div>
               </td>
-              <td style={{ padding: "14px 20px", color: "var(--text-secondary)", fontSize: "0.88rem", fontFamily: "Inter, sans-serif" }}>{b.brand} {b.model}</td>
-              <td style={{ padding: "14px 20px", color: "var(--text-secondary)", fontSize: "0.88rem", fontFamily: "Inter, sans-serif", maxWidth: 160 }}>
+              <td style={{ padding: "16px 28px", color: "rgba(255,255,255,0.9)", fontSize: "0.9rem", fontFamily: "Inter, sans-serif" }}>{b.brand} {b.model}</td>
+              <td style={{ padding: "16px 28px", color: "rgba(255,255,255,0.9)", fontSize: "0.9rem", fontFamily: "Inter, sans-serif", maxWidth: 180 }}>
                 <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{b.service}</div>
               </td>
-              <td style={{ padding: "14px 20px", color: "var(--text-secondary)", fontSize: "0.85rem", fontFamily: "Inter, sans-serif", whiteSpace: "nowrap" }}>{b.date || "—"}</td>
-              <td style={{ padding: "14px 20px" }}><StatusBadge status={b.status} /></td>
-              <td style={{ padding: "14px 20px" }}>
-                <div style={{ display: "flex", gap: 6 }}>
+              <td style={{ padding: "16px 28px", color: "var(--text-secondary)", fontSize: "0.9rem", fontFamily: "Inter, sans-serif", whiteSpace: "nowrap" }}>{b.date || "—"}</td>
+              <td style={{ padding: "16px 28px" }}><StatusBadge status={b.status} /></td>
+              <td style={{ padding: "16px 28px" }}>
+                <div style={{ display: "flex", gap: 8 }} onClick={e => e.stopPropagation()}>
                   <button onClick={() => onSelect(b)}
-                    style={{ padding: "6px 10px", borderRadius: 7, border: "1px solid var(--border)", background: "none", color: "var(--text-secondary)", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, fontSize: "0.8rem" }}>
-                    <Eye size={13} /> View
+                    style={{ padding: "8px 12px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "white", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, fontSize: "0.85rem", transition: "all 0.2s" }}
+                    onMouseEnter={e => e.currentTarget.style.background="rgba(255,255,255,0.1)"} onMouseLeave={e => e.currentTarget.style.background="rgba(255,255,255,0.05)"}>
+                    <Eye size={14} /> View
                   </button>
                   {b.status === "pending" && (
                     <button onClick={() => onStatus(b.id, "confirmed")} disabled={updatingId === b.id}
-                      style={{ padding: "6px 10px", borderRadius: 7, border: "1px solid rgba(59,130,246,0.3)", background: "rgba(59,130,246,0.1)", color: "#3B82F6", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, fontSize: "0.8rem" }}>
-                      <CheckCircle2 size={13} /> Confirm
+                      style={{ padding: "8px 12px", borderRadius: 10, border: "1px solid rgba(59,130,246,0.3)", background: "rgba(59,130,246,0.15)", color: "#66A3FF", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, fontSize: "0.85rem", transition: "all 0.2s" }}
+                      onMouseEnter={e => e.currentTarget.style.background="rgba(59,130,246,0.25)"} onMouseLeave={e => e.currentTarget.style.background="rgba(59,130,246,0.15)"}>
+                      <CheckCircle2 size={14} /> Confirm
                     </button>
                   )}
-                  <button onClick={() => onDelete(b.id)}
-                    style={{ padding: "6px 8px", borderRadius: 7, border: "1px solid rgba(239,68,68,0.2)", background: "rgba(239,68,68,0.06)", color: "#EF4444", cursor: "pointer", display: "flex", alignItems: "center" }}>
-                    <Trash2 size={13} />
-                  </button>
                 </div>
               </td>
-            </tr>
+            </motion.tr>
           ))}
           {bookings.length === 0 && (
-            <tr><td colSpan={6} style={{ padding: 40, textAlign: "center", color: "var(--text-muted)", fontFamily: "Inter, sans-serif" }}>No bookings found.</td></tr>
+            <tr><td colSpan={6} style={{ padding: 60, textAlign: "center", color: "var(--text-muted)", fontFamily: "Inter, sans-serif", fontSize: "1.1rem" }}>No bookings found matching your criteria.</td></tr>
           )}
         </tbody>
       </table>
     </div>
   );
 }
-
-// Needed to avoid "defined but not used" lint error
-const _unused = ChevronDown;
-void _unused;

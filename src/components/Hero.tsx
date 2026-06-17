@@ -161,10 +161,10 @@ export default function Hero() {
         className="hero-car-desktop"
         style={{
           position: "absolute",
-          right: 0,
+          right: "-4%",
           top: "50%",
           translateY: "-50%",
-          width: "58%",
+          width: "55%",
           maxWidth: 860,
           x: carX,
           scale: carScale,
@@ -270,16 +270,16 @@ export default function Hero() {
             className="display-xl"
             style={{ maxWidth: 640, marginBottom: 8 }}
           >
-            <span style={{ color: "var(--text)", display: "block" }}>
+            <span style={{ color: "var(--text)", display: "block", textShadow: "0 4px 30px var(--bg), 0 0 10px var(--bg)" }}>
               BOSCH CERTIFIED
             </span>
             <span
               className="gradient-text"
-              style={{ display: "block", lineHeight: 1 }}
+              style={{ display: "block", lineHeight: 1, textShadow: "0 4px 30px var(--bg)" }}
             >
               CAR CARE
             </span>
-            <span style={{ color: "var(--text)", display: "block" }}>
+            <span style={{ color: "var(--text)", display: "block", textShadow: "0 4px 30px var(--bg), 0 0 10px var(--bg)" }}>
               EXCELLENCE
             </span>
           </h1>

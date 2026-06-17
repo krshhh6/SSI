@@ -822,25 +822,25 @@ service cloud.firestore {
                   </div>
 
                   <select required value={offlineForm.service} onChange={e => setOfflineForm({...offlineForm, service: e.target.value})}
-                    style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
-                    <option value="" disabled >Select Service Type</option>
-                    <option value="Periodic Maintenance" >Periodic Maintenance</option>
-                    <option value="AC Service & Repair" >AC Service & Repair</option>
-                    <option value="Denting & Painting" >Denting & Painting</option>
-                    <option value="Engine Diagnostics" >Engine Diagnostics</option>
-                    <option value="Wheel Care" >Wheel Care</option>
-                    <option value="Car Detailing" >Car Detailing</option>
-                    <option value="Other / Custom Service" >Other / Custom Service</option>
+                    style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }}>
+                    <option value="" disabled style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Select Service Type</option>
+                    <option value="Periodic Maintenance" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Periodic Maintenance</option>
+                    <option value="AC Service & Repair" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>AC Service & Repair</option>
+                    <option value="Denting & Painting" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Denting & Painting</option>
+                    <option value="Engine Diagnostics" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Engine Diagnostics</option>
+                    <option value="Wheel Care" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Wheel Care</option>
+                    <option value="Car Detailing" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Car Detailing</option>
+                    <option value="Other / Custom Service" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Other / Custom Service</option>
                   </select>
 
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                     <input type="date" required value={offlineForm.date} onChange={e => setOfflineForm({...offlineForm, date: e.target.value})}
                       style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem",  }} />
                     <select required value={offlineForm.status} onChange={e => setOfflineForm({...offlineForm, status: e.target.value as Booking["status"]})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
-                      <option value="pending" >Status: Pending</option>
-                      <option value="confirmed" >Status: Confirmed</option>
-                      <option value="completed" >Status: Completed</option>
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }}>
+                      <option value="pending" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Pending</option>
+                      <option value="confirmed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Confirmed</option>
+                      <option value="completed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Completed</option>
                     </select>
                   </div>
 
@@ -865,10 +865,10 @@ service cloud.firestore {
 
                 <div style={{ marginBottom: 16 }}>
                   <select value={editBookingId} onChange={e => setEditBookingId(e.target.value)}
-                    style={{ width: "100%", padding: "12px 16px", borderRadius: 10, background: "rgba(0,102,255,0.1)", border: "1px solid rgba(0,102,255,0.3)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
-                    <option value="" >-- Select a Booking to Edit --</option>
+                    style={{ width: "100%", padding: "12px 16px", borderRadius: 10, background: "#1a2035", border: "1px solid rgba(0,102,255,0.3)", color: "#fff", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }}>
+                    <option value="" style={{ background: "#1a2035", color: "#fff" }}>-- Select a Booking to Edit --</option>
                     {bookings.slice().sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)).map(b => (
-                      <option key={b.id} value={b.id} >
+                      <option key={b.id} value={b.id} style={{ background: "#1a2035", color: "#fff" }}>
                         {b.name} - {b.service} ({b.date || "No date"})
                       </option>
                     ))}
@@ -896,26 +896,26 @@ service cloud.firestore {
                     </div>
 
                     <select required value={editForm.service} onChange={e => setEditForm({...editForm, service: e.target.value})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
-                      <option value="" disabled >Select Service Type</option>
-                      <option value="Periodic Maintenance" >Periodic Maintenance</option>
-                      <option value="AC Service & Repair" >AC Service & Repair</option>
-                      <option value="Denting & Painting" >Denting & Painting</option>
-                      <option value="Engine Diagnostics" >Engine Diagnostics</option>
-                      <option value="Wheel Care" >Wheel Care</option>
-                      <option value="Car Detailing" >Car Detailing</option>
-                      <option value="Other / Custom Service" >Other / Custom Service</option>
+                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }}>
+                      <option value="" disabled style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Select Service Type</option>
+                      <option value="Periodic Maintenance" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Periodic Maintenance</option>
+                      <option value="AC Service & Repair" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>AC Service & Repair</option>
+                      <option value="Denting & Painting" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Denting & Painting</option>
+                      <option value="Engine Diagnostics" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Engine Diagnostics</option>
+                      <option value="Wheel Care" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Wheel Care</option>
+                      <option value="Car Detailing" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Car Detailing</option>
+                      <option value="Other / Custom Service" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Other / Custom Service</option>
                     </select>
 
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                       <input type="date" required value={editForm.date} onChange={e => setEditForm({...editForm, date: e.target.value})}
                         style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem",  }} />
                       <select required value={editForm.status} onChange={e => setEditForm({...editForm, status: e.target.value as Booking["status"]})}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }}>
-                        <option value="pending" >Status: Pending</option>
-                        <option value="confirmed" >Status: Confirmed</option>
-                        <option value="completed" >Status: Completed</option>
-                        <option value="cancelled" >Status: Cancelled</option>
+                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }}>
+                        <option value="pending" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Pending</option>
+                        <option value="confirmed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Confirmed</option>
+                        <option value="completed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Completed</option>
+                        <option value="cancelled" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Cancelled</option>
                       </select>
                     </div>
 
@@ -1018,7 +1018,22 @@ service cloud.firestore {
         )}
       </AnimatePresence>
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } } .animate-spin { animation: spin 0.8s linear infinite; }`}</style>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 0.8s linear infinite; }
+        /* Force dark dropdown options in dark mode */
+        [data-theme="dark"] .admin-select option,
+        [data-theme="dark"] select option {
+          background: #0f1624 !important;
+          color: #ffffff !important;
+        }
+        [data-theme="dark"] select {
+          color-scheme: dark;
+        }
+        [data-theme="light"] select {
+          color-scheme: light;
+        }
+      `}</style>
     </div>
   );
 }

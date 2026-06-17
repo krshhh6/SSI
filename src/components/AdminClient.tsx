@@ -19,7 +19,16 @@ import {
   ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, CartesianGrid,
 } from "recharts";
 
-const ADMIN_EMAIL = "test01samwheels@gmail.com";
+
+// Admin email is read from the environment variable NEXT_PUBLIC_ADMIN_EMAIL.
+// Set this in .env.local for local dev, and in Vercel → Project Settings →
+// Environment Variables for production. Never hardcode it in source code.
+const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? "";
+if (!ADMIN_EMAIL) {
+  console.warn("[AdminClient] NEXT_PUBLIC_ADMIN_EMAIL is not set. Admin login will be disabled.");
+}
+
+
 const PIE_COLORS = ["#0066FF", "#00C896", "#F59E0B", "#8B5CF6", "#EC4899", "#E2001A", "#06B6D4"];
 
 type Booking = {

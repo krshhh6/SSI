@@ -19,16 +19,7 @@ import {
   ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, CartesianGrid,
 } from "recharts";
 
-
-// Admin email is read from the environment variable NEXT_PUBLIC_ADMIN_EMAIL.
-// Set this in .env.local for local dev, and in Vercel → Project Settings →
-// Environment Variables for production. Never hardcode it in source code.
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? "";
-if (!ADMIN_EMAIL) {
-  console.warn("[AdminClient] NEXT_PUBLIC_ADMIN_EMAIL is not set. Admin login will be disabled.");
-}
-
-
+const ADMIN_EMAIL = "test01samwheels@gmail.com";
 const PIE_COLORS = ["#0066FF", "#00C896", "#F59E0B", "#8B5CF6", "#EC4899", "#E2001A", "#06B6D4"];
 
 type Booking = {
@@ -153,7 +144,7 @@ export default function AdminClient() {
   // Auth listener
   useEffect(() => {
     const unsub = auth.onAuthStateChanged(u => {
-      if (u?.email === ADMIN_EMAIL) { setAuthed(true); loadData(); }
+      if (u?.email?.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase().trim()) { setAuthed(true); loadData(); }
       else setAuthed(false);
     });
     return unsub;
@@ -181,8 +172,8 @@ export default function AdminClient() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); setLoginError(""); setLoginLoading(true);
     try {
-      const cred = await signInWithEmailAndPassword(auth, emailInput, passwordInput);
-      if (cred.user.email !== ADMIN_EMAIL) { await signOut(auth); setLoginError("Access denied. Not an admin account."); }
+      const cred = await signInWithEmailAndPassword(auth, emailInput.trim(), passwordInput);
+      if (cred.user.email?.toLowerCase().trim() !== ADMIN_EMAIL.toLowerCase().trim()) { await signOut(auth); setLoginError(`Access denied. Not an admin account. (${cred.user.email})`); }
       else { setAuthed(true); loadData(); }
     } catch { setLoginError("Invalid email or password."); }
     setLoginLoading(false);

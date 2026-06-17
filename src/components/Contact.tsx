@@ -180,7 +180,7 @@ export default function Contact() {
             </div>
 
             {/* Action Buttons */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }} className="contact-actions">
               <motion.a
                 href="tel:+919028384499"
                 whileHover={{ scale: 1.02, y: -2, boxShadow: "0 12px 32px var(--bosch-red-glow)" }}
@@ -279,6 +279,7 @@ export default function Contact() {
                 border: "1px solid var(--border)",
                 position: "relative",
               }}
+              className="contact-map"
             >
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.585721867909!2d85.0783003!3d25.6082862!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed5761f3c3eedd%3A0xe0ec48051c1df5d1!2sBosch%20Car%20Service%20-%20SAM%20Wheels%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"

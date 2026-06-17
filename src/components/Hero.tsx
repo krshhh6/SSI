@@ -392,6 +392,7 @@ export default function Hero() {
           borderTop: "1px solid var(--border)",
           background: "var(--glass-bg)",
           backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
         }}
       >
         <div
@@ -446,8 +447,8 @@ export default function Hero() {
           position: "relative",
           zIndex: 3,
           width: "100%",
-          padding: "0 16px 120px",
-          marginTop: "-20px",
+          padding: "0 8px 8px",
+          marginTop: "-12px",
         }}
       >
         <div style={{ position: "relative" }}>

@@ -153,6 +153,7 @@ export default function Reviews() {
                 position: "relative",
                 overflow: "hidden",
               }}
+              className="review-card-main"
             >
               {/* Blue accent border top */}
               <div
@@ -205,7 +206,7 @@ export default function Reviews() {
               </p>
 
               {/* Author */}
-              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }} className="review-author-row">
                 <div
                   style={{
                     width: 48,
@@ -231,7 +232,7 @@ export default function Reviews() {
                     {REVIEWS[current].service} · {REVIEWS[current].date}
                   </div>
                 </div>
-                <div style={{ marginLeft: "auto" }}>
+                <div style={{ marginLeft: "auto" }} className="review-google-badge">
                   <span
                     style={{
                       padding: "4px 10px",

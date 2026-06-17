@@ -518,3 +518,182 @@ body {
   }
 }
 
+/* ─── Comprehensive Mobile Optimizations ─────────── */
+
+/* General section padding reduction on mobile */
+@media (max-width: 768px) {
+  .section-padding {
+    padding: 56px 0;
+  }
+  .container {
+    padding: 0 16px;
+  }
+}
+
+/* Hero section mobile */
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: auto !important;
+    padding-bottom: 0 !important;
+  }
+  .hero-content {
+    padding-top: 88px !important;
+    padding-bottom: 16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .display-xl {
+    font-size: clamp(2.2rem, 9vw, 3.2rem) !important;
+    line-height: 1.0 !important;
+  }
+  /* Trust badges: 2 per row */
+  .hero-badges-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  /* Stats bar: proper spacing on mobile */
+  .hero-stats {
+    position: relative !important;
+    bottom: auto !important;
+  }
+  .hero-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0 !important;
+    padding: 12px 16px !important;
+  }
+}
+
+/* Mobile car image */
+@media (max-width: 768px) {
+  .hero-car-desktop { display: none !important; }
+  .hero-car-mobile { display: block !important; }
+}
+
+/* Services grid mobile */
+@media (max-width: 480px) {
+  .services-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Reviews card mobile padding */
+@media (max-width: 768px) {
+  .review-card-main {
+    padding: 28px 20px !important;
+  }
+  .review-mini-grid {
+    display: none !important;
+  }
+  .review-author-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .review-google-badge {
+    margin-left: 0 !important;
+  }
+}
+
+/* Contact section mobile */
+@media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  .contact-map iframe {
+    height: 260px !important;
+  }
+  .contact-actions {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 8px !important;
+  }
+  .contact-actions a {
+    flex: 1;
+    min-width: 120px;
+    font-size: 0.85rem !important;
+    padding: 12px 14px !important;
+  }
+}
+
+/* Footer mobile */
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 32px !important;
+  }
+}
+@media (max-width: 540px) {
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+  .footer-bottom-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .footer-bottom-links {
+    flex-wrap: wrap;
+    gap: 12px !important;
+  }
+}
+
+/* Display typography scaling */
+@media (max-width: 768px) {
+  .display-lg {
+    font-size: clamp(1.6rem, 7vw, 2.4rem) !important;
+    line-height: 1.1 !important;
+  }
+  .display-md {
+    font-size: clamp(1.2rem, 5vw, 1.8rem) !important;
+  }
+  /* Section headers margin */
+  .section-header {
+    margin-bottom: 36px !important;
+  }
+}
+
+/* Navbar mobile burger area */
+@media (max-width: 768px) {
+  #navbar {
+    padding: 0 16px !important;
+  }
+}
+
+/* Booking page mobile */
+@media (max-width: 768px) {
+  .booking-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* My Bookings page mobile */
+@media (max-width: 768px) {
+  .bookings-page-wrap {
+    padding: 88px 16px 100px !important;
+  }
+}
+
+/* Sign In page mobile */
+@media (max-width: 768px) {
+  .signin-card {
+    padding: 32px 24px !important;
+    border-radius: 20px !important;
+  }
+}
+
+/* Generic card padding reduction on mobile */
+@media (max-width: 480px) {
+  .service-card {
+    padding: 14px !important;
+  }
+}
+
+/* Floating contact widget: safe area for notch phones */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .floating-contact-inner {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+}
+
+

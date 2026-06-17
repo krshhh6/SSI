@@ -274,6 +274,24 @@ export default function SignInClient() {
             </svg>
             Continue with Google
           </motion.button>
+          {/* Admin Access Link */}
+          <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.06)", textAlign: "center" }}>
+            <button
+              onClick={() => router.push("/admin")}
+              style={{
+                background: "none", border: "none", cursor: "pointer",
+                fontFamily: "Inter, sans-serif", fontSize: "0.8rem",
+                color: "var(--text-muted)", display: "inline-flex", alignItems: "center", gap: 6,
+                transition: "color 0.2s",
+                padding: 0,
+              }}
+              onMouseEnter={e => (e.currentTarget.style.color = "var(--bosch-red)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "var(--text-muted)")}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Staff / Admin Access
+            </button>
+          </div>
         </div>
       </motion.div>
     </section>

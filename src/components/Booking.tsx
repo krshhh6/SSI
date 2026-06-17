@@ -346,7 +346,7 @@ export default function Booking() {
                     type="date"
                     value={form.date}
                     onChange={(e) => setForm({ ...form, date: e.target.value })}
-                    style={{ ...inputStyle, colorScheme: "dark" }}
+                    style={{ ...inputStyle }}
                     min={new Date().toISOString().split("T")[0]}
                     onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
                     onBlur={(e) => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}

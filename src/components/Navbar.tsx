@@ -67,7 +67,8 @@ export default function Navbar() {
 
   const isActive = (link: Omit<NavLinkDef, "dropdown">) => {
     if (link.href === "/") return pathname === "/";
-    return pathname.startsWith(link.href.split("#")[0]) && link.href !== "/";
+    if (!link.isPage) return false;
+    return pathname.startsWith(link.href);
   };
 
   return (

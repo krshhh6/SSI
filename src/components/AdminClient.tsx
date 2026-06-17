@@ -63,6 +63,7 @@ export default function AdminClient() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [users, setUsers] = useState<UserRecord[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
+  const [dataError, setDataError] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
@@ -83,14 +84,32 @@ export default function AdminClient() {
 
   const loadData = async () => {
     setDataLoading(true);
+    setDataError("");
     try {
-      const bSnap = await getDocs(query(collection(db, "bookings"), orderBy("createdAt", "desc")));
+      // Try with orderBy first, fall back without if index not ready
+      let bSnap;
+      try {
+        bSnap = await getDocs(query(collection(db, "bookings"), orderBy("createdAt", "desc")));
+      } catch {
+        bSnap = await getDocs(collection(db, "bookings"));
+      }
       setBookings(bSnap.docs.map(d => ({ id: d.id, ...d.data() } as Booking)));
 
-      const uSnap = await getDocs(query(collection(db, "users"), orderBy("createdAt", "desc")));
+      let uSnap;
+      try {
+        uSnap = await getDocs(query(collection(db, "users"), orderBy("createdAt", "desc")));
+      } catch {
+        uSnap = await getDocs(collection(db, "users"));
+      }
       setUsers(uSnap.docs.map(d => ({ id: d.id, ...d.data() } as UserRecord)));
-    } catch (e) {
-      console.error(e);
+    } catch (e: unknown) {
+      console.error("Firestore error:", e);
+      const msg = e instanceof Error ? e.message : "Unknown error";
+      if (msg.includes("Missing or insufficient permissions") || msg.includes("permission-denied")) {
+        setDataError("PERMISSION_DENIED");
+      } else {
+        setDataError(msg);
+      }
     }
     setDataLoading(false);
   };
@@ -350,7 +369,58 @@ export default function AdminClient() {
 
       {/* Main Content */}
       <main style={{ maxWidth: 1400, margin: "0 auto", padding: "40px 32px" }}>
-        
+
+        {/* ── FIRESTORE RULES ERROR BANNER ── */}
+        {dataError && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{
+              background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.35)",
+              borderRadius: 16, padding: "20px 24px", marginBottom: 28,
+              display: "flex", alignItems: "flex-start", gap: 16,
+            }}
+          >
+            <AlertCircle size={24} color="#EF4444" style={{ flexShrink: 0, marginTop: 2 }} />
+            <div style={{ flex: 1 }}>
+              {dataError === "PERMISSION_DENIED" ? (
+                <>
+                  <div style={{ fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "#EF4444", marginBottom: 8 }}>
+                    Firestore Rules Not Published — Action Required
+                  </div>
+                  <p style={{ color: "rgba(255,200,200,0.9)", fontSize: "0.9rem", lineHeight: 1.6, marginBottom: 12 }}>
+                    Firebase is blocking all database reads. You must publish the security rules to see bookings and users.
+                  </p>
+                  <ol style={{ color: "rgba(255,200,200,0.9)", fontSize: "0.9rem", lineHeight: 2, paddingLeft: 20 }}>
+                    <li>Go to <a href="https://console.firebase.google.com" target="_blank" rel="noreferrer" style={{ color: "#66A3FF", fontWeight: 600 }}>console.firebase.google.com</a> → sam-wheels project</li>
+                    <li>Click <strong style={{ color: "white" }}>Firestore Database</strong> in the left sidebar</li>
+                    <li>Click the <strong style={{ color: "white" }}>Rules</strong> tab at the top</li>
+                    <li>Replace the entire content with the rules below and click <strong style={{ color: "white" }}>Publish</strong></li>
+                  </ol>
+                  <pre style={{ marginTop: 14, padding: "16px", background: "rgba(0,0,0,0.4)", borderRadius: 12, color: "#A8FF78", fontSize: "0.82rem", overflowX: "auto", lineHeight: 1.6, border: "1px solid rgba(255,255,255,0.08)" }}>
+{`rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}`}
+                  </pre>
+                  <button onClick={loadData} style={{ marginTop: 14, padding: "10px 20px", borderRadius: 10, border: "1px solid rgba(239,68,68,0.4)", background: "rgba(239,68,68,0.15)", color: "#EF4444", fontFamily: "Inter, sans-serif", fontWeight: 600, cursor: "pointer" }}>
+                    ↻ Retry After Publishing
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div style={{ fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#EF4444", marginBottom: 6 }}>Error Loading Data</div>
+                  <p style={{ color: "rgba(255,200,200,0.9)", fontSize: "0.9rem" }}>{dataError}</p>
+                </>
+              )}
+            </div>
+          </motion.div>
+        )}
+
         {/* ── OVERVIEW TAB ── */}
         {tab === "overview" && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>

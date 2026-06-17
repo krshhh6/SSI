@@ -175,6 +175,10 @@ export default function AdminClient() {
 
   const submitOfflineBooking = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (offlineForm.phone.length !== 10) {
+      alert("Please enter exactly 10 digits for the phone number.");
+      return;
+    }
     setOfflineLoading(true);
     setOfflineSuccess("");
     try {
@@ -756,7 +760,11 @@ service cloud.firestore {
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                     <input required placeholder="Customer Name" value={offlineForm.name} onChange={e => setOfflineForm({...offlineForm, name: e.target.value})}
                       style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
-                    <input required placeholder="Phone Number" value={offlineForm.phone} onChange={e => setOfflineForm({...offlineForm, phone: e.target.value})}
+                    <input required placeholder="Phone Number" value={offlineForm.phone} 
+                      onChange={e => {
+                        const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+                        setOfflineForm({...offlineForm, phone: val});
+                      }}
                       style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "white", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
                   </div>
                   

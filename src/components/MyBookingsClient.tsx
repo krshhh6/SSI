@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
+import { collection, query, where, orderBy, getDocs, doc, getDoc, setDoc } from "firebase/firestore";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
-import { CalendarCheck, Car, Wrench, Clock, LogOut, User, RefreshCw } from "lucide-react";
+import { CalendarCheck, Car, Wrench, Clock, LogOut, User, RefreshCw, Phone, Save, ShieldCheck } from "lucide-react";
 
 interface Booking {
   id: string;
@@ -33,6 +33,10 @@ export default function MyBookingsClient() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loadingBookings, setLoadingBookings] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [tab, setTab] = useState<"bookings" | "profile">("bookings");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileSuccess, setProfileSuccess] = useState("");
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -65,6 +69,18 @@ export default function MyBookingsClient() {
     }
   };
 
+  const fetchProfile = async () => {
+    if (!user) return;
+    try {
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (userDoc.exists() && userDoc.data().phone) {
+        setPhoneNumber(userDoc.data().phone);
+      }
+    } catch (err) {
+      console.error("Error fetching profile", err);
+    }
+  };
+
   const handleRefresh = async () => {
     setRefreshing(true);
     await fetchBookings();
@@ -72,9 +88,36 @@ export default function MyBookingsClient() {
   };
 
   useEffect(() => {
-    if (user) fetchBookings();
+    if (user) {
+      fetchBookings();
+      fetchProfile();
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+    if (phoneNumber && phoneNumber.length !== 10) {
+      alert("Please enter exactly 10 digits for your phone number.");
+      return;
+    }
+    setProfileLoading(true);
+    setProfileSuccess("");
+    try {
+      await setDoc(doc(db, "users", user.uid), {
+        name: user.displayName || "User",
+        email: user.email || "",
+        phone: phoneNumber,
+        role: "user"
+      }, { merge: true });
+      setProfileSuccess("Profile successfully updated!");
+      setTimeout(() => setProfileSuccess(""), 4000);
+    } catch (err) {
+      alert("Failed to save profile. Please try again.");
+    }
+    setProfileLoading(false);
+  };
 
   if (authLoading || (!user && !authLoading)) {
     return (
@@ -165,8 +208,24 @@ export default function MyBookingsClient() {
             </div>
           </div>
 
-          {/* Stats bar */}
-          <div style={{ display: "flex", gap: 16, marginTop: 32, flexWrap: "wrap" }}>
+          {/* Navigation Tabs */}
+          <div style={{ display: "flex", gap: 8, marginTop: 32, borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: 16 }}>
+            <button onClick={() => setTab("bookings")}
+              style={{ padding: "10px 20px", borderRadius: 10, background: tab === "bookings" ? "rgba(0,102,255,0.15)" : "transparent", border: tab === "bookings" ? "1px solid rgba(0,102,255,0.3)" : "1px solid transparent", color: tab === "bookings" ? "var(--accent)" : "var(--text-secondary)", fontWeight: 700, fontSize: "0.95rem", fontFamily: "Inter, sans-serif", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.2s" }}>
+              <CalendarCheck size={16} /> My Bookings
+            </button>
+            <button onClick={() => setTab("profile")}
+              style={{ padding: "10px 20px", borderRadius: 10, background: tab === "profile" ? "rgba(0,102,255,0.15)" : "transparent", border: tab === "profile" ? "1px solid rgba(0,102,255,0.3)" : "1px solid transparent", color: tab === "profile" ? "var(--accent)" : "var(--text-secondary)", fontWeight: 700, fontSize: "0.95rem", fontFamily: "Inter, sans-serif", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.2s" }}>
+              <User size={16} /> My Profile
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Tab Content: Bookings */}
+        {tab === "bookings" && (
+          <>
+            {/* Stats bar */}
+            <div style={{ display: "flex", gap: 16, marginBottom: 32, flexWrap: "wrap" }}>
             {[
               { label: "Total Bookings", value: bookings.length, color: "#0066FF" },
               { label: "Pending", value: bookings.filter(b => b.status === "pending").length, color: "#FF8800" },
@@ -185,10 +244,9 @@ export default function MyBookingsClient() {
                 <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontFamily: "Inter, sans-serif" }}>{stat.label}</div>
               </div>
             ))}
-          </div>
-        </motion.div>
+            </div>
 
-        {/* Bookings List */}
+            {/* Bookings List */}
         {loadingBookings ? (
           <div style={{ textAlign: "center", padding: "80px 0" }}>
             <div style={{ width: 40, height: 40, border: "3px solid var(--border)", borderTop: "3px solid var(--accent)", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto 16px" }} />
@@ -297,6 +355,89 @@ export default function MyBookingsClient() {
               })}
             </div>
           </AnimatePresence>
+        )}
+          </>
+        )}
+
+        {/* Tab Content: Profile */}
+        {tab === "profile" && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+            <div style={{ 
+              maxWidth: 600, 
+              background: "rgba(255,255,255,0.02)", 
+              backdropFilter: "blur(24px)", 
+              border: "1px solid rgba(255,255,255,0.08)", 
+              borderRadius: 24, 
+              padding: "32px",
+              boxShadow: "0 12px 40px rgba(0,0,0,0.15)" 
+            }}>
+              <h2 style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.6rem", fontWeight: 800, margin: "0 0 8px 0" }}>Profile Details</h2>
+              <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: 32 }}>
+                Manage your account information and contact details. Saving your phone number will automatically pre-fill it when making new bookings.
+              </p>
+
+              {profileSuccess && (
+                <div style={{ padding: "12px 16px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", color: "#10B981", borderRadius: 10, fontSize: "0.9rem", display: "flex", alignItems: "center", gap: 8, marginBottom: 24 }}>
+                  <ShieldCheck size={18} /> {profileSuccess}
+                </div>
+              )}
+
+              <form onSubmit={handleSaveProfile} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                {/* Name (Read-only) */}
+                <div>
+                  <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", marginBottom: 8, fontFamily: "Inter, sans-serif" }}>Full Name</label>
+                  <input type="text" readOnly value={user?.displayName || "N/A"} 
+                    style={{ width: "100%", padding: "14px 16px", borderRadius: 12, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", color: "var(--text-muted)", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none", cursor: "not-allowed" }} />
+                </div>
+                
+                {/* Email (Read-only) */}
+                <div>
+                  <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", marginBottom: 8, fontFamily: "Inter, sans-serif" }}>Email Address</label>
+                  <input type="email" readOnly value={user?.email || "N/A"} 
+                    style={{ width: "100%", padding: "14px 16px", borderRadius: 12, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", color: "var(--text-muted)", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none", cursor: "not-allowed" }} />
+                </div>
+
+                {/* Phone (Editable) */}
+                <div>
+                  <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, color: "var(--text)", marginBottom: 8, fontFamily: "Inter, sans-serif" }}>Mobile Number</label>
+                  <div style={{ position: "relative" }}>
+                    <div style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }}>
+                      <Phone size={18} />
+                    </div>
+                    <input 
+                      type="text" 
+                      placeholder="e.g. 9876543210" 
+                      value={phoneNumber} 
+                      onChange={e => {
+                        // Only allow numbers and max 10 digits
+                        const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        setPhoneNumber(val);
+                      }}
+                      style={{ width: "100%", padding: "14px 16px 14px 44px", borderRadius: 12, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.15)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none", transition: "border 0.2s" }} 
+                      onFocus={e => e.target.style.borderColor = "var(--accent)"}
+                      onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.15)"}
+                    />
+                  </div>
+                  <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginTop: 6 }}>10 digit mobile number without country code.</p>
+                </div>
+
+                <motion.button 
+                  type="submit"
+                  disabled={profileLoading}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  style={{ padding: "14px", borderRadius: 12, background: "var(--accent)", border: "none", color: "white", fontWeight: 700, fontSize: "0.95rem", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, cursor: profileLoading ? "wait" : "pointer", marginTop: 8 }}
+                >
+                  {profileLoading ? (
+                     <RefreshCw size={18} style={{ animation: "spin 0.8s linear infinite" }} />
+                  ) : (
+                    <Save size={18} />
+                  )}
+                  {profileLoading ? "Saving..." : "Save Profile"}
+                </motion.button>
+              </form>
+            </div>
+          </motion.div>
         )}
       </div>
 

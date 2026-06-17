@@ -4,7 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { Send, CalendarCheck, User, Phone, Car, Wrench, MessageSquare, LogIn, Lock } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 const VEHICLE_BRANDS = [
@@ -32,15 +32,37 @@ export default function Booking() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Auto-fill name if user is signed in
+  // Auto-fill name and phone if user is signed in
   useEffect(() => {
-    if (user?.displayName) {
-      setForm((prev) => ({ ...prev, name: prev.name || user.displayName || "" }));
+    async function loadUserData() {
+      if (!user) return;
+      
+      let initialPhone = "";
+      try {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists() && userDoc.data().phone) {
+          initialPhone = userDoc.data().phone;
+        }
+      } catch (err) {
+        // ignore
+      }
+
+      setForm((prev) => ({ 
+        ...prev, 
+        name: prev.name || user.displayName || "",
+        phone: prev.phone || initialPhone
+      }));
     }
+    
+    loadUserData();
   }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (form.phone.length !== 10) {
+      alert("Please enter exactly 10 digits for your phone number.");
+      return;
+    }
     setLoading(true);
     try {
       await addDoc(collection(db, "bookings"), {
@@ -276,9 +298,12 @@ export default function Booking() {
                   <input
                     required
                     type="tel"
-                    placeholder="+91 XXXXX XXXXX"
+                    placeholder="e.g. 9876543210"
                     value={form.phone}
-                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+                      setForm({ ...form, phone: val });
+                    }}
                     style={inputStyle}
                     onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
                     onBlur={(e) => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}

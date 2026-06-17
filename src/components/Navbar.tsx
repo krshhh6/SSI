@@ -147,7 +147,7 @@ export default function Navbar() {
 
           {/* Right side */}
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div className="hidden-mobile">
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <ThemeToggle />
             </div>
 
@@ -323,8 +323,6 @@ export default function Navbar() {
           })}
 
           <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 10 }}>
-            <ThemeToggle />
-
             {user ? (
               <div style={{ display: "flex", gap: 10 }}>
                 <button

@@ -126,6 +126,7 @@ export default function AdminClient() {
   });
   const [editLoading, setEditLoading] = useState(false);
   const [editSuccess, setEditSuccess] = useState("");
+  const [editSearch, setEditSearch] = useState("");
 
   // Populate edit form when a booking is selected
   useEffect(() => {
@@ -864,11 +865,34 @@ service cloud.firestore {
                 )}
 
                 <div style={{ marginBottom: 16 }}>
+                  <input
+                    type="text"
+                    placeholder="Search name, phone, vehicle, service..."
+                    value={editSearch}
+                    onChange={(e) => setEditSearch(e.target.value)}
+                    style={{
+                      width: "100%", padding: "12px 16px", borderRadius: 10,
+                      background: "var(--bg-secondary)", border: "1px solid var(--border)",
+                      color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif",
+                      fontSize: "0.9rem", marginBottom: 10
+                    }}
+                  />
                   <select value={editBookingId} onChange={e => setEditBookingId(e.target.value)}
-                    style={{ width: "100%", padding: "12px 16px", borderRadius: 10, background: "#1a2035", border: "1px solid rgba(0,102,255,0.3)", color: "#fff", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }}>
-                    <option value="" style={{ background: "#1a2035", color: "#fff" }}>-- Select a Booking to Edit --</option>
-                    {bookings.slice().sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)).map(b => (
-                      <option key={b.id} value={b.id} style={{ background: "#1a2035", color: "#fff" }}>
+                    style={{ width: "100%", padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid rgba(0,102,255,0.3)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "inherit" }}>
+                    <option value="" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>-- Select a Booking to Edit --</option>
+                    {bookings.slice()
+                      .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
+                      .filter(b => {
+                        if (!editSearch) return true;
+                        const s = editSearch.toLowerCase();
+                        return b.name?.toLowerCase().includes(s) || 
+                               b.service?.toLowerCase().includes(s) || 
+                               b.phone?.includes(s) || 
+                               b.brand?.toLowerCase().includes(s) || 
+                               b.model?.toLowerCase().includes(s);
+                      })
+                      .map(b => (
+                      <option key={b.id} value={b.id} style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>
                         {b.name} - {b.service} ({b.date || "No date"})
                       </option>
                     ))}

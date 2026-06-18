@@ -11,23 +11,22 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   // Disables access to dangerous browser features
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-  // Content Security Policy — restricts what scripts/styles can load
   {
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
       // Firebase, reCAPTCHA, and Google APIs
       "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://www.google.com https://firebaseinstallations.googleapis.com https://securetoken.googleapis.com",
-      // Scripts: self + reCAPTCHA
-      "script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.google.com https://www.recaptcha.net",
+      // Scripts: self + reCAPTCHA + Google Auth
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.google.com https://www.recaptcha.net https://apis.google.com",
       // Styles: self + Google Fonts
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       // Fonts: self + Google Fonts CDN
       "font-src 'self' https://fonts.gstatic.com",
-      // Images: self + data URIs for inline icons
+      // Images: self + data URIs for inline icons + Google Profile Pictures
       "img-src 'self' data: https:",
-      // Frames: only Google reCAPTCHA
-      "frame-src https://www.google.com https://www.recaptcha.net",
+      // Frames: Google reCAPTCHA + Firebase Auth
+      "frame-src 'self' https://www.google.com https://www.recaptcha.net https://sam-wheels.firebaseapp.com",
     ].join("; "),
   },
 ];

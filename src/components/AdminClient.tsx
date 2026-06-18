@@ -1083,15 +1083,15 @@ function BookingTable({ bookings, onSelect, onStatus, updatingId, sortField, sor
             <motion.tr key={b.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.02 }}
               style={{ borderBottom: "1px solid var(--border)", transition: "background 0.15s", cursor: "pointer" }}
               onClick={() => onSelect(b)}
-              onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}
+              onMouseEnter={e => e.currentTarget.style.background = "var(--border-hover)"}
               onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
               <td style={{ padding: "14px 20px" }}>
                 <div style={{ fontWeight: 600, color: "var(--text)", fontSize: "0.92rem" }}>{b.name}</div>
                 <div style={{ color: "var(--text-muted)", fontSize: "0.78rem" }}>{b.phone}</div>
               </td>
-              <td style={{ padding: "14px 20px", color: "rgba(255,255,255,0.8)", fontSize: "0.88rem" }}>{b.brand} {b.model}</td>
+              <td style={{ padding: "14px 20px", color: "var(--text-secondary)", fontSize: "0.88rem" }}>{b.brand} {b.model}</td>
               <td style={{ padding: "14px 20px", maxWidth: 160 }}>
-                <div style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.88rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{b.service}</div>
+                <div style={{ color: "var(--text-secondary)", fontSize: "0.88rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{b.service}</div>
               </td>
               <td style={{ padding: "14px 20px", color: "var(--text-secondary)", fontSize: "0.85rem", whiteSpace: "nowrap" }}>{b.date || "—"}</td>
               <td style={{ padding: "14px 20px", color: "var(--text-muted)", fontSize: "0.82rem", whiteSpace: "nowrap" }}>

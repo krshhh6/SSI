@@ -24,18 +24,31 @@ export default function SignInClient() {
     }
   }, [user, loading, router]);
 
+  const sanitize = (s: string) => s.replace(/<[^>]*>/g, "").trim();
+
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthLoading(true);
     setError("");
+
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanName = sanitize(name);
+
+    // Basic email format check
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      setError("Please enter a valid email address.");
+      setAuthLoading(false);
+      return;
+    }
+
     try {
       if (isSignUp) {
-        const userCred = await createUserWithEmailAndPassword(auth, email, password);
-        if (name) {
-          await updateProfile(userCred.user, { displayName: name });
+        const userCred = await createUserWithEmailAndPassword(auth, cleanEmail, password);
+        if (cleanName) {
+          await updateProfile(userCred.user, { displayName: cleanName });
         }
       } else {
-        await signInWithEmailAndPassword(auth, email, password);
+        await signInWithEmailAndPassword(auth, cleanEmail, password);
       }
       // Router push happens in useEffect when user changes
     } catch (err) {
@@ -51,6 +64,7 @@ export default function SignInClient() {
       setAuthLoading(false);
     }
   };
+
 
   const handleGoogleAuth = async () => {
     try {

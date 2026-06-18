@@ -57,28 +57,64 @@ export default function Booking() {
     loadUserData();
   }, [user]);
 
+  // Sanitize string: strip any HTML tags and trim whitespace
+  const sanitize = (s: string) => s.replace(/<[^>]*>/g, "").trim();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.phone.length !== 10) {
+
+    // --- Client-side validation ---
+    const cleanName = sanitize(form.name);
+    const cleanPhone = form.phone.replace(/\D/g, "");
+    const cleanBrand = sanitize(form.brand);
+    const cleanModel = sanitize(form.model);
+    const cleanService = sanitize(form.service);
+    const cleanMessage = sanitize(form.message);
+    const cleanDate = form.date;
+
+    if (cleanPhone.length !== 10) {
       alert("Please enter exactly 10 digits for your phone number.");
       return;
     }
+    if (!cleanName || cleanName.length > 100) {
+      alert("Please enter a valid name (max 100 characters).");
+      return;
+    }
+    if (!cleanService) {
+      alert("Please select a service.");
+      return;
+    }
+    if (cleanMessage.length > 500) {
+      alert("Message is too long (max 500 characters).");
+      return;
+    }
+
     setLoading(true);
     try {
       await addDoc(collection(db, "bookings"), {
-        ...form,
-        userId: user?.uid || "guest",
-        userEmail: user?.email || "",
-        userName: user?.displayName || form.name,
-        status: "pending",
+        name: cleanName,
+        phone: cleanPhone,
+        brand: cleanBrand,
+        model: cleanModel,
+        service: cleanService,
+        date: cleanDate,
+        message: cleanMessage,
+        userId: user!.uid,          // always use authenticated UID, never "guest"
+        userEmail: user!.email || "",
+        userName: user!.displayName || cleanName,
+        status: "pending",          // always force pending — never trust the client
         createdAt: serverTimestamp(),
       });
     } catch (err) {
       console.error("Firestore error:", err);
+      alert("Failed to submit booking. Please try again.");
+      setLoading(false);
+      return;
     }
     setLoading(false);
     setSubmitted(true);
   };
+
 
   const inputStyle = {
     width: "100%",

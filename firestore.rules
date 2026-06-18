@@ -2,31 +2,73 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper: is the requesting user an admin?
+    // ── Helper: only the designated admin ──────────────────────────
     function isAdmin() {
       return request.auth != null &&
-        request.auth.token.email == 'test01samwheels@gmail.com';
+        request.auth.token.email == 'test01samwheels@gmail.com' &&
+        request.auth.token.email_verified == true;
     }
 
-    // ── bookings collection ──────────────────────────────────────
+    // ── Helper: validate a booking document's fields ────────────────
+    function validBookingCreate() {
+      let d = request.resource.data;
+      return
+        // userId must match the logged-in user — prevents spoofing
+        d.userId == request.auth.uid &&
+
+        // status MUST be pending — prevents status forgery
+        d.status == 'pending' &&
+
+        // required fields must exist and be strings
+        d.name is string && d.name.size() > 0 && d.name.size() <= 100 &&
+        d.phone is string && d.phone.size() == 10 &&
+        d.service is string && d.service.size() > 0 &&
+
+        // message has an upper bound
+        (!(d.keys().hasAny(['message'])) || (d.message is string && d.message.size() <= 500)) &&
+
+        // model and brand must be reasonable length
+        (!(d.keys().hasAny(['brand'])) || (d.brand is string && d.brand.size() <= 100)) &&
+        (!(d.keys().hasAny(['model'])) || (d.model is string && d.model.size() <= 100));
+    }
+
+    // ── bookings collection ────────────────────────────────────────
     match /bookings/{bookingId} {
-      // Any signed-in user can create a booking
-      allow create: if request.auth != null;
 
-      // Users can read/update/delete their own bookings.
-      // Admins can read/update/delete any booking.
-      allow read, update, delete: if request.auth != null &&
+      // Admins can create offline bookings freely.
+      // Regular users must pass the strict validation above.
+      allow create: if request.auth != null && (
+        isAdmin() || validBookingCreate()
+      );
+
+      // Users can read their own bookings. Admins can read all.
+      allow read: if request.auth != null &&
         (resource.data.userId == request.auth.uid || isAdmin());
+
+      // Only admins can update (change status, edit details, etc.)
+      // Users cannot modify their own bookings after creation
+      allow update: if isAdmin();
+
+      // Only admins can delete bookings
+      allow delete: if isAdmin();
     }
 
-    // ── users collection ─────────────────────────────────────────
+    // ── users collection ───────────────────────────────────────────
     match /users/{userId} {
-      // Users can read and write their own document.
-      // Admins can read any user document.
+
+      // Users can read only their own document. Admins can read any.
       allow read: if request.auth != null &&
         (request.auth.uid == userId || isAdmin());
+
+      // Users can write only their own document.
+      // Enforce: they cannot change their role to 'admin'.
       allow write: if request.auth != null &&
-        request.auth.uid == userId;
+        request.auth.uid == userId &&
+        (!(request.resource.data.keys().hasAny(['role'])) ||
+          request.resource.data.role != 'admin');
+
+      // Admins can also update any user document
+      allow update: if isAdmin();
     }
 
   }

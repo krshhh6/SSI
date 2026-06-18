@@ -174,6 +174,7 @@ export default function SignInClient() {
                   required
                   placeholder="Full Name"
                   value={name}
+                  maxLength={100}
                   onChange={(e) => setName(e.target.value)}
                   style={inputStyle}
                   onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.background = "rgba(0,102,255,0.03)"; }}
@@ -189,6 +190,7 @@ export default function SignInClient() {
                 required
                 placeholder="Email Address"
                 value={email}
+                maxLength={100}
                 onChange={(e) => setEmail(e.target.value)}
                 style={inputStyle}
                 onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.background = "rgba(0,102,255,0.03)"; }}
@@ -203,6 +205,7 @@ export default function SignInClient() {
                 required
                 placeholder="Password (min. 6 characters)"
                 value={password}
+                maxLength={100}
                 onChange={(e) => setPassword(e.target.value)}
                 style={inputStyle}
                 minLength={6}

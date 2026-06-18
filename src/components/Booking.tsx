@@ -283,6 +283,7 @@ export default function Booking() {
                     type="text"
                     placeholder="Your Full Name"
                     value={form.name}
+                    maxLength={100}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     style={inputStyle}
                     onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
@@ -300,6 +301,7 @@ export default function Booking() {
                     type="tel"
                     placeholder="e.g. 9876543210"
                     value={form.phone}
+                    maxLength={10}
                     onChange={(e) => {
                       const val = e.target.value.replace(/\D/g, "").slice(0, 10);
                       setForm({ ...form, phone: val });
@@ -337,6 +339,7 @@ export default function Booking() {
                     type="text"
                     placeholder="e.g. Swift, Creta, i20"
                     value={form.model}
+                    maxLength={100}
                     onChange={(e) => setForm({ ...form, model: e.target.value })}
                     style={inputStyle}
                     onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
@@ -387,6 +390,7 @@ export default function Booking() {
                     rows={3}
                     placeholder="Any specific concerns or details about your vehicle..."
                     value={form.message}
+                    maxLength={500}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     style={{ ...inputStyle, resize: "none", lineHeight: 1.6 }}
                     onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}

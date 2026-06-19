@@ -110,7 +110,7 @@ export default function Navbar() {
             style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}
           >
             <img 
-              src="/bosch-logo.png" 
+              src="/bosch-logo.webp" 
               alt="Bosch Service Logo" 
               style={{ 
                 height: 48, 

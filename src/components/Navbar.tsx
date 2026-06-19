@@ -113,20 +113,21 @@ export default function Navbar() {
               src="/bosch-logo.png" 
               alt="Bosch Service Logo" 
               style={{ 
-                height: 48, 
+                height: 42, 
                 width: "auto", 
                 objectFit: "contain",
-                background: "white", // Adds a white background if the image is transparent (looks better on dark mode)
-                padding: "4px 8px",
-                borderRadius: 4
+                background: "white", 
+                padding: "3px 6px",
+                borderRadius: 4,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.2)"
               }} 
             />
             <div style={{ whiteSpace: "nowrap" }}>
-              <div style={{ fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.06em", color: "var(--text)", lineHeight: 1.1, fontFamily: "Outfit, sans-serif" }}>
-                SAM WHEELS
+              <div style={{ fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.06em", color: "var(--text)", lineHeight: 1.1, fontFamily: "Outfit, sans-serif", textTransform: "uppercase" }}>
+                BOSCH CAR SERVICE
               </div>
               <div style={{ fontSize: "0.65rem", fontWeight: 500, letterSpacing: "0.12em", color: "var(--accent)", lineHeight: 1, textTransform: "uppercase", marginTop: 2 }}>
-                PVT LTD
+                SAM Wheels Pvt Ltd
               </div>
             </div>
           </motion.a>

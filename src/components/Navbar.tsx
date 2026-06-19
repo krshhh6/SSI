@@ -109,23 +109,24 @@ export default function Navbar() {
             whileHover={{ scale: 1.02 }}
             style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}
           >
-            <div
-              style={{
-                width: 36, height: 36, borderRadius: 8,
-                background: "var(--bosch-red)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: "0 0 16px var(--bosch-red-glow)",
-                flexShrink: 0,
-              }}
-            >
-              <Wrench size={18} color="white" strokeWidth={2.5} />
-            </div>
+            <img 
+              src="/bosch-logo.png" 
+              alt="Bosch Service Logo" 
+              style={{ 
+                height: 48, 
+                width: "auto", 
+                objectFit: "contain",
+                background: "white", // Adds a white background if the image is transparent (looks better on dark mode)
+                padding: "4px 8px",
+                borderRadius: 4
+              }} 
+            />
             <div style={{ whiteSpace: "nowrap" }}>
               <div style={{ fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.06em", color: "var(--text)", lineHeight: 1.1, fontFamily: "Outfit, sans-serif" }}>
-                BOSCH CAR SERVICE
+                SAM WHEELS
               </div>
               <div style={{ fontSize: "0.65rem", fontWeight: 500, letterSpacing: "0.12em", color: "var(--accent)", lineHeight: 1, textTransform: "uppercase", marginTop: 2 }}>
-                SAM Wheels Pvt Ltd
+                PVT LTD
               </div>
             </div>
           </motion.a>

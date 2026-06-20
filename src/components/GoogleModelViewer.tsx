@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import "@google/model-viewer";
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 declare global {
   namespace JSX {
     interface IntrinsicElements {

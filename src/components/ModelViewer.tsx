@@ -2,9 +2,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Suspense, useRef, useLayoutEffect, useEffect, useMemo } from 'react';
-import { Canvas, useFrame, useLoader, useThree, invalidate } from '@react-three/fiber';
-import { OrbitControls, useGLTF, useFBX, useProgress, Html, Environment, ContactShadows } from '@react-three/drei';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { Canvas, useFrame, useThree, invalidate } from '@react-three/fiber';
+import { OrbitControls, useGLTF, useProgress, Html, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 
 const isTouch = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
@@ -76,14 +75,12 @@ const ModelInner = ({
   const tHov = useRef({ x: 0, y: 0 });
   const cHov = useRef({ x: 0, y: 0 });
 
-  const ext = useMemo(() => url.split('.').pop().toLowerCase(), [url]);
+  // Safe GLTF loading at the top level of the component to prevent Suspense crashes inside useMemo
+  const gltf = useGLTF(url) as any;
   const content = useMemo(() => {
-    if (ext === 'glb' || ext === 'gltf') return (useGLTF(url) as any).scene.clone();
-    if (ext === 'fbx') return (useFBX(url) as any).clone();
-    if (ext === 'obj') return (useLoader(OBJLoader as any, url) as any).clone();
-    console.error('Unsupported format:', ext);
+    if (gltf && gltf.scene) return gltf.scene.clone();
     return null;
-  }, [url, ext]);
+  }, [gltf]);
 
   const pivotW = useRef(new THREE.Vector3());
   useLayoutEffect(() => {

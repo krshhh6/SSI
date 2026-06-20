@@ -11,6 +11,7 @@ import Image from "next/image";
 import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-react";
 import FloatingParticles from "./FloatingParticles";
 import AnimatedCounter from "./AnimatedCounter";
+import GlareHover from "./GlareHover";
 const TRUST_BADGES = [
   { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
   { icon: Users, value: "535+", label: "Customer Reviews", color: "#0066FF" },
@@ -416,34 +417,42 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 1.1 + i * 0.1 }}
               className="hero-stat-card"
               style={{ 
-                textAlign: "center", 
-                padding: "24px 16px",
                 position: "relative",
                 borderRight: i !== STATS.length - 1 ? "1px solid rgba(255, 255, 255, 0.05)" : "none"
               }}
               whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.03)" }}
             >
-              <div
-                style={{
-                  fontSize: "clamp(1.5rem, 3.5vw, 2.5rem)",
-                  fontWeight: 900,
-                  color: "var(--accent)",
-                  fontFamily: "Outfit, sans-serif",
-                  lineHeight: 1,
-                  marginBottom: 8,
-                  textShadow: "0 0 20px rgba(0, 102, 255, 0.4)"
-                }}
+              <GlareHover
+                glareColor="#0066FF"
+                glareOpacity={0.2}
+                glareAngle={-45}
+                glareSize={200}
+                transitionDuration={600}
+                playOnce={false}
+                style={{ width: "100%", height: "100%", padding: "24px 16px", boxSizing: "border-box" }}
               >
-                <AnimatedCounter
-                  target={stat.target}
-                  suffix={stat.suffix}
-                  duration={2.5}
-                  decimals={stat.decimals}
-                />
-              </div>
-              <div style={{ fontSize: "0.85rem", color: "var(--text)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>
-                {stat.label}
-              </div>
+                <div
+                  style={{
+                    fontSize: "clamp(1.5rem, 3.5vw, 2.5rem)",
+                    fontWeight: 900,
+                    color: "var(--accent)",
+                    fontFamily: "Outfit, sans-serif",
+                    lineHeight: 1,
+                    marginBottom: 8,
+                    textShadow: "0 0 20px rgba(0, 102, 255, 0.4)"
+                  }}
+                >
+                  <AnimatedCounter
+                    target={stat.target}
+                    suffix={stat.suffix}
+                    duration={2.5}
+                    decimals={stat.decimals}
+                  />
+                </div>
+                <div style={{ fontSize: "0.85rem", color: "var(--text)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                  {stat.label}
+                </div>
+              </GlareHover>
             </motion.div>
           ))}
         </div>

@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Suspense, useRef, useLayoutEffect, useEffect, useMemo } from 'react';

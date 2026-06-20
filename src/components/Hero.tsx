@@ -12,7 +12,8 @@ import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-reac
 import FloatingParticles from "./FloatingParticles";
 import AnimatedCounter from "./AnimatedCounter";
 import GlareHover from "./GlareHover";
-import ModelViewer from "./ModelViewer";
+import dynamic from "next/dynamic";
+const ModelViewer = dynamic(() => import("./ModelViewer"), { ssr: false });
 const TRUST_BADGES = [
   { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
   { icon: Users, value: "535+", label: "Customer Reviews", color: "#0066FF" },

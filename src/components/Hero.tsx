@@ -377,6 +377,30 @@ export default function Hero() {
         </motion.div>
       </div>
 
+      {/* Curved Loop Animation Row */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2, delay: 0.8 }}
+        style={{
+          position: "absolute",
+          bottom: 150, // Moved up to sit above the glass box
+          left: 0,
+          right: 0,
+          zIndex: 4,
+          pointerEvents: "none",
+        }}
+      >
+        <CurvedLoop 
+          marqueeText="4.7★ GOOGLE RATING ✦ 535+ CUSTOMERS ✦ 15+ YEARS EXPERIENCE ✦ 30+ BRANDS ✦ "
+          speed={1.5}
+          curveAmount={120} // Reduced curve for a tighter banner
+          direction="left"
+          interactive={false}
+          className="curved-text-style"
+        />
+      </motion.div>
+
       {/* Redesigned Stats Row */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -389,80 +413,63 @@ export default function Hero() {
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 10,
+          background: "rgba(10, 15, 25, 0.6)",
+          border: "1px solid rgba(255, 255, 255, 0.08)",
+          boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          borderRadius: 24,
           width: "calc(100% - 48px)",
           maxWidth: 1200,
+          overflow: "hidden"
         }}
       >
-        {/* Curved Loop Animation Row (attached to top of stats) */}
-        <div style={{ position: "relative", zIndex: 4, height: 60, marginBottom: -20, pointerEvents: "none" }}>
-          <CurvedLoop 
-            marqueeText="4.7★ GOOGLE RATING ✦ 535+ CUSTOMERS ✦ 15+ YEARS EXPERIENCE ✦ 30+ BRANDS ✦ "
-            speed={1.5}
-            curveAmount={300}
-            direction="left"
-            interactive={false}
-            className="curved-text-style"
-          />
-        </div>
-
         <div
+          className="hero-stats-grid"
           style={{
-            background: "rgba(10, 15, 25, 0.6)",
-            border: "1px solid rgba(255, 255, 255, 0.08)",
-            boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            borderRadius: 24,
-            overflow: "hidden",
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)", // Desktop default, mobile CSS overrides with !important
             position: "relative",
-            zIndex: 5
           }}
         >
-          <div
-            className="hero-stats-grid"
-            style={{
-              display: "grid",
-              // We removed inline gridTemplateColumns to let CSS handle mobile responsiveness
-            }}
-          >
-            {STATS.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 1.1 + i * 0.1 }}
-                className="hero-stat-card"
-                style={{ 
-                  textAlign: "center", 
-                  padding: "24px 16px",
-                  position: "relative",
+          {STATS.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 1.1 + i * 0.1 }}
+              className="hero-stat-card"
+              style={{ 
+                textAlign: "center", 
+                padding: "24px 16px",
+                position: "relative",
+                borderRight: i !== STATS.length - 1 ? "1px solid rgba(255, 255, 255, 0.05)" : "none"
+              }}
+              whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.03)" }}
+            >
+              <div
+                style={{
+                  fontSize: "clamp(1.5rem, 3.5vw, 2.5rem)",
+                  fontWeight: 900,
+                  color: "var(--accent)",
+                  fontFamily: "Outfit, sans-serif",
+                  lineHeight: 1,
+                  marginBottom: 8,
+                  textShadow: "0 0 20px rgba(0, 102, 255, 0.4)"
                 }}
-                whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.03)" }}
               >
-                <div
-                  style={{
-                    fontSize: "clamp(1.5rem, 3.5vw, 2.5rem)",
-                    fontWeight: 900,
-                    color: "var(--accent)",
-                    fontFamily: "Outfit, sans-serif",
-                    lineHeight: 1,
-                    marginBottom: 8,
-                    textShadow: "0 0 20px rgba(0, 102, 255, 0.4)"
-                  }}
-                >
-                  <AnimatedCounter
-                    target={stat.target}
-                    suffix={stat.suffix}
-                    duration={2.5}
-                    decimals={stat.decimals}
-                  />
-                </div>
-                <div style={{ fontSize: "0.85rem", color: "var(--text)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                <AnimatedCounter
+                  target={stat.target}
+                  suffix={stat.suffix}
+                  duration={2.5}
+                  decimals={stat.decimals}
+                />
+              </div>
+              <div style={{ fontSize: "0.85rem", color: "var(--text)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                {stat.label}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </motion.div>
 

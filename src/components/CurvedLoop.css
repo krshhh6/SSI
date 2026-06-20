@@ -1,5 +1,4 @@
 .curved-loop-jacket {
-  /* Using min-height: 100vh was in the demo but for a section we want it flexible */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -7,9 +6,7 @@
   position: relative;
   z-index: 10;
   /* Adjusting height to fit a stats banner */
-  height: 180px;
-  overflow: hidden;
-  margin-top: -60px;
+  height: 120px;
 }
 
 .curved-loop-svg {

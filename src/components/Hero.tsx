@@ -11,7 +11,7 @@ import Image from "next/image";
 import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-react";
 import FloatingParticles from "./FloatingParticles";
 import AnimatedCounter from "./AnimatedCounter";
-
+import CurvedLoop from "./CurvedLoop";
 const TRUST_BADGES = [
   { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
   { icon: Users, value: "535+", label: "Customer Reviews", color: "#0066FF" },
@@ -377,7 +377,31 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Stats Row */}
+      {/* Curved Loop Animation Row */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2, delay: 0.8 }}
+        style={{
+          position: "absolute",
+          bottom: "100px", // Just above the stats grid
+          left: 0,
+          right: 0,
+          zIndex: 4,
+          pointerEvents: "none",
+        }}
+      >
+        <CurvedLoop 
+          marqueeText="4.7★ GOOGLE RATING ✦ 535+ CUSTOMERS ✦ 15+ YEARS EXPERIENCE ✦ 30+ BRANDS ✦ "
+          speed={1.5}
+          curveAmount={300}
+          direction="left"
+          interactive={false}
+          className="curved-text-style"
+        />
+      </motion.div>
+
+      {/* Redesigned Stats Row */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -385,43 +409,52 @@ export default function Hero() {
         className="hero-stats"
         style={{
           position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
+          bottom: 20,
+          left: "50%",
+          transform: "translateX(-50%)",
           zIndex: 10,
-          borderTop: "1px solid var(--border)",
-          background: "var(--glass-bg)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
+          background: "rgba(10, 15, 25, 0.6)",
+          border: "1px solid rgba(255, 255, 255, 0.08)",
+          boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          borderRadius: 24,
+          width: "calc(100% - 48px)",
+          maxWidth: 1200,
+          overflow: "hidden"
         }}
       >
         <div
           style={{
-            maxWidth: 1280,
-            margin: "0 auto",
-            padding: "20px 24px",
             display: "grid",
             gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 12,
+            position: "relative",
           }}
           className="hero-stats-grid"
         >
           {STATS.map((stat, i) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 1.1 + i * 0.1 }}
-              style={{ textAlign: "center", padding: "6px 0" }}
+              style={{ 
+                textAlign: "center", 
+                padding: "24px 16px",
+                position: "relative",
+                borderRight: i !== STATS.length - 1 ? "1px solid rgba(255, 255, 255, 0.05)" : "none"
+              }}
+              whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.03)" }}
             >
               <div
                 style={{
-                  fontSize: "clamp(1.3rem, 3vw, 2rem)",
+                  fontSize: "clamp(1.5rem, 3.5vw, 2.5rem)",
                   fontWeight: 900,
                   color: "var(--accent)",
                   fontFamily: "Outfit, sans-serif",
                   lineHeight: 1,
-                  marginBottom: 4,
+                  marginBottom: 8,
+                  textShadow: "0 0 20px rgba(0, 102, 255, 0.4)"
                 }}
               >
                 <AnimatedCounter
@@ -431,7 +464,7 @@ export default function Hero() {
                   decimals={stat.decimals}
                 />
               </div>
-              <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 500 }}>
+              <div style={{ fontSize: "0.85rem", color: "var(--text)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>
                 {stat.label}
               </div>
             </motion.div>

@@ -1,0 +1,34 @@
+.curved-loop-jacket {
+  /* Using min-height: 100vh was in the demo but for a section we want it flexible */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+  /* Adjusting height to fit a stats banner */
+  height: 180px;
+  overflow: hidden;
+  margin-top: -60px;
+}
+
+.curved-loop-svg {
+  user-select: none;
+  width: 100%;
+  /* Removed aspect-ratio to let it fit its container better */
+  overflow: visible;
+  display: block;
+  font-size: 4rem; /* Adjusted for banner */
+  fill: var(--accent); /* Using theme accent color */
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.curved-text-style {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+}

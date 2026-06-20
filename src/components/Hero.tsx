@@ -197,7 +197,7 @@ export default function Hero() {
           style={{ position: "relative", zIndex: 2, width: "100%", height: "100%" }}
         >
           <ModelViewer
-            url="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/porsche-911/model.gltf"
+            url="/bmw_330i/scene.gltf"
             width="100%"
             height="100%"
             defaultRotationX={0}
@@ -491,7 +491,7 @@ export default function Hero() {
             }}
           />
           <ModelViewer
-            url="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/porsche-911/model.gltf"
+            url="/bmw_330i/scene.gltf"
             width="100%"
             height="100%"
             defaultRotationX={0}

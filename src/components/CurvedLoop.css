@@ -15,7 +15,7 @@
   /* Removed aspect-ratio to let it fit its container better */
   overflow: visible;
   display: block;
-  font-size: 4rem; /* Adjusted for banner */
+  font-size: 1.8rem; /* Made significantly smaller so it doesn't overlap car */
   fill: var(--accent); /* Using theme accent color */
   -moz-user-select: none;
   -webkit-user-select: none;

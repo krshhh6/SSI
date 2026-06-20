@@ -384,7 +384,7 @@ export default function Hero() {
         transition={{ duration: 1.2, delay: 0.8 }}
         style={{
           position: "absolute",
-          bottom: 150, // Moved up to sit above the glass box
+          bottom: 125, // Lowered so it sits right above the glass box without overlapping car
           left: 0,
           right: 0,
           zIndex: 4,
@@ -394,7 +394,7 @@ export default function Hero() {
         <CurvedLoop 
           marqueeText="4.7★ GOOGLE RATING ✦ 535+ CUSTOMERS ✦ 15+ YEARS EXPERIENCE ✦ 30+ BRANDS ✦ "
           speed={1.5}
-          curveAmount={120} // Reduced curve for a tighter banner
+          curveAmount={80} // Reduced curve for the smaller font
           direction="left"
           interactive={false}
           className="curved-text-style"
@@ -410,8 +410,9 @@ export default function Hero() {
         style={{
           position: "absolute",
           bottom: 24,
-          left: "50%",
-          transform: "translateX(-50%)",
+          left: 0,
+          right: 0,
+          margin: "0 auto", // Safest way to center absolute elements
           zIndex: 10,
           background: "rgba(10, 15, 25, 0.6)",
           border: "1px solid rgba(255, 255, 255, 0.08)",

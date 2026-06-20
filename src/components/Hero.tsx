@@ -11,7 +11,6 @@ import Image from "next/image";
 import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-react";
 import FloatingParticles from "./FloatingParticles";
 import AnimatedCounter from "./AnimatedCounter";
-import CurvedLoop from "./CurvedLoop";
 
 const TRUST_BADGES = [
   { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
@@ -378,11 +377,12 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Curved Loop Stats */}
+      {/* Stats Row */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 1.0 }}
+        className="hero-stats"
         style={{
           position: "absolute",
           bottom: 0,
@@ -393,15 +393,50 @@ export default function Hero() {
           background: "var(--glass-bg)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255,255,255,0.05)"
         }}
       >
-        <CurvedLoop 
-          marqueeText="4.7★ Google Rating ✦ 535+ Happy Customers ✦ 15+ Years Experience ✦ 30+ Car Brands Serviced ✦ " 
-          speed={1.5}
-          curveAmount={30}
-          direction="left"
-        />
+        <div
+          style={{
+            maxWidth: 1280,
+            margin: "0 auto",
+            padding: "20px 24px",
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 12,
+          }}
+          className="hero-stats-grid"
+        >
+          {STATS.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1.1 + i * 0.1 }}
+              style={{ textAlign: "center", padding: "6px 0" }}
+            >
+              <div
+                style={{
+                  fontSize: "clamp(1.3rem, 3vw, 2rem)",
+                  fontWeight: 900,
+                  color: "var(--accent)",
+                  fontFamily: "Outfit, sans-serif",
+                  lineHeight: 1,
+                  marginBottom: 4,
+                }}
+              >
+                <AnimatedCounter
+                  target={stat.target}
+                  suffix={stat.suffix}
+                  duration={2.5}
+                  decimals={stat.decimals}
+                />
+              </div>
+              <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 500 }}>
+                {stat.label}
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </motion.div>
 
       {/* Mobile-only car image (shown inline below text on small screens) */}

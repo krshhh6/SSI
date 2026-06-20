@@ -105,7 +105,8 @@ function FeatureCard({
   desc,
   color,
 }: {
-  icon: React.ElementType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: any;
   title: string;
   desc: string;
   color: string;

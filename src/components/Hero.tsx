@@ -12,6 +12,7 @@ import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-reac
 import FloatingParticles from "./FloatingParticles";
 import AnimatedCounter from "./AnimatedCounter";
 import GlareHover from "./GlareHover";
+import ModelViewer from "./ModelViewer";
 const TRUST_BADGES = [
   { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
   { icon: Users, value: "535+", label: "Customer Reviews", color: "#0066FF" },
@@ -154,9 +155,7 @@ export default function Hero() {
       </div>
 
       {/* Particles */}
-      <FloatingParticles />
-
-      {/* Car render — desktop: absolute scroll-animated | mobile: inline below text */}
+      <FloatingParticles />      {/* Car render — desktop: absolute scroll-animated | mobile: inline below text */}
       <motion.div
         className="hero-car-desktop"
         style={{
@@ -166,6 +165,8 @@ export default function Hero() {
           translateY: "-50%",
           width: "55%",
           maxWidth: 860,
+          height: "60vh",
+          minHeight: 500,
           x: carX,
           scale: carScale,
           opacity: rawCarOpacity,
@@ -173,7 +174,7 @@ export default function Hero() {
           rotateY: rawCarRotateY,
           perspective: 1200,
           zIndex: 2,
-          pointerEvents: "none",
+          pointerEvents: "auto", // Ensure it's interactive
         }}
       >
         <div
@@ -186,25 +187,28 @@ export default function Hero() {
             background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.35) 0%, transparent 70%)",
             filter: "blur(20px)",
             zIndex: 1,
+            pointerEvents: "none",
           }}
         />
         <motion.div
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          style={{ position: "relative", zIndex: 2 }}
+          style={{ position: "relative", zIndex: 2, width: "100%", height: "100%" }}
         >
-          <Image
-            src="/images/hero-car.png"
-            alt="Premium luxury car - Bosch SAM Wheels Patna"
-            width={860}
-            height={480}
-            style={{
-              width: "100%",
-              height: "auto",
-              objectFit: "contain",
-              filter: "drop-shadow(0 20px 60px rgba(0, 102, 255, 0.5))",
-            }}
-            priority
+          <ModelViewer
+            url="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/porsche-911/model.gltf"
+            width="100%"
+            height="100%"
+            defaultRotationX={0}
+            defaultRotationY={-20} // Slightly angled like the original image
+            defaultZoom={1.5}
+            ambientIntensity={0.5}
+            keyLightIntensity={2}
+            rimLightIntensity={1}
+            autoRotate={true}
+            autoRotateSpeed={0.5}
+            enableManualZoom={false}
+            placeholderSrc="/images/hero-car.png"
           />
         </motion.div>
       </motion.div>
@@ -468,9 +472,11 @@ export default function Hero() {
           width: "100%",
           padding: "0 8px 8px",
           marginTop: "-12px",
+          height: "300px",
+          pointerEvents: "auto",
         }}
       >
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative", width: "100%", height: "100%" }}>
           <div
             style={{
               position: "absolute",
@@ -480,19 +486,23 @@ export default function Hero() {
               height: "20px",
               background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.3) 0%, transparent 70%)",
               filter: "blur(15px)",
+              pointerEvents: "none",
             }}
           />
-          <Image
-            src="/images/hero-car.png"
-            alt="Premium luxury car - Bosch SAM Wheels Patna"
-            width={600}
-            height={340}
-            style={{
-              width: "100%",
-              height: "auto",
-              objectFit: "contain",
-              filter: "drop-shadow(0 16px 40px rgba(0, 102, 255, 0.35))",
-            }}
+          <ModelViewer
+            url="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/porsche-911/model.gltf"
+            width="100%"
+            height="100%"
+            defaultRotationX={0}
+            defaultRotationY={-20}
+            defaultZoom={1.2}
+            ambientIntensity={0.5}
+            keyLightIntensity={2}
+            rimLightIntensity={1}
+            autoRotate={true}
+            autoRotateSpeed={0.5}
+            enableManualZoom={false}
+            placeholderSrc="/images/hero-car.png"
           />
         </div>
       </div>

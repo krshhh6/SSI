@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import CurvedLoop from "./CurvedLoop";
 
 const REVIEWS = [
   {
@@ -89,14 +90,26 @@ export default function Reviews() {
         }}
       />
 
-      <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        {/* Header */}
+      <div className="container">
+        {/* Curved Loop Animation Row */}
+        <div style={{ position: "relative", zIndex: 4, height: 60, marginBottom: 40, marginTop: -20, pointerEvents: "none" }}>
+          <CurvedLoop 
+            marqueeText="4.7★ GOOGLE RATING ✦ 535+ CUSTOMERS ✦ 15+ YEARS EXPERIENCE ✦ 30+ BRANDS ✦ "
+            speed={1.5}
+            curveAmount={80}
+            direction="left"
+            interactive={false}
+            className="curved-text-style"
+          />
+        </div>
+
+        {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          style={{ textAlign: "center", marginBottom: 56 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          style={{ textAlign: "center", marginBottom: 64 }}
         >
           <span
             style={{

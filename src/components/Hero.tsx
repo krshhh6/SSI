@@ -11,7 +11,6 @@ import Image from "next/image";
 import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-react";
 import FloatingParticles from "./FloatingParticles";
 import AnimatedCounter from "./AnimatedCounter";
-import CurvedLoop from "./CurvedLoop";
 const TRUST_BADGES = [
   { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
   { icon: Users, value: "535+", label: "Customer Reviews", color: "#0066FF" },
@@ -376,30 +375,6 @@ export default function Hero() {
           </div>
         </motion.div>
       </div>
-
-      {/* Curved Loop Animation Row */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, delay: 0.8 }}
-        style={{
-          position: "absolute",
-          bottom: 125, // Lowered so it sits right above the glass box without overlapping car
-          left: 0,
-          right: 0,
-          zIndex: 4,
-          pointerEvents: "none",
-        }}
-      >
-        <CurvedLoop 
-          marqueeText="4.7★ GOOGLE RATING ✦ 535+ CUSTOMERS ✦ 15+ YEARS EXPERIENCE ✦ 30+ BRANDS ✦ "
-          speed={1.5}
-          curveAmount={80} // Reduced curve for the smaller font
-          direction="left"
-          interactive={false}
-          className="curved-text-style"
-        />
-      </motion.div>
 
       {/* Redesigned Stats Row */}
       <motion.div

@@ -5,19 +5,20 @@
   justify-content: center;
   width: 100%;
   overflow: hidden;
-  padding: 1rem 0;
+  padding: 0.25rem 0; /* Reduced padding */
+  height: 48px; /* Fixed height for a sleek bar */
 }
 
 .curved-loop-svg {
   user-select: none;
   width: 100%;
   max-width: 1440px;
-  height: auto;
-  aspect-ratio: 100 / 12;
+  height: 120px; /* Keep SVG height large to maintain curve */
+  margin-top: -36px; /* Offset to center the curve */
   overflow: visible;
   display: block;
-  font-size: 2.5rem;
-  fill: var(--accent); /* Uses the accent color (Bosch blue) */
+  font-size: 1.25rem; /* Smaller font size */
+  fill: var(--accent);
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
@@ -28,8 +29,12 @@
 }
 
 @media (max-width: 768px) {
+  .curved-loop-jacket {
+    height: 36px;
+  }
   .curved-loop-svg {
-    font-size: 1.8rem;
-    aspect-ratio: 100 / 24;
+    font-size: 1rem;
+    height: 90px;
+    margin-top: -27px;
   }
 }

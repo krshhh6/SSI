@@ -1,0 +1,35 @@
+.curved-loop-jacket {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  padding: 1rem 0;
+}
+
+.curved-loop-svg {
+  user-select: none;
+  width: 100%;
+  max-width: 1440px;
+  height: auto;
+  aspect-ratio: 100 / 12;
+  overflow: visible;
+  display: block;
+  font-size: 2.5rem;
+  fill: var(--accent); /* Uses the accent color (Bosch blue) */
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .curved-loop-svg {
+    font-size: 1.8rem;
+    aspect-ratio: 100 / 24;
+  }
+}

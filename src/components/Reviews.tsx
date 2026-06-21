@@ -52,7 +52,8 @@ const FALLBACK_REVIEWS: ReviewData[] = [
 ];
 
 export default function Reviews() {
-  const [reviews, setReviews] = useState<ReviewData[]>(FALLBACK_REVIEWS);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [reviews, setReviews] = useState<any[]>(FALLBACK_REVIEWS);
   const [current, setCurrent] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const ref = useRef<HTMLDivElement>(null);

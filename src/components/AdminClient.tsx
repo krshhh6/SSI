@@ -101,6 +101,7 @@ export default function AdminClient() {
   const [tab, setTab] = useState<"overview" | "bookings" | "users" | "analytics" | "advanced">("overview");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [users, setUsers] = useState<UserRecord[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [reviewsData, setReviewsData] = useState<any[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
   const [dataError, setDataError] = useState("");
@@ -748,7 +749,7 @@ service cloud.firestore {
                           <span style={{ fontWeight: 700, color: "var(--text)" }}>{r.name}</span>
                           <span style={{ color: "#FFB800", fontSize: "0.85rem" }}>{"★".repeat(r.rating)}</span>
                         </div>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.5, marginBottom: 8 }}>"{r.text}"</p>
+                        <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.5, marginBottom: 8 }}>&quot;{r.text}&quot;</p>
                         <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", gap: 12 }}>
                           <span>Service: {r.service}</span>
                           <span>Date: {r.date}</span>

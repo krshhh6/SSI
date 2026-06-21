@@ -11,8 +11,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-react";
-import FloatingParticles from "./FloatingParticles";
-import AnimatedCounter from "./AnimatedCounter";
+import BlurText from "./ReactBits/BlurText";
+import Particles from "./ReactBits/Particles";
+import StarBorder from "./ReactBits/StarBorder";
+import CountUp from "./ReactBits/CountUp";
 import GlareHover from "./GlareHover";
 
 const TRUST_BADGES = [
@@ -157,7 +159,18 @@ export default function Hero() {
       </div>
 
       {/* Particles */}
-      <FloatingParticles />      {/* Car render — desktop: absolute scroll-animated | mobile: inline below text */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none" }}>
+        <Particles
+          particleColors={["#ffffff", "#ffffff"]}
+          particleCount={200}
+          particleSpread={10}
+          speed={0.1}
+          particleBaseSize={100}
+          moveParticlesOnHover={true}
+          alphaParticles={true}
+          disableRotation={false}
+        />
+      </div>      {/* Car render — desktop: absolute scroll-animated | mobile: inline below text */}
       <motion.div
         className="hero-car-desktop"
         style={{
@@ -264,23 +277,14 @@ export default function Hero() {
           </motion.div>
 
           {/* Headline */}
-          <h1
+          <div
             className="display-xl"
-            style={{ maxWidth: 640, marginBottom: 8 }}
+            style={{ maxWidth: 640, marginBottom: 8, display: "flex", flexDirection: "column", textShadow: "0 4px 30px var(--bg), 0 0 10px var(--bg)" }}
           >
-            <span style={{ color: "var(--text)", display: "block", textShadow: "0 4px 30px var(--bg), 0 0 10px var(--bg)" }}>
-              BOSCH CERTIFIED
-            </span>
-            <span
-              className="gradient-text-blue"
-              style={{ display: "block", lineHeight: 1, textShadow: "0 4px 30px var(--bg)" }}
-            >
-              CAR CARE
-            </span>
-            <span style={{ color: "var(--text)", display: "block", textShadow: "0 4px 30px var(--bg), 0 0 10px var(--bg)" }}>
-              EXCELLENCE
-            </span>
-          </h1>
+            <BlurText text="BOSCH CERTIFIED" delay={50} animateBy="letters" direction="top" className="text-[var(--text)]" />
+            <BlurText text="CAR CARE" delay={75} animateBy="letters" direction="bottom" className="gradient-text-blue" />
+            <BlurText text="EXCELLENCE" delay={100} animateBy="letters" direction="top" className="text-[var(--text)]" />
+          </div>
 
           {/* Sub headline */}
           <motion.p
@@ -309,16 +313,16 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.7 }}
             style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 56 }}
           >
-            <motion.a
-              href="/booking"
-              className="btn-primary"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              style={{ fontSize: "1rem", padding: "15px 36px" }}
+            <StarBorder
+              as="a"
+              href="#booking"
+              color="#ffffff"
+              speed="3s"
+              thickness={2}
             >
               <CalendarCheck size={18} />
               Book Service
-            </motion.a>
+            </StarBorder>
             <motion.a
               href="tel:+919028384499"
               className="btn-secondary"
@@ -440,12 +444,13 @@ export default function Hero() {
                     textShadow: "0 0 20px rgba(0, 102, 255, 0.4)"
                   }}
                 >
-                  <AnimatedCounter
-                    target={stat.target}
-                    suffix={stat.suffix}
+                  <CountUp
+                    to={stat.target}
+                    from={0}
+                    direction="up"
                     duration={2.5}
-                    decimals={stat.decimals}
-                  />
+                    separator=","
+                  />{stat.suffix}
                 </div>
                 <div style={{ fontSize: "0.85rem", color: "var(--text)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>
                   {stat.label}

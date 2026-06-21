@@ -185,7 +185,7 @@ export default function Navbar() {
                     display: "flex", alignItems: "center", gap: 6,
                     background: "rgba(226,0,26,0.08)",
                     border: "1px solid rgba(226,0,26,0.20)",
-                    color: "#68ae99", padding: "9px 14px", borderRadius: 7,
+                    color: "#0066FF", padding: "9px 14px", borderRadius: 7,
                     cursor: "pointer", fontWeight: 600, fontSize: "0.82rem",
                     fontFamily: "Inter, sans-serif",
                   }}
@@ -343,7 +343,7 @@ export default function Navbar() {
                   style={{
                     display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                     background: "rgba(226,0,26,0.08)", border: "1px solid rgba(226,0,26,0.2)",
-                    color: "#68ae99", padding: "11px 16px", borderRadius: 7,
+                    color: "#0066FF", padding: "11px 16px", borderRadius: 7,
                     fontWeight: 600, fontSize: "0.9rem", cursor: "pointer", fontFamily: "Inter, sans-serif",
                   }}
                 >

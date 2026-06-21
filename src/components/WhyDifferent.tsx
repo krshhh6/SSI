@@ -6,8 +6,8 @@ import {
 } from "lucide-react";
 
 const FEATURES = [
-  { icon: Package, title: "100% Genuine Bosch Parts", desc: "Direct from authorized Bosch distributors. Zero counterfeit, zero compromise.", color: "#68ae99" },
-  { icon: UserCheck, title: "Certified Bosch Technicians", desc: "All our technicians are Bosch-trained and regularly updated on latest vehicle tech.", color: "#68ae99" },
+  { icon: Package, title: "100% Genuine Bosch Parts", desc: "Direct from authorized Bosch distributors. Zero counterfeit, zero compromise.", color: "#0066FF" },
+  { icon: UserCheck, title: "Certified Bosch Technicians", desc: "All our technicians are Bosch-trained and regularly updated on latest vehicle tech.", color: "#0066FF" },
   { icon: Cpu, title: "Advanced Diagnostics", desc: "Bosch KTS 590 diagnostic system reads every fault code for precise repair.", color: "#00C896" },
   { icon: Truck, title: "Pickup & Drop Service", desc: "Convenient doorstep vehicle pickup and delivery for busy customers.", color: "#FF8800" },
   { icon: Shield, title: "Insurance Support", desc: "Cashless claim processing with all major insurers. Zero paperwork hassle.", color: "#AA66FF" },
@@ -53,7 +53,7 @@ export default function WhyDifferent() {
               padding: "5px 16px",
               borderRadius: 100,
               border: "1px solid rgba(226, 0, 26, 0.4)",
-              color: "#68ae99",
+              color: "#0066FF",
               fontSize: "0.75rem",
               fontWeight: 600,
               letterSpacing: "0.12em",

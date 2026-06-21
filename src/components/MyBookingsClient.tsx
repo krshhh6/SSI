@@ -22,9 +22,9 @@ interface Booking {
 
 const STATUS_CONFIG = {
   pending:   { label: "Pending",   color: "#FF8800", bg: "rgba(255,136,0,0.12)",   dot: "#FF8800" },
-  confirmed: { label: "Confirmed", color: "#68ae99", bg: "rgba(0,102,255,0.12)",   dot: "#68ae99" },
+  confirmed: { label: "Confirmed", color: "#0066FF", bg: "rgba(0,102,255,0.12)",   dot: "#0066FF" },
   completed: { label: "Completed", color: "#00C896", bg: "rgba(0,200,150,0.12)",   dot: "#00C896" },
-  cancelled: { label: "Cancelled", color: "#68ae99", bg: "rgba(226,0,26,0.12)",    dot: "#68ae99" },
+  cancelled: { label: "Cancelled", color: "#0066FF", bg: "rgba(226,0,26,0.12)",    dot: "#0066FF" },
 };
 
 export default function MyBookingsClient() {
@@ -199,7 +199,7 @@ export default function MyBookingsClient() {
                   padding: "10px 16px", borderRadius: 10,
                   background: "rgba(226,0,26,0.08)",
                   border: "1px solid rgba(226,0,26,0.20)",
-                  color: "#68ae99", cursor: "pointer", fontSize: "0.85rem", fontFamily: "Inter, sans-serif",
+                  color: "#0066FF", cursor: "pointer", fontSize: "0.85rem", fontFamily: "Inter, sans-serif",
                 }}
               >
                 <LogOut size={15} />
@@ -227,9 +227,9 @@ export default function MyBookingsClient() {
             {/* Stats bar */}
             <div style={{ display: "flex", gap: 16, marginBottom: 32, flexWrap: "wrap" }}>
             {[
-              { label: "Total Bookings", value: bookings.length, color: "#68ae99" },
+              { label: "Total Bookings", value: bookings.length, color: "#0066FF" },
               { label: "Pending", value: bookings.filter(b => b.status === "pending").length, color: "#FF8800" },
-              { label: "Confirmed", value: bookings.filter(b => b.status === "confirmed").length, color: "#68ae99" },
+              { label: "Confirmed", value: bookings.filter(b => b.status === "confirmed").length, color: "#0066FF" },
               { label: "Completed", value: bookings.filter(b => b.status === "completed").length, color: "#00C896" },
             ].map((stat) => (
               <div key={stat.label} style={{

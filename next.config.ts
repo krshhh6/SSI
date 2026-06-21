@@ -16,7 +16,7 @@ const securityHeaders = [
     value: [
       "default-src 'self'",
       // Firebase, reCAPTCHA, and Google APIs, plus permissive 3D asset domains
-      "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://www.google.com https://firebaseinstallations.googleapis.com https://securetoken.googleapis.com https://*.githack.com https://*.githubusercontent.com blob: data:",
+      "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://www.google.com https://firebaseinstallations.googleapis.com https://securetoken.googleapis.com https://*.githack.com https://*.githubusercontent.com https://www.gstatic.com blob: data:",
       // Scripts: self + reCAPTCHA + Google Auth
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.google.com https://www.recaptcha.net https://apis.google.com blob: data:",
       // Workers for WebGL/Three.js

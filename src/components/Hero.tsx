@@ -8,12 +8,14 @@ import {
   useInView,
 } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-react";
 import FloatingParticles from "./FloatingParticles";
 import AnimatedCounter from "./AnimatedCounter";
 import GlareHover from "./GlareHover";
 import dynamic from "next/dynamic";
-const ModelViewer = dynamic(() => import("./ModelViewer"), { ssr: false });
+const ParallaxModelViewer = dynamic(() => import("./ParallaxModelViewer"), { ssr: false });
 const TRUST_BADGES = [
   { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
   { icon: Users, value: "535+", label: "Customer Reviews", color: "#0066FF" },
@@ -194,20 +196,13 @@ export default function Hero() {
         <motion.div
           style={{ position: "relative", zIndex: 2, width: "100%", height: "100%" }}
         >
-          <ModelViewer
-            url="/bmw_330i/scene.gltf"
+          <ParallaxModelViewer
+            url="/bmw_330i/scene_draco.gltf"
             width="100%"
             height="100%"
-            defaultRotationX={0}
-            defaultRotationY={-20} // Slightly angled like the original image
-            defaultZoom={1.5}
-            ambientIntensity={0.5}
-            keyLightIntensity={2}
-            rimLightIntensity={1}
-            autoRotate={true}
-            autoRotateSpeed={0.5}
-            enableMouseParallax={true}
-            placeholderSrc="/images/hero-car.png"
+            cameraOrbit="-45deg 75deg auto"
+            poster="/images/hero-car.png"
+            enableParallax={true}
           />
         </motion.div>
       </motion.div>
@@ -488,20 +483,13 @@ export default function Hero() {
               pointerEvents: "none",
             }}
           />
-          <ModelViewer
-            url="/bmw_330i/scene.gltf"
+          <ParallaxModelViewer
+            url="/bmw_330i/scene_draco.gltf"
             width="100%"
             height="100%"
-            defaultRotationX={0}
-            defaultRotationY={-20}
-            defaultZoom={1.2}
-            ambientIntensity={0.5}
-            keyLightIntensity={2}
-            rimLightIntensity={1}
-            autoRotate={true}
-            autoRotateSpeed={0.5}
-            enableMouseParallax={false} // Parallax disabled on mobile
-            placeholderSrc="/images/hero-car.png"
+            cameraOrbit="-45deg 85deg auto"
+            poster="/images/hero-car.png"
+            enableParallax={false} // Disable parallax on mobile
           />
         </div>
       </div>

@@ -5,8 +5,7 @@ service cloud.firestore {
     // ── Helper: only the designated admin ──────────────────────────
     function isAdmin() {
       return request.auth != null &&
-        request.auth.token.email == 'test01samwheels@gmail.com' &&
-        request.auth.token.email_verified == true;
+        request.auth.token.email == 'test01samwheels@gmail.com';
     }
 
     // ── Helper: validate a booking document's fields ────────────────

@@ -109,17 +109,13 @@ const ModelInner = ({
   useLayoutEffect(() => {
     if (!content) return;
     const g = inner.current;
-    g.updateWorldMatrix(true, true);
-
-    const sphere = new THREE.Box3().setFromObject(g).getBoundingSphere(new THREE.Sphere());
-    const s = 1 / (sphere.radius * 2);
-    g.position.set(-sphere.center.x, -sphere.center.y, -sphere.center.z);
-    g.scale.setScalar(s);
+    
+    // We rely on <Center> from drei for scaling and centering, so no manual Box3 math is needed here!
 
     g.traverse((o: any) => {
       if (o.isMesh) {
-        o.castShadow = true;
-        o.receiveShadow = true;
+        o.castShadow = false; // Disable shadows for massive performance boost
+        o.receiveShadow = false;
         if (fadeIn) {
           o.material.transparent = true;
           o.material.opacity = 0;
@@ -130,16 +126,6 @@ const ModelInner = ({
     g.getWorldPosition(pivotW.current);
     pivot.copy(pivotW.current);
     outer.current.rotation.set(initPitch, initYaw, 0);
-
-    if (autoFrame && (camera as any).isPerspectiveCamera) {
-      const persp = camera as any;
-      const fitR = sphere.radius * s;
-      const d = (fitR * 1.2) / Math.sin((persp.fov * Math.PI) / 180 / 2);
-      persp.position.set(pivotW.current.x, pivotW.current.y, pivotW.current.z + d);
-      persp.near = d / 10;
-      persp.far = d * 10;
-      persp.updateProjectionMatrix();
-    }
 
     if (fadeIn) {
       let t = 0;
@@ -334,7 +320,9 @@ const ModelInner = ({
   return (
     <group ref={outer}>
       <group ref={inner}>
-        <primitive object={content} />
+        <Center>
+          <primitive object={content} />
+        </Center>
       </group>
     </group>
   );
@@ -468,9 +456,7 @@ const ModelViewer = ({
 
       <ErrorBoundary fallbackSrc={placeholderSrc}>
         <Canvas
-          shadows
           frameloop="demand"
-          gl={{ preserveDrawingBuffer: true }}
           onCreated={({ gl, scene, camera }) => {
             rendererRef.current = gl;
             sceneRef.current = scene;
@@ -484,7 +470,7 @@ const ModelViewer = ({
           {environmentPreset !== 'none' && <Environment preset={environmentPreset as any} background={false} />}
 
           <ambientLight intensity={ambientIntensity} />
-          <directionalLight position={[5, 5, 5]} intensity={keyLightIntensity} castShadow />
+          <directionalLight position={[5, 5, 5]} intensity={keyLightIntensity} />
           <directionalLight position={[-5, 2, 5]} intensity={fillLightIntensity} />
           <directionalLight position={[0, 4, -5]} intensity={rimLightIntensity} />
 

@@ -16,13 +16,14 @@ interface Booking {
   service: string;
   date: string;
   message: string;
-  status: "pending" | "confirmed" | "completed" | "cancelled";
+  status: "pending" | "confirmed" | "completed" | "cancelled" | "on_track";
   createdAt: { toDate: () => Date };
 }
 
 const STATUS_CONFIG = {
   pending:   { label: "Pending",   color: "#FF8800", bg: "rgba(255,136,0,0.12)",   dot: "#FF8800" },
   confirmed: { label: "Confirmed", color: "#0066FF", bg: "rgba(0,102,255,0.12)",   dot: "#0066FF" },
+  on_track:  { label: "On Track",  color: "#8B5CF6", bg: "rgba(139,92,246,0.12)",  dot: "#8B5CF6" },
   completed: { label: "Completed", color: "#00C896", bg: "rgba(0,200,150,0.12)",   dot: "#00C896" },
   cancelled: { label: "Cancelled", color: "#0066FF", bg: "rgba(226,0,26,0.12)",    dot: "#0066FF" },
 };
@@ -230,6 +231,7 @@ export default function MyBookingsClient() {
               { label: "Total Bookings", value: bookings.length, color: "#0066FF" },
               { label: "Pending", value: bookings.filter(b => b.status === "pending").length, color: "#FF8800" },
               { label: "Confirmed", value: bookings.filter(b => b.status === "confirmed").length, color: "#0066FF" },
+              { label: "On Track", value: bookings.filter(b => b.status === "on_track").length, color: "#8B5CF6" },
               { label: "Completed", value: bookings.filter(b => b.status === "completed").length, color: "#00C896" },
             ].map((stat) => (
               <div key={stat.label} style={{

@@ -31,7 +31,7 @@ type Booking = {
   service: string;
   date: string;
   message: string;
-  status: "pending" | "confirmed" | "completed" | "cancelled";
+  status: "pending" | "confirmed" | "completed" | "cancelled" | "on_track";
   userId: string;
   userEmail: string;
   createdAt: { seconds: number } | null;
@@ -48,6 +48,7 @@ type UserRecord = {
 const STATUS_CFG = {
   pending:   { color: "#F59E0B", bg: "rgba(245,158,11,0.15)",  border: "rgba(245,158,11,0.35)",  icon: Clock,         label: "Pending"   },
   confirmed: { color: "#3B82F6", bg: "rgba(59,130,246,0.15)",  border: "rgba(59,130,246,0.35)",   icon: CheckCircle2,  label: "Confirmed" },
+  on_track:  { color: "#8B5CF6", bg: "rgba(139,92,246,0.15)",  border: "rgba(139,92,246,0.35)",   icon: TrendingUp,    label: "On Track"  },
   completed: { color: "#10B981", bg: "rgba(16,185,129,0.15)",  border: "rgba(16,185,129,0.35)",   icon: CheckCircle2,  label: "Completed" },
   cancelled: { color: "#EF4444", bg: "rgba(239,68,68,0.15)",   border: "rgba(239,68,68,0.35)",    icon: XCircle,       label: "Cancelled" },
 };
@@ -288,6 +289,7 @@ export default function AdminClient() {
     total:     bookings.length,
     pending:   bookings.filter(b => b.status === "pending").length,
     confirmed: bookings.filter(b => b.status === "confirmed").length,
+    on_track:  bookings.filter(b => b.status === "on_track").length,
     completed: bookings.filter(b => b.status === "completed").length,
     cancelled: bookings.filter(b => b.status === "cancelled").length,
     todayCount: bookings.filter(b => {
@@ -648,6 +650,7 @@ service cloud.firestore {
                 <option value="all" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>All Status</option>
                 <option value="pending" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Pending</option>
                 <option value="confirmed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Confirmed</option>
+                <option value="on_track" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>On Track</option>
                 <option value="completed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Completed</option>
                 <option value="cancelled" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Cancelled</option>
               </select>
@@ -926,6 +929,7 @@ service cloud.firestore {
                       style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }}>
                       <option value="pending" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Pending</option>
                       <option value="confirmed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Confirmed</option>
+                      <option value="on_track" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: On Track</option>
                       <option value="completed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Completed</option>
                     </select>
                   </div>
@@ -1098,7 +1102,7 @@ service cloud.firestore {
               <div style={{ marginBottom: 24 }}>
                 <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>Update Status</div>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  {(["pending", "confirmed", "completed", "cancelled"] as Booking["status"][]).map(s => {
+                  {(["pending", "confirmed", "on_track", "completed", "cancelled"] as Booking["status"][]).map(s => {
                     const c = STATUS_CFG[s];
                     const active = selectedBooking.status === s;
                     return (

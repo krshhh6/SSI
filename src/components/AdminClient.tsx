@@ -101,6 +101,7 @@ export default function AdminClient() {
   const [tab, setTab] = useState<"overview" | "bookings" | "users" | "analytics" | "advanced">("overview");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [users, setUsers] = useState<UserRecord[]>([]);
+  const [reviewsData, setReviewsData] = useState<any[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
   const [dataError, setDataError] = useState("");
   const [search, setSearch] = useState("");
@@ -127,6 +128,10 @@ export default function AdminClient() {
   const [editLoading, setEditLoading] = useState(false);
   const [editSuccess, setEditSuccess] = useState("");
   const [editSearch, setEditSearch] = useState("");
+
+  // Review form state
+  const [reviewForm, setReviewForm] = useState({ name: "", rating: 5, text: "", service: "", date: "" });
+  const [reviewLoading, setReviewLoading] = useState(false);
 
   // Populate edit form when a booking is selected
   useEffect(() => {
@@ -163,6 +168,11 @@ export default function AdminClient() {
       try { uSnap = await getDocs(query(collection(db, "users"), orderBy("createdAt", "desc"))); }
       catch { uSnap = await getDocs(collection(db, "users")); }
       setUsers(uSnap.docs.map(d => ({ id: d.id, ...d.data() } as UserRecord)));
+
+      let rSnap;
+      try { rSnap = await getDocs(query(collection(db, "reviews"), orderBy("createdAt", "desc"))); }
+      catch { rSnap = await getDocs(collection(db, "reviews")); }
+      setReviewsData(rSnap.docs.map(d => ({ id: d.id, ...d.data() })));
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
       setDataError(msg.includes("permission") || msg.includes("denied") ? "PERMISSION_DENIED" : msg);
@@ -248,6 +258,28 @@ export default function AdminClient() {
       alert("Error updating booking: " + (err instanceof Error ? err.message : String(err)));
     }
     setEditLoading(false);
+  };
+
+  const submitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setReviewLoading(true);
+    try {
+      await addDoc(collection(db, "reviews"), {
+        ...reviewForm,
+        createdAt: Timestamp.now()
+      });
+      setReviewForm({ name: "", rating: 5, text: "", service: "", date: "" });
+      loadData();
+    } catch (err: unknown) {
+      alert("Error adding review: " + (err instanceof Error ? err.message : String(err)));
+    }
+    setReviewLoading(false);
+  };
+
+  const deleteReview = async (id: string) => {
+    if (!confirm("Permanently delete this review?")) return;
+    await deleteDoc(doc(db, "reviews", id));
+    loadData();
   };
 
   // Stats
@@ -397,6 +429,7 @@ export default function AdminClient() {
               { id: "overview",  label: "Overview",  icon: LayoutDashboard },
               { id: "bookings",  label: "Bookings",  icon: CalendarDays    },
               { id: "users",     label: "Users",     icon: Users           },
+              { id: "reviews",   label: "Reviews",   icon: MessageSquare   },
               { id: "analytics", label: "Analytics", icon: TrendingUp      },
               { id: "advanced",  label: "Advanced",  icon: Settings        },
             ] as const).map(item => (
@@ -699,6 +732,57 @@ service cloud.firestore {
                 </table>
               </div>
             </GlassCard>
+          </motion.div>
+        )}
+
+        {/* ────────────────────── REVIEWS ────────────────────── */}
+        {tab === "reviews" && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 24, alignItems: "start" }}>
+              <GlassCard title={`Manage Reviews (${reviewsData.length})`}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  {reviewsData.map(r => (
+                    <div key={r.id} style={{ padding: "16px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                      <div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                          <span style={{ fontWeight: 700, color: "var(--text)" }}>{r.name}</span>
+                          <span style={{ color: "#FFB800", fontSize: "0.85rem" }}>{"★".repeat(r.rating)}</span>
+                        </div>
+                        <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.5, marginBottom: 8 }}>"{r.text}"</p>
+                        <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", gap: 12 }}>
+                          <span>Service: {r.service}</span>
+                          <span>Date: {r.date}</span>
+                        </div>
+                      </div>
+                      <button onClick={() => deleteReview(r.id)} style={{ padding: 6, background: "rgba(239,68,68,0.1)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 8, cursor: "pointer" }}>
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  ))}
+                  {reviewsData.length === 0 && <div style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}>No reviews found. Fallback reviews are currently being displayed on the site. Add one below!</div>}
+                </div>
+              </GlassCard>
+
+              <GlassCard title="Add New Review">
+                <form onSubmit={submitReview} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  <input required placeholder="Customer Name" value={reviewForm.name} onChange={e => setReviewForm({...reviewForm, name: e.target.value})}
+                    style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", outline: "none", fontSize: "0.9rem" }} />
+                  <select value={reviewForm.rating} onChange={e => setReviewForm({...reviewForm, rating: Number(e.target.value)})}
+                    style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", outline: "none", fontSize: "0.9rem" }}>
+                    {[5,4,3,2,1].map(num => <option key={num} value={num}>{num} Stars</option>)}
+                  </select>
+                  <textarea required placeholder="Review Text" value={reviewForm.text} onChange={e => setReviewForm({...reviewForm, text: e.target.value})}
+                    style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", outline: "none", fontSize: "0.9rem", minHeight: 100, resize: "vertical" }} />
+                  <input required placeholder="Service Done (e.g. AC Service)" value={reviewForm.service} onChange={e => setReviewForm({...reviewForm, service: e.target.value})}
+                    style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", outline: "none", fontSize: "0.9rem" }} />
+                  <input required placeholder="Timeframe (e.g. 2 days ago)" value={reviewForm.date} onChange={e => setReviewForm({...reviewForm, date: e.target.value})}
+                    style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", outline: "none", fontSize: "0.9rem" }} />
+                  <button type="submit" disabled={reviewLoading} style={{ padding: "12px", background: "#0066FF", color: "white", borderRadius: 8, border: "none", fontWeight: 600, cursor: reviewLoading ? "wait" : "pointer" }}>
+                    {reviewLoading ? "Adding..." : "Add Review"}
+                  </button>
+                </form>
+              </GlassCard>
+            </div>
           </motion.div>
         )}
 

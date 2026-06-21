@@ -3,9 +3,22 @@ import { useState, useEffect, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import CurvedLoop from "./CurvedLoop";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
-const REVIEWS = [
+export type ReviewData = {
+  id: string;
+  name: string;
+  rating: number;
+  text: string;
+  service: string;
+  date: string;
+  createdAt?: any;
+};
+
+const FALLBACK_REVIEWS: ReviewData[] = [
   {
+    id: "f1",
     name: "Rohit Kumar",
     rating: 5,
     text: "I had a very good experience there. Great service and professional staff. They diagnosed the issue within an hour and fixed it the same day. Highly recommend SAM Wheels!",
@@ -13,6 +26,7 @@ const REVIEWS = [
     date: "2 months ago",
   },
   {
+    id: "f2",
     name: "Ram Bhagat",
     rating: 5,
     text: "Nice service done by them. Atmosphere is good and staff is cooperative. The Bosch diagnostic machine they use is very advanced. My car runs like new.",
@@ -20,6 +34,7 @@ const REVIEWS = [
     date: "1 month ago",
   },
   {
+    id: "f3",
     name: "Gaurav Sinha",
     rating: 5,
     text: "Pickup and drop process was smooth. Excellent dent and paint work — you cannot even tell there was a dent. The color matching was perfect. Worth every penny.",
@@ -27,45 +42,49 @@ const REVIEWS = [
     date: "3 weeks ago",
   },
   {
+    id: "f4",
     name: "Priya Verma",
     rating: 5,
     text: "The AC service was done perfectly. Team was transparent about what needed to be fixed and what didn't. Pricing is fair and they use only genuine Bosch parts.",
     service: "AC Service",
     date: "5 weeks ago",
   },
-  {
-    name: "Ankit Mishra",
-    rating: 5,
-    text: "Best car service in Patna hands down. They handled my insurance claim completely hassle-free. Staff kept me updated via WhatsApp throughout the process.",
-    service: "Insurance Claim",
-    date: "6 weeks ago",
-  },
-  {
-    name: "Sunil Pandey",
-    rating: 5,
-    text: "Excellent wheel alignment service. Car's handling has improved tremendously. Very professional setup with computerized equipment. Will be back for my next service.",
-    service: "Wheel Alignment",
-    date: "2 months ago",
-  },
 ];
 
 export default function Reviews() {
+  const [reviews, setReviews] = useState<ReviewData[]>(FALLBACK_REVIEWS);
   const [current, setCurrent] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true });
 
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    const fetchReviews = async () => {
+      try {
+        const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+          const fetched = snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as ReviewData));
+          setReviews(fetched);
+        }
+      } catch (err) {
+        console.error("Error fetching reviews:", err);
+      }
+    };
+    fetchReviews();
+  }, []);
+
+  useEffect(() => {
+    if (!isAutoPlaying || reviews.length === 0) return;
     const timer = setInterval(() => {
-      setCurrent((c) => (c + 1) % REVIEWS.length);
+      setCurrent((c) => (c + 1) % reviews.length);
     }, 4500);
     return () => clearInterval(timer);
-  }, [isAutoPlaying]);
+  }, [isAutoPlaying, reviews.length]);
 
   const navigate = (dir: 1 | -1) => {
     setIsAutoPlaying(false);
-    setCurrent((c) => (c + dir + REVIEWS.length) % REVIEWS.length);
+    setCurrent((c) => (c + dir + reviews.length) % reviews.length);
     setTimeout(() => setIsAutoPlaying(true), 8000);
   };
 
@@ -191,7 +210,7 @@ export default function Reviews() {
 
               {/* Stars */}
               <div style={{ marginBottom: 20 }}>
-                {"★".repeat(REVIEWS[current].rating).split("").map((s, i) => (
+                {"★".repeat(reviews[current]?.rating || 5).split("").map((s, i) => (
                   <motion.span
                     key={i}
                     initial={{ opacity: 0, scale: 0 }}
@@ -215,7 +234,7 @@ export default function Reviews() {
                   fontWeight: 400,
                 }}
               >
-                &ldquo;{REVIEWS[current].text}&rdquo;
+                &ldquo;{reviews[current]?.text}&rdquo;
               </p>
 
               {/* Author */}
@@ -235,14 +254,14 @@ export default function Reviews() {
                     flexShrink: 0,
                   }}
                 >
-                  {REVIEWS[current].name[0]}
+                  {reviews[current]?.name?.[0] || "?"}
                 </div>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: "1rem", color: "var(--text)" }}>
-                    {REVIEWS[current].name}
+                    {reviews[current]?.name}
                   </div>
                   <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>
-                    {REVIEWS[current].service} · {REVIEWS[current].date}
+                    {reviews[current]?.service} · {reviews[current]?.date}
                   </div>
                 </div>
                 <div style={{ marginLeft: "auto" }} className="review-google-badge">
@@ -295,7 +314,7 @@ export default function Reviews() {
             </motion.button>
 
             <div style={{ display: "flex", gap: 8 }}>
-              {REVIEWS.map((_, i) => (
+              {reviews.map((_, i) => (
                 <motion.button
                   key={i}
                   onClick={() => { setIsAutoPlaying(false); setCurrent(i); }}
@@ -347,7 +366,7 @@ export default function Reviews() {
           }}
           className="review-mini-grid"
         >
-          {REVIEWS.filter((_, i) => i !== current).slice(0, 3).map((rev, i) => (
+          {reviews.filter((_, i) => i !== current).slice(0, 3).map((rev, i) => (
             <div
               key={i}
               style={{

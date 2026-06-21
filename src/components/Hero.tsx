@@ -11,9 +11,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-react";
-import BlurText from "./ReactBits/BlurText";
-import Particles from "./ReactBits/Particles";
-import StarBorder from "./ReactBits/StarBorder";
 import CountUp from "./ReactBits/CountUp";
 import GlareHover from "./GlareHover";
 
@@ -75,76 +72,18 @@ export default function Hero() {
       }}
       className="hero-section"
     >
-      {/* Ambient Background */}
+      {/* Clean Light Background */}
       <div
-        style={{ position: "absolute", inset: 0, overflow: "hidden", zIndex: 0 }}
+        style={{ position: "absolute", inset: 0, overflow: "hidden", zIndex: 0, background: "var(--bg)" }}
       >
-        {/* Gradient mesh */}
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background:
-              "radial-gradient(ellipse 80% 60% at 60% 50%, rgba(0, 102, 255, 0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 20% 80%, rgba(226, 0, 26, 0.05) 0%, transparent 50%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(0, 150, 255, 0.06) 0%, transparent 50%)",
-          }}
-        />
-        {/* Animated orbs */}
-        <motion.div
-          style={{
-            position: "absolute",
-            width: 600,
-            height: 600,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(0, 102, 255, 0.12) 0%, transparent 70%)",
-            right: "-10%",
-            top: "10%",
-            y: orb1Y,
-          }}
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          style={{
-            position: "absolute",
-            width: 400,
-            height: 400,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(226, 0, 26, 0.07) 0%, transparent 70%)",
-            left: "5%",
-            bottom: "20%",
-            y: orb2Y,
-          }}
-          animate={{ scale: [1, 1.15, 1] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        />
-
-        {/* Light beam */}
-        <motion.div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: "-20%",
-            width: "40%",
-            height: "100%",
-            background: "linear-gradient(105deg, transparent 40%, rgba(0, 102, 255, 0.03) 50%, transparent 60%)",
-            transform: "rotate(-15deg)",
-          }}
-          animate={{ x: ["0%", "180%"] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", repeatDelay: 5 }}
-        />
-
-        {/* Grid lines */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
+            backgroundImage: "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
             backgroundSize: "60px 60px",
           }}
         />
-
-        {/* Bottom vignette */}
         <div
           style={{
             position: "absolute",
@@ -155,20 +94,6 @@ export default function Hero() {
             background: "linear-gradient(to bottom, transparent, var(--bg))",
             zIndex: 2,
           }}
-        />
-      </div>
-
-      {/* Particles */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none" }}>
-        <Particles
-          particleColors={["#ffffff", "#ffffff"]}
-          particleCount={200}
-          particleSpread={10}
-          speed={0.1}
-          particleBaseSize={100}
-          moveParticlesOnHover={true}
-          alphaParticles={true}
-          disableRotation={false}
         />
       </div>      {/* Car render — desktop: absolute scroll-animated | mobile: inline below text */}
       <motion.div
@@ -279,11 +204,17 @@ export default function Hero() {
           {/* Headline */}
           <div
             className="display-xl"
-            style={{ maxWidth: 640, marginBottom: 8, display: "flex", flexDirection: "column", textShadow: "0 4px 30px var(--bg), 0 0 10px var(--bg)" }}
+            style={{ maxWidth: 640, marginBottom: 8, display: "flex", flexDirection: "column" }}
           >
-            <BlurText text="BOSCH CERTIFIED" delay={50} animateBy="letters" direction="top" className="text-[var(--text)]" />
-            <BlurText text="CAR CARE" delay={75} animateBy="letters" direction="bottom" className="gradient-text-blue" />
-            <BlurText text="EXCELLENCE" delay={100} animateBy="letters" direction="top" className="text-[var(--text)]" />
+            <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+              BOSCH CERTIFIED
+            </motion.span>
+            <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} style={{ color: "var(--bosch-red)" }}>
+              CAR CARE
+            </motion.span>
+            <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}>
+              EXCELLENCE
+            </motion.span>
           </div>
 
           {/* Sub headline */}
@@ -313,16 +244,20 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.7 }}
             style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 56 }}
           >
-            <StarBorder
-              as="a"
+            <motion.a
               href="#booking"
-              color="#ffffff"
-              speed="3s"
-              thickness={2}
+              className="btn-primary"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{
+                background: "var(--bosch-red)",
+                color: "#ffffff",
+                boxShadow: "0 4px 14px rgba(226, 0, 26, 0.2)",
+              }}
             >
               <CalendarCheck size={18} />
               Book Service
-            </StarBorder>
+            </motion.a>
             <motion.a
               href="tel:+919028384499"
               className="btn-secondary"

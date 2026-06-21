@@ -1,7 +1,6 @@
 "use client";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import SpotlightCard from "./ReactBits/SpotlightCard";
 import {
   Wrench,
   Gauge,
@@ -171,24 +170,27 @@ function ServiceCard({
   color: string;
 }) {
   return (
-    <motion.div variants={cardVariants} style={{ height: "100%" }}>
-      <SpotlightCard
-        className="service-card h-full"
-        spotlightColor={`${color}22`}
-      >
-        {/* Corner glow */}
-      <div
-        style={{
-          position: "absolute",
-          top: -30,
-          right: -30,
-          width: 100,
-          height: 100,
-          borderRadius: "50%",
-          background: `radial-gradient(circle, ${color}22 0%, transparent 70%)`,
-          transition: "opacity 0.3s ease",
-        }}
-      />
+    <motion.div
+      variants={cardVariants}
+      whileHover={{
+        y: -4,
+        transition: { duration: 0.25, ease: "easeOut" },
+      }}
+      style={{
+        background: "var(--card)",
+        border: "1px solid var(--border)",
+        borderRadius: 12,
+        cursor: "default",
+        position: "relative",
+        overflow: "hidden",
+        transition: "all 0.3s ease",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+      className="service-card"
+    >
 
       <div style={{ display: "flex", alignItems: "center", gap: 16 }} className="service-header">
         {/* Icon */}
@@ -274,7 +276,6 @@ function ServiceCard({
           }
         }
       `}</style>
-      </SpotlightCard>
     </motion.div>
   );
 }

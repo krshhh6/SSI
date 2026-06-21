@@ -3,56 +3,30 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
-  /* Dark Mode Defaults */
-  --bg: #050505;
-  --bg-secondary: #0a0a0f;
-  --card: #0F1115;
-  --card-hover: #141720;
-  --border: rgba(255, 255, 255, 0.06);
-  --border-hover: rgba(0, 102, 255, 0.4);
-  --accent: #0066FF;
-  --accent-glow: rgba(0, 102, 255, 0.3);
-  --accent-secondary: #0099FF;
-  --bosch-red: #E2001A;
-  --bosch-red-glow: rgba(226, 0, 26, 0.3);
-  --text: #FFFFFF;
-  --text-secondary: #A8B0BE;
-  --text-muted: #5A6475;
-  --glass-bg: rgba(15, 17, 21, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --navbar-bg: rgba(5, 5, 5, 0.85);
-  --shadow-glow: 0 0 40px rgba(0, 102, 255, 0.15);
-  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.6);
-  --green-accent: #00C896;
-  --green-glow: rgba(0, 200, 150, 0.2);
-}
-
-[data-theme="light"] {
   color-scheme: light;
-  --bg: #F7F8FA;
-  --bg-secondary: #EDEEF2;
+  /* Minimalist Light Mode Defaults */
+  --bg: #FFFFFF;
+  --bg-secondary: #F8F9FA;
   --card: #FFFFFF;
-  --card-hover: #F0F4FF;
-  --border: rgba(0, 0, 0, 0.07);
-  --border-hover: rgba(0, 93, 255, 0.4);
-  --accent: #005DFF;
-  --accent-glow: rgba(0, 93, 255, 0.2);
-  --accent-secondary: #0080FF;
+  --card-hover: #F8F9FA;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.2);
+  --accent: #111111;
+  --accent-glow: rgba(0, 0, 0, 0.05);
+  --accent-secondary: #333333;
   --bosch-red: #E2001A;
-  --bosch-red-glow: rgba(226, 0, 26, 0.2);
-  --text: #121212;
-  --text-secondary: #5A6475;
-  --text-muted: #9BA3AF;
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(0, 0, 0, 0.08);
-  --navbar-bg: rgba(247, 248, 250, 0.85);
-  --shadow-glow: 0 0 40px rgba(0, 93, 255, 0.1);
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
-  --shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.15);
-  --green-accent: #00A87A;
-  --green-glow: rgba(0, 168, 122, 0.15);
+  --bosch-red-glow: rgba(226, 0, 26, 0.1);
+  --text: #111111;
+  --text-secondary: #555555;
+  --text-muted: #888888;
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --navbar-bg: rgba(255, 255, 255, 0.95);
+  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.03);
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.03);
+  --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.08);
+  --green-accent: #008A5E;
+  --green-glow: rgba(0, 138, 94, 0.1);
 }
 
 * {

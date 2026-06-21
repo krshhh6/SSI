@@ -14,8 +14,7 @@ import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-reac
 import FloatingParticles from "./FloatingParticles";
 import AnimatedCounter from "./AnimatedCounter";
 import GlareHover from "./GlareHover";
-import dynamic from "next/dynamic";
-const ParallaxModelViewer = dynamic(() => import("./ParallaxModelViewer"), { ssr: false });
+
 const TRUST_BADGES = [
   { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
   { icon: Users, value: "535+", label: "Customer Reviews", color: "#0066FF" },
@@ -194,15 +193,16 @@ export default function Hero() {
           }}
         />
         <motion.div
+          animate={{ y: [0, -15, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           style={{ position: "relative", zIndex: 2, width: "100%", height: "100%" }}
         >
-          <ParallaxModelViewer
-            url="/bmw_330i/scene_draco.gltf"
-            width="100%"
-            height="100%"
-            cameraOrbit="-45deg 75deg auto"
-            poster="/images/hero-car.png"
-            enableParallax={true}
+          <Image
+            src="/images/hero-car.png"
+            alt="Premium Car Service"
+            fill
+            style={{ objectFit: "contain", filter: "drop-shadow(0 20px 30px rgba(0,0,0,0.3))" }}
+            priority
           />
         </motion.div>
       </motion.div>
@@ -483,14 +483,19 @@ export default function Hero() {
               pointerEvents: "none",
             }}
           />
-          <ParallaxModelViewer
-            url="/bmw_330i/scene_draco.gltf"
-            width="100%"
-            height="100%"
-            cameraOrbit="-45deg 85deg auto"
-            poster="/images/hero-car.png"
-            enableParallax={false} // Disable parallax on mobile
-          />
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            style={{ position: "relative", width: "100%", height: "100%" }}
+          >
+            <Image
+              src="/images/hero-car.png"
+              alt="Premium Car Service"
+              fill
+              style={{ objectFit: "contain", filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))" }}
+              priority
+            />
+          </motion.div>
         </div>
       </div>
     </section>

@@ -98,7 +98,7 @@ export default function AdminClient() {
   const [loginError, setLoginError] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-  const [tab, setTab] = useState<"overview" | "bookings" | "users" | "analytics" | "advanced">("overview");
+  const [tab, setTab] = useState<"overview" | "bookings" | "users" | "reviews" | "analytics" | "advanced">("overview");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [users, setUsers] = useState<UserRecord[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

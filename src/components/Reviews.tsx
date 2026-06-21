@@ -13,7 +13,7 @@ export type ReviewData = {
   text: string;
   service: string;
   date: string;
-  createdAt?: any;
+  createdAt?: unknown;
 };
 
 const FALLBACK_REVIEWS: ReviewData[] = [

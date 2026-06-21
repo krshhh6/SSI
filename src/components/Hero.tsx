@@ -135,13 +135,20 @@ export default function Hero() {
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           style={{ position: "relative", zIndex: 2, width: "100%", height: "100%" }}
         >
-          <Image
-            src="/images/hero-car.png"
-            alt="Premium Car Service"
-            fill
-            style={{ objectFit: "contain", filter: "drop-shadow(0 20px 30px rgba(0,0,0,0.3))" }}
-            priority
-          />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{ 
+              width: "100%", 
+              height: "100%", 
+              objectFit: "contain", 
+              filter: "drop-shadow(0 20px 30px rgba(0,0,0,0.3))" 
+            }}
+          >
+            <source src="https://res.cloudinary.com/dfvfphe5z/video/upload/v1782060909/herocar_yy03cv.mp4" type="video/mp4" />
+          </video>
         </motion.div>
       </motion.div>
 
@@ -303,13 +310,20 @@ export default function Hero() {
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               style={{ position: "relative", zIndex: 2, width: "100%", height: "100%" }}
             >
-              <Image
-                src="/images/hero-car.png"
-                alt="Premium Car Service"
-                fill
-                style={{ objectFit: "contain", filter: "drop-shadow(0 10px 15px rgba(0,0,0,0.15))" }}
-                priority
-              />
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ 
+                  width: "100%", 
+                  height: "100%", 
+                  objectFit: "contain", 
+                  filter: "drop-shadow(0 10px 15px rgba(0,0,0,0.15))" 
+                }}
+              >
+                <source src="https://res.cloudinary.com/dfvfphe5z/video/upload/v1782060909/herocar_yy03cv.mp4" type="video/mp4" />
+              </video>
             </motion.div>
           </motion.div>
 
@@ -471,13 +485,20 @@ export default function Hero() {
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             style={{ position: "relative", width: "100%", height: "100%" }}
           >
-            <Image
-              src="/images/hero-car.png"
-              alt="Premium Car Service"
-              fill
-              style={{ objectFit: "contain", filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))" }}
-              priority
-            />
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{ 
+                width: "100%", 
+                height: "100%", 
+                objectFit: "contain", 
+                filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))" 
+              }}
+            >
+              <source src="https://res.cloudinary.com/dfvfphe5z/video/upload/v1782060909/herocar_yy03cv.mp4" type="video/mp4" />
+            </video>
           </motion.div>
         </div>
       </div>

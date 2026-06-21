@@ -47,6 +47,13 @@ export default function Hero() {
   const carScale = useSpring(rawCarScale, { stiffness: 60, damping: 20 });
   const carY = useSpring(rawCarY, { stiffness: 60, damping: 20 });
 
+  // Mobile Car scroll
+  const rawMobileCarScale = useTransform(scrollYProgress, [0, 0.4], [1, 0.85]);
+  const rawMobileCarOpacity = useTransform(scrollYProgress, [0.15, 0.6], [1, 0]);
+  const rawMobileCarY = useTransform(scrollYProgress, [0, 0.5], ["0%", "15%"]);
+  const mobileCarScale = useSpring(rawMobileCarScale, { stiffness: 60, damping: 20 });
+  const mobileCarY = useSpring(rawMobileCarY, { stiffness: 60, damping: 20 });
+
   // Hero content parallax
   const headlineY = useTransform(scrollYProgress, [0, 0.5], ["0%", "-30%"]);
   const headlineOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
@@ -281,6 +288,9 @@ export default function Hero() {
               minHeight: 300,
               marginBottom: 40,
               zIndex: 2,
+              scale: mobileCarScale,
+              opacity: rawMobileCarOpacity,
+              y: mobileCarY,
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -439,48 +449,7 @@ export default function Hero() {
         </div>
       </motion.div>
 
-      {/* Mobile-only car image (shown inline below text on small screens) */}
-      <div
-        className="hero-car-mobile"
-        style={{
-          display: "none",
-          position: "relative",
-          zIndex: 3,
-          width: "100%",
-          padding: "0 8px 8px",
-          marginTop: "-12px",
-          height: "300px",
-          pointerEvents: "auto",
-        }}
-      >
-        <div style={{ position: "relative", width: "100%", height: "100%" }}>
-          <div
-            style={{
-              position: "absolute",
-              bottom: "5%",
-              left: "15%",
-              right: "15%",
-              height: "20px",
-              background: "radial-gradient(ellipse, rgba(104, 174, 153, 0.3) 0%, transparent 70%)",
-              filter: "blur(15px)",
-              pointerEvents: "none",
-            }}
-          />
-          <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            style={{ position: "relative", width: "100%", height: "100%" }}
-          >
-            <Image
-              src="/images/hero-car.png"
-              alt="Premium Car Service"
-              fill
-              style={{ objectFit: "contain", filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))" }}
-              priority
-            />
-          </motion.div>
-        </div>
-      </div>
+
     </section>
   );
 }

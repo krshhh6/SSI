@@ -100,12 +100,12 @@ export default function Hero() {
         className="hero-car-desktop"
         style={{
           position: "absolute",
-          right: "-4%",
-          top: "50%",
+          right: "0%",
+          top: "40%",
           translateY: "-50%",
-          width: "55%",
-          maxWidth: 860,
-          height: "60vh",
+          width: "60%",
+          maxWidth: 900,
+          height: "70vh",
           minHeight: 500,
           x: carX,
           scale: carScale,
@@ -143,8 +143,10 @@ export default function Hero() {
             style={{ 
               width: "100%", 
               height: "100%", 
-              objectFit: "contain", 
-              filter: "drop-shadow(0 20px 30px rgba(0,0,0,0.3))" 
+              objectFit: "cover", 
+              filter: "drop-shadow(0 20px 30px rgba(0,0,0,0.3))",
+              WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 50%, transparent 100%)",
+              maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 50%, transparent 100%)"
             }}
           >
             <source src="https://res.cloudinary.com/dfvfphe5z/video/upload/v1782060909/herocar_yy03cv.mp4" type="video/mp4" />
@@ -318,8 +320,10 @@ export default function Hero() {
                 style={{ 
                   width: "100%", 
                   height: "100%", 
-                  objectFit: "contain", 
-                  filter: "drop-shadow(0 10px 15px rgba(0,0,0,0.15))" 
+                  objectFit: "cover", 
+                  filter: "drop-shadow(0 10px 15px rgba(0,0,0,0.15))",
+                  WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 50%, transparent 100%)",
+                  maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 50%, transparent 100%)"
                 }}
               >
                 <source src="https://res.cloudinary.com/dfvfphe5z/video/upload/v1782060909/herocar_yy03cv.mp4" type="video/mp4" />

@@ -13,7 +13,7 @@ export type ReviewData = {
   text: string;
   service: string;
   date: string;
-  createdAt?: any;
+  createdAt?: unknown;
 };
 
 const FALLBACK_REVIEWS: ReviewData[] = [
@@ -52,12 +52,11 @@ const FALLBACK_REVIEWS: ReviewData[] = [
 ];
 
 export default function Reviews() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [reviews, setReviews] = useState<any[]>(FALLBACK_REVIEWS);
+  const [reviews, setReviews] = useState<ReviewData[]>(FALLBACK_REVIEWS);
   const [current, setCurrent] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true });
+  useInView(ref, { once: true });
 
   useEffect(() => {
     const fetchReviews = async () => {

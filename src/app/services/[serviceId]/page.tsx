@@ -58,17 +58,19 @@ const SERVICES_DB: Record<string, { title: string; subtitle: string; description
   },
 };
 
-export function generateMetadata({ params }: { params: { serviceId: string } }): Metadata {
-  const service = SERVICES_DB[params.serviceId];
+export async function generateMetadata({ params }: { params: Promise<{ serviceId: string }> }): Promise<Metadata> {
+  const { serviceId } = await params;
+  const service = SERVICES_DB[serviceId];
   if (!service) return { title: "Service Not Found" };
   return {
-    title: \`\${service.title} | Bosch Car Service Patna\`,
+    title: `${service.title} | Bosch Car Service Patna`,
     description: service.subtitle,
   };
 }
 
-export default function ServiceDetailPage({ params }: { params: { serviceId: string } }) {
-  const service = SERVICES_DB[params.serviceId];
+export default async function ServiceDetailPage({ params }: { params: Promise<{ serviceId: string }> }) {
+  const { serviceId } = await params;
+  const service = SERVICES_DB[serviceId];
 
   if (!service) {
     notFound();
@@ -98,8 +100,8 @@ export default function ServiceDetailPage({ params }: { params: { serviceId: str
                   display: "inline-block",
                   padding: "5px 16px",
                   borderRadius: 100,
-                  border: \`1px solid \${service.color}40\`,
-                  background: \`\${service.color}15\`,
+                  border: `1px solid ${service.color}40`,
+                  background: `${service.color}15`,
                   color: service.color,
                   fontSize: "0.75rem",
                   fontWeight: 700,
@@ -138,18 +140,18 @@ export default function ServiceDetailPage({ params }: { params: { serviceId: str
               <div
                 style={{
                   background: "var(--card)",
-                  border: \`1px solid \${service.color}40\`,
+                  border: `1px solid ${service.color}40`,
                   borderRadius: 24,
                   padding: 48,
                   textAlign: "center",
-                  boxShadow: \`0 24px 60px \${service.color}15\`,
+                  boxShadow: `0 24px 60px ${service.color}15`,
                   backdropFilter: "blur(20px)",
                   position: "relative",
                   overflow: "hidden"
                 }}
               >
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: service.color }} />
-                <div style={{ width: 80, height: 80, borderRadius: 20, background: \`\${service.color}15\`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
+                <div style={{ width: 80, height: 80, borderRadius: 20, background: `${service.color}15`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
                   <Wrench size={32} color={service.color} />
                 </div>
                 <h3 style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", marginBottom: 12 }}>
@@ -159,7 +161,7 @@ export default function ServiceDetailPage({ params }: { params: { serviceId: str
                   Get expert care for your vehicle. Schedule an appointment today and experience the Bosch advantage.
                 </p>
                 <Link
-                  href={\`/#booking?service=\${params.serviceId}\`}
+                  href={`/#booking?service=${serviceId}`}
                   style={{
                     display: "block",
                     padding: "16px 24px",
@@ -169,7 +171,7 @@ export default function ServiceDetailPage({ params }: { params: { serviceId: str
                     textDecoration: "none",
                     fontWeight: 700,
                     fontSize: "1.05rem",
-                    boxShadow: \`0 12px 30px \${service.color}40\`,
+                    boxShadow: `0 12px 30px ${service.color}40`,
                     transition: "transform 0.2s ease, box-shadow 0.2s ease",
                   }}
                   onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}

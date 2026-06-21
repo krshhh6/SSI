@@ -29,6 +29,8 @@ const securityHeaders = [
       "img-src 'self' data: blob: https:",
       // Frames: Google reCAPTCHA + Firebase Auth
       "frame-src 'self' https://www.google.com https://www.recaptcha.net https://sam-wheels.firebaseapp.com",
+      // Media: Cloudinary Videos
+      "media-src 'self' https://res.cloudinary.com",
     ].join("; "),
   },
 ];

@@ -4,7 +4,6 @@ import {
   motion,
   useScroll,
   useTransform,
-  useSpring,
   useInView,
 } from "framer-motion";
 import Image from "next/image";
@@ -35,17 +34,7 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  // Car scroll-driven animation
-  const rawCarX = useTransform(scrollYProgress, [0, 0.6], ["0%", "-32%"]);
-  const rawCarRotateY = useTransform(scrollYProgress, [0, 0.6], [0, -6]);
-  const rawCarScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.82]);
-  const rawCarOpacity = useTransform(scrollYProgress, [0.3, 0.65], [1, 0]);
-  const rawCarY = useTransform(scrollYProgress, [0, 0.6], ["0%", "8%"]);
 
-  // Spring-smooth versions
-  const carX = useSpring(rawCarX, { stiffness: 60, damping: 20 });
-  const carScale = useSpring(rawCarScale, { stiffness: 60, damping: 20 });
-  const carY = useSpring(rawCarY, { stiffness: 60, damping: 20 });
 
   // Hero content parallax
   const headlineY = useTransform(scrollYProgress, [0, 0.5], ["0%", "-30%"]);
@@ -107,12 +96,7 @@ export default function Hero() {
           maxWidth: 900,
           height: "70vh",
           minHeight: 500,
-          x: carX,
-          scale: carScale,
-          opacity: rawCarOpacity,
-          y: carY,
-          rotateY: rawCarRotateY,
-          perspective: 1200,
+
           zIndex: 2,
           pointerEvents: "auto", // Ensure it's interactive
         }}

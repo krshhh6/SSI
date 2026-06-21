@@ -388,9 +388,9 @@ export default function Hero() {
           right: 0,
           margin: "0 auto", // Safest way to center absolute elements
           zIndex: 10,
-          background: "rgba(10, 15, 25, 0.6)",
-          border: "1px solid rgba(255, 255, 255, 0.08)",
-          boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+          background: "var(--glass-bg)",
+          border: "1px solid var(--glass-border)",
+          boxShadow: "var(--shadow-card)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
           borderRadius: 24,
@@ -416,9 +416,9 @@ export default function Hero() {
               className="hero-stat-card"
               style={{ 
                 position: "relative",
-                borderRight: i !== STATS.length - 1 ? "1px solid rgba(255, 255, 255, 0.05)" : "none"
+                borderRight: i !== STATS.length - 1 ? "1px solid var(--glass-border)" : "none"
               }}
-              whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.03)" }}
+              whileHover={{ backgroundColor: "var(--card-hover)" }}
             >
               <GlareHover
                 glareColor="#0066FF"

@@ -15,10 +15,10 @@ import CountUp from "./ReactBits/CountUp";
 import GlareHover from "./GlareHover";
 
 const TRUST_BADGES = [
-  { icon: Star, value: "4.7", label: "Google Rating", color: "var(--accent)" },
-  { icon: Users, value: "535+", label: "Customer Reviews", color: "var(--accent)" },
-  { icon: Car, value: "All", label: "Multi-Brand Service", color: "var(--text)" },
-  { icon: ShieldCheck, value: "100%", label: "Bosch Authorized", color: "var(--text)" },
+  { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
+  { icon: Users, value: "535+", label: "Customer Reviews", color: "#0066FF" },
+  { icon: Car, value: "All", label: "Multi-Brand Service", color: "#00C896" },
+  { icon: ShieldCheck, value: "100%", label: "Bosch Authorized", color: "#E2001A" },
 ];
 
 const STATS = [
@@ -46,13 +46,6 @@ export default function Hero() {
   const carX = useSpring(rawCarX, { stiffness: 60, damping: 20 });
   const carScale = useSpring(rawCarScale, { stiffness: 60, damping: 20 });
   const carY = useSpring(rawCarY, { stiffness: 60, damping: 20 });
-
-  // Mobile Car scroll
-  const rawMobileCarScale = useTransform(scrollYProgress, [0, 0.4], [1, 0.85]);
-  const rawMobileCarOpacity = useTransform(scrollYProgress, [0.15, 0.6], [1, 0]);
-  const rawMobileCarY = useTransform(scrollYProgress, [0, 0.5], ["0%", "15%"]);
-  const mobileCarScale = useSpring(rawMobileCarScale, { stiffness: 60, damping: 20 });
-  const mobileCarY = useSpring(rawMobileCarY, { stiffness: 60, damping: 20 });
 
   // Hero content parallax
   const headlineY = useTransform(scrollYProgress, [0, 0.5], ["0%", "-30%"]);
@@ -131,7 +124,7 @@ export default function Hero() {
             left: "20%",
             right: "20%",
             height: "30px",
-            background: "radial-gradient(ellipse, rgba(104, 174, 153, 0.35) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.35) 0%, transparent 70%)",
             filter: "blur(20px)",
             zIndex: 1,
             pointerEvents: "none",
@@ -200,8 +193,8 @@ export default function Hero() {
                   width: 6,
                   height: 6,
                   borderRadius: "50%",
-                  background: "#68ae99",
-                  boxShadow: "0 0 8px #68ae99",
+                  background: "#E2001A",
+                  boxShadow: "0 0 8px #E2001A",
                 }}
               />
               Bosch Authorized Workshop · Patna, Bihar
@@ -216,7 +209,7 @@ export default function Hero() {
             <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
               BOSCH CERTIFIED
             </motion.span>
-            <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} style={{ color: "var(--accent)" }}>
+            <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} style={{ color: "var(--bosch-red)" }}>
               CAR CARE
             </motion.span>
             <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}>
@@ -288,9 +281,6 @@ export default function Hero() {
               minHeight: 300,
               marginBottom: 40,
               zIndex: 2,
-              scale: mobileCarScale,
-              opacity: rawMobileCarOpacity,
-              y: mobileCarY,
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -303,7 +293,7 @@ export default function Hero() {
                 left: "10%",
                 right: "10%",
                 height: "20px",
-                background: "radial-gradient(ellipse, rgba(104, 174, 153, 0.2) 0%, transparent 70%)",
+                background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.2) 0%, transparent 70%)",
                 filter: "blur(15px)",
                 zIndex: 1,
               }}
@@ -413,7 +403,7 @@ export default function Hero() {
               whileHover={{ backgroundColor: "var(--card-hover)" }}
             >
               <GlareHover
-                glareColor="#68ae99"
+                glareColor="#0066FF"
                 glareOpacity={0.2}
                 glareAngle={-45}
                 glareSize={200}
@@ -429,7 +419,7 @@ export default function Hero() {
                     fontFamily: "Outfit, sans-serif",
                     lineHeight: 1,
                     marginBottom: 8,
-                    textShadow: "0 0 20px rgba(104, 174, 153, 0.4)"
+                    textShadow: "0 0 20px rgba(0, 102, 255, 0.4)"
                   }}
                 >
                   <CountUp
@@ -449,7 +439,48 @@ export default function Hero() {
         </div>
       </motion.div>
 
-
+      {/* Mobile-only car image (shown inline below text on small screens) */}
+      <div
+        className="hero-car-mobile"
+        style={{
+          display: "none",
+          position: "relative",
+          zIndex: 3,
+          width: "100%",
+          padding: "0 8px 8px",
+          marginTop: "-12px",
+          height: "300px",
+          pointerEvents: "auto",
+        }}
+      >
+        <div style={{ position: "relative", width: "100%", height: "100%" }}>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "5%",
+              left: "15%",
+              right: "15%",
+              height: "20px",
+              background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.3) 0%, transparent 70%)",
+              filter: "blur(15px)",
+              pointerEvents: "none",
+            }}
+          />
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            style={{ position: "relative", width: "100%", height: "100%" }}
+          >
+            <Image
+              src="/images/hero-car.png"
+              alt="Premium Car Service"
+              fill
+              style={{ objectFit: "contain", filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))" }}
+              priority
+            />
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
 }

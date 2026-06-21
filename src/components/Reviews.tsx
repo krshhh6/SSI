@@ -13,7 +13,7 @@ export type ReviewData = {
   text: string;
   service: string;
   date: string;
-  createdAt?: unknown;
+  createdAt?: any;
 };
 
 const FALLBACK_REVIEWS: ReviewData[] = [
@@ -56,7 +56,7 @@ export default function Reviews() {
   const [current, setCurrent] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
-  useInView(ref, { once: true });
+  const isInView = useInView(ref, { once: true });
 
   useEffect(() => {
     const fetchReviews = async () => {

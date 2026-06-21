@@ -4,13 +4,13 @@
 
 :root {
   color-scheme: light;
-  /* Minimalist Light Mode Defaults */
-  --bg: #FFFFFF;
-  --bg-secondary: #F8F9FA;
-  --card: #FFFFFF;
-  --card-hover: #F8F9FA;
-  --border: rgba(0, 0, 0, 0.08);
-  --border-hover: rgba(0, 0, 0, 0.2);
+  /* Glassmorphism Light Mode Defaults */
+  --bg: #F4F7F9;
+  --bg-secondary: #E9ECEF;
+  --card: rgba(255, 255, 255, 0.6);
+  --card-hover: rgba(255, 255, 255, 0.85);
+  --border: rgba(255, 255, 255, 0.4);
+  --border-hover: rgba(255, 255, 255, 0.8);
   --accent: #111111;
   --accent-glow: rgba(0, 0, 0, 0.05);
   --accent-secondary: #333333;
@@ -19,11 +19,11 @@
   --text: #111111;
   --text-secondary: #555555;
   --text-muted: #888888;
-  --glass-bg: rgba(255, 255, 255, 0.9);
-  --glass-border: rgba(0, 0, 0, 0.05);
-  --navbar-bg: rgba(255, 255, 255, 0.95);
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --navbar-bg: rgba(255, 255, 255, 0.75);
   --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.03);
-  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.03);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.04);
   --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.08);
   --green-accent: #008A5E;
   --green-glow: rgba(0, 138, 94, 0.1);
@@ -31,13 +31,13 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
-  /* Minimalist Dark Mode Defaults */
-  --bg: #000000;
-  --bg-secondary: #0A0A0A;
-  --card: #0A0A0A;
-  --card-hover: #111111;
+  /* Glassmorphism Dark Mode Defaults */
+  --bg: #050507;
+  --bg-secondary: #0A0A0F;
+  --card: rgba(20, 22, 28, 0.6);
+  --card-hover: rgba(30, 33, 42, 0.85);
   --border: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.2);
+  --border-hover: rgba(255, 255, 255, 0.15);
   --accent: #FFFFFF;
   --accent-glow: rgba(255, 255, 255, 0.05);
   --accent-secondary: #DDDDDD;
@@ -46,12 +46,12 @@
   --text: #FFFFFF;
   --text-secondary: #AAAAAA;
   --text-muted: #777777;
-  --glass-bg: rgba(0, 0, 0, 0.9);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --navbar-bg: rgba(0, 0, 0, 0.95);
-  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.03);
-  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.03);
-  --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.08);
+  --glass-bg: rgba(10, 12, 16, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --navbar-bg: rgba(5, 5, 7, 0.75);
+  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.5);
   --green-accent: #00C896;
   --green-glow: rgba(0, 200, 150, 0.1);
 }
@@ -74,6 +74,42 @@ body {
   transition: background-color 0.4s ease, color 0.4s ease;
   overflow-x: hidden;
   line-height: 1.6;
+  position: relative;
+}
+
+/* Ambient Background Blobs to highlight glassmorphism */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: -1;
+  pointer-events: none;
+  transition: all 0.8s ease;
+}
+
+body::before {
+  top: -10%;
+  left: -10%;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, rgba(0, 102, 255, 0.08) 0%, transparent 70%);
+}
+
+body::after {
+  bottom: -10%;
+  right: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(226, 0, 26, 0.05) 0%, transparent 70%);
+}
+
+[data-theme="dark"] body::before {
+  background: radial-gradient(circle, rgba(0, 102, 255, 0.15) 0%, transparent 70%);
+}
+
+[data-theme="dark"] body::after {
+  background: radial-gradient(circle, rgba(226, 0, 26, 0.1) 0%, transparent 70%);
 }
 
 /* Scrollbar */

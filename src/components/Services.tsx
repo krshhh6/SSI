@@ -178,6 +178,8 @@ function ServiceCard({
       }}
       style={{
         background: "var(--card)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
         border: "1px solid var(--border)",
         borderRadius: 12,
         cursor: "default",

@@ -141,7 +141,7 @@ export default function SignInClient() {
           }}
         >
           {/* Top gradient bar */}
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg, #E2001A, #0066FF)" }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg, #68ae99, #68ae99)" }} />
 
           {/* Logo icon */}
           <motion.div
@@ -150,7 +150,7 @@ export default function SignInClient() {
             transition={{ type: "spring", stiffness: 300, delay: 0.2 }}
             style={{
               width: 60, height: 60, borderRadius: 16,
-              background: "linear-gradient(135deg, #E2001A, #A0000F)",
+              background: "linear-gradient(135deg, #68ae99, #A0000F)",
               display: "flex", alignItems: "center", justifyContent: "center",
               margin: "0 auto 20px",
               boxShadow: "0 0 40px rgba(226,0,26,0.35)",

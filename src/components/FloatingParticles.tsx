@@ -30,8 +30,8 @@ export default function FloatingParticles() {
 
     const colors =
       theme === "dark"
-        ? ["#0066FF", "#0099FF", "#00CCFF", "#FFFFFF", "#E2001A"]
-        : ["#005DFF", "#0080FF", "#00AAFF", "#121212", "#E2001A"];
+        ? ["#68ae99", "#0099FF", "#00CCFF", "#FFFFFF", "#68ae99"]
+        : ["#005DFF", "#0080FF", "#00AAFF", "#121212", "#68ae99"];
 
     const resize = () => {
       canvas.width = canvas.offsetWidth;

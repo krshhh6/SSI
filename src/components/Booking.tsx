@@ -175,7 +175,7 @@ export default function Booking() {
           </span>
           <h2 className="display-lg">
             BOOK YOUR{" "}
-            <span className="gradient-text-blue">SERVICE</span>
+            <span className="gradient-text">SERVICE</span>
           </h2>
           <p style={{ color: "var(--text-secondary)", maxWidth: 480, margin: "16px auto 0", fontSize: "1rem", lineHeight: 1.7 }}>
             Fill in the details and our team will confirm your appointment within 2 hours.

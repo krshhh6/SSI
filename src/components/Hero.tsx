@@ -15,10 +15,10 @@ import CountUp from "./ReactBits/CountUp";
 import GlareHover from "./GlareHover";
 
 const TRUST_BADGES = [
-  { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
-  { icon: Users, value: "535+", label: "Customer Reviews", color: "#0066FF" },
-  { icon: Car, value: "All", label: "Multi-Brand Service", color: "#00C896" },
-  { icon: ShieldCheck, value: "100%", label: "Bosch Authorized", color: "#E2001A" },
+  { icon: Star, value: "4.7", label: "Google Rating", color: "var(--accent)" },
+  { icon: Users, value: "535+", label: "Customer Reviews", color: "var(--accent)" },
+  { icon: Car, value: "All", label: "Multi-Brand Service", color: "var(--text)" },
+  { icon: ShieldCheck, value: "100%", label: "Bosch Authorized", color: "var(--text)" },
 ];
 
 const STATS = [
@@ -124,7 +124,7 @@ export default function Hero() {
             left: "20%",
             right: "20%",
             height: "30px",
-            background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.35) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse, rgba(104, 174, 153, 0.35) 0%, transparent 70%)",
             filter: "blur(20px)",
             zIndex: 1,
             pointerEvents: "none",
@@ -193,8 +193,8 @@ export default function Hero() {
                   width: 6,
                   height: 6,
                   borderRadius: "50%",
-                  background: "#E2001A",
-                  boxShadow: "0 0 8px #E2001A",
+                  background: "#68ae99",
+                  boxShadow: "0 0 8px #68ae99",
                 }}
               />
               Bosch Authorized Workshop · Patna, Bihar
@@ -209,7 +209,7 @@ export default function Hero() {
             <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
               BOSCH CERTIFIED
             </motion.span>
-            <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} style={{ color: "var(--bosch-red)" }}>
+            <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} style={{ color: "var(--accent)" }}>
               CAR CARE
             </motion.span>
             <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}>
@@ -293,7 +293,7 @@ export default function Hero() {
                 left: "10%",
                 right: "10%",
                 height: "20px",
-                background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.2) 0%, transparent 70%)",
+                background: "radial-gradient(ellipse, rgba(104, 174, 153, 0.2) 0%, transparent 70%)",
                 filter: "blur(15px)",
                 zIndex: 1,
               }}
@@ -403,7 +403,7 @@ export default function Hero() {
               whileHover={{ backgroundColor: "var(--card-hover)" }}
             >
               <GlareHover
-                glareColor="#0066FF"
+                glareColor="#68ae99"
                 glareOpacity={0.2}
                 glareAngle={-45}
                 glareSize={200}
@@ -419,7 +419,7 @@ export default function Hero() {
                     fontFamily: "Outfit, sans-serif",
                     lineHeight: 1,
                     marginBottom: 8,
-                    textShadow: "0 0 20px rgba(0, 102, 255, 0.4)"
+                    textShadow: "0 0 20px rgba(104, 174, 153, 0.4)"
                   }}
                 >
                   <CountUp
@@ -461,7 +461,7 @@ export default function Hero() {
               left: "15%",
               right: "15%",
               height: "20px",
-              background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.3) 0%, transparent 70%)",
+              background: "radial-gradient(ellipse, rgba(104, 174, 153, 0.3) 0%, transparent 70%)",
               filter: "blur(15px)",
               pointerEvents: "none",
             }}

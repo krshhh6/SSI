@@ -148,7 +148,7 @@ export default function Reviews() {
           </span>
           <h2 className="display-lg">
             WHAT OUR{" "}
-            <span className="gradient-text-blue">CUSTOMERS SAY</span>
+            <span className="gradient-text">CUSTOMERS SAY</span>
           </h2>
           <div
             style={{

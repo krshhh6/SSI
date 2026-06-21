@@ -148,7 +148,7 @@ export default function Footer() {
               }}
             >
               <span style={{ fontSize: "1rem" }}>🏆</span>
-              <span style={{ fontSize: "0.78rem", fontWeight: 600, color: "#E2001A", letterSpacing: "0.06em" }}>
+              <span style={{ fontSize: "0.78rem", fontWeight: 600, color: "#68ae99", letterSpacing: "0.06em" }}>
                 Bosch Authorized Workshop
               </span>
             </div>

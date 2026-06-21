@@ -96,7 +96,7 @@ export default function BoschAdvantage() {
                       width: 100,
                       height: 100,
                       borderRadius: 20,
-                      background: "linear-gradient(135deg, #E2001A, #A0000F)",
+                      background: "linear-gradient(135deg, #68ae99, #A0000F)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -190,7 +190,7 @@ export default function BoschAdvantage() {
                 padding: "5px 16px",
                 borderRadius: 100,
                 border: "1px solid rgba(226, 0, 26, 0.4)",
-                color: "#E2001A",
+                color: "#68ae99",
                 fontSize: "0.75rem",
                 fontWeight: 600,
                 letterSpacing: "0.12em",
@@ -203,7 +203,7 @@ export default function BoschAdvantage() {
 
             <h2 className="display-md" style={{ marginBottom: 20, lineHeight: 1.1 }}>
               THE{" "}
-              <span className="gradient-text-red">BOSCH</span>
+              <span className="gradient-text">BOSCH</span>
               <br />
               ADVANTAGE
             </h2>

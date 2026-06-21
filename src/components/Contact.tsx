@@ -51,7 +51,7 @@ export default function Contact() {
           </span>
           <h2 className="display-lg">
             VISIT OUR{" "}
-            <span className="gradient-text-blue">SERVICE CENTER</span>
+            <span className="gradient-text">SERVICE CENTER</span>
           </h2>
         </motion.div>
 

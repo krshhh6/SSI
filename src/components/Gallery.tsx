@@ -4,12 +4,12 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { X, ZoomIn } from "lucide-react";
 
 const GALLERY_ITEMS = [
-  { category: "Workshop", label: "State-of-the-Art Facility", color: "#0066FF", emoji: "🏭", rows: 2 },
-  { category: "Exterior", label: "Paint & Dent Perfection", color: "#E2001A", emoji: "🚗", rows: 1 },
+  { category: "Workshop", label: "State-of-the-Art Facility", color: "#68ae99", emoji: "🏭", rows: 2 },
+  { category: "Exterior", label: "Paint & Dent Perfection", color: "#68ae99", emoji: "🚗", rows: 1 },
   { category: "Technicians", label: "Bosch Certified Experts", color: "#00C896", emoji: "👨‍🔧", rows: 1 },
   { category: "Interior", label: "Premium Detailing", color: "#AA66FF", emoji: "💺", rows: 1 },
   { category: "Workshop", label: "Bosch KTS Diagnostics", color: "#FF8800", emoji: "🔬", rows: 1 },
-  { category: "Customer Vehicles", label: "BMW Series 5", color: "#0066FF", emoji: "🏎️", rows: 1 },
+  { category: "Customer Vehicles", label: "BMW Series 5", color: "#68ae99", emoji: "🏎️", rows: 1 },
   { category: "Customer Vehicles", label: "Hyundai Creta", color: "#00AAFF", emoji: "🚙", rows: 2 },
   { category: "Exterior", label: "Ceramic Coating", color: "#AA66FF", emoji: "✨", rows: 1 },
   { category: "Technicians", label: "Training & Certification", color: "#00C896", emoji: "🎓", rows: 1 },
@@ -73,7 +73,7 @@ export default function Gallery() {
           </span>
           <h2 className="display-lg">
             WORKSHOP{" "}
-            <span className="gradient-text-blue">GALLERY</span>
+            <span className="gradient-text">GALLERY</span>
           </h2>
         </motion.div>
 

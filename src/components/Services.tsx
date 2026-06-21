@@ -17,49 +17,49 @@ const SERVICES = [
     icon: Wrench,
     title: "Periodic Maintenance",
     desc: "Scheduled servicing with genuine oil, filters, and parts to keep your car running at peak performance.",
-    color: "#0066FF",
+    color: "#68ae99",
   },
   {
     icon: Gauge,
     title: "Engine Diagnostics",
     desc: "Advanced Bosch KTS diagnostic tools for precise fault detection and engine health assessment.",
-    color: "#00AAFF",
+    color: "#68ae99",
   },
   {
     icon: PaintBucket,
     title: "Dent & Paint",
     desc: "Professional dent removal and precision painting using computerized color matching technology.",
-    color: "#E2001A",
+    color: "#68ae99",
   },
   {
     icon: Wind,
     title: "AC Service & Repair",
     desc: "Complete AC system check, refrigerant refill, compressor service and cabin air filter replacement.",
-    color: "#00C896",
+    color: "#68ae99",
   },
   {
     icon: RotateCcw,
     title: "Wheel Alignment",
     desc: "3D computerized wheel alignment and balancing for optimal tire life and fuel efficiency.",
-    color: "#FF8800",
+    color: "#68ae99",
   },
   {
     icon: Sparkles,
     title: "Car Detailing",
     desc: "Premium interior and exterior detailing with ceramic coating, polishing and deep cleaning.",
-    color: "#AA66FF",
+    color: "#68ae99",
   },
   {
     icon: FileText,
     title: "Insurance Claims",
     desc: "Hassle-free cashless insurance claim processing with all major insurance companies.",
-    color: "#FF4466",
+    color: "#68ae99",
   },
   {
     icon: Package,
     title: "Genuine Bosch Parts",
     desc: "100% authentic Bosch spare parts sourced directly from authorized distributors.",
-    color: "#0066FF",
+    color: "#68ae99",
   },
 ];
 
@@ -129,7 +129,7 @@ export default function Services() {
           </span>
           <h2 className="display-lg" style={{ marginBottom: 16 }}>
             SERVICES FOR{" "}
-            <span className="gradient-text-blue">ALL CAR BRANDS</span>
+            <span className="gradient-text">ALL CAR BRANDS</span>
           </h2>
           <p style={{ color: "var(--text-secondary)", maxWidth: 520, margin: "0 auto", fontSize: "1.05rem", lineHeight: 1.7 }}>
             From periodic maintenance to complex diagnostics — we service every make and model with Bosch-certified expertise.

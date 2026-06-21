@@ -270,6 +270,49 @@ export default function Hero() {
             </motion.a>
           </motion.div>
 
+          {/* Mobile Car Render */}
+          <motion.div
+            className="hero-car-mobile"
+            style={{
+              display: "none",
+              position: "relative",
+              width: "100%",
+              height: "40vh",
+              minHeight: 300,
+              marginBottom: 40,
+              zIndex: 2,
+            }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                bottom: "10%",
+                left: "10%",
+                right: "10%",
+                height: "20px",
+                background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.2) 0%, transparent 70%)",
+                filter: "blur(15px)",
+                zIndex: 1,
+              }}
+            />
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              style={{ position: "relative", zIndex: 2, width: "100%", height: "100%" }}
+            >
+              <Image
+                src="/images/hero-car.png"
+                alt="Premium Car Service"
+                fill
+                style={{ objectFit: "contain", filter: "drop-shadow(0 10px 15px rgba(0,0,0,0.15))" }}
+                priority
+              />
+            </motion.div>
+          </motion.div>
+
           {/* Trust Badges */}
           <div ref={badgesRef}>
             <motion.div

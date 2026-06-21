@@ -1,10 +1,33 @@
 "use client";
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Suspense, useRef, useLayoutEffect, useEffect, useMemo } from 'react';
+import React, { Suspense, useRef, useLayoutEffect, useEffect, useMemo } from 'react';
 import { Canvas, useFrame, useThree, invalidate } from '@react-three/fiber';
 import { OrbitControls, useGLTF, useProgress, Html, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
+
+class ErrorBoundary extends React.Component<any, { hasError: boolean }> {
+  constructor(props: any) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error: any) {
+    return { hasError: true };
+  }
+  componentDidCatch(error: any, errorInfo: any) {
+    console.error("WebGL 3D Model crashed:", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+          <img src={this.props.fallbackSrc || '/images/hero-car.png'} alt="3D Model Fallback" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const isTouch = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 const deg2rad = (d: number) => (d * Math.PI) / 180;
@@ -443,55 +466,57 @@ const ModelViewer = ({
         </button>
       )}
 
-      <Canvas
-        shadows
-        frameloop="demand"
-        gl={{ preserveDrawingBuffer: true }}
-        onCreated={({ gl, scene, camera }) => {
-          rendererRef.current = gl;
-          sceneRef.current = scene;
-          cameraRef.current = camera;
-          gl.toneMapping = THREE.ACESFilmicToneMapping;
-          gl.outputColorSpace = THREE.SRGBColorSpace;
-        }}
-        camera={{ fov: 50, position: [0, 0, camZ], near: 0.01, far: 100 }}
-        style={{ touchAction: 'pan-y pinch-zoom' }}
-      >
-        {environmentPreset !== 'none' && <Environment preset={environmentPreset as any} background={false} />}
+      <ErrorBoundary fallbackSrc={placeholderSrc}>
+        <Canvas
+          shadows
+          frameloop="demand"
+          gl={{ preserveDrawingBuffer: true }}
+          onCreated={({ gl, scene, camera }) => {
+            rendererRef.current = gl;
+            sceneRef.current = scene;
+            cameraRef.current = camera;
+            gl.toneMapping = THREE.ACESFilmicToneMapping;
+            gl.outputColorSpace = THREE.SRGBColorSpace;
+          }}
+          camera={{ fov: 50, position: [0, 0, camZ], near: 0.01, far: 100 }}
+          style={{ touchAction: 'pan-y pinch-zoom' }}
+        >
+          {environmentPreset !== 'none' && <Environment preset={environmentPreset as any} background={false} />}
 
-        <ambientLight intensity={ambientIntensity} />
-        <directionalLight position={[5, 5, 5]} intensity={keyLightIntensity} castShadow />
-        <directionalLight position={[-5, 2, 5]} intensity={fillLightIntensity} />
-        <directionalLight position={[0, 4, -5]} intensity={rimLightIntensity} />
+          <ambientLight intensity={ambientIntensity} />
+          <directionalLight position={[5, 5, 5]} intensity={keyLightIntensity} castShadow />
+          <directionalLight position={[-5, 2, 5]} intensity={fillLightIntensity} />
+          <directionalLight position={[0, 4, -5]} intensity={rimLightIntensity} />
 
-        <ContactShadows ref={contactRef} position={[0, -0.5, 0]} opacity={0.35} scale={10} blur={2} />
+          <ContactShadows ref={contactRef} position={[0, -0.5, 0]} opacity={0.35} scale={10} blur={2} />
 
-        <Suspense fallback={<Loader placeholderSrc={placeholderSrc} />}>
-          <ModelInner
-            url={url}
-            xOff={modelXOffset}
-            yOff={modelYOffset}
-            pivot={pivot}
-            initYaw={initYaw}
-            initPitch={initPitch}
-            minZoom={minZoomDistance}
-            maxZoom={maxZoomDistance}
-            enableMouseParallax={enableMouseParallax}
-            enableManualRotation={enableManualRotation}
-            enableHoverRotation={enableHoverRotation}
-            enableManualZoom={enableManualZoom}
-            autoFrame={autoFrame}
-            fadeIn={fadeIn}
-            autoRotate={autoRotate}
-            autoRotateSpeed={autoRotateSpeed}
-            onLoaded={onModelLoaded}
-          />
-        </Suspense>
+          <Suspense fallback={<Loader placeholderSrc={placeholderSrc} />}>
+            <ModelInner
+              url={url}
+              xOff={modelXOffset}
+              yOff={modelYOffset}
+              pivot={pivot}
+              initYaw={initYaw}
+              initPitch={initPitch}
+              minZoom={minZoomDistance}
+              maxZoom={maxZoomDistance}
+              enableMouseParallax={enableMouseParallax}
+              enableManualRotation={enableManualRotation}
+              enableHoverRotation={enableHoverRotation}
+              enableManualZoom={enableManualZoom}
+              autoFrame={autoFrame}
+              fadeIn={fadeIn}
+              autoRotate={autoRotate}
+              autoRotateSpeed={autoRotateSpeed}
+              onLoaded={onModelLoaded}
+            />
+          </Suspense>
 
-        {!isTouch && (
-          <DesktopControls pivot={pivot} min={minZoomDistance} max={maxZoomDistance} zoomEnabled={enableManualZoom} />
-        )}
-      </Canvas>
+          {!isTouch && (
+            <DesktopControls pivot={pivot} min={minZoomDistance} max={maxZoomDistance} zoomEnabled={enableManualZoom} />
+          )}
+        </Canvas>
+      </ErrorBoundary>
     </div>
   );
 };

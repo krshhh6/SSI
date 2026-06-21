@@ -15,16 +15,18 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      // Firebase, reCAPTCHA, and Google APIs
-      "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://www.google.com https://firebaseinstallations.googleapis.com https://securetoken.googleapis.com https://raw.githack.com",
+      // Firebase, reCAPTCHA, and Google APIs, plus permissive 3D asset domains
+      "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://www.google.com https://firebaseinstallations.googleapis.com https://securetoken.googleapis.com https://*.githack.com https://*.githubusercontent.com blob: data:",
       // Scripts: self + reCAPTCHA + Google Auth
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.google.com https://www.recaptcha.net https://apis.google.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.google.com https://www.recaptcha.net https://apis.google.com blob: data:",
+      // Workers for WebGL/Three.js
+      "worker-src 'self' blob: data:",
       // Styles: self + Google Fonts
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       // Fonts: self + Google Fonts CDN
       "font-src 'self' https://fonts.gstatic.com",
       // Images: self + data URIs for inline icons + Google Profile Pictures
-      "img-src 'self' data: https:",
+      "img-src 'self' data: blob: https:",
       // Frames: Google reCAPTCHA + Firebase Auth
       "frame-src 'self' https://www.google.com https://www.recaptcha.net https://sam-wheels.firebaseapp.com",
     ].join("; "),

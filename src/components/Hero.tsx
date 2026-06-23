@@ -92,10 +92,10 @@ export default function Hero() {
           right: "0%",
           top: "40%",
           translateY: "-50%",
-          width: "60%",
-          maxWidth: 900,
-          height: "70vh",
-          minHeight: 500,
+          width: "45%",
+          maxWidth: 650,
+          height: "55vh",
+          minHeight: 400,
 
           zIndex: 2,
           pointerEvents: "auto", // Ensure it's interactive

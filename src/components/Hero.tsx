@@ -133,7 +133,7 @@ export default function Hero() {
               maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 50%, transparent 100%)"
             }}
           >
-            <source src="https://res.cloudinary.com/dfvfphe5z/video/upload/v1782060909/herocar_yy03cv.mp4" type="video/mp4" />
+            <source src="/carhero.webm" type="video/webm" />
           </video>
         </motion.div>
       </motion.div>
@@ -310,7 +310,7 @@ export default function Hero() {
                   maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 50%, transparent 100%)"
                 }}
               >
-                <source src="https://res.cloudinary.com/dfvfphe5z/video/upload/v1782060909/herocar_yy03cv.mp4" type="video/mp4" />
+                <source src="/carhero.webm" type="video/webm" />
               </video>
             </motion.div>
           </motion.div>
@@ -485,7 +485,7 @@ export default function Hero() {
                 filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))" 
               }}
             >
-              <source src="https://res.cloudinary.com/dfvfphe5z/video/upload/v1782060909/herocar_yy03cv.mp4" type="video/mp4" />
+              <source src="/carhero.webm" type="video/webm" />
             </video>
           </motion.div>
         </div>

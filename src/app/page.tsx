@@ -8,7 +8,7 @@ import FloatingContact from "@/components/FloatingContact";
 
 export default function Home() {
   return (
-    <>
+    <div data-theme="dark" style={{ backgroundColor: "#0F1011", color: "var(--text)", minHeight: "100vh", width: "100%", position: "relative", overflowX: "hidden" }}>
       <Navbar />
       <main>
         <Hero />
@@ -18,6 +18,6 @@ export default function Home() {
       </main>
       <Footer />
       <FloatingContact />
-    </>
+    </div>
   );
 }

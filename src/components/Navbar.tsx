@@ -75,6 +75,7 @@ export default function Navbar() {
     <>
       <motion.nav
         id="navbar"
+        data-theme={(pathname === "/" && !scrolled) ? "dark" : undefined}
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}

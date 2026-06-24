@@ -51,6 +51,7 @@ export default function Hero() {
     <section
       id="home"
       ref={sectionRef}
+      data-theme="dark"
       style={{
         position: "relative",
         minHeight: "100vh",
@@ -58,6 +59,7 @@ export default function Hero() {
         alignItems: "center",
         overflow: "hidden",
         background: "var(--bg)",
+        color: "var(--text)",
       }}
       className="hero-section"
     >

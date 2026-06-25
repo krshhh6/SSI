@@ -396,16 +396,16 @@ export default function AdminClient() {
         <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <input type="email" required value={emailInput} onChange={e => setEmailInput(e.target.value)} placeholder="Admin Email Address"
             style={{ width: "100%", padding: "15px 18px", borderRadius: 12, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none" }}
-            onFocus={e => { e.target.style.borderColor = "var(--accent)"; }} onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.1)"; }} />
+            onFocus={e => { e.target.style.borderColor = "var(--accent)"; }} onBlur={e => { e.target.style.borderColor = "var(--border)"; }} />
           <input type="password" required value={passwordInput} onChange={e => setPasswordInput(e.target.value)} placeholder="Password"
             style={{ width: "100%", padding: "15px 18px", borderRadius: 12, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none" }}
-            onFocus={e => { e.target.style.borderColor = "var(--accent)"; }} onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.1)"; }} />
+            onFocus={e => { e.target.style.borderColor = "var(--accent)"; }} onBlur={e => { e.target.style.borderColor = "var(--border)"; }} />
           <motion.button type="submit" disabled={loginLoading} whileHover={!loginLoading ? { scale: 1.01 } : {}} whileTap={!loginLoading ? { scale: 0.99 } : {}}
             style={{ marginTop: 8, padding: "16px", borderRadius: 12, background: loginLoading ? "rgba(226,0,26,0.5)" : "#0066FF", color: "var(--text)", border: "none", cursor: loginLoading ? "wait" : "pointer", fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1rem", letterSpacing: "0.06em", boxShadow: "0 8px 28px rgba(226,0,26,0.35)" }}>
             {loginLoading ? "Authenticating…" : "Sign In to Admin"}
           </motion.button>
         </form>
-        <p style={{ textAlign: "center", marginTop: 24, fontSize: "0.8rem", color: "rgba(255,255,255,0.25)" }}>🔒 Restricted access — authorized personnel only</p>
+        <p style={{ textAlign: "center", marginTop: 24, fontSize: "0.8rem", color: "var(--text-muted)" }}>🔒 Restricted access — authorized personnel only</p>
       </motion.div>
     </div>
   );
@@ -437,7 +437,7 @@ export default function AdminClient() {
               { id: "advanced",  label: "Advanced",  icon: Settings        },
             ] as const).map(item => (
               <button key={item.id} onClick={() => setTab(item.id)}
-                style={{ padding: "7px 14px", borderRadius: 8, border: "none", background: tab === item.id ? "rgba(255,255,255,0.1)" : "transparent", color: tab === item.id ? "white" : "rgba(255,255,255,0.45)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", display: "flex", alignItems: "center", gap: 7, transition: "all 0.2s" }}>
+                style={{ padding: "7px 14px", borderRadius: 8, border: "none", background: tab === item.id ? "var(--text)" : "transparent", color: tab === item.id ? "var(--bg)" : "var(--text-secondary)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", display: "flex", alignItems: "center", gap: 7, transition: "all 0.2s" }}>
                 <item.icon size={15} />{item.label}
               </button>
             ))}
@@ -476,12 +476,12 @@ export default function AdminClient() {
                     <button onClick={() => setNotifOpen(false)} style={{ background: "none", border: "none", color: "var(--text-secondary)", cursor: "pointer" }}><X size={15} /></button>
                   </div>
                   {pendingBookings.length === 0 ? (
-                    <div style={{ padding: "24px", textAlign: "center", color: "rgba(255,255,255,0.35)", fontSize: "0.88rem" }}>All caught up! ✓</div>
+                    <div style={{ padding: "24px", textAlign: "center", color: "var(--text-muted)", fontSize: "0.88rem" }}>All caught up! ✓</div>
                   ) : (
                     <div style={{ maxHeight: 280, overflowY: "auto" }}>
                       {pendingBookings.slice(0, 6).map(b => (
                         <div key={b.id} onClick={() => { setSelectedBooking(b); setNotifOpen(false); }} style={{ padding: "12px 18px", borderBottom: "1px solid var(--border)", cursor: "pointer", transition: "background 0.15s" }}
-                          onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.04)"}
+                          onMouseEnter={e => e.currentTarget.style.background = "var(--border)"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                           <div style={{ fontWeight: 600, fontSize: "0.88rem", color: "var(--text)", marginBottom: 3 }}>{b.name}</div>
                           <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)" }}>{b.service} · {b.brand} {b.model}</div>
@@ -523,8 +523,8 @@ export default function AdminClient() {
               {dataError === "PERMISSION_DENIED" ? (
                 <>
                   <div style={{ fontWeight: 700, fontSize: "1rem", color: "#EF4444", marginBottom: 8, fontFamily: "Outfit, sans-serif" }}>Firestore Rules Not Published</div>
-                  <p style={{ color: "rgba(255,180,180,0.9)", fontSize: "0.88rem", marginBottom: 12 }}>Firebase is blocking all database reads. Go to Firebase Console → Firestore → Rules tab and replace the rules with:</p>
-                  <pre style={{ background: "rgba(0,0,0,0.4)", borderRadius: 10, padding: "14px 16px", color: "#A8FF78", fontSize: "0.8rem", overflowX: "auto", border: "1px solid var(--border)", marginBottom: 12 }}>
+                  <p style={{ color: "var(--bosch-red)", fontSize: "0.88rem", marginBottom: 12 }}>Firebase is blocking all database reads. Go to Firebase Console → Firestore → Rules tab and replace the rules with:</p>
+                  <pre style={{ background: "var(--bg-secondary)", borderRadius: 10, padding: "14px 16px", color: "var(--green-accent)", fontSize: "0.8rem", overflowX: "auto", border: "1px solid var(--border)", marginBottom: 12 }}>
 {`rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -537,7 +537,7 @@ service cloud.firestore {
                   <button onClick={loadData} style={{ padding: "9px 18px", borderRadius: 9, border: "1px solid rgba(239,68,68,0.4)", background: "rgba(239,68,68,0.12)", color: "#EF4444", fontFamily: "Inter, sans-serif", fontWeight: 600, cursor: "pointer" }}>↻ Retry</button>
                 </>
               ) : (
-                <><div style={{ fontWeight: 700, color: "#EF4444", marginBottom: 6 }}>Error loading data</div><p style={{ color: "rgba(255,180,180,0.8)", fontSize: "0.88rem" }}>{dataError}</p></>
+                <><div style={{ fontWeight: 700, color: "#EF4444", marginBottom: 6 }}>Error loading data</div><p style={{ color: "var(--bosch-red)", fontSize: "0.88rem" }}>{dataError}</p></>
               )}
             </div>
           </motion.div>
@@ -555,7 +555,7 @@ service cloud.firestore {
                 { label: "Completed",   value: stats.completed,      color: "#10B981", sub: `${stats.completionRate}% rate`  },
                 { label: "Cancelled",   value: stats.cancelled,      color: "#EF4444", sub: "Lost bookings"                  },
               ].map(c => (
-                <div key={c.label} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid var(--border)", borderRadius: 20, padding: "20px", position: "relative", overflow: "hidden", cursor: "pointer" }}
+                <div key={c.label} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 20, padding: "20px", position: "relative", overflow: "hidden", cursor: "pointer" }}
                   onClick={() => { if (c.label !== "Total") { setTab("bookings"); setStatusFilter(c.label.toLowerCase()); } else setTab("bookings"); }}>
                   <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${c.color}, transparent)` }} />
                   <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "var(--text-secondary)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 12 }}>{c.label}</div>
@@ -570,10 +570,10 @@ service cloud.firestore {
               <GlassCard title="Booking Trends — Last 7 Days">
                 <ResponsiveContainer width="100%" height={240}>
                   <LineChart data={trendData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                    <XAxis dataKey="date" stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} />
-                    <YAxis stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
-                    <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                    <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                    <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                    <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
                     <Line type="monotone" dataKey="bookings" stroke="#0066FF" strokeWidth={2.5} dot={{ fill: "#0066FF", r: 4 }} activeDot={{ r: 6 }} />
                   </LineChart>
                 </ResponsiveContainer>
@@ -586,7 +586,7 @@ service cloud.firestore {
                       <Pie data={statusData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={4} dataKey="value" stroke="none">
                         {statusData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                       </Pie>
-                      <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
+                      <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
@@ -607,8 +607,8 @@ service cloud.firestore {
                   {todayBookings.map(b => (
                     <div key={b.id} onClick={() => setSelectedBooking(b)}
                       style={{ display: "flex", alignItems: "center", gap: 16, padding: "12px 16px", borderRadius: 12, background: "var(--bg-secondary)", border: "1px solid var(--border)", cursor: "pointer", transition: "background 0.15s" }}
-                      onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
-                      onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}>
+                      onMouseEnter={e => e.currentTarget.style.background = "var(--card-hover)"}
+                      onMouseLeave={e => e.currentTarget.style.background = "var(--card)"}>
                       <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(0,102,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Car size={18} color="#0066FF" /></div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontWeight: 600, fontSize: "0.95rem", color: "var(--text)" }}>{b.name}</div>
@@ -643,7 +643,7 @@ service cloud.firestore {
                 <Search size={15} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
                 <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, phone, vehicle, service…"
                   style={{ width: "100%", paddingLeft: 40, paddingRight: 14, paddingTop: 13, paddingBottom: 13, borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", outline: "none" }}
-                  onFocus={e => e.target.style.borderColor = "rgba(0,102,255,0.5)"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.08)"} />
+                  onFocus={e => e.target.style.borderColor = "rgba(0,102,255,0.5)"} onBlur={e => e.target.style.borderColor = "var(--border-hover)"} />
               </div>
               <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
                 style={{ padding: "13px 16px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", cursor: "pointer", outline: "none", colorScheme: "inherit" }}>
@@ -699,7 +699,7 @@ service cloud.firestore {
                       return (
                         <motion.tr key={u.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }}
                           style={{ borderBottom: "1px solid var(--border)", transition: "background 0.15s" }}
-                          onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}
+                          onMouseEnter={e => e.currentTarget.style.background = "var(--card)"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                           <td style={{ padding: "15px 20px" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -712,7 +712,7 @@ service cloud.firestore {
                           <td style={{ padding: "15px 20px", color: "var(--text-secondary)", fontSize: "0.88rem" }}>{u.email}</td>
                           <td style={{ padding: "15px 20px" }}>
                             <div style={{ display: "flex", gap: 6 }}>
-                              {uBookings.length === 0 ? <span style={{ color: "rgba(255,255,255,0.25)", fontSize: "0.85rem" }}>No bookings</span> : (
+                              {uBookings.length === 0 ? <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>No bookings</span> : (
                                 <>
                                   <span style={{ padding: "3px 10px", borderRadius: 100, background: "rgba(0,102,255,0.1)", color: "#0066FF", fontSize: "0.75rem", fontWeight: 700 }}>{uBookings.length} total</span>
                                   {uBookings.filter(b => b.status === "pending").length > 0 && <span style={{ padding: "3px 10px", borderRadius: 100, background: "rgba(245,158,11,0.1)", color: "#F59E0B", fontSize: "0.75rem", fontWeight: 700 }}>{uBookings.filter(b => b.status === "pending").length} pending</span>}
@@ -797,10 +797,10 @@ service cloud.firestore {
               <GlassCard title="Bookings by Service">
                 <ResponsiveContainer width="100%" height={280}>
                   <BarChart data={serviceData} margin={{ top: 5, right: 10, left: -20, bottom: 60 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                    <XAxis dataKey="name" stroke="rgba(255,255,255,0.25)" fontSize={10} tickLine={false} axisLine={false} angle={-35} textAnchor="end" interval={0} />
-                    <YAxis stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
-                    <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                    <XAxis dataKey="name" stroke="var(--text-muted)" fontSize={10} tickLine={false} axisLine={false} angle={-35} textAnchor="end" interval={0} />
+                    <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                    <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
                     <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                       {serviceData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
                     </Bar>
@@ -811,10 +811,10 @@ service cloud.firestore {
               <GlassCard title="Popular Vehicle Brands">
                 <ResponsiveContainer width="100%" height={280}>
                   <BarChart data={brandData} layout="vertical" margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" horizontal={false} />
-                    <XAxis type="number" stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
-                    <YAxis type="category" dataKey="name" stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} width={80} />
-                    <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
+                    <XAxis type="number" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                    <YAxis type="category" dataKey="name" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} width={80} />
+                    <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
                     <Bar dataKey="value" radius={[0, 6, 6, 0]} fill="#0066FF" />
                   </BarChart>
                 </ResponsiveContainer>
@@ -823,10 +823,10 @@ service cloud.firestore {
               <GlassCard title="7-Day Booking Trend">
                 <ResponsiveContainer width="100%" height={240}>
                   <LineChart data={trendData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                    <XAxis dataKey="date" stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} />
-                    <YAxis stroke="rgba(255,255,255,0.25)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
-                    <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                    <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                    <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                    <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
                     <Line type="monotone" dataKey="bookings" stroke="#00C896" strokeWidth={2.5} dot={{ fill: "#00C896", r: 4 }} />
                   </LineChart>
                 </ResponsiveContainer>
@@ -839,7 +839,7 @@ service cloud.firestore {
                       <Pie data={statusData} cx="50%" cy="50%" innerRadius={65} outerRadius={95} paddingAngle={4} dataKey="value" stroke="none">
                         {statusData.map((e, i) => <Cell key={i} fill={e.color} />)}
                       </Pie>
-                      <RechartsTooltip contentStyle={{ background: "rgba(10,10,15,0.95)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
+                      <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
@@ -1094,7 +1094,7 @@ service cloud.firestore {
               {selectedBooking.message && (
                 <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 14, padding: "14px 16px", marginBottom: 24 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, color: "var(--text-muted)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}><MessageSquare size={12} />Additional Message</div>
-                  <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.92rem", lineHeight: 1.6 }}>{selectedBooking.message}</p>
+                  <p style={{ color: "var(--text)", fontSize: "0.92rem", lineHeight: 1.6 }}>{selectedBooking.message}</p>
                 </div>
               )}
 
@@ -1107,7 +1107,7 @@ service cloud.firestore {
                     const active = selectedBooking.status === s;
                     return (
                       <button key={s} onClick={() => updateStatus(selectedBooking.id, s)} disabled={active || updatingId === selectedBooking.id}
-                        style={{ padding: "10px 18px", borderRadius: 100, border: `1px solid ${active ? c.color : "rgba(255,255,255,0.12)"}`, background: active ? c.bg : "transparent", color: active ? c.color : "rgba(255,255,255,0.4)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: active ? "default" : "pointer", transition: "all 0.2s", opacity: updatingId === selectedBooking.id ? 0.5 : 1 }}>
+                        style={{ padding: "10px 18px", borderRadius: 100, border: `1px solid ${active ? c.color : "var(--border)"}`, background: active ? c.bg : "transparent", color: active ? c.color : "var(--text-secondary)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: active ? "default" : "pointer", transition: "all 0.2s", opacity: updatingId === selectedBooking.id ? 0.5 : 1 }}>
                         {c.label}
                       </button>
                     );

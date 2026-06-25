@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/context/AuthContext";
+import AnimatePresenceProvider from "@/components/AnimatePresenceProvider";
 
 export const viewport: Viewport = {
   themeColor: [
@@ -61,7 +62,11 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <AnimatePresenceProvider>
+              {children}
+            </AnimatePresenceProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

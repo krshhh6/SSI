@@ -15,8 +15,17 @@ export default function ThemeToggle() {
   const isDark = theme === "dark";
 
   return (
-    <div className="galaxy-button">
-      <button onClick={toggleTheme} aria-label="Toggle theme">
+    <>
+      <div className="galaxy-button">
+        <button
+          onClick={(e) => {
+            const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+            const originX = rect.left + rect.width / 2;
+            const originY = rect.top + rect.height / 2;
+            toggleTheme(originX, originY);
+          }}
+          aria-label="Toggle theme"
+        >
         <span className="spark"></span>
         <span className="backdrop"></span>
         <span className="galaxy__container">
@@ -193,6 +202,7 @@ export default function ThemeToggle() {
           100% { opacity: 1; transform: translate(-50%, -50%) rotateX(-65deg) scale(1.3); }
         }
       `}</style>
-    </div>
+      </div>
+    </>
   );
 }

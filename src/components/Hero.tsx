@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-react";
 import CountUp from "./ReactBits/CountUp";
 import GlareHover from "./GlareHover";
+import MagneticButton from "./MagneticButton";
 
 const TRUST_BADGES = [
   { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
@@ -239,30 +240,38 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.7 }}
             style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 56 }}
           >
-            <motion.a
-              href="#booking"
-              className="btn-primary"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              style={{
-                background: "var(--bosch-red)",
-                color: "#ffffff",
-                boxShadow: "0 4px 14px rgba(226, 0, 26, 0.2)",
-              }}
-            >
-              <CalendarCheck size={18} />
-              Book Service
-            </motion.a>
-            <motion.a
-              href="tel:+919028384499"
-              className="btn-secondary"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              style={{ fontSize: "1rem", padding: "15px 36px" }}
-            >
-              <Phone size={18} />
-              Call Now
-            </motion.a>
+            <MagneticButton strength={10}>
+              <motion.a
+                href="#booking"
+                className="btn-primary"
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  background: "var(--bosch-red)",
+                  color: "#ffffff",
+                  boxShadow: "0 4px 24px rgba(226, 0, 26, 0.35)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  textDecoration: "none",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                <CalendarCheck size={18} />
+                Book Service
+              </motion.a>
+            </MagneticButton>
+            <MagneticButton strength={10}>
+              <motion.a
+                href="tel:+919028384499"
+                className="btn-secondary"
+                whileTap={{ scale: 0.97 }}
+                style={{ fontSize: "1rem", padding: "15px 36px", display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}
+              >
+                <Phone size={18} />
+                Call Now
+              </motion.a>
+            </MagneticButton>
           </motion.div>
 
           {/* Mobile Car Render */}

@@ -1,6 +1,6 @@
 "use client";
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import {
   Wrench,
   Gauge,
@@ -11,6 +11,7 @@ import {
   FileText,
   Package,
 } from "lucide-react";
+import SpotlightCard from "./SpotlightCard";
 
 const SERVICES = [
   {
@@ -66,38 +67,41 @@ const SERVICES = [
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.08 },
+    transition: { staggerChildren: 0.07 },
   },
 };
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.5, ease: "easeOut" as const },
-  },
-};
-
 
 export default function Services() {
   const ref = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+
   return (
-    <section id="services" className="section-padding" style={{ background: "var(--bg-secondary)", position: "relative", overflow: "hidden" }}>
-      {/* Background decoration */}
-      <div
+    <section
+      id="services"
+      ref={sectionRef}
+      className="section-padding"
+      style={{ background: "var(--bg-secondary)", position: "relative", overflow: "hidden" }}
+    >
+      {/* Parallax background orb */}
+      <motion.div
         style={{
           position: "absolute",
           top: "50%",
           left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: 800,
-          height: 800,
+          translateX: "-50%",
+          translateY: "-50%",
+          y: bgY,
+          width: 900,
+          height: 900,
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(0, 102, 255, 0.04) 0%, transparent 60%)",
+          background: "radial-gradient(circle, rgba(0, 102, 255, 0.06) 0%, transparent 60%)",
           pointerEvents: "none",
         }}
       />
@@ -105,13 +109,17 @@ export default function Services() {
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           style={{ textAlign: "center", marginBottom: 64 }}
         >
-          <span
+          <motion.span
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
             style={{
               display: "inline-block",
               padding: "5px 16px",
@@ -126,7 +134,7 @@ export default function Services() {
             }}
           >
             What We Offer
-          </span>
+          </motion.span>
           <h2 className="display-lg" style={{ marginBottom: 16 }}>
             SERVICES FOR{" "}
             <span className="gradient-text-blue">ALL CAR BRANDS</span>
@@ -148,8 +156,8 @@ export default function Services() {
             gap: 20,
           }}
         >
-          {SERVICES.map((service) => (
-            <ServiceCard key={service.title} {...service} />
+          {SERVICES.map((service, i) => (
+            <ServiceCard key={service.title} {...service} index={i} />
           ))}
         </motion.div>
       </div>
@@ -162,122 +170,138 @@ function ServiceCard({
   title,
   desc,
   color,
+  index,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon: any;
   title: string;
   desc: string;
   color: string;
+  index: number;
 }) {
+  const fromX = index % 2 === 0 ? -30 : 30;
+
+  const cardVariants = {
+    hidden: { opacity: 0, x: fromX, y: 20, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
+    },
+  };
+
   return (
     <motion.div
       variants={cardVariants}
       whileHover={{
-        y: -4,
+        y: -6,
         transition: { duration: 0.25, ease: "easeOut" },
       }}
-      style={{
-        background: "var(--card)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        border: "1px solid var(--border)",
-        borderRadius: 12,
-        cursor: "default",
-        position: "relative",
-        overflow: "hidden",
-        transition: "all 0.3s ease",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-      }}
-      className="service-card"
     >
+      <SpotlightCard
+        spotlightColor={`${color}22`}
+        style={{
+          background: "var(--card)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: "1px solid var(--border)",
+          borderRadius: 12,
+          cursor: "default",
+          transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+        className="service-card"
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }} className="service-header">
+          <motion.div
+            whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
+            transition={{ duration: 0.4 }}
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 12,
+              background: `${color}18`,
+              border: `1px solid ${color}33`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <Icon size={24} color={color} strokeWidth={2} />
+          </motion.div>
 
-      <div style={{ display: "flex", alignItems: "center", gap: 16 }} className="service-header">
-        {/* Icon */}
-        <div
-          style={{
-            width: 50,
-            height: 50,
-            borderRadius: 12,
-            background: `${color}18`,
-            border: `1px solid ${color}33`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transition: "all 0.3s ease",
-            flexShrink: 0,
-          }}
-        >
-          <Icon size={24} color={color} strokeWidth={2} />
+          <h3
+            style={{
+              fontSize: "1.05rem",
+              fontWeight: 700,
+              letterSpacing: "-0.01em",
+              color: "var(--text)",
+              margin: 0,
+              lineHeight: 1.3,
+            }}
+          >
+            {title}
+          </h3>
         </div>
 
-        <h3
+        <p
+          className="service-desc"
           style={{
-            fontSize: "1.05rem",
-            fontWeight: 700,
-            letterSpacing: "-0.01em",
-            color: "var(--text)",
+            fontSize: "0.875rem",
+            color: "var(--text-secondary)",
+            lineHeight: 1.6,
             margin: 0,
-            lineHeight: 1.3,
           }}
         >
-          {title}
-        </h3>
-      </div>
+          {desc}
+        </p>
 
-      <p
-        className="service-desc"
-        style={{
-          fontSize: "0.875rem",
-          color: "var(--text-secondary)",
-          lineHeight: 1.6,
-          margin: 0,
-        }}
-      >
-        {desc}
-      </p>
+        {/* Bottom accent line */}
+        <motion.div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 2,
+            background: `linear-gradient(90deg, ${color}, ${color}44)`,
+            originX: 0,
+            scaleX: 0,
+          }}
+          whileHover={{ scaleX: 1 }}
+          transition={{ duration: 0.3 }}
+        />
 
-      {/* Bottom accent line */}
-      <motion.div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 2,
-          background: `linear-gradient(90deg, ${color}, ${color}44)`,
-          originX: 0,
-          scaleX: 0,
-        }}
-        whileHover={{ scaleX: 1 }}
-        transition={{ duration: 0.3 }}
-      />
-
-      <style>{`
-        .service-card {
-          padding: 24px;
-        }
-        .service-header {
-          margin-bottom: 16px;
-        }
-        .service-card:hover {
-          border-color: ${color}44 !important;
-          box-shadow: 0 10px 40px ${color}18, 0 0 0 1px ${color}22 !important;
-        }
-        @media (max-width: 768px) {
+        <style>{`
           .service-card {
-            padding: 16px;
+            padding: 24px;
           }
           .service-header {
-            margin-bottom: 0;
+            margin-bottom: 16px;
           }
-          .service-desc {
-            display: none;
+          .service-card:hover {
+            border-color: ${color}44 !important;
+            box-shadow: 0 10px 40px ${color}18, 0 0 0 1px ${color}22 !important;
           }
-        }
-      `}</style>
+          @media (max-width: 768px) {
+            .service-card {
+              padding: 16px;
+            }
+            .service-header {
+              margin-bottom: 0;
+            }
+            .service-desc {
+              display: none;
+            }
+          }
+        `}</style>
+      </SpotlightCard>
     </motion.div>
   );
 }

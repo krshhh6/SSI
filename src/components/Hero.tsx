@@ -281,9 +281,8 @@ export default function Hero() {
               display: "none",
               position: "relative",
               width: "100%",
-              height: "40vh",
-              minHeight: 300,
-              marginBottom: 40,
+              height: "280px",
+              marginBottom: 20,
               zIndex: 2,
             }}
             initial={{ opacity: 0, y: 20 }}
@@ -293,11 +292,11 @@ export default function Hero() {
             <div
               style={{
                 position: "absolute",
-                bottom: "10%",
-                left: "10%",
-                right: "10%",
+                bottom: "5%",
+                left: "15%",
+                right: "15%",
                 height: "20px",
-                background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.2) 0%, transparent 70%)",
+                background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.3) 0%, transparent 70%)",
                 filter: "blur(15px)",
                 zIndex: 1,
               }}
@@ -315,10 +314,8 @@ export default function Hero() {
                 style={{ 
                   width: "100%", 
                   height: "100%", 
-                  objectFit: "cover", 
-                  filter: "drop-shadow(0 10px 15px rgba(0,0,0,0.15))",
-                  WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 50%, transparent 100%)",
-                  maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 50%, transparent 100%)"
+                  objectFit: "contain", 
+                  filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))",
                 }}
               >
                 <source src="/carhero.webm" type="video/webm" />
@@ -452,55 +449,7 @@ export default function Hero() {
         </div>
       </motion.div>
 
-      {/* Mobile-only car image (shown inline below text on small screens) */}
-      <div
-        className="hero-car-mobile"
-        style={{
-          display: "none",
-          position: "relative",
-          zIndex: 3,
-          width: "100%",
-          padding: "0 8px 8px",
-          marginTop: "-12px",
-          height: "300px",
-          pointerEvents: "auto",
-        }}
-      >
-        <div style={{ position: "relative", width: "100%", height: "100%" }}>
-          <div
-            style={{
-              position: "absolute",
-              bottom: "5%",
-              left: "15%",
-              right: "15%",
-              height: "20px",
-              background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.3) 0%, transparent 70%)",
-              filter: "blur(15px)",
-              pointerEvents: "none",
-            }}
-          />
-          <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            style={{ position: "relative", width: "100%", height: "100%" }}
-          >
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              style={{ 
-                width: "100%", 
-                height: "100%", 
-                objectFit: "contain", 
-                filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))" 
-              }}
-            >
-              <source src="/carhero.webm" type="video/webm" />
-            </video>
-          </motion.div>
-        </div>
-      </div>
+
     </section>
   );
 }

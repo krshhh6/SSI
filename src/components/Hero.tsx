@@ -241,25 +241,25 @@ export default function Hero() {
             style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 56 }}
           >
             <MagneticButton strength={10}>
-              <motion.a
-                href="#booking"
-                className="btn-primary"
-                whileTap={{ scale: 0.97 }}
-                style={{
-                  background: "var(--bosch-red)",
-                  color: "#ffffff",
-                  boxShadow: "0 4px 24px rgba(226, 0, 26, 0.35)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  textDecoration: "none",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                <CalendarCheck size={18} />
-                Book Service
-              </motion.a>
+              <Link href="/booking" style={{ textDecoration: "none", display: "block" }}>
+                <motion.div
+                  className="btn-primary"
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    background: "var(--bosch-red)",
+                    color: "#ffffff",
+                    boxShadow: "0 4px 24px rgba(226, 0, 26, 0.35)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    position: "relative",
+                    overflow: "hidden",
+                  }}
+                >
+                  <CalendarCheck size={18} />
+                  Book Service
+                </motion.div>
+              </Link>
             </MagneticButton>
             <MagneticButton strength={10}>
               <motion.a

@@ -11,7 +11,7 @@ import {
   LayoutDashboard, Users, CalendarDays, LogOut, Search, RefreshCw,
   Trash2, CheckCircle2, Clock, XCircle, AlertCircle, Wrench, Mail,
   Phone, Car, Eye, Download, Bell, TrendingUp, Filter, X,
-  MessageSquare, ChevronDown, ChevronUp, Settings, Megaphone,
+  MessageSquare, ChevronDown, ChevronUp, Settings,
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -103,6 +103,7 @@ export default function AdminClient() {
   const [tab, setTab] = useState<"overview" | "bookings" | "users" | "feedback" | "analytics" | "advanced">("overview");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [users, setUsers] = useState<UserRecord[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [feedbackData, setFeedbackData] = useState<any[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
   const [dataError, setDataError] = useState("");
@@ -154,7 +155,6 @@ export default function AdminClient() {
       else setAuthed(false);
     });
     return unsub;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadData = async () => {
@@ -263,12 +263,6 @@ export default function AdminClient() {
   const deleteFeedback = async (id: string) => {
     if (!confirm("Permanently delete this feedback?")) return;
     await deleteDoc(doc(db, "feedback", id));
-    loadData();
-  };
-
-  const deleteReview = async (id: string) => {
-    if (!confirm("Permanently delete this review?")) return;
-    await deleteDoc(doc(db, "reviews", id));
     loadData();
   };
 
@@ -616,8 +610,11 @@ service cloud.firestore {
             )}
 
             {/* Recent bookings table */}
-            <GlassCard title="Recent Bookings" action={<button onClick={() => setTab("bookings")} style={{ background: "none", border: "none", color: "#0066FF", cursor: "pointer", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem" }}>View All →</button>}>
-              <BookingTable bookings={bookings.slice(0, 6)} onSelect={setSelectedBooking} onStatus={updateStatus} updatingId={updatingId} sortField={sortField} sortDir={sortDir} onSort={toggleSort} SortIcon={SortIcon} />
+            <GlassCard>
+              <div style={{ marginBottom: 20 }}>
+                <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search bookings..." style={{ width: "100%", padding: 12, borderRadius: 8, border: "1px solid var(--border)" }} />
+              </div>
+              <BookingTable bookings={filtered} onSelect={setSelectedBooking} onStatus={updateStatus} updatingId={updatingId} onSort={toggleSort} SortIcon={SortIcon} />
             </GlassCard>
           </motion.div>
         )}
@@ -663,7 +660,7 @@ service cloud.firestore {
             </div>
 
             <GlassCard>
-              <BookingTable bookings={filtered} onSelect={setSelectedBooking} onStatus={updateStatus} updatingId={updatingId} sortField={sortField} sortDir={sortDir} onSort={toggleSort} SortIcon={SortIcon} />
+              <BookingTable bookings={filtered} onSelect={setSelectedBooking} onStatus={updateStatus} updatingId={updatingId} onSort={toggleSort} SortIcon={SortIcon} />
             </GlassCard>
           </motion.div>
         )}
@@ -1146,9 +1143,9 @@ function GlassCard({ title, action, children, style }: { title?: string, action?
 }
 
 // ─── BookingTable ─────────────────────────────────────────────────────────────
-function BookingTable({ bookings, onSelect, onStatus, updatingId, sortField, sortDir, onSort, SortIcon }: {
+function BookingTable({ bookings, onSelect, onStatus, updatingId, onSort, SortIcon }: {
   bookings: Booking[], onSelect: (b: Booking) => void, onStatus: (id: string, s: Booking["status"]) => void,
-  updatingId: string | null, sortField: string, sortDir: string, onSort: (f: "createdAt"|"name"|"date") => void, SortIcon: React.FC<{field: "createdAt"|"name"|"date"}>
+  updatingId: string | null, onSort: (f: "createdAt"|"name"|"date") => void, SortIcon: React.FC<{field: "createdAt"|"name"|"date"}>
 }) {
   return (
     <div style={{ overflowX: "auto" }}>

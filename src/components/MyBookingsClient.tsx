@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { collection, query, where, orderBy, getDocs, doc, getDoc, setDoc } from "firebase/firestore";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
-import { CalendarCheck, Car, Wrench, Clock, LogOut, User, RefreshCw, Phone, Save, ShieldCheck } from "lucide-react";
+import { CalendarCheck, Car, Wrench, Clock, LogOut, User, RefreshCw, Phone, Save, ShieldCheck, Star, X } from "lucide-react";
 
 interface Booking {
   id: string;
@@ -38,6 +38,10 @@ export default function MyBookingsClient() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [profileLoading, setProfileLoading] = useState(false);
   const [profileSuccess, setProfileSuccess] = useState("");
+  const [feedbackIds, setFeedbackIds] = useState<Set<string>>(new Set());
+  const [feedbackModal, setFeedbackModal] = useState<Booking | null>(null);
+  const [feedbackForm, setFeedbackForm] = useState({ rating: 5, text: "" });
+  const [submittingFeedback, setSubmittingFeedback] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -67,6 +71,16 @@ export default function MyBookingsClient() {
       }
     } finally {
       setLoadingBookings(false);
+    }
+    
+    // Fetch feedback to know which bookings have feedback
+    try {
+      const fSnap = await getDocs(query(collection(db, "feedback"), where("userId", "==", user.uid)));
+      const ids = new Set<string>();
+      fSnap.docs.forEach(d => ids.add(d.data().bookingId));
+      setFeedbackIds(ids);
+    } catch (e) {
+      console.error("Error fetching feedback", e);
     }
   };
 
@@ -118,6 +132,32 @@ export default function MyBookingsClient() {
       alert("Failed to save profile. Please try again.");
     }
     setProfileLoading(false);
+  };
+
+  const submitFeedback = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user || !feedbackModal) return;
+    setSubmittingFeedback(true);
+    try {
+      await setDoc(doc(collection(db, "feedback")), {
+        bookingId: feedbackModal.id,
+        userId: user.uid,
+        userName: user.displayName || "Customer",
+        service: feedbackModal.service,
+        brand: feedbackModal.brand,
+        model: feedbackModal.model,
+        date: feedbackModal.date,
+        rating: feedbackForm.rating,
+        text: feedbackForm.text,
+        createdAt: new Date()
+      });
+      setFeedbackIds(prev => new Set(prev).add(feedbackModal.id));
+      setFeedbackModal(null);
+      setFeedbackForm({ rating: 5, text: "" });
+    } catch (err) {
+      alert("Error submitting feedback: " + (err instanceof Error ? err.message : String(err)));
+    }
+    setSubmittingFeedback(false);
   };
 
   if (authLoading || (!user && !authLoading)) {
@@ -351,6 +391,20 @@ export default function MyBookingsClient() {
                           💬 {booking.message}
                         </p>
                       )}
+
+                      {booking.status === "completed" && !feedbackIds.has(booking.id) && (
+                        <button
+                          onClick={() => setFeedbackModal(booking)}
+                          style={{ marginTop: 16, padding: "8px 16px", borderRadius: 8, background: "rgba(0,200,150,0.1)", border: "1px solid rgba(0,200,150,0.3)", color: "#00C896", cursor: "pointer", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", display: "inline-flex", alignItems: "center", gap: 6 }}
+                        >
+                          <Star size={14} /> Leave Feedback
+                        </button>
+                      )}
+                      {booking.status === "completed" && feedbackIds.has(booking.id) && (
+                        <div style={{ marginTop: 16, display: "inline-flex", alignItems: "center", gap: 6, color: "var(--text-muted)", fontSize: "0.85rem", fontFamily: "Inter, sans-serif" }}>
+                          <ShieldCheck size={14} color="#00C896" /> Feedback Submitted
+                        </div>
+                      )}
                     </div>
                   </motion.div>
                 );
@@ -442,6 +496,47 @@ export default function MyBookingsClient() {
           </motion.div>
         )}
       </div>
+
+      {/* Feedback Modal */}
+      <AnimatePresence>
+        {feedbackModal && (
+          <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setFeedbackModal(null)}
+              style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }} />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+              style={{ position: "relative", width: "100%", maxWidth: 460, background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 24, padding: 32, boxShadow: "0 24px 80px rgba(0,0,0,0.5)" }}>
+              
+              <button onClick={() => setFeedbackModal(null)} style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer" }}><X size={20} /></button>
+              
+              <h2 style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.4rem", fontWeight: 800, marginBottom: 8 }}>Rate Your Service</h2>
+              <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: 24 }}>How was your experience with the {feedbackModal.service} for your {feedbackModal.brand} {feedbackModal.model}?</p>
+              
+              <form onSubmit={submitFeedback} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", marginBottom: 8, fontFamily: "Inter, sans-serif" }}>Rating</label>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {[1, 2, 3, 4, 5].map(star => (
+                      <button key={star} type="button" onClick={() => setFeedbackForm({...feedbackForm, rating: star})}
+                        style={{ padding: 10, borderRadius: 12, border: `1px solid ${feedbackForm.rating >= star ? "#FFB800" : "var(--border)"}`, background: feedbackForm.rating >= star ? "rgba(255,184,0,0.1)" : "var(--bg-secondary)", color: feedbackForm.rating >= star ? "#FFB800" : "var(--text-muted)", cursor: "pointer", transition: "0.2s" }}>
+                        <Star size={24} fill={feedbackForm.rating >= star ? "#FFB800" : "none"} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", marginBottom: 8, fontFamily: "Inter, sans-serif" }}>Comments</label>
+                  <textarea required value={feedbackForm.text} onChange={e => setFeedbackForm({...feedbackForm, text: e.target.value})} placeholder="Tell us about your experience..."
+                    style={{ width: "100%", padding: "14px 16px", borderRadius: 12, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none", minHeight: 100, resize: "vertical" }} />
+                </div>
+                <button type="submit" disabled={submittingFeedback}
+                  style={{ marginTop: 8, padding: "14px", borderRadius: 12, background: submittingFeedback ? "var(--border)" : "var(--accent)", color: submittingFeedback ? "var(--text-muted)" : "white", border: "none", cursor: submittingFeedback ? "wait" : "pointer", fontWeight: 700, fontSize: "0.95rem", fontFamily: "Inter, sans-serif" }}>
+                  {submittingFeedback ? "Submitting..." : "Submit Feedback"}
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <style>{`
         @media (max-width: 600px) {

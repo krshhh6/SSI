@@ -100,9 +100,10 @@ export default function AdminClient() {
   const [loginError, setLoginError] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-  const [tab, setTab] = useState<"overview" | "bookings" | "users" | "campaigns" | "analytics" | "advanced">("overview");
+  const [tab, setTab] = useState<"overview" | "bookings" | "users" | "feedback" | "analytics" | "advanced">("overview");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [users, setUsers] = useState<UserRecord[]>([]);
+  const [feedbackData, setFeedbackData] = useState<any[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
   const [dataError, setDataError] = useState("");
   const [search, setSearch] = useState("");
@@ -167,6 +168,11 @@ export default function AdminClient() {
       try { uSnap = await getDocs(query(collection(db, "users"), orderBy("createdAt", "desc"))); }
       catch { uSnap = await getDocs(collection(db, "users")); }
       setUsers(uSnap.docs.map(d => ({ id: d.id, ...d.data() } as UserRecord)));
+
+      let fSnap;
+      try { fSnap = await getDocs(query(collection(db, "feedback"), orderBy("createdAt", "desc"))); }
+      catch { fSnap = await getDocs(collection(db, "feedback")); }
+      setFeedbackData(fSnap.docs.map(d => ({ id: d.id, ...d.data() })));
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
       setDataError(msg.includes("permission") || msg.includes("denied") ? "PERMISSION_DENIED" : msg);
@@ -252,6 +258,12 @@ export default function AdminClient() {
       alert("Error updating booking: " + (err instanceof Error ? err.message : String(err)));
     }
     setEditLoading(false);
+  };
+
+  const deleteFeedback = async (id: string) => {
+    if (!confirm("Permanently delete this feedback?")) return;
+    await deleteDoc(doc(db, "feedback", id));
+    loadData();
   };
 
   const deleteReview = async (id: string) => {
@@ -408,7 +420,7 @@ export default function AdminClient() {
               { id: "overview",  label: "Overview",  icon: LayoutDashboard },
               { id: "bookings",  label: "Bookings",  icon: CalendarDays    },
               { id: "users",     label: "Users",     icon: Users           },
-              { id: "campaigns", label: "Campaigns", icon: Megaphone       },
+              { id: "feedback",  label: "Feedback",  icon: MessageSquare   },
               { id: "analytics", label: "Analytics", icon: TrendingUp      },
               { id: "advanced",  label: "Advanced",  icon: Settings        },
             ] as const).map(item => (
@@ -726,21 +738,31 @@ service cloud.firestore {
           </motion.div>
         )}
 
-        {/* ────────────────────── CAMPAIGNS ────────────────────── */}
-        {tab === "campaigns" && (
+        {/* ────────────────────── FEEDBACK ────────────────────── */}
+        {tab === "feedback" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <GlassCard title="Broadcast Message (Email)">
-              <div style={{ padding: 12 }}>
-                <p style={{ color: "var(--text-secondary)", marginBottom: 20 }}>
-                  Send a mass email to all your registered customers ({users.length} users).
-                  This will open your default email client with all customer emails in the BCC field to protect their privacy.
-                </p>
-                <a 
-                  href={`mailto:?bcc=${users.map(u => u.email).join(",")}&subject=Update%20from%20Bosch%20Car%20Service%20Patna`}
-                  style={{ padding: "12px 24px", borderRadius: 12, background: "#0066FF", color: "white", textDecoration: "none", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 8 }}
-                >
-                  <Mail size={18} /> Compose Mass Email
-                </a>
+            <GlassCard title={`User Feedback (${feedbackData.length})`}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {feedbackData.map(f => (
+                  <div key={f.id} style={{ padding: "16px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                        <span style={{ fontWeight: 700, color: "var(--text)" }}>{f.userName || "Customer"}</span>
+                        <span style={{ color: "#FFB800", fontSize: "0.85rem" }}>{"★".repeat(f.rating)}</span>
+                      </div>
+                      <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.5, marginBottom: 8 }}>&ldquo;{f.text}&rdquo;</p>
+                      <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", gap: 12, flexWrap: "wrap" }}>
+                        <span>Vehicle: {f.brand} {f.model}</span>
+                        <span>Service: {f.service}</span>
+                        <span>Date: {f.date || "—"}</span>
+                      </div>
+                    </div>
+                    <button onClick={() => deleteFeedback(f.id)} style={{ padding: 6, background: "rgba(239,68,68,0.1)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 8, cursor: "pointer" }}>
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                ))}
+                {feedbackData.length === 0 && <div style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}>No feedback received yet.</div>}
               </div>
             </GlassCard>
           </motion.div>

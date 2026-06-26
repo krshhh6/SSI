@@ -81,5 +81,14 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // ── feedback collection ──────────────────────────────────────────
+    match /feedback/{feedbackId} {
+      // Admins can read and delete all feedback
+      // Users can read and write their own feedback
+      allow read: if request.auth != null && (isAdmin() || resource.data.userId == request.auth.uid);
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+      allow update, delete: if isAdmin();
+    }
+
   }
 }

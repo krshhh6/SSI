@@ -11,7 +11,7 @@ service cloud.firestore {
     // ── Helper: validate a booking document's fields ────────────────
     function validBookingCreate() {
       let d = request.resource.data;
-      return
+      return (
         // userId must match the logged-in user — prevents spoofing
         d.userId == request.auth.uid &&
 
@@ -21,14 +21,15 @@ service cloud.firestore {
         // required fields must exist and be strings
         d.name is string && d.name.size() > 0 && d.name.size() <= 100 &&
         d.phone is string && d.phone.size() == 10 &&
-        d.service is string && d.service.size() > 0 &&
+        d['service'] is string && d['service'].size() > 0 &&
 
         // message has an upper bound
         (!(d.keys().hasAny(['message'])) || (d.message is string && d.message.size() <= 500)) &&
 
         // model and brand must be reasonable length
         (!(d.keys().hasAny(['brand'])) || (d.brand is string && d.brand.size() <= 100)) &&
-        (!(d.keys().hasAny(['model'])) || (d.model is string && d.model.size() <= 100));
+        (!(d.keys().hasAny(['model'])) || (d.model is string && d.model.size() <= 100))
+      );
     }
 
     // ── bookings collection ────────────────────────────────────────
@@ -68,6 +69,16 @@ service cloud.firestore {
 
       // Admins can also update any user document
       allow update: if isAdmin();
+    }
+
+    // ── reviews collection ───────────────────────────────────────────
+    match /reviews/{reviewId} {
+      
+      // Anyone can read reviews (displayed on the homepage)
+      allow read: if true;
+      
+      // Only admins can write/delete reviews for now
+      allow write: if isAdmin();
     }
 
   }

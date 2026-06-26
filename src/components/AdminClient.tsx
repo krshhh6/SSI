@@ -11,9 +11,10 @@ import {
   LayoutDashboard, Users, CalendarDays, LogOut, Search, RefreshCw,
   Trash2, CheckCircle2, Clock, XCircle, AlertCircle, Wrench, Mail,
   Phone, Car, Eye, Download, Bell, TrendingUp, Filter, X,
-  MessageSquare, ChevronDown, ChevronUp, Settings,
+  MessageSquare, ChevronDown, ChevronUp, Settings, Megaphone,
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import { useDebounce } from "@/hooks/useDebounce";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip,
   ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, CartesianGrid,
@@ -99,14 +100,13 @@ export default function AdminClient() {
   const [loginError, setLoginError] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-  const [tab, setTab] = useState<"overview" | "bookings" | "users" | "reviews" | "analytics" | "advanced">("overview");
+  const [tab, setTab] = useState<"overview" | "bookings" | "users" | "campaigns" | "analytics" | "advanced">("overview");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [users, setUsers] = useState<UserRecord[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [reviewsData, setReviewsData] = useState<any[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
   const [dataError, setDataError] = useState("");
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 300);
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("");
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
@@ -131,9 +131,6 @@ export default function AdminClient() {
   const [editSuccess, setEditSuccess] = useState("");
   const [editSearch, setEditSearch] = useState("");
 
-  // Review form state
-  const [reviewForm, setReviewForm] = useState({ name: "", rating: 5, text: "", service: "", date: "" });
-  const [reviewLoading, setReviewLoading] = useState(false);
 
   // Populate edit form when a booking is selected
   useEffect(() => {
@@ -170,11 +167,6 @@ export default function AdminClient() {
       try { uSnap = await getDocs(query(collection(db, "users"), orderBy("createdAt", "desc"))); }
       catch { uSnap = await getDocs(collection(db, "users")); }
       setUsers(uSnap.docs.map(d => ({ id: d.id, ...d.data() } as UserRecord)));
-
-      let rSnap;
-      try { rSnap = await getDocs(query(collection(db, "reviews"), orderBy("createdAt", "desc"))); }
-      catch { rSnap = await getDocs(collection(db, "reviews")); }
-      setReviewsData(rSnap.docs.map(d => ({ id: d.id, ...d.data() })));
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
       setDataError(msg.includes("permission") || msg.includes("denied") ? "PERMISSION_DENIED" : msg);
@@ -262,22 +254,6 @@ export default function AdminClient() {
     setEditLoading(false);
   };
 
-  const submitReview = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setReviewLoading(true);
-    try {
-      await addDoc(collection(db, "reviews"), {
-        ...reviewForm,
-        createdAt: Timestamp.now()
-      });
-      setReviewForm({ name: "", rating: 5, text: "", service: "", date: "" });
-      loadData();
-    } catch (err: unknown) {
-      alert("Error adding review: " + (err instanceof Error ? err.message : String(err)));
-    }
-    setReviewLoading(false);
-  };
-
   const deleteReview = async (id: string) => {
     if (!confirm("Permanently delete this review?")) return;
     await deleteDoc(doc(db, "reviews", id));
@@ -339,8 +315,8 @@ export default function AdminClient() {
   // Filtered & sorted bookings
   const filtered = useMemo(() => {
     let list = [...bookings];
-    if (search) {
-      const s = search.toLowerCase();
+    if (debouncedSearch) {
+      const s = debouncedSearch.toLowerCase();
       list = list.filter(b => [b.name, b.userEmail, b.service, b.brand, b.model, b.phone, b.date].some(v => v?.toLowerCase().includes(s)));
     }
     if (statusFilter !== "all") list = list.filter(b => b.status === statusFilter);
@@ -355,7 +331,7 @@ export default function AdminClient() {
       return 0;
     });
     return list;
-  }, [bookings, search, statusFilter, dateFilter, sortField, sortDir]);
+  }, [bookings, debouncedSearch, statusFilter, dateFilter, sortField, sortDir]);
 
   const pendingBookings = bookings.filter(b => b.status === "pending");
   const todayBookings = bookings.filter(b => {
@@ -432,7 +408,7 @@ export default function AdminClient() {
               { id: "overview",  label: "Overview",  icon: LayoutDashboard },
               { id: "bookings",  label: "Bookings",  icon: CalendarDays    },
               { id: "users",     label: "Users",     icon: Users           },
-              { id: "reviews",   label: "Reviews",   icon: MessageSquare   },
+              { id: "campaigns", label: "Campaigns", icon: Megaphone       },
               { id: "analytics", label: "Analytics", icon: TrendingUp      },
               { id: "advanced",  label: "Advanced",  icon: Settings        },
             ] as const).map(item => (
@@ -688,8 +664,8 @@ service cloud.firestore {
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                   <thead>
                     <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                      {["Customer", "Email", "Bookings", "Role", "Joined"].map(h => (
-                        <th key={h} style={{ padding: "14px 20px", textAlign: "left", fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{h}</th>
+                      {["Customer", "Email", "Bookings", "Role", "Joined", "Contact"].map((h, i) => (
+                        <th key={h} style={{ padding: "14px 20px", textAlign: i === 5 ? "right" : "left", fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -728,6 +704,17 @@ service cloud.firestore {
                           <td style={{ padding: "15px 20px", color: "var(--text-muted)", fontSize: "0.85rem" }}>
                             {u.createdAt?.seconds ? fmtDate(u.createdAt.seconds) : "—"}
                           </td>
+                          <td style={{ padding: "15px 20px", textAlign: "right" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "flex-end" }}>
+                              <a
+                                href={`mailto:${u.email}`}
+                                title="Send Email"
+                                style={{ display: "inline-flex", padding: 8, borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text-secondary)" }}
+                              >
+                                <Mail size={16} />
+                              </a>
+                            </div>
+                          </td>
                         </motion.tr>
                       );
                     })}
@@ -739,56 +726,26 @@ service cloud.firestore {
           </motion.div>
         )}
 
-        {/* ────────────────────── REVIEWS ────────────────────── */}
-        {tab === "reviews" && (
+        {/* ────────────────────── CAMPAIGNS ────────────────────── */}
+        {tab === "campaigns" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 24, alignItems: "start" }}>
-              <GlassCard title={`Manage Reviews (${reviewsData.length})`}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {reviewsData.map(r => (
-                    <div key={r.id} style={{ padding: "16px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                      <div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                          <span style={{ fontWeight: 700, color: "var(--text)" }}>{r.name}</span>
-                          <span style={{ color: "#FFB800", fontSize: "0.85rem" }}>{"★".repeat(r.rating)}</span>
-                        </div>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.5, marginBottom: 8 }}>&ldquo;{r.text}&rdquo;</p>
-                        <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", gap: 12 }}>
-                          <span>Service: {r.service}</span>
-                          <span>Date: {r.date}</span>
-                        </div>
-                      </div>
-                      <button onClick={() => deleteReview(r.id)} style={{ padding: 6, background: "rgba(239,68,68,0.1)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 8, cursor: "pointer" }}>
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  ))}
-                  {reviewsData.length === 0 && <div style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}>No reviews found. Fallback reviews are currently being displayed on the site. Add one below!</div>}
-                </div>
-              </GlassCard>
-
-              <GlassCard title="Add New Review">
-                <form onSubmit={submitReview} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  <input required placeholder="Customer Name" value={reviewForm.name} onChange={e => setReviewForm({...reviewForm, name: e.target.value})}
-                    style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", outline: "none", fontSize: "0.9rem" }} />
-                  <select value={reviewForm.rating} onChange={e => setReviewForm({...reviewForm, rating: Number(e.target.value)})}
-                    style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", outline: "none", fontSize: "0.9rem" }}>
-                    {[5,4,3,2,1].map(num => <option key={num} value={num}>{num} Stars</option>)}
-                  </select>
-                  <textarea required placeholder="Review Text" value={reviewForm.text} onChange={e => setReviewForm({...reviewForm, text: e.target.value})}
-                    style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", outline: "none", fontSize: "0.9rem", minHeight: 100, resize: "vertical" }} />
-                  <input required placeholder="Service Done (e.g. AC Service)" value={reviewForm.service} onChange={e => setReviewForm({...reviewForm, service: e.target.value})}
-                    style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", outline: "none", fontSize: "0.9rem" }} />
-                  <input required placeholder="Timeframe (e.g. 2 days ago)" value={reviewForm.date} onChange={e => setReviewForm({...reviewForm, date: e.target.value})}
-                    style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", outline: "none", fontSize: "0.9rem" }} />
-                  <button type="submit" disabled={reviewLoading} style={{ padding: "12px", background: "#0066FF", color: "white", borderRadius: 8, border: "none", fontWeight: 600, cursor: reviewLoading ? "wait" : "pointer" }}>
-                    {reviewLoading ? "Adding..." : "Add Review"}
-                  </button>
-                </form>
-              </GlassCard>
-            </div>
+            <GlassCard title="Broadcast Message (Email)">
+              <div style={{ padding: 12 }}>
+                <p style={{ color: "var(--text-secondary)", marginBottom: 20 }}>
+                  Send a mass email to all your registered customers ({users.length} users).
+                  This will open your default email client with all customer emails in the BCC field to protect their privacy.
+                </p>
+                <a 
+                  href={`mailto:?bcc=${users.map(u => u.email).join(",")}&subject=Update%20from%20Bosch%20Car%20Service%20Patna`}
+                  style={{ padding: "12px 24px", borderRadius: 12, background: "#0066FF", color: "white", textDecoration: "none", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 8 }}
+                >
+                  <Mail size={18} /> Compose Mass Email
+                </a>
+              </div>
+            </GlassCard>
           </motion.div>
         )}
+
 
         {/* ────────────────────── ANALYTICS ────────────────────── */}
         {tab === "analytics" && (
@@ -1213,6 +1170,17 @@ function BookingTable({ bookings, onSelect, onStatus, updatingId, sortField, sor
               <td style={{ padding: "14px 20px" }}><StatusBadge status={b.status} /></td>
               <td style={{ padding: "14px 20px" }}>
                 <div style={{ display: "flex", gap: 6 }} onClick={e => e.stopPropagation()}>
+                  {b.phone && (
+                    <a
+                      href={`https://wa.me/91${b.phone}?text=Hi%20${encodeURIComponent(b.name)},%20regarding%20your%20booking%20at%20Bosch%20Car%20Service%20Patna...`}
+                      target="_blank"
+                      rel="noreferrer"
+                      title="WhatsApp"
+                      style={{ padding: "7px 12px", borderRadius: 8, background: "rgba(37,211,102,0.1)", color: "#25D366", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: "0.82rem", fontFamily: "Inter, sans-serif", fontWeight: 600, textDecoration: "none" }}
+                    >
+                      <MessageSquare size={13} />Chat
+                    </a>
+                  )}
                   <button onClick={() => onSelect(b)} style={{ padding: "7px 12px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text-secondary)", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: "0.82rem", fontFamily: "Inter, sans-serif", fontWeight: 600 }}>
                     <Eye size={13} />View
                   </button>

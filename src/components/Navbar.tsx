@@ -28,6 +28,7 @@ const NAV_LINKS: NavLinkDef[] = [
       { label: "Gallery",          href: "/gallery",          isPage: true  },
     ]
   },
+  { label: "Blog",             href: "/blog",             isPage: true  },
   { label: "Booking",          href: "/booking",          isPage: true  },
   { label: "Contact",          href: "/#contact",         isPage: false },
 ];

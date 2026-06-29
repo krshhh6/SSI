@@ -399,7 +399,7 @@ export default function AdminClient() {
       <div style={{ position: "fixed", top: "-10%", right: "-5%", width: "60vw", height: "60vw", background: "radial-gradient(circle, rgba(0,102,255,0.025) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
 
       {/* ── NAV ── */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(5,5,5,0.8)", backdropFilter: "blur(24px)", borderBottom: "1px solid var(--border)", padding: "0 28px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "var(--navbar-bg)", backdropFilter: "blur(24px)", borderBottom: "1px solid var(--border)", padding: "0 28px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         {/* Left */}
         <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>

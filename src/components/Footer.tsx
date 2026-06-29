@@ -5,8 +5,13 @@ import { Phone, MessageCircle, Award, ArrowUp } from "lucide-react";
 
 const QUICK_LINKS = ["Home", "Services", "Bosch Advantage", "Blog", "Reviews", "Gallery", "Contact"];
 const SERVICES_LIST = [
-  "Periodic Maintenance", "Engine Diagnostics", "Dent & Paint",
-  "AC Service", "Wheel Alignment", "Car Detailing", "Insurance Claims",
+  { label: "Periodic Maintenance", href: "/blog#periodic-maintenance" },
+  { label: "Engine Diagnostics", href: "/blog#engine-diagnostics" },
+  { label: "Dent & Paint", href: "/blog#dent-and-paint" },
+  { label: "AC Service", href: "/blog#ac-service" },
+  { label: "Wheel Alignment", href: "/blog#wheel-alignment" },
+  { label: "Car Detailing", href: "/blog#car-detailing" },
+  { label: "Insurance Claims", href: "/blog#insurance-claims" },
 ];
 
 // Social media icons as inline SVG paths (lucide-react doesn't include brand icons)
@@ -265,10 +270,20 @@ export default function Footer() {
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
               {SERVICES_LIST.map((s) => (
-                <li key={s}>
-                  <span style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>
-                    {s}
-                  </span>
+                <li key={s.label}>
+                  <motion.a
+                    href={s.href}
+                    whileHover={{ x: 4, color: "var(--accent)" }}
+                    style={{
+                      color: "var(--text-secondary)",
+                      textDecoration: "none",
+                      fontSize: "0.875rem",
+                      display: "inline-block",
+                      transition: "color 0.2s ease",
+                    }}
+                  >
+                    {s.label}
+                  </motion.a>
                 </li>
               ))}
             </ul>

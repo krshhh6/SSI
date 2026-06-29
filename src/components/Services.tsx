@@ -19,48 +19,56 @@ const SERVICES = [
     title: "Periodic Maintenance",
     desc: "Scheduled servicing with genuine oil, filters, and parts to keep your car running at peak performance.",
     color: "#0066FF",
+    href: "/blog#periodic-maintenance",
   },
   {
     icon: Gauge,
     title: "Engine Diagnostics",
     desc: "Advanced Bosch KTS diagnostic tools for precise fault detection and engine health assessment.",
     color: "#00AAFF",
+    href: "/blog#engine-diagnostics",
   },
   {
     icon: PaintBucket,
     title: "Dent & Paint",
     desc: "Professional dent removal and precision painting using computerized color matching technology.",
     color: "#E2001A",
+    href: "/blog#dent-and-paint",
   },
   {
     icon: Wind,
     title: "AC Service & Repair",
     desc: "Complete AC system check, refrigerant refill, compressor service and cabin air filter replacement.",
     color: "#00C896",
+    href: "/blog#ac-service",
   },
   {
     icon: RotateCcw,
     title: "Wheel Alignment",
     desc: "3D computerized wheel alignment and balancing for optimal tire life and fuel efficiency.",
     color: "#FF8800",
+    href: "/blog#wheel-alignment",
   },
   {
     icon: Sparkles,
     title: "Car Detailing",
     desc: "Premium interior and exterior detailing with ceramic coating, polishing and deep cleaning.",
     color: "#AA66FF",
+    href: "/blog#car-detailing",
   },
   {
     icon: FileText,
     title: "Insurance Claims",
     desc: "Hassle-free cashless insurance claim processing with all major insurance companies.",
     color: "#FF4466",
+    href: "/blog#insurance-claims",
   },
   {
     icon: Package,
     title: "Genuine Bosch Parts",
     desc: "100% authentic Bosch spare parts sourced directly from authorized distributors.",
     color: "#0066FF",
+    href: "/bosch-advantage",
   },
 ];
 
@@ -171,6 +179,7 @@ function ServiceCard({
   desc,
   color,
   index,
+  href,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon: any;
@@ -178,6 +187,7 @@ function ServiceCard({
   desc: string;
   color: string;
   index: number;
+  href: string;
 }) {
   const fromX = index % 2 === 0 ? -30 : 30;
 
@@ -193,12 +203,14 @@ function ServiceCard({
   };
 
   return (
-    <motion.div
+    <motion.a
+      href={href}
       variants={cardVariants}
       whileHover={{
         y: -6,
         transition: { duration: 0.25, ease: "easeOut" },
       }}
+      style={{ textDecoration: "none", display: "block" }}
     >
       <SpotlightCard
         spotlightColor={`${color}22`}
@@ -302,6 +314,6 @@ function ServiceCard({
           }
         `}</style>
       </SpotlightCard>
-    </motion.div>
+    </motion.a>
   );
 }

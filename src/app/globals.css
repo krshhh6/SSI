@@ -7,6 +7,8 @@
   /* Glassmorphism Light Mode Defaults */
   --bg: #F4F7F9;
   --bg-secondary: #E9ECEF;
+  --bg-hero: var(--bg);
+  --bg-footer: var(--bg-secondary);
   --card: rgba(255, 255, 255, 0.6);
   --card-hover: rgba(255, 255, 255, 0.85);
   --border: rgba(255, 255, 255, 0.4);
@@ -32,8 +34,10 @@
 [data-theme="dark"] {
   color-scheme: dark;
   /* Glassmorphism Dark Mode Defaults */
-  --bg: #0F1011;
-  --bg-secondary: #16181A;
+  --bg: #050505;
+  --bg-secondary: #050505;
+  --bg-hero: #0F1011;
+  --bg-footer: #16181A;
   --card: rgba(20, 22, 28, 0.6);
   --card-hover: rgba(30, 33, 42, 0.85);
   --border: rgba(255, 255, 255, 0.08);

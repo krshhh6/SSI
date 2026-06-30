@@ -59,14 +59,14 @@ export default function Hero() {
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
-        background: "var(--bg)",
+        background: "var(--bg-hero)",
         color: "var(--text)",
       }}
       className="hero-section"
     >
       {/* Clean Light Background */}
       <div
-        style={{ position: "absolute", inset: 0, overflow: "hidden", zIndex: 0, background: "var(--bg)" }}
+        style={{ position: "absolute", inset: 0, overflow: "hidden", zIndex: 0, background: "var(--bg-hero)" }}
       >
         <div
           style={{
@@ -83,7 +83,7 @@ export default function Hero() {
             left: 0,
             right: 0,
             height: "30%",
-            background: "linear-gradient(to bottom, transparent, var(--bg))",
+            background: "linear-gradient(to bottom, transparent, var(--bg-hero))",
             zIndex: 2,
           }}
         />

@@ -72,14 +72,13 @@ export default function Footer() {
   };
 
   return (
-    <footer
-      style={{
-        background: "var(--bg-secondary)",
+    <footer style={{
+        background: "var(--bg-footer)",
         borderTop: "1px solid var(--border)",
+        paddingTop: 80,
         position: "relative",
         overflow: "hidden",
-      }}
-    >
+      }}>
       {/* Ambient */}
       <div
         style={{

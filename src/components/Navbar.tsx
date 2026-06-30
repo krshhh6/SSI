@@ -5,6 +5,7 @@ import { Phone, Menu, X, Wrench, LogIn, User, LogOut, CalendarDays, ChevronDown 
 import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
+import { AnimatedBackground } from "@/components/core/animated-background";
 
 type NavLinkDef = {
   label: string;
@@ -136,17 +137,32 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <div style={{ display: "flex", alignItems: "center", gap: 2 }} className="hidden-mobile">
-            {NAV_LINKS.map((link) => {
-              if (link.dropdown) {
-                const isDropdownActive = link.dropdown.some(sublink => isActive(sublink));
+            <AnimatedBackground
+              defaultValue={undefined}
+              className="rounded-lg bg-[var(--card-hover)]"
+              transition={{
+                type: "spring",
+                bounce: 0.2,
+                duration: 0.3,
+              }}
+              enableHover
+            >
+              {NAV_LINKS.map((link) => {
+                if (link.dropdown) {
+                  const isDropdownActive = link.dropdown.some(sublink => isActive(sublink));
+                  return (
+                    <div key={link.label} data-id={link.label}>
+                      <NavDropdown link={link} active={isDropdownActive} onClick={handleNavClick} />
+                    </div>
+                  );
+                }
                 return (
-                  <NavDropdown key={link.label} link={link} active={isDropdownActive} onClick={handleNavClick} />
+                  <div key={link.href} data-id={link.label}>
+                    <NavLink link={link} active={isActive(link)} onClick={handleNavClick} />
+                  </div>
                 );
-              }
-              return (
-                <NavLink key={link.href} link={link} active={isActive(link)} onClick={handleNavClick} />
-              );
-            })}
+              })}
+            </AnimatedBackground>
           </div>
 
           {/* Right side */}

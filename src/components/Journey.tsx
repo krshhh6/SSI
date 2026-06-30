@@ -31,6 +31,7 @@ const STEPS = [
 ];
 
 function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) {
+  const [isHovered, setIsHovered] = React.useState(false);
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
 
@@ -50,7 +51,12 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
     mouseY.set((event.clientY - rect.top) / rect.height);
   }
 
+  function handleMouseEnter() {
+    setIsHovered(true);
+  }
+
   function handleMouseLeave() {
+    setIsHovered(false);
     mouseX.set(0.5);
     mouseY.set(0.5);
   }
@@ -62,6 +68,7 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{
         perspective: 1000,
@@ -76,11 +83,10 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
           inset: -15,
           background: outerGlow,
           filter: "blur(20px)",
-          opacity: 0,
           zIndex: 0,
           borderRadius: 140,
         }}
-        whileHover={{ opacity: 1 }}
+        animate={{ opacity: isHovered ? 1 : 0 }}
         transition={{ duration: 0.3 }}
       />
       
@@ -105,7 +111,7 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
           transformStyle: "preserve-3d",
           zIndex: 1,
         }}
-        whileHover={{ scale: 1.02 }}
+        animate={{ scale: isHovered ? 1.02 : 1 }}
         transition={{ duration: 0.2 }}
       >
         {/* Inner Tracking Glare */}
@@ -114,11 +120,10 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
             position: "absolute",
             inset: 0,
             background: glareBackground,
-            opacity: 0,
             zIndex: 0,
             pointerEvents: "none",
           }}
-          whileHover={{ opacity: 1 }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
           transition={{ duration: 0.3 }}
         />
 

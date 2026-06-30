@@ -65,7 +65,7 @@ export default function Journey() {
                 width: 280,
                 minHeight: 400,
                 borderRadius: 140,
-                background: "var(--card)",
+                background: "#16191C",
                 border: "1px solid var(--border)",
                 position: "relative",
                 overflow: "hidden",

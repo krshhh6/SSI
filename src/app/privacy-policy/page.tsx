@@ -48,10 +48,29 @@ export default function PrivacyPolicy() {
 
             <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>3. Data Security & Storage</h2>
             <p>
-              Your data is stored securely using enterprise-grade cloud infrastructure (Google Firebase). We implement strict security rules to ensure that your personal booking history and account details can only be accessed by you and our authorized administrators.
+              Your data is stored securely using enterprise-grade cloud infrastructure (Google Firebase). We employ strict security measures to protect against unauthorized or unlawful use, alteration, or accidental loss of your information. Only you and our authorized administrators can access your personal booking history and account details.
             </p>
 
-            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>4. Your Rights (DPDP Act)</h2>
+            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>4. Information Sharing and Disclosure</h2>
+            <p>
+              We maintain strict controls over the sharing of your personal data. We do not sell, monetize, or utilize your data for third-party advertising. We may share your information only in the following limited circumstances:
+              <ul style={{ listStyle: "disc", paddingLeft: 24, marginTop: 12 }}>
+                <li>When required by law, court order, or governmental agency for verification of identity, or for the prevention, detection, or investigation of cyber incidents.</li>
+                <li>In good faith compliance with applicable legal and regulatory frameworks.</li>
+                <li>If SAM Wheels Pvt Ltd is acquired by or merged with another company.</li>
+              </ul>
+            </p>
+
+            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>5. Cookies and Log Files</h2>
+            <p>
+              Like most standard websites, we use log files and cookies to improve site functionality and user experience. 
+              <ul style={{ listStyle: "disc", paddingLeft: 24, marginTop: 12 }}>
+                <li><strong>Cookies:</strong> We use cookies to maintain your login session securely. These cookies do not contain personally identifiable information and are erased when you log out.</li>
+                <li><strong>Log Files:</strong> We collect internet protocol (IP) addresses, browser type, and date/time stamps to analyze trends and administer the site. This automatically collected information is used solely in aggregate to improve our services.</li>
+              </ul>
+            </p>
+
+            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>6. Your Rights (DPDP Act)</h2>
             <p>
               Under the DPDP Act, you possess the following rights regarding your personal data:
               <ul style={{ listStyle: "disc", paddingLeft: 24, marginTop: 12 }}>
@@ -61,9 +80,17 @@ export default function PrivacyPolicy() {
               </ul>
             </p>
 
-            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>5. Contact Us</h2>
+            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>7. Grievance Officer</h2>
             <p>
-              If you wish to exercise your data rights, request data deletion, or have any questions about this Privacy Policy, please contact our Data Protection Officer at:
+              In accordance with the Information Technology Act, 2000 and the DPDP Act, the contact details of the Grievance Officer for data-related complaints are provided below. We shall acknowledge your complaint within 24 hours and dispose of such complaints within 15 days from the date of receipt.
+              <br/><br/>
+              <strong>Email:</strong> grievance@samwheels.com<br/>
+              <strong>Address:</strong> SAM Wheels Pvt Ltd, Opp. Passport Office, Akashvani Lane, Ashiana–Digha Road, Patna, Bihar 800014
+            </p>
+
+            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>8. Contact Us</h2>
+            <p>
+              For general questions or service bookings, please contact us at:
               <br/><br/>
               <strong>Phone:</strong> +91 90283 84499<br/>
               <strong>Address:</strong> Opp. Passport Office, Akashvani Lane, Ashiana–Digha Road, Patna, Bihar 800014

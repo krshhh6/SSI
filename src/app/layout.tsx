@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/context/AuthContext";
 import AnimatePresenceProvider from "@/components/AnimatePresenceProvider";
+import InitialLoader from "@/components/InitialLoader";
 
 export const viewport: Viewport = {
   themeColor: [
@@ -61,6 +62,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <InitialLoader />
         <ThemeProvider>
           <AuthProvider>
             <AnimatePresenceProvider>

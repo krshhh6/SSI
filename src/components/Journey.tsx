@@ -31,7 +31,7 @@ const STEPS = [
 
 export default function Journey() {
   return (
-    <section className="section-padding" style={{ background: "var(--bg)", position: "relative", overflow: "hidden" }}>
+    <section className="section-padding" style={{ background: "var(--bg-secondary)", position: "relative", overflow: "hidden" }}>
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
         <motion.div
           initial={{ opacity: 0, y: 40 }}

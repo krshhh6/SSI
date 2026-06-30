@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import { Phone, MessageCircle, Award, ArrowUp } from "lucide-react";
 
-const QUICK_LINKS = ["Home", "Services", "Bosch Advantage", "Blog", "Reviews", "Gallery", "Contact"];
+const QUICK_LINKS = ["Home", "Services", "Bosch Advantage", "Blog", "Reviews", "Gallery", "Contact", "Privacy Policy"];
 const SERVICES_LIST = [
   { label: "Periodic Maintenance", href: "/blog#periodic-maintenance" },
   { label: "Engine Diagnostics", href: "/blog#engine-diagnostics" },
@@ -56,6 +56,10 @@ export default function Footer() {
     }
     if (link === "Gallery") {
       router.push("/gallery");
+      return;
+    }
+    if (link === "Privacy Policy") {
+      router.push("/privacy-policy");
       return;
     }
 

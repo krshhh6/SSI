@@ -291,6 +291,14 @@ export default function SignInClient() {
             </svg>
             Continue with Google
           </motion.button>
+
+          {/* DPDP Disclaimer */}
+          <div style={{ marginTop: 16, textAlign: "center", padding: "0 10px" }}>
+            <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", lineHeight: 1.5, fontFamily: "Inter, sans-serif" }}>
+              By continuing, you agree to our <a href="/privacy-policy" target="_blank" style={{ color: "var(--text-secondary)", textDecoration: "underline" }}>Privacy Policy</a> and consent to the processing of your personal data.
+            </p>
+          </div>
+
           {/* Admin Access Link */}
           <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.06)", textAlign: "center" }}>
             <button

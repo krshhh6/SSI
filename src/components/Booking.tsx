@@ -29,6 +29,7 @@ export default function Booking() {
     name: "", phone: "", brand: "", model: "",
     service: "", date: "", message: "",
   });
+  const [consentGiven, setConsentGiven] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -86,6 +87,10 @@ export default function Booking() {
     }
     if (cleanMessage.length > 500) {
       alert("Message is too long (max 500 characters).");
+      return;
+    }
+    if (!consentGiven) {
+      alert("Please agree to the Privacy Policy to continue.");
       return;
     }
 
@@ -433,6 +438,20 @@ export default function Booking() {
                     onBlur={(e) => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
                   />
                 </div>
+              </div>
+
+              {/* DPDP Consent */}
+              <div style={{ marginTop: 24, display: "flex", gap: 12, alignItems: "flex-start" }}>
+                <input
+                  type="checkbox"
+                  id="consent"
+                  checked={consentGiven}
+                  onChange={(e) => setConsentGiven(e.target.checked)}
+                  style={{ marginTop: 4, cursor: "pointer" }}
+                />
+                <label htmlFor="consent" style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.5, cursor: "pointer" }}>
+                  I agree to the <a href="/privacy-policy" target="_blank" style={{ color: "var(--accent)" }}>Privacy Policy</a> and consent to the collection of my data for this booking.
+                </label>
               </div>
 
               {/* Submit */}

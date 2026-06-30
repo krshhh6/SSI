@@ -80,7 +80,17 @@ export default function PrivacyPolicy() {
               </ul>
             </p>
 
-            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>7. Grievance Officer</h2>
+            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>7. Children’s Privacy</h2>
+            <p>
+              Our website is not intended for children under 13 years of age, and we do not knowingly collect information from them.
+            </p>
+
+            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>8. Changes to This Policy</h2>
+            <p>
+              We may update this Privacy Policy from time to time. Changes will be posted on this page with the effective date, and your continued use of our website signifies your acceptance of the updated terms.
+            </p>
+
+            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>9. Grievance Officer</h2>
             <p>
               In accordance with the Information Technology Act, 2000 and the DPDP Act, the contact details of the Grievance Officer for data-related complaints are provided below. We shall acknowledge your complaint within 24 hours and dispose of such complaints within 15 days from the date of receipt.
               <br/><br/>
@@ -88,7 +98,7 @@ export default function PrivacyPolicy() {
               <strong>Address:</strong> SAM Wheels Pvt Ltd, Opp. Passport Office, Akashvani Lane, Ashiana–Digha Road, Patna, Bihar 800014
             </p>
 
-            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>8. Contact Us</h2>
+            <h2 style={{ color: "var(--text)", fontSize: "1.5rem", marginTop: 20 }}>10. Contact Us</h2>
             <p>
               For general questions or service bookings, please contact us at:
               <br/><br/>

@@ -750,7 +750,6 @@ body::after {
 
 /* Page Loader Animation */
 .page-loader-card {
-  --bg-color: var(--bg);
   background-color: var(--bg);
   display: flex;
   justify-content: center;
@@ -759,55 +758,50 @@ body::after {
   width: 100vw;
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 99999; /* Increased to ensure no FOUC */
 }
 
 .page-loader {
-  color: var(--text-secondary);
+  color: var(--text);
   font-family: 'Outfit', sans-serif;
-  font-weight: 500;
-  font-size: 28px;
+  font-weight: 800; /* Premium bold font */
+  font-size: clamp(32px, 5vw, 48px);
   box-sizing: content-box;
-  height: 40px;
-  padding: 10px 10px;
+  height: clamp(48px, 7.5vw, 72px); /* Increased height to prevent cutoff */
+  padding: 10px 15px;
   display: flex;
   border-radius: 8px;
+  align-items: center;
+}
+
+.page-loader p {
+  margin-right: 12px;
 }
 
 .page-loader-words {
   overflow: hidden;
   position: relative;
-}
-
-.page-loader-words::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    var(--bg-color) 10%,
-    transparent 30%,
-    transparent 70%,
-    var(--bg-color) 90%
-  );
-  z-index: 20;
+  height: 100%;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
 }
 
 .page-loader-word {
-  display: block;
+  display: flex;
+  align-items: center;
   height: 100%;
-  padding-left: 8px;
   color: var(--bosch-red);
-  animation: spin_4991 4s infinite;
+  animation: spin_4991 4s cubic-bezier(0.64, 0, 0.35, 1) infinite; /* Premium easing */
 }
 
 @keyframes spin_4991 {
-  10% { transform: translateY(-102%); }
+  10% { transform: translateY(-100%); }
   25% { transform: translateY(-100%); }
-  35% { transform: translateY(-202%); }
+  35% { transform: translateY(-200%); }
   50% { transform: translateY(-200%); }
-  60% { transform: translateY(-302%); }
+  60% { transform: translateY(-300%); }
   75% { transform: translateY(-300%); }
-  85% { transform: translateY(-402%); }
+  85% { transform: translateY(-400%); }
   100% { transform: translateY(-400%); }
 }
 

@@ -10,11 +10,11 @@ export default function InitialLoader() {
     // Prevent scrolling while loader is active
     document.body.style.overflow = "hidden";
     
-    // Hide loader after 6.5 seconds
+    // Hide loader after 4 seconds
     const timer = setTimeout(() => {
       setIsLoading(false);
       document.body.style.overflow = "auto";
-    }, 6500);
+    }, 4000);
 
     return () => {
       clearTimeout(timer);
@@ -32,7 +32,7 @@ export default function InitialLoader() {
           className="page-loader-card"
         >
           <div className="page-loader">
-            <p>loading</p>
+            <p>SAM Wheels</p>
             <div className="page-loader-words">
               <span className="page-loader-word">diagnostics</span>
               <span className="page-loader-word">servicing</span>

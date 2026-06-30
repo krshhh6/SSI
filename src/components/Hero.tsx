@@ -13,6 +13,12 @@ import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-reac
 import CountUp from "./ReactBits/CountUp";
 import GlareHover from "./GlareHover";
 import MagneticButton from "./MagneticButton";
+import localFont from 'next/font/local';
+
+const branche = localFont({
+  src: '../../public/fonts/branche/branche.ttf',
+  display: 'swap',
+});
 
 const TRUST_BADGES = [
   { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
@@ -199,8 +205,8 @@ export default function Hero() {
 
           {/* Headline */}
           <div
-            className="display-xl"
-            style={{ maxWidth: 640, marginBottom: 8, display: "flex", flexDirection: "column", fontFamily: "'Branche', sans-serif" }}
+            className={`display-xl ${branche.className}`}
+            style={{ maxWidth: 640, marginBottom: 8, display: "flex", flexDirection: "column" }}
           >
             <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
               BOSCH CERTIFIED

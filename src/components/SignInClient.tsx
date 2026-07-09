@@ -41,6 +41,15 @@ export default function SignInClient() {
       return;
     }
 
+    // Restrict to Gmail and Outlook domains only
+    const allowedDomains = ["@gmail.com", "@outlook.com"];
+    const isAllowedDomain = allowedDomains.some(domain => cleanEmail.endsWith(domain));
+    if (!isAllowedDomain) {
+      setError("Only Gmail and Outlook email addresses are allowed.");
+      setAuthLoading(false);
+      return;
+    }
+
     try {
       if (isSignUp) {
         const userCred = await createUserWithEmailAndPassword(auth, cleanEmail, password);

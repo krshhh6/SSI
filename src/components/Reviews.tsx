@@ -110,16 +110,100 @@ export default function Reviews() {
       />
 
       <div className="container">
-        {/* Curved Loop Animation Row */}
-        <div style={{ position: "relative", zIndex: 4, height: 60, marginBottom: 40, marginTop: -20, pointerEvents: "none" }}>
-          <CurvedLoop 
-            marqueeText="4.7★ GOOGLE RATING ✦ 535+ CUSTOMERS ✦ 15+ YEARS EXPERIENCE ✦ 30+ BRANDS ✦ "
-            speed={1.5}
-            curveAmount={80}
-            direction="left"
-            interactive={false}
-            className="curved-text-style"
-          />
+        {/* Straight Text Ticker */}
+        <div style={{
+          position: "relative",
+          zIndex: 4,
+          marginBottom: 32,
+          marginTop: -20,
+          overflow: "hidden",
+          WebkitMaskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
+          maskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
+        }}>
+          <div style={{
+            display: "flex",
+            width: "max-content",
+            animation: "marquee-straight 28s linear infinite",
+          }}>
+            {[0, 1].map((key) => (
+              <div key={key} style={{ display: "flex", alignItems: "center", gap: 0, whiteSpace: "nowrap" }}>
+                {["4.7★ GOOGLE RATING", "535+ HAPPY CUSTOMERS", "15+ YEARS EXPERIENCE", "30+ CAR BRANDS SERVICED", "BOSCH AUTHORIZED CENTER", "100% GENUINE PARTS"].map((item, i) => (
+                  <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
+                    <span style={{
+                      fontSize: "0.85rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.12em",
+                      color: "var(--accent)",
+                      fontFamily: "Outfit, sans-serif",
+                      padding: "0 32px",
+                    }}>{item}</span>
+                    <span style={{ color: "var(--accent)", fontSize: "0.7rem", opacity: 0.6 }}>✦</span>
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Car Brand Logos Marquee */}
+        <div style={{
+          position: "relative",
+          zIndex: 4,
+          marginBottom: 56,
+          overflow: "hidden",
+          WebkitMaskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
+          maskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
+        }}>
+          <div style={{
+            display: "flex",
+            width: "max-content",
+            animation: "marquee-straight-reverse 35s linear infinite",
+          }}>
+            {[0, 1].map((key) => (
+              <div key={key} style={{ display: "flex", alignItems: "center", gap: 48, paddingRight: 48 }}>
+                {[
+                  { name: "BMW", color: "#1C6DC1" },
+                  { name: "AUDI", color: "#BB0A30" },
+                  { name: "Mercedes", color: "#A0A0A0" },
+                  { name: "Toyota", color: "#EB0A1E" },
+                  { name: "Honda", color: "#E40521" },
+                  { name: "Hyundai", color: "#002C5F" },
+                  { name: "Suzuki", color: "#0033A0" },
+                  { name: "Ford", color: "#003476" },
+                  { name: "Ferrari", color: "#CC0000" },
+                  { name: "Porsche", color: "#C0A060" },
+                  { name: "MG", color: "#B5121B" },
+                  { name: "Kia", color: "#05141F" },
+                  { name: "Tata", color: "#1A5BA7" },
+                  { name: "Mahindra", color: "#CC0000" },
+                  { name: "Jeep", color: "#2C3E50" },
+                ].map((brand) => (
+                  <div key={brand.name} style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "10px 24px",
+                    borderRadius: 12,
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    minWidth: 110,
+                    flexShrink: 0,
+                    transition: "all 0.3s ease",
+                  }}>
+                    <span style={{
+                      fontSize: "1rem",
+                      fontWeight: 800,
+                      letterSpacing: "0.08em",
+                      color: brand.color,
+                      fontFamily: "Outfit, sans-serif",
+                      textTransform: "uppercase",
+                      filter: "brightness(1.3)",
+                    }}>{brand.name}</span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Section Header */}

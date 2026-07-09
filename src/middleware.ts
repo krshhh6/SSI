@@ -6,8 +6,8 @@ import type { NextRequest } from 'next/server';
 const rateLimitMap = new Map<string, { count: number; startTime: number }>();
 
 export function middleware(request: NextRequest) {
-  // Extract the user's IP address. Fallback to 'unknown' if not found.
-  const ip = request.ip || request.headers.get('x-forwarded-for') || 'unknown';
+  // Extract the user's IP address from headers.
+  const ip = request.headers.get('x-forwarded-for') || 'unknown';
   
   // Rate Limiting Rules
   const MAX_REQUESTS = 100; // Max requests allowed per window

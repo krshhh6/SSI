@@ -30,6 +30,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
       if (u) {
+        // Domain restriction: Only @gmail.com is allowed
+        if (u.email && !u.email.toLowerCase().endsWith("@gmail.com")) {
+          await signOut(auth);
+          setUser(null);
+          setLoading(false);
+          return;
+        }
         try {
           // Ensure user document exists in Firestore 'users' collection
           const userRef = doc(db, "users", u.uid);
@@ -53,7 +60,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signInWithGoogle = async () => {
-    await signInWithPopup(auth, googleProvider);
+    const result = await signInWithPopup(auth, googleProvider);
+    if (result.user && result.user.email) {
+      const email = result.user.email.toLowerCase();
+      if (!email.endsWith("@gmail.com")) {
+        await signOut(auth);
+        throw { 
+          code: "auth/custom-domain-restricted", 
+          message: "Only Gmail email addresses are allowed." 
+        };
+      }
+    }
   };
 
   const logout = async () => {

@@ -81,13 +81,15 @@ export default function SignInClient() {
       await signInWithGoogle();
     } catch (err) {
       console.error("Google Auth Error:", err);
-      const e = err as { code?: string };
+      const e = err as { code?: string; message?: string };
       if (e.code === "auth/unauthorized-domain") {
         setError("Domain not authorized. Please add this URL to Firebase > Auth > Settings > Authorized domains.");
       } else if (e.code === "auth/operation-not-allowed") {
         setError("Google Sign-In is not enabled. Please enable it in Firebase Console.");
       } else if (e.code === "auth/popup-closed-by-user") {
         setError("Sign-in popup was closed before completing.");
+      } else if (e.code === "auth/custom-domain-restricted") {
+        setError(e.message || "Only Gmail email addresses are allowed.");
       } else {
         setError("Google Sign-In failed. Please try again.");
       }

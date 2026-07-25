@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import { Send, CalendarCheck, User, Phone, Car, Wrench, MessageSquare, LogIn, Lock, ChevronDown } from "lucide-react";
+import { Send, CalendarCheck, User, Phone, Car, Wrench, MessageSquare, LogIn, Lock } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
@@ -358,29 +358,29 @@ export default function Booking() {
                   <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-secondary)", letterSpacing: "0.06em", display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
                     <Car size={13} /> VEHICLE BRAND
                   </label>
-                  <div style={{ position: "relative" }}>
+                  <div style={{ position: "relative", width: "100%" }}>
                     <select
                       required
                       value={form.brand}
                       onChange={(e) => setForm({ ...form, brand: e.target.value })}
-                      style={{ ...inputStyle, appearance: "none", WebkitAppearance: "none", cursor: "pointer", paddingRight: 40 }}
+                      style={{
+                        ...inputStyle,
+                        appearance: "none",
+                        WebkitAppearance: "none",
+                        MozAppearance: "none",
+                        cursor: "pointer",
+                        paddingRight: 42,
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230066FF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "right 14px center",
+                        backgroundSize: "16px",
+                      }}
                       onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
                       onBlur={(e) => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
                     >
-                      <option value="" style={{ background: "var(--card)", color: "var(--text)" }}>Select Brand</option>
-                      {VEHICLE_BRANDS.map((b) => <option key={b} value={b} style={{ background: "var(--card)", color: "var(--text)" }}>{b}</option>)}
+                      <option value="" style={{ background: "var(--bg)", color: "var(--text)" }}>Select Brand</option>
+                      {VEHICLE_BRANDS.map((b) => <option key={b} value={b} style={{ background: "var(--bg)", color: "var(--text)" }}>{b}</option>)}
                     </select>
-                    <ChevronDown
-                      size={18}
-                      color="var(--text-secondary)"
-                      style={{
-                        position: "absolute",
-                        right: 14,
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        pointerEvents: "none",
-                      }}
-                    />
                   </div>
                 </div>
 
@@ -406,29 +406,29 @@ export default function Booking() {
                   <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-secondary)", letterSpacing: "0.06em", display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
                     <Wrench size={13} /> SERVICE REQUIRED
                   </label>
-                  <div style={{ position: "relative" }}>
+                  <div style={{ position: "relative", width: "100%" }}>
                     <select
                       required
                       value={form.service}
                       onChange={(e) => setForm({ ...form, service: e.target.value })}
-                      style={{ ...inputStyle, appearance: "none", WebkitAppearance: "none", cursor: "pointer", paddingRight: 40 }}
+                      style={{
+                        ...inputStyle,
+                        appearance: "none",
+                        WebkitAppearance: "none",
+                        MozAppearance: "none",
+                        cursor: "pointer",
+                        paddingRight: 42,
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230066FF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "right 14px center",
+                        backgroundSize: "16px",
+                      }}
                       onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
                       onBlur={(e) => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
                     >
-                      <option value="" style={{ background: "var(--card)", color: "var(--text)" }}>Select Service</option>
-                      {SERVICES.map((s) => <option key={s} value={s} style={{ background: "var(--card)", color: "var(--text)" }}>{s}</option>)}
+                      <option value="" style={{ background: "var(--bg)", color: "var(--text)" }}>Select Service</option>
+                      {SERVICES.map((s) => <option key={s} value={s} style={{ background: "var(--bg)", color: "var(--text)" }}>{s}</option>)}
                     </select>
-                    <ChevronDown
-                      size={18}
-                      color="var(--text-secondary)"
-                      style={{
-                        position: "absolute",
-                        right: 14,
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        pointerEvents: "none",
-                      }}
-                    />
                   </div>
                 </div>
 

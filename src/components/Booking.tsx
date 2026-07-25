@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import { Send, CalendarCheck, User, Phone, Car, Wrench, MessageSquare, LogIn, Lock } from "lucide-react";
+import { Send, CalendarCheck, User, Phone, Car, Wrench, MessageSquare, LogIn, Lock, ChevronDown } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
@@ -358,17 +358,30 @@ export default function Booking() {
                   <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-secondary)", letterSpacing: "0.06em", display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
                     <Car size={13} /> VEHICLE BRAND
                   </label>
-                  <select
-                    required
-                    value={form.brand}
-                    onChange={(e) => setForm({ ...form, brand: e.target.value })}
-                    style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
-                    onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
-                    onBlur={(e) => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
-                  >
-                    <option value="">Select Brand</option>
-                    {VEHICLE_BRANDS.map((b) => <option key={b} value={b}>{b}</option>)}
-                  </select>
+                  <div style={{ position: "relative" }}>
+                    <select
+                      required
+                      value={form.brand}
+                      onChange={(e) => setForm({ ...form, brand: e.target.value })}
+                      style={{ ...inputStyle, appearance: "none", WebkitAppearance: "none", cursor: "pointer", paddingRight: 40 }}
+                      onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
+                      onBlur={(e) => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
+                    >
+                      <option value="" style={{ background: "var(--card)", color: "var(--text)" }}>Select Brand</option>
+                      {VEHICLE_BRANDS.map((b) => <option key={b} value={b} style={{ background: "var(--card)", color: "var(--text)" }}>{b}</option>)}
+                    </select>
+                    <ChevronDown
+                      size={18}
+                      color="var(--text-secondary)"
+                      style={{
+                        position: "absolute",
+                        right: 14,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        pointerEvents: "none",
+                      }}
+                    />
+                  </div>
                 </div>
 
                 {/* Model */}
@@ -393,17 +406,30 @@ export default function Booking() {
                   <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-secondary)", letterSpacing: "0.06em", display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
                     <Wrench size={13} /> SERVICE REQUIRED
                   </label>
-                  <select
-                    required
-                    value={form.service}
-                    onChange={(e) => setForm({ ...form, service: e.target.value })}
-                    style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
-                    onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
-                    onBlur={(e) => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
-                  >
-                    <option value="">Select Service</option>
-                    {SERVICES.map((s) => <option key={s} value={s}>{s}</option>)}
-                  </select>
+                  <div style={{ position: "relative" }}>
+                    <select
+                      required
+                      value={form.service}
+                      onChange={(e) => setForm({ ...form, service: e.target.value })}
+                      style={{ ...inputStyle, appearance: "none", WebkitAppearance: "none", cursor: "pointer", paddingRight: 40 }}
+                      onFocus={(e) => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
+                      onBlur={(e) => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
+                    >
+                      <option value="" style={{ background: "var(--card)", color: "var(--text)" }}>Select Service</option>
+                      {SERVICES.map((s) => <option key={s} value={s} style={{ background: "var(--card)", color: "var(--text)" }}>{s}</option>)}
+                    </select>
+                    <ChevronDown
+                      size={18}
+                      color="var(--text-secondary)"
+                      style={{
+                        position: "absolute",
+                        right: 14,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        pointerEvents: "none",
+                      }}
+                    />
+                  </div>
                 </div>
 
                 {/* Date */}

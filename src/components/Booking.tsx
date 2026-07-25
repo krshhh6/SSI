@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import { Send, CalendarCheck, User, Phone, Car, Wrench, MessageSquare, LogIn, Lock } from "lucide-react";
+import { Send, CalendarCheck, User, Phone, Car, Wrench, MessageSquare, LogIn, Lock, ChevronDown } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
@@ -381,6 +381,18 @@ export default function Booking() {
                       <option value="" style={{ background: "var(--bg)", color: "var(--text)" }}>Select Brand</option>
                       {VEHICLE_BRANDS.map((b) => <option key={b} value={b} style={{ background: "var(--bg)", color: "var(--text)" }}>{b}</option>)}
                     </select>
+                    <ChevronDown
+                      size={18}
+                      style={{
+                        position: "absolute",
+                        right: 14,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        pointerEvents: "none",
+                        color: "var(--accent)",
+                        zIndex: 2,
+                      }}
+                    />
                   </div>
                 </div>
 
@@ -429,6 +441,18 @@ export default function Booking() {
                       <option value="" style={{ background: "var(--bg)", color: "var(--text)" }}>Select Service</option>
                       {SERVICES.map((s) => <option key={s} value={s} style={{ background: "var(--bg)", color: "var(--text)" }}>{s}</option>)}
                     </select>
+                    <ChevronDown
+                      size={18}
+                      style={{
+                        position: "absolute",
+                        right: 14,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        pointerEvents: "none",
+                        color: "var(--accent)",
+                        zIndex: 2,
+                      }}
+                    />
                   </div>
                 </div>
 

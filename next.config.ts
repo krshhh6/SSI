@@ -36,6 +36,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: process.cwd(),
   images: {
     domains: [],
     unoptimized: false,

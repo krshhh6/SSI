@@ -145,65 +145,70 @@ export default function Reviews() {
           </div>
         </div>
 
-        {/* Car Brand Logos Marquee */}
+        {/* Car Brand Logos — Static Grid */}
         <div style={{
           position: "relative",
           zIndex: 4,
           marginBottom: 56,
-          overflow: "hidden",
-          WebkitMaskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
-          maskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          gap: 20,
+          padding: "12px 0",
         }}>
-          <div style={{
-            display: "flex",
-            width: "max-content",
-            animation: "marquee-straight-reverse 35s linear infinite",
-          }}>
-            {[0, 1].map((key) => (
-              <div key={key} style={{ display: "flex", alignItems: "center", gap: 48, paddingRight: 48 }}>
-                {[
-                  { name: "BMW", color: "#1C6DC1" },
-                  { name: "AUDI", color: "#BB0A30" },
-                  { name: "Mercedes", color: "#A0A0A0" },
-                  { name: "Toyota", color: "#EB0A1E" },
-                  { name: "Honda", color: "#E40521" },
-                  { name: "Hyundai", color: "#002C5F" },
-                  { name: "Suzuki", color: "#0033A0" },
-                  { name: "Ford", color: "#003476" },
-                  { name: "Ferrari", color: "#CC0000" },
-                  { name: "Porsche", color: "#C0A060" },
-                  { name: "MG", color: "#B5121B" },
-                  { name: "Kia", color: "#05141F" },
-                  { name: "Tata", color: "#1A5BA7" },
-                  { name: "Mahindra", color: "#CC0000" },
-                  { name: "Jeep", color: "#2C3E50" },
-                ].map((brand) => (
-                  <div key={brand.name} style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "10px 24px",
-                    borderRadius: 12,
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(255,255,255,0.07)",
-                    minWidth: 110,
-                    flexShrink: 0,
-                    transition: "all 0.3s ease",
-                  }}>
-                    <span style={{
-                      fontSize: "1rem",
-                      fontWeight: 800,
-                      letterSpacing: "0.08em",
-                      color: brand.color,
-                      fontFamily: "Outfit, sans-serif",
-                      textTransform: "uppercase",
-                      filter: "brightness(1.3)",
-                    }}>{brand.name}</span>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
+          {[
+            { name: "Maruti Suzuki", file: "maruti.svg",  bg: "#003087" },
+            { name: "Hyundai",       file: "hyundai.svg", bg: "#002C5F" },
+            { name: "Toyota",        file: "toyota.svg",  bg: "#EB0A1E" },
+            { name: "Honda",         file: "honda.svg",   bg: "#CC0000" },
+            { name: "Renault",       file: "renault.svg", bg: "#181818" },
+            { name: "TATA",          file: "tata.svg",    bg: "#1A5BA7" },
+            { name: "Kia",           file: "kia.svg",     bg: "#05141F" },
+          ].map((brand) => (
+            <div
+              key={brand.name}
+              title={brand.name}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "10px 20px",
+                borderRadius: 10,
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                minWidth: 110,
+                height: 60,
+                flexShrink: 0,
+                cursor: "default",
+                transition: "all 0.25s ease",
+              }}
+              onMouseEnter={e => {
+                const el = e.currentTarget as HTMLDivElement;
+                el.style.background = "rgba(255,255,255,0.14)";
+                el.style.transform = "translateY(-3px)";
+                el.style.boxShadow = "0 8px 24px rgba(0,0,0,0.2)";
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget as HTMLDivElement;
+                el.style.background = "rgba(255,255,255,0.06)";
+                el.style.transform = "translateY(0)";
+                el.style.boxShadow = "none";
+              }}
+            >
+              <img
+                src={`/logos/${brand.file}`}
+                alt={brand.name}
+                style={{
+                  height: 28,
+                  maxWidth: 100,
+                  objectFit: "contain",
+                  filter: "brightness(10)",
+                  opacity: 0.9,
+                }}
+              />
+            </div>
+          ))}
         </div>
 
         {/* Section Header */}

@@ -119,6 +119,238 @@ bosch-sam-wheels/
 
 ---
 
+## 🏗️ How the Project Works — End to End
+
+This section explains the full data and rendering flow so you can understand exactly what happens from the moment a user opens the site to when a booking lands in the database.
+
+### 1. Application Startup & Providers
+
+When the app first loads, Next.js runs `src/app/layout.tsx`. This root layout wraps every page with three nested providers, applied in this specific order:
+
+```
+ThemeProvider            ← Manages dark/light mode (reads from localStorage)
+  └── AuthProvider       ← Connects to Firebase Auth, holds global user state
+        └── AnimatePresenceProvider  ← Enables Framer Motion page transitions
+              └── {page children}
+```
+
+- **`ThemeProvider`** (`ThemeProvider.tsx`) reads a `theme` key from `localStorage` and sets a `data-theme` attribute on `<html>`. A small inline `<script>` in `layout.tsx` also sets this attribute before React hydrates to prevent a flash of wrong theme.
+- **`AuthProvider`** (`AuthContext.tsx`) calls `onAuthStateChanged` from Firebase. This listener fires on every page load and whenever the user signs in/out. It exposes `user`, `loading`, `signInWithGoogle`, and `logout` to every component via the `useAuth()` hook.
+- **`AnimatePresenceProvider`** enables smooth exit animations when navigating between pages.
+
+Additionally, **`InitialLoader`** (`InitialLoader.tsx`) renders a branded loading screen for ~1.5s on first visit to mask the initial JavaScript hydration.
+
+---
+
+### 2. The Home Page (`/`)
+
+The home page (`src/app/page.tsx`) is a **server component** that assembles sections in order:
+
+```
+Navbar
+  Hero             ← 3D animated section with GSAP + Three.js
+  Services         ← Service cards with stagger animations
+  Journey          ← Timeline / company story
+  Reviews          ← Firestore-powered carousel (reads `reviews` collection)
+  Contact          ← Contact form
+Footer
+FloatingContact    ← Sticky WhatsApp button (bottom-right corner)
+```
+
+Each section is a separate client component that animates into view using Framer Motion's `useInView` hook — components only animate when they scroll into the viewport, improving performance.
+
+---
+
+### 3. User Authentication Flow
+
+```
+User visits /sign-in
+       │
+       ├─ Enters Email + Password  ──►  SignInClient.tsx validates Gmail domain
+       │                                 ├─ If non-Gmail → shows error, stops
+       │                                 └─ If Gmail → createUserWithEmailAndPassword (Firebase)
+       │
+       └─ Clicks "Continue with Google"
+                    │
+                    ▼
+            Firebase Google Popup
+                    │
+                    ▼
+            AuthContext.tsx (signInWithGoogle)
+                    ├─ Checks email.endsWith("@gmail.com")
+                    ├─ If non-Gmail → signOut immediately → throws error
+                    └─ If Gmail → OK
+                    │
+                    ▼
+            onAuthStateChanged fires
+                    ├─ Domain check (3rd layer)
+                    ├─ Creates/fetches user doc in Firestore `users/{uid}`
+                    └─ Sets global `user` state
+                    │
+                    ▼
+            useEffect in SignInClient detects user → router.push("/my-bookings")
+```
+
+Every subsequent page load re-runs `onAuthStateChanged`. If the user has a cached Firebase session token, they are auto-signed-in without seeing the login screen.
+
+---
+
+### 4. Booking Flow
+
+```
+User visits /booking
+       │
+       ├─ Not signed in? → Shows "Sign in to Book" prompt with redirect button
+       │
+       └─ Signed in?
+              │
+              ▼
+       Booking.tsx renders form
+              │
+              ├─ Auto-fills name & phone from Firestore `users/{uid}` doc
+              ├─ User selects: Brand (dropdown), Service (dropdown), Date, Message
+              └─ User submits
+                     │
+                     ▼
+              Client-side validation
+                     ├─ Name, phone (10 digits), service, date — all required
+                     ├─ DPDP consent checkbox must be checked
+                     └─ If invalid → inline error shown
+                     │
+                     ▼
+              addDoc(collection(db, "bookings"), { ...data, status: "pending" })
+                     │
+                     ├─ Firestore Security Rules validate the document server-side:
+                     │     userId must match logged-in user UID
+                     │     status MUST be "pending" (prevents forgery)
+                     │     phone must be exactly 10 digits
+                     │     name ≤ 100 chars, message ≤ 500 chars
+                     │
+                     └─ On success → shows animated success card
+                            "Booking Confirmed! We'll call to confirm your slot."
+```
+
+---
+
+### 5. My Bookings — Tracking Appointments
+
+Once a booking is submitted, the user can track it at `/my-bookings`:
+
+- Fetches all Firestore documents from `bookings` where `userId == currentUser.uid`
+- Displays each booking as a card with the current **status badge** (color-coded)
+- Booking status is updated by the admin — the user sees changes in real-time on refresh
+- Users can also submit **feedback** for completed bookings (writes to `feedback` collection)
+
+**Booking Status Visual Flow:**
+
+```
+🟡 Pending  →  🔵 Confirmed  →  🟣 On Track  →  🟢 Completed
+                                                   ↑ User can leave feedback here
+                                  (Admin updates status from the admin panel)
+                                                   ↓
+                                               🔴 Cancelled  (at any stage)
+```
+
+---
+
+### 6. Admin Panel Flow
+
+```
+Admin visits /admin
+       │
+       ├─ Sees a separate login form (not the regular /sign-in page)
+       │     Uses email/password only (no Google popup)
+       │
+       ▼
+AdminClient.tsx checks: user.email === ADMIN_EMAIL
+       ├─ If not admin → "Access Denied", signs out
+       │
+       └─ If admin → loads full dashboard
+              │
+              ├─ getDocs(collection(db, "bookings"))   → all bookings
+              ├─ getDocs(collection(db, "users"))      → all users
+              ├─ getDocs(collection(db, "feedback"))   → all feedback
+              │
+              ├─ Dashboard tab  → stat cards + charts (Recharts)
+              ├─ Bookings tab   → searchable/filterable table
+              │     └─ updateDoc(bookingRef, { status: newStatus })
+              ├─ Users tab      → user list
+              ├─ Feedback tab   → user feedback
+              └─ Add Booking    → addDoc for walk-in customers (bypasses strict rules via isAdmin())
+```
+
+**CSV Export:** Generates a `.csv` blob in the browser and triggers a download — no server needed.
+
+---
+
+### 7. Security Rules Enforcement (Firestore)
+
+All the data flows above are gated by `firestore.rules`, which Firebase evaluates **server-side** for every read/write. Even if someone modifies the JavaScript in the browser, the rules cannot be bypassed:
+
+```
+bookings collection:
+  create:  ✅ Auth user (own UID, status=pending, phone=10 digits) OR admin
+  read:    ✅ Own bookings OR admin
+  update:  ❌ Users blocked | ✅ Admin only
+  delete:  ❌ Users blocked | ✅ Admin only
+
+users collection:
+  read:    ✅ Own doc OR admin
+  write:   ✅ Own doc (cannot set role=admin) | ✅ Admin can update any
+
+reviews:   ✅ Anyone can read | ❌ Only admin can write
+feedback:  ✅ Own read/create | ❌ Admin manages all
+```
+
+---
+
+### 8. Rendering Strategy
+
+| Page | Strategy | Why |
+|---|---|---|
+| `/` (Home) | Static (SSG) | Marketing content, no user data |
+| `/services`, `/gallery`, `/blog`, etc. | Static (SSG) | Content doesn't change per-user |
+| `/booking` | Client-side | Needs Firebase Auth + Firestore |
+| `/my-bookings` | Client-side | User-specific data |
+| `/sign-in` | Client-side | Firebase Auth SDK is browser-only |
+| `/admin` | Client-side | Full dashboard, real-time Firestore reads |
+
+Pages that show static content are pre-rendered at build time by Next.js (zero server computation per request). Pages that need auth or Firestore data are client-rendered — the page shell is served statically, then data is fetched in the browser.
+
+---
+
+### 9. Component Architecture
+
+Every page in `src/app/*/page.tsx` is a lightweight **server component** whose only job is to import and render one or more **client components** from `src/components/`. This pattern is intentional:
+
+- **Server components** = can be cached, streamed, and have no JS bundle cost
+- **Client components** (marked `"use client"` at top) = run in browser, can use hooks and Firebase
+
+Example for the Booking page:
+```
+src/app/booking/page.tsx      ← Server component (just renders <Booking />)
+        └── src/components/Booking.tsx   ← "use client" — all logic lives here
+```
+
+This keeps the bundle small and ensures only interactive pages ship client-side JavaScript.
+
+---
+
+### 10. Styling Architecture
+
+The project uses a **hybrid CSS approach**:
+
+| Layer | Tool | Purpose |
+|---|---|---|
+| Global theme | CSS Variables in `globals.css` | Colors, spacing, dark/light mode |
+| Utility classes | Tailwind CSS v4 | Layout, spacing, responsive helpers |
+| Component styles | Inline `style` objects (React) | Glassmorphism cards, animations |
+| Transitions | Framer Motion props | `whileHover`, `whileTap`, `initial/animate` |
+
+The CSS variable system (`--bg`, `--accent`, `--text`, etc.) is toggled by switching `data-theme="dark"` ↔ `data-theme="light"` on the `<html>` element. All components reference these variables, so the theme switch is instant and affects the entire app.
+
+---
+
 ## Pages & Features
 
 | Route | Description | Auth Required |

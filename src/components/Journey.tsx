@@ -9,24 +9,28 @@ const STEPS = [
     title: "Book Your Service",
     desc: "Simply choose the service & book an appointment in just a few clicks.",
     color: "#00C896",
+    image: "/images/book-service-promo.jpg",
   },
   {
     icon: Truck,
     title: "Pickup & Drop",
     desc: "Our team will arrive at your location to pick up your car from your home or office at your convenience.",
     color: "#C0CA33",
+    image: "/images/pickup-drop-promo.png",
   },
   {
     icon: Smartphone,
     title: "Real-Time Updates",
     desc: "Track your car's service progress digitally and get notified at every step.",
     color: "#AA66FF",
+    image: "/images/real-time-updates-promo.jpg",
   },
   {
     icon: ThumbsUp,
     title: "Hassle-Free Delivery",
     desc: "Once the service is complete, we'll deliver your car back to you, sparkling clean and ready to go.",
     color: "#00AAFF",
+    image: "/images/hassle-free-delivery-promo.jpg",
   }
 ];
 
@@ -72,7 +76,7 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
       onMouseLeave={handleMouseLeave}
       style={{
         perspective: 1000,
-        width: 280,
+        width: 280, 
         position: "relative",
       }}
     >
@@ -84,7 +88,7 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
           background: outerGlow,
           filter: "blur(20px)",
           zIndex: 0,
-          borderRadius: 140,
+          borderRadius: step.image ? 24 : 140,
         }}
         animate={{ opacity: isHovered ? 1 : 0 }}
         transition={{ duration: 0.3 }}
@@ -95,8 +99,8 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
         style={{
           rotateX,
           rotateY,
-          minHeight: 400,
-          borderRadius: 140,
+          minHeight: step.image ? 280 : 400,
+          borderRadius: step.image ? 24 : 140,
           background: "var(--card)",
           backdropFilter: "blur(10px)",
           border: "1px solid var(--border)",
@@ -105,7 +109,7 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "56px 24px",
+          padding: step.image ? 0 : "56px 24px",
           textAlign: "center",
           boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
           transformStyle: "preserve-3d",
@@ -141,31 +145,48 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
         }} />
 
         {/* Card Content */}
-        <div style={{
-          width: 72,
-          height: 72,
-          borderRadius: "50%",
-          background: "rgba(128,128,128,0.05)",
-          border: "1px solid var(--border)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: 32,
-          color: step.color,
-          position: "relative",
-          zIndex: 2,
-          transform: "translateZ(30px)", 
-        }}>
-          <step.icon size={30} strokeWidth={1.5} />
-        </div>
+        {step.image ? (
+          <img
+            src={step.image}
+            alt={step.title}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              zIndex: 2,
+            }}
+          />
+        ) : (
+          <>
+            <div style={{
+              width: 72,
+              height: 72,
+              borderRadius: "50%",
+              background: "rgba(128,128,128,0.05)",
+              border: "1px solid var(--border)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 32,
+              color: step.color,
+              position: "relative",
+              zIndex: 2,
+              transform: "translateZ(30px)", 
+            }}>
+              <step.icon size={30} strokeWidth={1.5} />
+            </div>
 
-        <h3 style={{ fontSize: "1.3rem", fontWeight: 600, marginBottom: 16, position: "relative", zIndex: 2, transform: "translateZ(20px)" }}>
-          {step.title}
-        </h3>
-        
-        <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: 1.6, position: "relative", zIndex: 2, transform: "translateZ(10px)" }}>
-          {step.desc}
-        </p>
+            <h3 style={{ fontSize: "1.3rem", fontWeight: 600, marginBottom: 16, position: "relative", zIndex: 2, transform: "translateZ(20px)" }}>
+              {step.title}
+            </h3>
+            
+            <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: 1.6, position: "relative", zIndex: 2, transform: "translateZ(10px)" }}>
+              {step.desc}
+            </p>
+          </>
+        )}
       </motion.div>
     </motion.div>
   );
@@ -190,12 +211,20 @@ export default function Journey() {
           </p>
         </motion.div>
 
-        <div style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 24,
-          justifyContent: "center",
-        }}>
+        <div 
+          className="hide-scrollbar"
+          style={{
+            display: "flex",
+            flexWrap: "nowrap",
+            gap: 24,
+            justifyContent: "flex-start",
+            overflowX: "auto",
+            padding: "20px 0 60px 0", // Space for scrollbar and 3D hover scale
+            margin: "0 auto",
+            maxWidth: "100%",
+            width: "max-content", // Centers items when container is wide enough
+          }}
+        >
           {STEPS.map((step, i) => (
             <JourneyCard key={step.title} step={step} index={i} />
           ))}

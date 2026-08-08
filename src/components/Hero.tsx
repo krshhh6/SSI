@@ -163,10 +163,10 @@ export default function Hero() {
         >
           {/* Tag */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            style={{ marginBottom: 24 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            style={{ marginBottom: 24, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}
           >
             <span
               style={{
@@ -194,6 +194,24 @@ export default function Hero() {
                 }}
               />
               Bosch Authorized Workshop · Patna, Bihar
+            </span>
+
+            {/* Clean 4.7 Star Rating (No Box) */}
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                fontSize: "0.85rem",
+                fontWeight: 800,
+                letterSpacing: "0.02em",
+              }}
+            >
+              <Star size={16} fill="#FFC107" color="#FFC107" style={{ filter: "drop-shadow(0 0 4px rgba(255,193,7,0.6))" }} />
+              <span style={{ color: "#FFD54F", fontWeight: 900 }}>4.7</span>
+              <span style={{ color: "rgba(255,255,255,0.75)", fontWeight: 600, fontSize: "0.78rem" }}>
+                Google Rating (535+ Reviews)
+              </span>
             </span>
           </motion.div>
 

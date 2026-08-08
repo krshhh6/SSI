@@ -1,0 +1,557 @@
+{
+  "domCards": [
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/menu.svg?w=800&dpr=1",
+      "alt": "back",
+      "className": "UT5Nm gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/512x512.png?w=800&dpr=1",
+      "alt": "Gomechanic",
+      "className": "_3hOVm gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/icons/ic_expand_more.svg",
+      "alt": "Call Now",
+      "className": "_1O5Iq gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/icons/ic_expand_more.svg",
+      "alt": "Select your car",
+      "className": "_Z9Ew gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/icons/ic_expand_more.svg",
+      "alt": "Select your car",
+      "className": "_Z9Ew gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/assets/img/customerpage/formIcons/star_rating.png",
+      "alt": "Rating",
+      "className": "_3xV17 gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/WHITE.png?w=240&dpr=1",
+      "alt": "Gomechanic",
+      "className": "JQsfK gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/PcHomeForm/FF3733C0-2200-4562-A654-5C44240968CE.svg?w=800&dpr=1",
+      "alt": "arrow",
+      "className": "_3tDbw gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/PcHomeForm/FF3733C0-2200-4562-A654-5C44240968CE.svg?w=800&dpr=1",
+      "alt": "arrow",
+      "className": "_3tDbw gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/1.png?w=200&dpr=1",
+      "alt": "Car Services Mumbai",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/5.png?w=200&dpr=1",
+      "alt": "AC Service & Repair Mumbai",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons/battery-v3.svg?w=200&dpr=1",
+      "alt": "Batteries Mumbai",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons/tyre-v3.svg?w=200&dpr=1",
+      "alt": "Tyres & Wheel Care Mumbai",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons/denting-painting-v3.svg?w=200&dpr=1",
+      "alt": "Denting & Painting Mumbai",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/8.png?w=200&dpr=1",
+      "alt": "Detailing Services Mumbai",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xhdpi/4.png?w=200&dpr=1",
+      "alt": "Car Spa & Cleaning Mumbai",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/Car-Inspection.png?w=200&dpr=1",
+      "alt": "Car Inspections Mumbai",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/10.png?w=200&dpr=1",
+      "alt": "Windshields & Lights Mumbai",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/Suspension-_-Fitments.png?w=200&dpr=1",
+      "alt": "Suspension & Fitments Mumbai",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/Clutch-_-Bumpers.png?w=200&dpr=1",
+      "alt": "Clutch & Body Parts Mumbai",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons/insurance-v3.svg?w=200&dpr=1",
+      "alt": "Insurance Claims Mumbai",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=200&dpr=1",
+      "alt": "miles",
+      "className": "_1aVFu gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/graphics/Icons/rightArrow.svg",
+      "alt": "Left arrow",
+      "className": "_1sJhO gm-added gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "Batteries",
+      "className": "_1fciT gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "Brakes",
+      "className": "X7zo5 gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "AC Parts",
+      "className": "X7zo5 gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "Clutch",
+      "className": "_1fciT gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "Tyres",
+      "className": "_1fciT gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "Sell Your Car",
+      "className": "X7zo5 gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "Suspension",
+      "className": "X7zo5 gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "Lights",
+      "className": "X7zo5 gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "Body Parts",
+      "className": "X7zo5 gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "Glasses",
+      "className": "X7zo5 gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "Car Spa",
+      "className": "X7zo5 gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "Car Detailing",
+      "className": "X7zo5 gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+      "alt": "Side Mirror",
+      "className": "X7zo5 gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/graphics/Icons/rightArrow.svg",
+      "alt": "Left arrow",
+      "className": "_1V7xh gm-added gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/graphics/Icons/rightArrow.svg",
+      "alt": "Left arrow",
+      "className": "_1sJhO gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=300&dpr=1",
+      "alt": "Monsoon",
+      "className": "_26tqf gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=300&dpr=1",
+      "alt": "Monsoon",
+      "className": "_26tqf gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=300&dpr=1",
+      "alt": "Monsoon",
+      "className": "_26tqf gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=300&dpr=1",
+      "alt": "Monsoon",
+      "className": "_26tqf gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/graphics/Icons/rightArrow.svg",
+      "alt": "Left arrow",
+      "className": "_1V7xh gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/878e15c1.png",
+      "alt": "Banner",
+      "className": "_39Sae gm-observing gm-observing-cb gm-added"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/retail-carousel/indiav2middle_banner1prob01066.jpg%3Fv%3D1777284645.216091?version=1777284647.308457&w=800&dpr=1",
+      "alt": "banner",
+      "className": "gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/retail-carousel/indiav2middle_banner1prob11066.jpg%3Fv%3D1777283402.891859?version=1777283404.958088&w=800&dpr=1",
+      "alt": "banner",
+      "className": "gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/retail-carousel/indiav2middle_banner1prob21066.jpg%3Fv%3D1777283451.697348?version=1777283453.544971&w=800&dpr=1",
+      "alt": "banner",
+      "className": "gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/878e15c1.png",
+      "alt": "Banner",
+      "className": "_39Sae gm-observing gm-observing-cb gm-added"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/Select-The-Perfect-Car-Service.png?w=240&dpr=1",
+      "alt": "Work",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/Schedule-Free-Doorstep-Pick-up.png?w=240&dpr=1",
+      "alt": "Work",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/track-your-car-service-real-time.png?w=240&dpr=1",
+      "alt": "Work",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/Earn-While-We-Service.png?w=240&dpr=1",
+      "alt": "Work",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/star.png?w=70&dpr=1",
+      "alt": "star",
+      "className": "gm-added gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/invertedComma.png?w=480&dpr=1",
+      "alt": "Inverted Comma",
+      "className": "_2ZfUO gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/google.png?w=480&dpr=1",
+      "alt": "Google",
+      "className": "lu6Dn gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/invertedComma.png?w=480&dpr=1",
+      "alt": "Inverted Comma",
+      "className": "_2ZfUO gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/google.png?w=480&dpr=1",
+      "alt": "Google",
+      "className": "lu6Dn gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/invertedComma.png?w=480&dpr=1",
+      "alt": "Inverted Comma",
+      "className": "_2ZfUO gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/google.png?w=480&dpr=1",
+      "alt": "Google",
+      "className": "lu6Dn gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/invertedComma.png?w=480&dpr=1",
+      "alt": "Inverted Comma",
+      "className": "_2ZfUO gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/google.png?w=480&dpr=1",
+      "alt": "Google",
+      "className": "lu6Dn gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/invertedComma.png?w=480&dpr=1",
+      "alt": "Inverted Comma",
+      "className": "_2ZfUO gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/google.png?w=480&dpr=1",
+      "alt": "Google",
+      "className": "lu6Dn gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/invertedComma.png?w=480&dpr=1",
+      "alt": "Inverted Comma",
+      "className": "_2ZfUO gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/google.png?w=480&dpr=1",
+      "alt": "Google",
+      "className": "lu6Dn gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/invertedComma.png?w=480&dpr=1",
+      "alt": "Inverted Comma",
+      "className": "_2ZfUO gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/google.png?w=480&dpr=1",
+      "alt": "Google",
+      "className": "lu6Dn gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/invertedComma.png?w=480&dpr=1",
+      "alt": "Inverted Comma",
+      "className": "_2ZfUO gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/google.png?w=480&dpr=1",
+      "alt": "Google",
+      "className": "lu6Dn gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/invertedComma.png?w=480&dpr=1",
+      "alt": "Inverted Comma",
+      "className": "_2ZfUO gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/google.png?w=480&dpr=1",
+      "alt": "Google",
+      "className": "lu6Dn gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/invertedComma.png?w=480&dpr=1",
+      "alt": "Inverted Comma",
+      "className": "_2ZfUO gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/google.png?w=480&dpr=1",
+      "alt": "Google",
+      "className": "lu6Dn gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/PcHomeForm/ic_expand_more.svg?w=800&dpr=1",
+      "alt": "Expand",
+      "className": "_2FHWM gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/PcHomeForm/ic_expand_more.svg?w=800&dpr=1",
+      "alt": "Expand",
+      "className": "_2FHWM gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/PcHomeForm/ic_expand_more.svg?w=800&dpr=1",
+      "alt": "Expand",
+      "className": "_2FHWM gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/PcHomeForm/ic_expand_more.svg?w=800&dpr=1",
+      "alt": "Expand",
+      "className": "_2FHWM gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/PcHomeForm/ic_expand_more.svg?w=800&dpr=1",
+      "alt": "Expand",
+      "className": "_2FHWM gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/PcHomeForm/ic_expand_more.svg?w=800&dpr=1",
+      "alt": "Expand",
+      "className": "_2FHWM gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/PcHomeForm/ic_expand_more.svg?w=800&dpr=1",
+      "alt": "Expand",
+      "className": "_2FHWM gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/Website/gm-app-download-update.jpg?w=300&dpr=1",
+      "alt": "Download GoMechanic App",
+      "className": "gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/Website/play-store.png?w=200&dpr=1",
+      "alt": "Play store",
+      "className": "_3QZU1 gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/Website/app-store.png?w=200&dpr=1",
+      "alt": "App store",
+      "className": "_1eS8c gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/AppDetails/F330B59C-DA83-4500-A7B2-A0D858252D88.svg?w=200&dpr=1",
+      "alt": "Input",
+      "className": "_3dz0B gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/graphics/Icons/rightArrow.svg",
+      "alt": "Left arrow",
+      "className": "_1sJhO gm-added gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/878e15c1.png",
+      "alt": "bosch",
+      "className": "_2P5xN gm-added gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/878e15c1.png",
+      "alt": "valeo",
+      "className": "_2P5xN gm-added gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/878e15c1.png",
+      "alt": "mahle",
+      "className": "_2P5xN gm-added gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/878e15c1.png",
+      "alt": "ntn",
+      "className": "_2P5xN gm-added gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/878e15c1.png",
+      "alt": "sachs",
+      "className": "_2P5xN gm-added gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/878e15c1.png",
+      "alt": "textar",
+      "className": "_2P5xN gm-added gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/graphics/Icons/rightArrow.svg",
+      "alt": "Left arrow",
+      "className": "_1V7xh gm-added gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/e53edad8.png",
+      "alt": "Down Arrow",
+      "className": "_1vy0D gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/e53edad8.png",
+      "alt": "Down Arrow",
+      "className": "_1vy0D gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/e53edad8.png",
+      "alt": "Down Arrow",
+      "className": "_1vy0D gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/e53edad8.png",
+      "alt": "Down Arrow",
+      "className": "_1vy0D gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/addons/e53edad8.png",
+      "alt": "Down Arrow",
+      "className": "_1vy0D gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/WHITE.png?w=640&dpr=1",
+      "alt": "Gomechanic",
+      "className": "_2uiim gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/FooterPage/playstore.png?w=300&dpr=1",
+      "alt": "Gomechanic",
+      "className": "uOMMO gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/FooterPage/appstore.png?w=300&dpr=1",
+      "alt": "App store",
+      "className": "_2j0Rj gm-loaded gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://gomechanic.in/icons/sos%20siren.gif",
+      "alt": "Loader",
+      "className": "gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://t.co/i/adsct?bci=3&dv=Asia%2FCalcutta%26en-US%2Cen%26Google%20Inc.%26Win32%26255%26800%26600%2616%2624%26800%26600%260%26na&eci=2&event_id=1e7347b9-fd11-4fc0-bb40-b76fac2d5fc4&events=%5B%5B%22pageview%22%2C%7B%7D%5D%5D&integration=advertiser&p_id=Twitter&p_user_id=0&pl_id=deff3acb-2013-4c9e-9600-4c473f94b63f&pt=Expert%20Car%20Service%20and%20Repair%20in%20Mumbai%20-%20GoMechanic&tw_document_href=https%3A%2F%2Fgomechanic.in%2Fmumbai&tw_iframe_status=0&tw_order_quantity=0&tw_pid_src=1&tw_sale_amount=0&twpid=tw.1786183801065.555614894538953750&txn_id=o5kad&type=javascript&version=2.4.1",
+      "alt": "",
+      "className": "gm-added gm-observing gm-observing-cb"
+    },
+    {
+      "src": "https://analytics.twitter.com/i/adsct?bci=3&dv=Asia%2FCalcutta%26en-US%2Cen%26Google%20Inc.%26Win32%26255%26800%26600%2616%2624%26800%26600%260%26na&eci=2&event_id=1e7347b9-fd11-4fc0-bb40-b76fac2d5fc4&events=%5B%5B%22pageview%22%2C%7B%7D%5D%5D&integration=advertiser&p_id=Twitter&p_user_id=0&pl_id=deff3acb-2013-4c9e-9600-4c473f94b63f&pt=Expert%20Car%20Service%20and%20Repair%20in%20Mumbai%20-%20GoMechanic&tw_document_href=https%3A%2F%2Fgomechanic.in%2Fmumbai&tw_iframe_status=0&tw_order_quantity=0&tw_pid_src=1&tw_sale_amount=0&twpid=tw.1786183801065.555614894538953750&txn_id=o5kad&type=javascript&version=2.4.1",
+      "alt": "",
+      "className": "gm-added gm-observing gm-observing-cb"
+    }
+  ],
+  "networkImages": [
+    "https://gomechprod.blob.core.windows.net/websiteasset/New%20Website/components/Homepage/Select-The-Perfect-Car-Service.png",
+    "https://gomechprod.blob.core.windows.net/websiteasset/New%20Website/components/Homepage/Schedule-Free-Doorstep-Pick-up.png",
+    "https://gomechanic.in/assets/img/customerpage/formIcons/star_rating.png",
+    "https://gomechanic.in/addons/f8ea2ae2.png",
+    "https://gomechprod.blob.core.windows.net/websiteasset/New%20Website/components/Homepage/track-your-car-service-real-time.png",
+    "https://gomechprod.blob.core.windows.net/websiteasset/New%20Website/components/Homepage/Earn-While-We-Service.png",
+    "https://gomechprod.blob.core.windows.net/websiteasset/New%20Website/components/Homepage/star.png",
+    "https://gomechprod.blob.core.windows.net/websiteasset/New%20Website/components/Homepage/home-screen.jpg",
+    "https://gomechprod.blob.core.windows.net/websiteasset/New%20Website/components/Homepage/WHITE.png",
+    "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/1.png",
+    "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/5.png",
+    "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/8.png",
+    "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/10.png",
+    "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/Suspension-_-Fitments.png",
+    "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/xhdpi/4.png",
+    "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/Car-Inspection.png",
+    "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/Clutch-_-Bumpers.png",
+    "https://gomechprod.blob.core.windows.net/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png",
+    "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/8.png?w=200&dpr=1",
+    "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/WHITE.png?w=240&dpr=1",
+    "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/10.png?w=200&dpr=1",
+    "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/Suspension-_-Fitments.png?w=200&dpr=1",
+    "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xhdpi/4.png?w=200&dpr=1",
+    "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/Car-Inspection.png?w=200&dpr=1",
+    "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=200&dpr=1",
+    "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/Clutch-_-Bumpers.png?w=200&dpr=1",
+    "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/1.png?w=200&dpr=1",
+    "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/Select-The-Perfect-Car-Service.png?w=240&dpr=1",
+    "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/track-your-car-service-real-time.png?w=240&dpr=1",
+    "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/Earn-While-We-Service.png?w=240&dpr=1",
+    "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/Schedule-Free-Doorstep-Pick-up.png?w=240&dpr=1",
+    "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/star.png?w=70&dpr=1",
+    "https://gomechanic.gumlet.io/gomech-retail/gomechanic_assets/category_icons_new/xxxhdpi/5.png?w=200&dpr=1",
+    "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Homepage/star.png?w=800&dpr=1",
+    "https://gomechanic.gumlet.io/websiteasset/New%20Website/components/Admin/carouselPlaceholder.png?w=128&dpr=1",
+    "https://gomechanic.in/graphics/192.png"
+  ]
+}

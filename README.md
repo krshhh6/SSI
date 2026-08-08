@@ -40,6 +40,7 @@
 **SAM Wheels** is a multi-page marketing and booking website for a Bosch-authorized car service centre. Users can browse services, book an appointment, track their bookings, and leave reviews. An admin dashboard provides full CRUD capabilities for managing bookings, users, and analytics.
 
 **Key business features:**
+
 - 🌐 Public marketing website with hero, services, gallery, reviews, and sustainability pages
 - 📅 Online booking system with form validation (synced to Firestore)
 - 👤 User authentication (Email/Password + Google Sign-In — **Gmail-only**)
@@ -51,19 +52,19 @@
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| **Frontend Framework** | [Next.js 15](https://nextjs.org/) (App Router, Turbopack) |
-| **Language** | TypeScript 5 |
-| **Styling** | Tailwind CSS v4 + Vanilla CSS (CSS Variables) |
-| **Animation** | [Framer Motion](https://www.framer.com/motion/) + [GSAP](https://gsap.com/) |
-| **3D Graphics** | [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/) + Three.js |
-| **Backend / DB** | [Firebase Firestore](https://firebase.google.com/docs/firestore) |
-| **Auth** | [Firebase Authentication](https://firebase.google.com/docs/auth) (Google + Email) |
-| **Security** | Firebase App Check + reCAPTCHA v3 |
-| **Icons** | [Lucide React](https://lucide.dev/) |
-| **Charts** | [Recharts](https://recharts.org/) |
-| **Hosting** | [Vercel](https://vercel.com/) |
+| Layer                  | Technology                                                                        |
+| ---------------------- | --------------------------------------------------------------------------------- |
+| **Frontend Framework** | [Next.js 15](https://nextjs.org/) (App Router, Turbopack)                         |
+| **Language**           | TypeScript 5                                                                      |
+| **Styling**            | Tailwind CSS v4 + Vanilla CSS (CSS Variables)                                     |
+| **Animation**          | [Framer Motion](https://www.framer.com/motion/) + [GSAP](https://gsap.com/)       |
+| **3D Graphics**        | [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/) + Three.js           |
+| **Backend / DB**       | [Firebase Firestore](https://firebase.google.com/docs/firestore)                  |
+| **Auth**               | [Firebase Authentication](https://firebase.google.com/docs/auth) (Google + Email) |
+| **Security**           | Firebase App Check + reCAPTCHA v3                                                 |
+| **Icons**              | [Lucide React](https://lucide.dev/)                                               |
+| **Charts**             | [Recharts](https://recharts.org/)                                                 |
+| **Hosting**            | [Vercel](https://vercel.com/)                                                     |
 
 ---
 
@@ -121,26 +122,27 @@ bosch-sam-wheels/
 
 ## Pages & Features
 
-| Route | Description | Auth Required |
-|---|---|---|
-| `/` | Home: Hero, Services, Reviews, CurvedLoop, Journey | No |
-| `/booking` | Book a service appointment | Yes (Gmail) |
-| `/my-bookings` | View & track your bookings, leave feedback | Yes (Gmail) |
-| `/sign-in` | Login/Signup with Email or Google | No |
-| `/admin` | Admin dashboard: all bookings, users, analytics | Admin only |
-| `/services` | Detailed services breakdown | No |
-| `/gallery` | Workshop photo gallery | No |
-| `/blog` | Blog/news section | No |
-| `/bosch-advantage` | Bosch certification benefits | No |
-| `/why-different` | Why choose SAM Wheels | No |
-| `/sustainability` | Eco-friendly practices | No |
-| `/privacy-policy` | DPDP-compliant privacy policy | No |
+| Route              | Description                                        | Auth Required |
+| ------------------ | -------------------------------------------------- | ------------- |
+| `/`                | Home: Hero, Services, Reviews, CurvedLoop, Journey | No            |
+| `/booking`         | Book a service appointment                         | Yes (Gmail)   |
+| `/my-bookings`     | View & track your bookings, leave feedback         | Yes (Gmail)   |
+| `/sign-in`         | Login/Signup with Email or Google                  | No            |
+| `/admin`           | Admin dashboard: all bookings, users, analytics    | Admin only    |
+| `/services`        | Detailed services breakdown                        | No            |
+| `/gallery`         | Workshop photo gallery                             | No            |
+| `/blog`            | Blog/news section                                  | No            |
+| `/bosch-advantage` | Bosch certification benefits                       | No            |
+| `/why-different`   | Why choose SAM Wheels                              | No            |
+| `/sustainability`  | Eco-friendly practices                             | No            |
+| `/privacy-policy`  | DPDP-compliant privacy policy                      | No            |
 
 ---
 
 ## Getting Started (Local Dev)
 
 ### Prerequisites
+
 - Node.js 20+
 - npm 10+
 - A Firebase project (see [Firebase Setup](#firebase-setup))
@@ -198,18 +200,19 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your_recaptcha_v3_site_key_here
 The project uses the Firebase project named **`sam-wheels`**.
 
 ### Services Used
+
 - **Firestore**: Main database for bookings, users, reviews, feedback
 - **Firebase Authentication**: Email/Password + Google Sign-In (Gmail-only)
 - **Firebase App Check**: Prevents unauthorized API access (paired with reCAPTCHA v3)
 
 ### Firestore Collections
 
-| Collection | Purpose |
-|---|---|
-| `bookings` | All service appointments |
-| `users` | User profile documents |
-| `reviews` | Customer reviews shown on homepage |
-| `feedback` | Post-service feedback from users |
+| Collection | Purpose                            |
+| ---------- | ---------------------------------- |
+| `bookings` | All service appointments           |
+| `users`    | User profile documents             |
+| `reviews`  | Customer reviews shown on homepage |
+| `feedback` | Post-service feedback from users   |
 
 ### Deploying Firestore Security Rules
 
@@ -273,6 +276,7 @@ An Edge middleware rate-limits all `/api/*` routes to **100 requests/minute per 
 
 **File:** `next.config.ts`  
 All pages are served with:
+
 - `X-Frame-Options: SAMEORIGIN` (clickjacking protection)
 - `X-Content-Type-Options: nosniff` (MIME sniffing protection)
 - `Strict-Transport-Security` (force HTTPS, 1 year)
@@ -287,6 +291,7 @@ All pages are served with:
 **Access:** Only the email defined in `ADMIN_EMAIL` (`src/components/AdminClient.tsx`, line 23) can log in.
 
 ### Admin Features
+
 - 📊 **Dashboard**: Stats cards (Total bookings, Revenue estimate, Users, Pending count)
 - 📈 **Charts**: Bar chart (bookings by month), Pie chart (bookings by service/brand), Line chart (trend)
 - 📋 **Bookings Table**: Filter by status/date, search by name/phone, update booking status
@@ -297,27 +302,32 @@ All pages are served with:
 - 🔔 **Notification badge** for pending bookings
 
 ### Booking Statuses
-| Status | Color | Meaning |
-|---|---|---|
-| `pending` | 🟡 Amber | Newly submitted, awaiting action |
-| `confirmed` | 🔵 Blue | Admin confirmed the appointment |
-| `on_track` | 🟣 Purple | Vehicle is currently being serviced |
-| `completed` | 🟢 Green | Service done |
-| `cancelled` | 🔴 Red | Booking was cancelled |
+
+| Status      | Color     | Meaning                             |
+| ----------- | --------- | ----------------------------------- |
+| `pending`   | 🟡 Amber  | Newly submitted, awaiting action    |
+| `confirmed` | 🔵 Blue   | Admin confirmed the appointment     |
+| `on_track`  | 🟣 Purple | Vehicle is currently being serviced |
+| `completed` | 🟢 Green  | Service done                        |
+| `cancelled` | 🔴 Red    | Booking was cancelled               |
 
 ---
 
 ## Deployment
 
 ### Current Setup
+
 The live site is deployed on **Vercel** and connected to the `krshhh6/SSI` GitHub repository. Every push to the `main` branch auto-deploys.
 
 ### Recommended Architecture (Production)
+
 For maximum security and performance:
+
 1. **Vercel** → hosts the Next.js app (free tier works)
 2. **Cloudflare** (optional) → sit in front of Vercel as a CDN/WAF for DDoS protection, caching, and hiding the origin server IP
 
 ### Deploy to Vercel (Fresh Setup)
+
 1. Go to [vercel.com](https://vercel.com) and create a new project
 2. Import the GitHub repository `krshhh6/SSI`
 3. In **Environment Variables**, add:
@@ -342,4 +352,4 @@ If you are new to this project, read **[`AGENT_KNOWLEDGE.md`](./AGENT_KNOWLEDGE.
 
 ---
 
-<p align="center">Built for SAM Wheels — Bosch Authorized Service Centre</p>n
+<p align="center">Built for SAM Wheels — Bosch Authorized Service Centre</p>

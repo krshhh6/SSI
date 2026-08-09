@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 130">
+  <!-- "Allianz" in navy blue -->
+  <text x="8" y="98" font-family="Arial Black, Helvetica Neue, Arial, sans-serif" font-size="72" font-weight="900" fill="#003781">Allianz</text>
+  <!-- Allianz eagle/bars circle -->
+  <circle cx="348" cy="62" r="40" fill="none" stroke="#003781" stroke-width="5"/>
+  <rect x="330" y="35" width="11" height="54" rx="2" fill="#003781"/>
+  <rect x="342" y="24" width="11" height="66" rx="2" fill="#003781"/>
+  <rect x="354" y="35" width="11" height="54" rx="2" fill="#003781"/>
+  <!-- "Assistance" in red -->
+  <text x="402" y="98" font-family="Arial Black, Helvetica Neue, Arial, sans-serif" font-size="68" font-weight="900" fill="#E2001A">Assistance</text>
+</svg>

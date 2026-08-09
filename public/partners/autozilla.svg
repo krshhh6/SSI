@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 140">
+  <!-- "auto" in light blue -->
+  <text x="10" y="110" font-family="Arial Rounded MT Bold, Arial Black, sans-serif" font-size="100" font-weight="900" fill="#1E90FF">auto</text>
+  <!-- "zilla" in dark navy -->
+  <text x="262" y="110" font-family="Arial Rounded MT Bold, Arial Black, sans-serif" font-size="100" font-weight="900" fill="#1B3FA0">zilla</text>
+  <!-- dot above "i" -->
+  <circle cx="282" cy="22" r="9" fill="#1E90FF"/>
+</svg>

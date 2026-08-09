@@ -5,24 +5,18 @@ import { usePathname } from "next/navigation";
 const variants: Variants = {
   hidden: {
     opacity: 0,
-    y: 24,
-    scale: 0.99,
   },
   enter: {
     opacity: 1,
-    y: 0,
-    scale: 1,
     transition: {
-      duration: 0.45,
+      duration: 0.3,
       ease: "easeOut",
     },
   },
   exit: {
     opacity: 0,
-    y: -16,
-    scale: 1.01,
     transition: {
-      duration: 0.3,
+      duration: 0.2,
       ease: "easeIn",
     },
   },

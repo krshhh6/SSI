@@ -17,10 +17,16 @@ import {
   Users
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import CarSelectModal, { SelectedCar } from "./CarSelectModal";
 import AuthModal from "./AuthModal";
+import BrandLogo from "./core/BrandLogos";
+import ManufacturerGrid from "./ManufacturerGrid";
+import ManufacturerPanel from "./ManufacturerPanel";
+import CategoryGrid from "./CategoryGrid";
+import QuoteSidebar from "./QuoteSidebar";
 
 // Cities list
 const CITIES = ["PATNA"];
@@ -682,6 +688,937 @@ const BATTERIES_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = 
   },
 ];
 
+const TYRES_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Apollo Tyres",
+    packages: [
+      {
+        id: "apollo-amazer-4g",
+        title: "Apollo Amazer 4G",
+        badge: "RECOMMENDED",
+        timeTaken: "Takes 2 Hours",
+        warranty: "5 Years warranty",
+        recommendedInterval: "Tubeless • Fitting Cost Included",
+        thumbnail: "/tyres/apollo_amazer.png",
+        originalPrice: 7599,
+        basePrice: 5711,
+        rating: "4.2",
+        isRecommended: true,
+        checklist: [
+          "Size - 185/65 R15",
+          "5 years warranty",
+          "Tubeless",
+          "Fitting Cost Included",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Tyre Replacement at Service Center",
+          "Tyres Inspection for Tread",
+          "Alignment & Balancing Charges Extra",
+          "Based on Tyre Patterns and Availability Pricing May Vary",
+        ],
+      },
+      {
+        id: "apollo-alnac-4g",
+        title: "Apollo Alnac 4G",
+        timeTaken: "Takes 2 Hours",
+        warranty: "5 Years warranty",
+        recommendedInterval: "Tubeless • Fitting Cost Included",
+        thumbnail: "/tyres/apollo_alnac.png",
+        originalPrice: 6999,
+        basePrice: 5199,
+        rating: "4.5",
+        isRecommended: false,
+        checklist: [
+          "Size - 185/65 R15",
+          "5 years warranty",
+          "Tubeless",
+          "Fitting Cost Included",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Tyre Replacement at Service Center",
+          "Tyres Inspection for Tread",
+          "Alignment & Balancing Charges Extra",
+          "Based on Tyre Patterns and Availability Pricing May Vary",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "MRF Tyres",
+    packages: [
+      {
+        id: "mrf-ztx",
+        title: "Mrf ZTX",
+        badge: "RECOMMENDED",
+        timeTaken: "Takes 2 Hours",
+        warranty: "5 Years warranty",
+        recommendedInterval: "Tubeless • Fitting Cost Included",
+        thumbnail: "/tyres/mrf_ztx.png",
+        originalPrice: 9800,
+        basePrice: 7999,
+        rating: "4.5",
+        isRecommended: true,
+        checklist: [
+          "Size - 185/65 R15",
+          "5 years warranty",
+          "Tubeless",
+          "Fitting Cost Included",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Tyre Replacement at Service Center",
+          "Tyres Inspection for Tread",
+          "Alignment & Balancing Charges Extra",
+          "Based on Tyre Patterns and Availability Pricing May Vary",
+        ],
+      },
+      {
+        id: "mrf-ecotred",
+        title: "Mrf Ecotred",
+        timeTaken: "Takes 2 Hours",
+        warranty: "5 Years warranty",
+        recommendedInterval: "Tubeless • Fitting Cost Included",
+        thumbnail: "/tyres/mrf_tyre.png",
+        originalPrice: 11200,
+        basePrice: 9197,
+        rating: "4.3",
+        isRecommended: false,
+        checklist: [
+          "Free Pickup & Drop",
+          "Tyre Replacement at Service Center",
+          "Tyres Inspection for Tread",
+          "Alignment & Balancing Charges Extra",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Tyre Replacement at Service Center",
+          "Tyres Inspection for Tread",
+          "Alignment & Balancing Charges Extra",
+          "Based on Tyre Patterns and Availability Pricing May Vary",
+        ],
+      },
+      {
+        id: "mrf-perfinza",
+        title: "Mrf Perfinza",
+        timeTaken: "Takes 2 Hours",
+        warranty: "5 Years warranty",
+        recommendedInterval: "Tubeless • Fitting Cost Included",
+        thumbnail: "/tyres/mrf_tyre.png",
+        originalPrice: 12800,
+        basePrice: 10184,
+        rating: "4.4",
+        isRecommended: false,
+        checklist: [
+          "Free Pickup & Drop",
+          "Tyre Replacement at Service Center",
+          "Tyres Inspection for Tread",
+          "Alignment & Balancing Charges Extra",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Tyre Replacement at Service Center",
+          "Tyres Inspection for Tread",
+          "Alignment & Balancing Charges Extra",
+          "Based on Tyre Patterns and Availability Pricing May Vary",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "CEAT Tyres",
+    packages: [
+      {
+        id: "ceat-secura-drive",
+        title: "Ceat Secura Drive",
+        badge: "POPULAR",
+        timeTaken: "Takes 2 Hours",
+        warranty: "5 Years warranty",
+        recommendedInterval: "Tubeless • Fitting Cost Included",
+        thumbnail: "/tyres/ceat_secura_drive.png",
+        originalPrice: 8499,
+        basePrice: 6499,
+        rating: "4.6",
+        isRecommended: false,
+        checklist: [
+          "Size - 185/65 R15",
+          "5 years warranty",
+          "Tubeless",
+          "Fitting Cost Included",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Tyre Replacement at Service Center",
+          "Tyres Inspection for Tread",
+          "Alignment & Balancing Charges Extra",
+          "Based on Tyre Patterns and Availability Pricing May Vary",
+        ],
+      },
+      {
+        id: "ceat-gripp-ln-tl",
+        title: "Ceat Gripp LN TL",
+        timeTaken: "Takes 2 Hours",
+        warranty: "5 Years warranty",
+        recommendedInterval: "Tubeless • Fitting Cost Included",
+        thumbnail: "/tyres/ceat_gripp_ln.png",
+        originalPrice: 7999,
+        basePrice: 5999,
+        rating: "4.4",
+        isRecommended: false,
+        checklist: [
+          "Size - 185/65 R15",
+          "5 years warranty",
+          "Tubeless",
+          "Fitting Cost Included",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Tyre Replacement at Service Center",
+          "Tyres Inspection for Tread",
+          "Alignment & Balancing Charges Extra",
+          "Based on Tyre Patterns and Availability Pricing May Vary",
+        ],
+      },
+    ],
+  },
+];
+
+const DENTING_PAINTING_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Front Side",
+    packages: [
+      {
+        id: "front-bumper-paint",
+        title: "Front Bumper Paint",
+        badge: "2 YEAR WARRANTY",
+        timeTaken: "Takes 24 Hours",
+        warranty: "2 Years Warranty on Paint",
+        recommendedInterval: "100% Colour Match",
+        thumbnail: "/F1.webp",
+        originalPrice: 3271,
+        basePrice: 2944,
+        rating: "4.6",
+        isRecommended: false,
+        checklist: [
+          "Removal of Minor Dent & Scratches",
+          "Grade A Primer Applied",
+          "High Quality DuPont Paint",
+          "Clear Coat Protective Layer Paint",
+          "Panel Rubbing & Polishing",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Takes 24 Hours",
+          "2 Years Warranty on Paint",
+          "100% Colour Match",
+          "Grade A Primer Applied",
+          "High Quality DuPont Paint",
+          "Clear Coat Protective Layer Paint",
+          "Panel Rubbing & Polishing",
+        ],
+      },
+      {
+        id: "bonnet-paint",
+        title: "Bonnet Paint",
+        badge: "2 YEAR WARRANTY",
+        timeTaken: "Takes 24 Hours",
+        warranty: "2 Years Warranty on Paint",
+        recommendedInterval: "100% Colour Match",
+        thumbnail: "/F2.webp",
+        originalPrice: 3271,
+        basePrice: 2944,
+        rating: "4.5",
+        isRecommended: false,
+        checklist: [
+          "Removal of Minor Dent & Scratches",
+          "Grade A Primer Applied",
+          "High Quality DuPont Paint",
+          "Clear Coat Protective Layer Paint",
+          "Panel Rubbing & Polishing",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Takes 24 Hours",
+          "2 Years Warranty on Paint",
+          "100% Colour Match",
+          "Grade A Primer Applied",
+          "High Quality DuPont Paint",
+          "Clear Coat Protective Layer Paint",
+          "Panel Rubbing & Polishing",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Rear Side",
+    packages: [
+      {
+        id: "rear-bumper-paint",
+        title: "Rear Bumper Paint",
+        timeTaken: "Takes 24 Hours",
+        warranty: "2 Years Warranty on Paint",
+        recommendedInterval: "100% Colour Match",
+        thumbnail: "/packages/rear_bumper_paint.png",
+        originalPrice: 3271,
+        basePrice: 2944,
+        rating: "4.7",
+        isRecommended: true,
+        checklist: [
+          "Removal of Minor Dent & Scratches",
+          "Grade A Primer Applied",
+          "High Quality DuPont Paint",
+          "Clear Coat Protective Layer Paint",
+          "Panel Rubbing & Polishing",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Takes 24 Hours",
+          "2 Years Warranty on Paint",
+          "100% Colour Match",
+          "Grade A Primer Applied",
+          "High Quality DuPont Paint",
+          "Clear Coat Protective Layer Paint",
+          "Panel Rubbing & Polishing",
+        ],
+      },
+      {
+        id: "boot-paint",
+        title: "Boot Paint",
+        timeTaken: "Takes 24 Hours",
+        warranty: "2 Years Warranty on Paint",
+        recommendedInterval: "100% Colour Match",
+        thumbnail: "/packages/boot_paint.png",
+        originalPrice: 3271,
+        basePrice: 2944,
+        rating: "4.6",
+        isRecommended: false,
+        checklist: [
+          "Removal of Minor Dent & Scratches",
+          "Grade A Primer Applied",
+          "High Quality DuPont Paint",
+          "Clear Coat Protective Layer Paint",
+          "Panel Rubbing & Polishing",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Takes 24 Hours",
+          "2 Years Warranty on Paint",
+          "100% Colour Match",
+          "Grade A Primer Applied",
+          "High Quality DuPont Paint",
+          "Clear Coat Protective Layer Paint",
+          "Panel Rubbing & Polishing",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Whole Body",
+    packages: [
+      {
+        id: "full-body-dent-paint",
+        title: "Full Body Dent Paint",
+        badge: "FREE DEEP ALL ROUND CLEANING",
+        timeTaken: "Takes 8 Days",
+        warranty: "2 Years Warranty on Paint",
+        recommendedInterval: "100% Colour Match",
+        thumbnail: "/packages/full_body_dent_paint.png",
+        originalPrice: 28000,
+        basePrice: 21999,
+        rating: "4.9",
+        isRecommended: true,
+        checklist: [
+          "Removal of Minor Dent & Scratches",
+          "Grade A Primer Applied",
+          "High Quality DuPont Paint",
+          "Clear Coat Protective Layer Paint",
+          "Panel Rubbing & Polishing",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Takes 8 Days",
+          "2 Years Warranty on Paint",
+          "100% Colour Match",
+          "Grade A Primer Applied",
+          "High Quality DuPont Paint",
+          "Clear Coat Protective Layer Paint",
+          "Panel Rubbing & Polishing",
+          "Free Deep All Round Cleaning Included",
+        ],
+      },
+    ],
+  },
+];
+
+const DETAILING_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Ceramic Coating",
+    packages: [
+      {
+        id: "meguiars-ceramic-coating",
+        title: "Meguiar's Ceramic Coating",
+        badge: "FREE INTERIOR SPA",
+        timeTaken: "Takes 3 Days",
+        warranty: "1 Year Warranty",
+        recommendedInterval: "Every 3 Years (Recommended)",
+        thumbnail: "/packages/meguiars_ceramic_coating.png",
+        originalPrice: 25000,
+        basePrice: 17999,
+        rating: "4.9",
+        isRecommended: true,
+        checklist: [
+          "Complete Paint Correction",
+          "2 Layers of Coating",
+          "Removes Minor Scratches",
+          "Deep All Round Spa",
+          "Exterior Car Wash",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Complete Paint Correction & Polishing",
+          "2 Layers of Premium Meguiar's Ceramic Coating",
+          "Removes Minor Scratches & Swirl Marks",
+          "Free Deep All-Round Interior Spa Included",
+          "Exterior High Pressure Car Wash",
+        ],
+      },
+      {
+        id: "9h-ceramic-coating",
+        title: "9H Nano Ceramic Coating",
+        badge: "3 YEAR WARRANTY",
+        timeTaken: "Takes 24 Hours",
+        warranty: "3 Years Warranty with annual maintenance",
+        recommendedInterval: "9H Hardness Protection Layer",
+        thumbnail: "/packages/ceramic_coating_bottle.png",
+        originalPrice: 22000,
+        basePrice: 15499,
+        rating: "4.8",
+        isRecommended: false,
+        checklist: [
+          "3-step paint correction & polishing",
+          "Degreasing & surface preparation",
+          "Double layer 9H Nano-ceramic coat",
+          "Alloy wheel & windshield coating",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Ultra hydrophobic coating",
+          "Protects against bird droppings, acid rain, and scratches",
+          "Extremely deep mirror shine",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Teflon Coating",
+    packages: [
+      {
+        id: "meguiars-teflon-coating",
+        title: "Meguiar's Teflon Coating",
+        badge: "POPULAR",
+        timeTaken: "Takes 24 Hours",
+        warranty: "3 Months Warranty",
+        recommendedInterval: "Every 1 Year (Recommended)",
+        thumbnail: "/packages/meguiars_teflon_coating.png",
+        originalPrice: 5500,
+        basePrice: 3999,
+        rating: "4.7",
+        isRecommended: true,
+        checklist: [
+          "Pre-Coating Rubbing and Polishing",
+          "Ultra Shine Polishing",
+          "Removes Minor Scratches",
+          "Exterior Car Wash",
+          "Full Body Meguiar's Teflon Coating",
+          "Meguiar's Exterior Anti-Rust Treatment",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "Pre-Coating Rubbing and Polishing",
+          "Ultra Shine Polishing Treatment",
+          "Removes Minor Scratches & Swirl Marks",
+          "Full Body Meguiar's Teflon Coating Layer",
+          "Meguiar's Exterior Anti-Rust Protection",
+        ],
+      },
+      {
+        id: "teflon-coating-buffer",
+        title: "Teflon Paint Protection",
+        badge: "1 YEAR WARRANTY",
+        timeTaken: "Takes 6 Hours",
+        warranty: "1 Year Warranty",
+        recommendedInterval: "Protects against minor scratches & UV rays",
+        thumbnail: "/packages/teflon_polishing_buffer.png",
+        originalPrice: 4800,
+        basePrice: 3299,
+        rating: "4.5",
+        isRecommended: false,
+        checklist: [
+          "Car Washing & Clay Bar Treatment",
+          "Machine Rubbing to remove swirls",
+          "Dual layer Teflon sealant application",
+          "Tyre dressing & dashboard polish",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Free Pickup & Drop",
+          "High-gloss mirror finish",
+          "Hydrophobic effect (water repelling)",
+          "Prevents paint fading",
+        ],
+      },
+    ],
+  },
+];
+
+const CAR_SPA_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Washing & Cleaning Packages",
+    packages: [
+      {
+        id: "premium-top-wash",
+        title: "Premium Top Wash",
+        badge: "1 HOUR QUICK WASH",
+        timeTaken: "Revitalize Your Ride In Just 1 Hour",
+        warranty: "Applicable on Walk-In Only",
+        recommendedInterval: "Preserving Paint & Finish • Eliminate Dust, Bird Droppings & Tree Sap",
+        thumbnail: "/packages/premium_top_wash.png",
+        originalPrice: 999,
+        basePrice: 499,
+        rating: "4.7",
+        isRecommended: false,
+        checklist: [
+          "Exterior Top Wash",
+          "Rinsing",
+          "Hand Drying",
+          "Tyre external wash",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "High Pressure Exterior Top Wash",
+          "Complete Water Rinsing & Shampoo Foam",
+          "Microfiber Hand Drying",
+          "Tyre External Pressure Cleaning",
+          "Preserving Original Factory Paint & Gloss Finish",
+        ],
+      },
+      {
+        id: "car-wash-and-wax",
+        title: "Car Wash & Wax",
+        badge: "POPULAR",
+        timeTaken: "Takes 3 Hours",
+        warranty: "Maintains Car Shine",
+        recommendedInterval: "Recommended Every 2 Months",
+        thumbnail: "/packages/car_wash_wax.png",
+        originalPrice: 1999,
+        basePrice: 1299,
+        rating: "4.8",
+        isRecommended: true,
+        checklist: [
+          "Car Wash",
+          "Interior Vacuuming",
+          "Dashboard and Tyre Polish",
+          "Body Wax",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Complete Pressure Car Wash",
+          "Deep Interior Cabin & Trunk Vacuuming",
+          "Dashboard, Console & Tyre Polish",
+          "Premium High-Gloss Body Wax Application",
+        ],
+      },
+      {
+        id: "deep-interior-spa",
+        title: "Deep Interior Spa & Vacuuming",
+        badge: "DEEP CLEANING",
+        timeTaken: "Takes 4 Hours",
+        warranty: "100% Germ & Stain Free Guarantee",
+        recommendedInterval: "Deep Seat & Carpet Shampooing",
+        thumbnail: "/packages/car_vacuuming.png",
+        originalPrice: 2499,
+        basePrice: 1599,
+        rating: "4.9",
+        isRecommended: true,
+        checklist: [
+          "Deep Interior Vacuuming",
+          "Seat Upholstery Shampoo",
+          "Dashboard & Console Polishing",
+          "AC Vent Sanitization",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Complete Carpet, Roof & Trunk Vacuuming",
+          "Fabric / Leather Seat Upholstery Deep Shampooing",
+          "Dashboard, Door Trims & Armrest Polishing",
+          "Steam AC Vent Sanitization & Germ Removal",
+        ],
+      },
+      {
+        id: "windshield-foam-wash",
+        title: "Windshield & Glass Foam Wash",
+        timeTaken: "Takes 1 Hour",
+        warranty: "Crystal Clear Vision",
+        recommendedInterval: "Water Repellent & Anti-Fog Treatment",
+        thumbnail: "/packages/windshield_spray.png",
+        originalPrice: 1299,
+        basePrice: 799,
+        rating: "4.6",
+        isRecommended: false,
+        checklist: [
+          "Windshield Pressure Foam Wash",
+          "Anti-Fog Glass Polish",
+          "Wiper Blade Cleaning",
+          "Water Repellent Treatment",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Front & Rear Windshield High-Pressure Foam Wash",
+          "Hydrophobic Water Repellent Glass Coating",
+          "Anti-Fog Internal Glass Cleaning",
+          "Wiper Blade Cleaning & Inspection",
+        ],
+      },
+    ],
+  },
+];
+
+const CAR_INSPECTION_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Used Car",
+    packages: [
+      {
+        id: "second-hand-car-inspection",
+        title: "Second Hand Car Inspection",
+        badge: "GET 10% OFF ON PERIODIC SERVICE",
+        timeTaken: "Takes 4 hours",
+        warranty: "Available at Doorstep",
+        recommendedInterval: "Scanner Report Provided • Get Car Valuation",
+        thumbnail: "/packages/second_hand_inspection.png",
+        originalPrice: 2499,
+        basePrice: 1799,
+        rating: "4.8",
+        isRecommended: true,
+        checklist: [
+          "50 Points Check-List",
+          "Physical Car Diagnosis",
+          "Get Car Valuation",
+          "Full Car Scanning",
+          "Upfront Estimate",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "50 Points Comprehensive Check-List Inspection",
+          "Physical Exterior, Interior & Mechanical Car Diagnosis",
+          "Complete ECU & OBD Diagnostic Scanner Report",
+          "Accredited Used Car Market Valuation Certificate",
+          "Upfront Transparent Repair Estimate Report",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Inspections",
+    packages: [
+      {
+        id: "car-inspection-diagnostics",
+        title: "Car Inspection / Diagnostics",
+        timeTaken: "Takes 4 hours",
+        warranty: "25 Points Checklist",
+        recommendedInterval: "Every 1 Month (Recommended)",
+        thumbnail: "/packages/car_inspection_diagnostics.png",
+        originalPrice: 1499,
+        basePrice: 999,
+        rating: "4.7",
+        isRecommended: false,
+        checklist: [
+          "Underbody Inspection",
+          "Upfront Estimate",
+          "25 Points Checklist",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Complete Underbody & Chassis Inspection",
+          "25-Point Vital Vehicle Components Check",
+          "Engine Fluid, Brake & Suspension Diagnostic",
+          "Upfront Transparent Repair Estimate Report",
+        ],
+      },
+      {
+        id: "engine-comprehensive-inspection",
+        title: "Engine & Mechanical Inspection",
+        timeTaken: "Takes 3 hours",
+        warranty: "30 Points Checklist",
+        recommendedInterval: "Recommended: Engine Noise or Performance Drop",
+        thumbnail: "/packages/engine_underhood_inspection.png",
+        originalPrice: 1999,
+        basePrice: 1299,
+        rating: "4.6",
+        isRecommended: false,
+        checklist: [
+          "Engine Compression Test",
+          "Underhood Inspection",
+          "Leakage & Belt Check",
+          "Upfront Estimate",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Complete Engine Bay & Underhood Component Check",
+          "Coolant, Oil & Transmission Fluid Leakage Inspection",
+          "Belts, Pulleys & Engine Mountings Inspection",
+          "Exhaust & Emissions System Diagnostic",
+        ],
+      },
+      {
+        id: "ecu-obd-scanning",
+        title: "ECU / OBD Diagnostic Scanning",
+        timeTaken: "Takes 2 hours",
+        warranty: "Full Digital Report",
+        recommendedInterval: "Recommended: Check Engine Light On",
+        thumbnail: "/packages/ecu_scanner_inspection.png",
+        originalPrice: 1299,
+        basePrice: 799,
+        rating: "4.9",
+        isRecommended: false,
+        checklist: [
+          "Computerized OBD-II Scan",
+          "Fault Code Clearance",
+          "Sensor Health Diagnostics",
+          "Digital Health Report",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "Advanced Bosch OBD-II Computer Scanner Diagnostic",
+          "Check Engine Light & Error Code Reading",
+          "Sensor, ECU & Transmission Diagnostic Scan",
+          "Instant Printable Digital Diagnostics Report",
+        ],
+      },
+    ],
+  },
+];
+
+const WINDSHIELD_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Windshields",
+    packages: [
+      {
+        id: "front-windshield-replacement",
+        title: "Front Windshield Replacement",
+        badge: "LABOUR INCLUDED",
+        timeTaken: "Takes 6 Hours",
+        warranty: "1 Month Warranty on Fitting",
+        recommendedInterval: "On Crack In Windshield (Recommended)",
+        thumbnail: "/packages/front_windshield_replacement.png",
+        originalPrice: 6499,
+        basePrice: 4299,
+        rating: "4.8",
+        isRecommended: true,
+        checklist: [
+          "Windshield (ISI Approved)",
+          "Opening & Fitting of New Windshield",
+          "Sensor Charges Additional (If Applicable)",
+          "Consumables - Sealant/Bond/Adhesive",
+          "Free Pickup & Drop",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "AIS / ISI Approved OEM Quality Front Glass",
+          "Opening & Precision Fitting of New Windshield",
+          "High-Bond Polyurethane Adhesive / Sealant Consumables",
+          "Sensor & Rain Sensor Charges Additional (If Applicable)",
+          "Free Doorstep Pickup & Drop Included",
+        ],
+      },
+      {
+        id: "rear-windshield-replacement",
+        title: "Rear Windshield Replacement",
+        badge: "LABOUR INCLUDED",
+        timeTaken: "Takes 6 Hours",
+        warranty: "1 Month Warranty on Fitting",
+        recommendedInterval: "On Crack in Windshield (Recommended)",
+        thumbnail: "/packages/rear_windshield_replacement.png",
+        originalPrice: 5999,
+        basePrice: 3899,
+        rating: "4.7",
+        isRecommended: false,
+        checklist: [
+          "Windshield (ISI Approved)",
+          "Opening & Fitting of New Windshield",
+          "Defogger Charges Additional (If Applicable)",
+          "Consumables - Sealant/Bond/Adhesive",
+          "Free Pickup & Drop",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "ISI Approved Shatterproof Rear Glass",
+          "Opening & Professional Installation",
+          "High-Strength Polyurethane Adhesive Sealant",
+          "Rear Defogger Connection & Wire Inspection",
+          "Free Doorstep Pickup & Drop Included",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Glasses",
+    packages: [
+      {
+        id: "door-glass-replacement",
+        title: "Door Glass Replacement",
+        badge: "LABOUR INCLUDED",
+        timeTaken: "Takes 6 Hours",
+        warranty: "1 Month Warranty on Fitting",
+        recommendedInterval: "On Crack in Door Glass (Recommended)",
+        thumbnail: "/packages/front_windshield_replacement.png",
+        originalPrice: 3499,
+        basePrice: 2299,
+        rating: "4.6",
+        isRecommended: false,
+        checklist: [
+          "Door Glass (AIS Approved)",
+          "Opening & Fitting of New Door Glass",
+          "Consumables - Bond/Adhesive",
+          "Free Pickup & Drop",
+          "UV Glass Charges Additional (If Applicable)",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "AIS Approved Toughened Side Door Glass",
+          "Power Window Channel Alignment & Fitting",
+          "Consumables - Rubber Channel & Adhesive",
+          "Free Doorstep Pickup & Drop Included",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Lights",
+    packages: [
+      {
+        id: "front-headlight-replacement",
+        title: "Front Headlight",
+        timeTaken: "Takes 4 Hours",
+        warranty: "1 Month Warranty on Fitting",
+        recommendedInterval: "For Broken / Cracked Lights (Recommended)",
+        thumbnail: "/packages/front_headlight.png",
+        originalPrice: 4299,
+        basePrice: 2899,
+        rating: "4.8",
+        isRecommended: true,
+        checklist: [
+          "Headlight OES (Price for single unit)",
+          "Opening & Fitting of Bumper/Headlight",
+          "Free Pickup & Drop",
+          "Projector/LEDs/DRLs Additional (If Applicable)",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "OEM/OES Headlight Assembly Replacement",
+          "Front Bumper Dismantling & Refitting",
+          "Electrical Harness & Bulb Testing",
+          "Projector, LED & DRL Unit Charges Extra (If Applicable)",
+          "Free Doorstep Pickup & Drop Included",
+        ],
+      },
+      {
+        id: "rear-taillight-replacement",
+        title: "Rear Taillight",
+        timeTaken: "Takes 4 Hours",
+        warranty: "1 Month Warranty on Fitting",
+        recommendedInterval: "For Broken / Cracked Lights (Recommended)",
+        thumbnail: "/packages/rear_taillight.png",
+        originalPrice: 3799,
+        basePrice: 2499,
+        rating: "4.7",
+        isRecommended: false,
+        checklist: [
+          "Tail Light OES (Price for single unit)",
+          "Opening & Fitting of Tail Light",
+          "Free Pickup & Drop",
+          "Bulbs/LEDs Additional (If Applicable)",
+          "Tail Light price will differ from car model to model",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "OEM/OES Tail Light Assembly Replacement",
+          "Rear Bumper / Panel Dismantling & Refitting",
+          "Electrical Harness & LED Strip Testing",
+          "Bulbs & LED Charges Extra (If Applicable)",
+          "Free Doorstep Pickup & Drop Included",
+        ],
+      },
+      {
+        id: "fog-light-replacement",
+        title: "Fog Light",
+        timeTaken: "Takes 4 Hours",
+        warranty: "1 Month Warranty on Fitting",
+        recommendedInterval: "For Broken / Non-Working Fog Lights",
+        thumbnail: "/packages/fog_light.png",
+        originalPrice: 2499,
+        basePrice: 1599,
+        rating: "4.6",
+        isRecommended: false,
+        checklist: [
+          "Opening & Fitting of Bumper + Fog Lamp",
+          "Fog Light Assembly Replacement (Single Unit)",
+          "Free Pickup & Drop",
+          "Wiring & Relay Check Included",
+        ],
+        moreCount: 0,
+        allDetails: [
+          "OEM/OES Fog Light Assembly (Front / Rear)",
+          "Bumper Dismantling & Fog Light Housing Fitting",
+          "Wiring Harness & Relay Testing",
+          "LED / Halogen Fog Lamp Available",
+          "Free Doorstep Pickup & Drop Included",
+        ],
+      },
+    ],
+  },
+];
+
+const getCategoryPackages = (categoryName: string) => {
+  switch (categoryName) {
+    case "Car Services":
+      return [{ sectionTitle: "Scheduled Service Packages", packages: SCHEDULED_PACKAGES }];
+    case "AC Service & Repair":
+      return AC_PACKAGES;
+    case "Batteries":
+      return BATTERIES_PACKAGES;
+    case "Tyres & Wheel Care":
+      return TYRES_PACKAGES;
+    case "Denting & Painting":
+      return DENTING_PAINTING_PACKAGES;
+    case "Detailing Services":
+      return DETAILING_PACKAGES;
+    case "Car Spa & Cleaning":
+      return CAR_SPA_PACKAGES;
+    case "Car Inspections":
+      return CAR_INSPECTION_PACKAGES;
+    case "Windshields & Lights":
+      return WINDSHIELD_PACKAGES;
+    default:
+      return [{ sectionTitle: "General Packages", packages: SCHEDULED_PACKAGES }];
+  }
+};
+
 const POPULAR_CAR_MODELS = [
   { name: "Swift", brand: "Maruti Suzuki", image: "/cars/swift.png" },
   { name: "WagonR", brand: "Maruti Suzuki", image: "/cars/wagonr.png" },
@@ -693,6 +1630,20 @@ const POPULAR_CAR_MODELS = [
   { name: "Brezza", brand: "Maruti Suzuki", image: "/cars/swift.png" },
   { name: "Creta", brand: "Hyundai", image: "/cars/dzire.png" },
   { name: "Nexon", brand: "Tata", image: "/cars/baleno.png" },
+];
+
+const CAR_BRANDS_DB = [
+  { name: "Maruti Suzuki", models: ["Swift", "Baleno", "Brezza", "Dzire", "Ertiga", "WagonR", "Alto K10", "Grand Vitara", "Fronx", "Ciaz"] },
+  { name: "Hyundai", models: ["Creta", "i20", "Venue", "Verna", "Grand i10 Nios", "Exster", "Alcazar", "Tucson"] },
+  { name: "Tata", models: ["Nexon", "Punch", "Harrier", "Safari", "Tiago", "Tigor", "Altroz"] },
+  { name: "Mahindra", models: ["Thar", "XUV700", "Scorpio-N", "Scorpio Classic", "Bolero"] },
+  { name: "Honda", models: ["City", "Amaze", "Elevate"] },
+  { name: "Toyota", models: ["Fortuner", "Innova Crysta", "Innova Hycross", "Glanza"] },
+  { name: "Kia", models: ["Seltos", "Sonet", "Carens"] },
+  { name: "Volkswagen", models: ["Virtus", "Taigun", "Tiguan", "Polo"] },
+  { name: "Renault", models: ["Kwid", "Triber", "Kiger"] },
+  { name: "Ford", models: ["EcoSport", "Endeavour", "Figo", "Aspire"] },
+  { name: "Chevrolet", models: ["Beat", "Cruze", "Spark", "Captiva"] }
 ];
 
 const HOW_BOSCH_WORKS_STEPS = [
@@ -728,6 +1679,7 @@ export default function Services({
   setSelectedCategory: setSelectedCategoryProp,
 }: ServicesProps = {}) {
   const { user } = useAuth();
+  const { addToCart } = useCart();
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-60px" });
 
@@ -740,7 +1692,13 @@ export default function Services({
   // Local fallback if props are not passed
   const [localCategory, setLocalCategory] = useState<string | null>(null);
   const selectedCategory = selectedCategoryProp !== undefined ? selectedCategoryProp : localCategory;
-  const setSelectedCategory = setSelectedCategoryProp !== undefined ? setSelectedCategoryProp : setLocalCategory;
+  const setSelectedCategory = (cat: string | null) => {
+    if (setSelectedCategoryProp) setSelectedCategoryProp(cat);
+    setLocalCategory(cat);
+    setSelectedBrand(""); // Reset brand selection in the right panel when category changes
+  };
+
+  const [selectedBrand, setSelectedBrand] = useState<string>("");
 
   // Modals
   const [isCarModalOpen, setIsCarModalOpen] = useState(false);
@@ -773,7 +1731,7 @@ export default function Services({
   };
 
   // Scheduled Packages & Model Selector State
-  const [viewingPackage, setViewingPackage] = useState<any>(null);
+  const [viewingPackage, setViewingPackage] = useState<PackageItem | null>(null);
   const [modelSearchQuery, setModelSearchQuery] = useState("");
 
   // Quick submission handler
@@ -852,7 +1810,6 @@ export default function Services({
       style={{
         background: "var(--bg)",
         position: "relative",
-        overflow: "hidden",
         paddingTop: 60,
         paddingBottom: 80,
       }}
@@ -872,165 +1829,169 @@ export default function Services({
         }}
       />
 
-      <div className="container" style={{ position: "relative", zIndex: 1, maxWidth: "100%", overflowX: "hidden" }}>
+      <div className="container" style={{ position: "relative", zIndex: 1, maxWidth: 1280, margin: "0 auto", padding: "0 24px", boxSizing: "border-box" }}>
         
-        {/* 1. Sub-Navbar Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            background: "var(--card)",
-            border: "1px solid var(--border)",
-            borderRadius: 100,
-            padding: "6px 12px",
-            marginBottom: 48,
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
-            position: "relative",
-          }}
-        >
-          <button
-            onClick={() => scrollTabs("left")}
-            style={{
-              background: "none",
-              border: "none",
-              color: "var(--text-muted)",
-              cursor: "pointer",
-              padding: 6,
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <ChevronLeft size={20} />
-          </button>
+        {!selectedCategory && (
+          <>
+            {/* 1. Sub-Navbar Bar */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                background: "var(--card)",
+                border: "1px solid var(--border)",
+                borderRadius: 100,
+                padding: "6px 12px",
+                marginBottom: 48,
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
+                position: "relative",
+              }}
+            >
+              <button
+                onClick={() => scrollTabs("left")}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "var(--text-muted)",
+                  cursor: "pointer",
+                  padding: 6,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <ChevronLeft size={20} />
+              </button>
 
-          <div
-            ref={tabsNavRef}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              overflowX: "auto",
-              scrollBehavior: "smooth",
-              scrollbarWidth: "none",
-              flex: 1,
-              padding: "4px 8px",
-            }}
-          >
-            {NAV_TABS.map((tab, idx) => {
-              const isActive = activeTab === idx;
-              return (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(idx)}
-                  style={{
-                    position: "relative",
-                    background: "none",
-                    border: "none",
-                    padding: "10px 20px",
-                    borderRadius: 100,
-                    fontSize: "0.9rem",
-                    fontWeight: isActive ? 700 : 500,
-                    color: isActive ? "var(--text)" : "var(--text-secondary)",
-                    cursor: "pointer",
-                    whiteSpace: "nowrap",
-                    transition: "color 0.2s ease",
-                  }}
-                >
-                  {tab}
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeSubTab"
+              <div
+                ref={tabsNavRef}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  overflowX: "auto",
+                  scrollBehavior: "smooth",
+                  scrollbarWidth: "none",
+                  flex: 1,
+                  padding: "4px 8px",
+                }}
+              >
+                {NAV_TABS.map((tab, idx) => {
+                  const isActive = activeTab === idx;
+                  return (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(idx)}
                       style={{
-                        position: "absolute",
-                        bottom: -2,
-                        left: 16,
-                        right: 16,
-                        height: 3,
-                        borderRadius: 2,
-                        background: "#E2001A",
+                        position: "relative",
+                        background: "none",
+                        border: "none",
+                        padding: "10px 20px",
+                        borderRadius: 100,
+                        fontSize: "0.9rem",
+                        fontWeight: isActive ? 700 : 500,
+                        color: isActive ? "var(--text)" : "var(--text-secondary)",
+                        cursor: "pointer",
+                        whiteSpace: "nowrap",
+                        transition: "color 0.2s ease",
                       }}
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </div>
+                    >
+                      {tab}
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeSubTab"
+                          style={{
+                            position: "absolute",
+                            bottom: -2,
+                            left: 16,
+                            right: 16,
+                            height: 3,
+                            borderRadius: 2,
+                            background: "#E2001A",
+                          }}
+                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
 
-          <button
-            onClick={() => scrollTabs("right")}
-            style={{
-              background: "none",
-              border: "none",
-              color: "var(--text-muted)",
-              cursor: "pointer",
-              padding: 6,
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <ChevronRight size={20} />
-          </button>
-        </motion.div>
+              <button
+                onClick={() => scrollTabs("right")}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "var(--text-muted)",
+                  cursor: "pointer",
+                  padding: 6,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <ChevronRight size={20} />
+              </button>
+            </motion.div>
 
-        {/* 2. Section Heading Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          style={{ marginBottom: 40 }}
-        >
-          <span
-            style={{
-              display: "inline-block",
-              padding: "4px 14px",
-              borderRadius: 100,
-              border: "1px solid var(--border-hover)",
-              color: "var(--accent)",
-              fontSize: "0.75rem",
-              fontWeight: 700,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              marginBottom: 12,
-            }}
-          >
-            SERVICES FOR ALL CAR BRANDS
-          </span>
-          <h2
-            style={{
-              fontSize: "2.25rem",
-              fontWeight: 900,
-              color: "var(--text)",
-              margin: "0 0 12px 0",
-              fontFamily: "Outfit, sans-serif",
-              lineHeight: 1.2,
-            }}
-          >
-            Car Services Available In{" "}
-            <span style={{ color: "#E2001A" }}>{selectedCity}</span>
-          </h2>
-          <p
-            style={{
-              color: "var(--text-secondary)",
-              fontSize: "1rem",
-              maxWidth: 680,
-              margin: 0,
-              lineHeight: 1.6,
-            }}
-          >
-            Choose from a wide assortment of car services from periodic car servicing, car care services, wheel care services, cashless Insurance claims and much more!
-          </p>
-        </motion.div>
+            {/* 2. Section Heading Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6 }}
+              style={{ marginBottom: 40 }}
+            >
+              <span
+                style={{
+                  display: "inline-block",
+                  padding: "4px 14px",
+                  borderRadius: 100,
+                  border: "1px solid var(--border-hover)",
+                  color: "var(--accent)",
+                  fontSize: "0.75rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  marginBottom: 12,
+                }}
+              >
+                SERVICES FOR ALL CAR BRANDS
+              </span>
+              <h2
+                style={{
+                  fontSize: "2.25rem",
+                  fontWeight: 900,
+                  color: "var(--text)",
+                  margin: "0 0 12px 0",
+                  fontFamily: "Outfit, sans-serif",
+                  lineHeight: 1.2,
+                }}
+              >
+                Car Services Available In{" "}
+                <span style={{ color: "#E2001A" }}>{selectedCity}</span>
+              </h2>
+              <p
+                style={{
+                  color: "var(--text-secondary)",
+                  fontSize: "1rem",
+                  maxWidth: 680,
+                  margin: 0,
+                  lineHeight: 1.6,
+                }}
+              >
+                Choose from a wide assortment of car services from periodic car servicing, car care services, wheel care services, cashless Insurance claims and much more!
+              </p>
+            </motion.div>
+          </>
+        )}
 
         {/* 3. Dual-Column GoMechanic Layout */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 340px",
-            gap: 28,
+            gridTemplateColumns: "minmax(0,1fr) 394px",
+            gap: 20,
             alignItems: "start",
             position: "relative",
           }}
@@ -1041,6 +2002,7 @@ export default function Services({
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.1 }}
+            style={{ minWidth: 0 }}
           >
             {/* TAB 0: OUR SERVICES (ALL INCLUSIVE MAIN VIEW) */}
             {activeTab === 0 && (
@@ -1049,45 +2011,147 @@ export default function Services({
                 {/* CATEGORY PACKAGES VIEW (when a category like AC Service & Repair or Car Services is selected) */}
                 {selectedCategory ? (
                   <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-                    {/* Header bar with Back button */}
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-                      <div>
+                    {/* Always show category tabs scrollbar first */}
+                    <div style={{ position: "relative", display: "flex", alignItems: "center", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "8px 12px", marginBottom: 12, boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)" }}>
+                      <button
+                        onClick={() => {
+                          const el = document.getElementById("category-scroll-container");
+                          if (el) el.scrollBy({ left: -200, behavior: "smooth" });
+                        }}
+                        style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "flex", alignItems: "center", padding: 4 }}
+                      >
+                        <ChevronLeft size={20} />
+                      </button>
+
+                      <div
+                        id="category-scroll-container"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 32,
+                          overflowX: "auto",
+                          scrollBehavior: "smooth",
+                          scrollbarWidth: "none",
+                          flex: 1,
+                          padding: "4px 8px",
+                        }}
+                      >
+                        {/* "All Categories" Tab to go back */}
                         <button
                           onClick={() => setSelectedCategory(null)}
                           style={{
-                            background: "none",
-                            border: "none",
-                            color: "#E2001A",
-                            fontWeight: 700,
-                            fontSize: "0.88rem",
-                            cursor: "pointer",
                             display: "flex",
                             alignItems: "center",
                             gap: 6,
-                            padding: 0,
-                            marginBottom: 8,
+                            background: "none",
+                            border: "none",
+                            padding: "12px 20px",
+                            cursor: "pointer",
+                            whiteSpace: "nowrap",
+                            transition: "all 0.2s ease",
+                            borderRadius: 8,
+                            flexShrink: 0,
                           }}
+                          onMouseEnter={(e) => e.currentTarget.style.background = "rgba(0, 0, 0, 0.04)"}
+                          onMouseLeave={(e) => e.currentTarget.style.background = "none"}
                         >
-                          <ArrowLeft size={16} /> Back to All Categories
+                          <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#E11D2F" }}>
+                            ← All Categories
+                          </span>
                         </button>
-                        <h3 style={{ fontSize: "1.6rem", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif" }}>
+
+                        <div style={{ width: 1, height: 24, background: "var(--border)", margin: "0 12px", flexShrink: 0 }} />
+
+                        {SERVICE_CATEGORIES.map((cat) => {
+                          const isActive = selectedCategory === cat.title;
+                          return (
+                            <button
+                              key={cat.id}
+                              onClick={() => setSelectedCategory(cat.title)}
+                              style={{
+                                flex: "0 0 auto",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: 6,
+                                background: isActive ? "rgba(225, 29, 47, 0.08)" : "none",
+                                border: "none",
+                                padding: "12px 20px",
+                                borderRadius: 8,
+                                cursor: "pointer",
+                                whiteSpace: "nowrap",
+                                transition: "all 0.2s ease",
+                                position: "relative",
+                                boxSizing: "border-box",
+                              }}
+                            >
+                              <img
+                                src={cat.iconUrl}
+                                alt={cat.title}
+                                style={{
+                                  width: 24,
+                                  height: 24,
+                                  objectFit: "contain",
+                                  filter: isActive ? "none" : "grayscale(100%) opacity(60%)",
+                                  transition: "filter 0.2s ease",
+                                }}
+                              />
+                              <span
+                                style={{
+                                  fontSize: "0.85rem",
+                                  fontWeight: isActive ? 600 : 500,
+                                  color: isActive ? "#E11D2F" : "var(--text-secondary)",
+                                  transition: "color 0.2s ease",
+                                }}
+                              >
+                                {cat.title}
+                              </span>
+                              {isActive && (
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    bottom: 3,
+                                    left: 20,
+                                    right: 20,
+                                    height: 3,
+                                    backgroundColor: "#E11D2F",
+                                    borderRadius: 2,
+                                  }}
+                                />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          const el = document.getElementById("category-scroll-container");
+                          if (el) el.scrollBy({ left: 200, behavior: "smooth" });
+                        }}
+                        style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "flex", alignItems: "center", padding: 4 }}
+                      >
+                        <ChevronRight size={20} />
+                      </button>
+                    </div>
+
+                    {/* Header bar */}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8, gap: 12, flexWrap: "wrap" }}>
+                      <div style={{ minWidth: 0 }}>
+                        <h3 style={{ fontSize: "1.4rem", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                           {selectedCategory} Packages
                         </h3>
                       </div>
                       {selectedCar && (
-                        <div style={{ background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.3)", borderRadius: 100, padding: "6px 14px", fontSize: "0.8rem", fontWeight: 800, color: "#10B981", display: "flex", alignItems: "center", gap: 6 }}>
+                        <div style={{ background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.3)", borderRadius: 100, padding: "6px 14px", fontSize: "0.8rem", fontWeight: 800, color: "#10B981", display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
                           🚗 {selectedCar.brand} - {selectedCar.model}
                         </div>
                       )}
                     </div>
 
-                    {/* Section Groups (e.g. Service Packages, Pollution, AC Fitments for AC Service & Repair) */}
-                    {(selectedCategory === "AC Service & Repair"
-                      ? AC_PACKAGES
-                      : selectedCategory === "Batteries"
-                      ? BATTERIES_PACKAGES
-                      : [{ sectionTitle: "Service Packages", packages: SCHEDULED_PACKAGES }]
-                    ).map((sec, secIdx) => (
+                    {/* Section Groups */}
+                    {getCategoryPackages(selectedCategory).map((sec, secIdx) => (
                       <div key={secIdx} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                         <h3 style={{ fontSize: "1.4rem", fontWeight: 900, color: "var(--text)", margin: "8px 0 0 0", fontFamily: "Outfit, sans-serif" }}>
                           {sec.sectionTitle}
@@ -1096,269 +2160,254 @@ export default function Services({
                         {sec.packages.map((pkg) => (
                           <motion.div
                             key={pkg.id}
-                            whileHover={{ y: -2 }}
+                            whileHover={{ y: -2, boxShadow: "0 6px 20px rgba(0,0,0,0.08)" }}
                             style={{
                               background: "var(--card)",
-                              border: pkg.isRecommended ? "2px solid #10B981" : "1px solid var(--border)",
-                              borderRadius: 14,
-                              padding: "24px 22px 18px",
+                              border: "1px solid var(--border)",
+                              borderRadius: 8,
+                              padding: "16px",
                               position: "relative",
-                              boxShadow: "0 6px 20px rgba(0,0,0,0.04)",
+                              boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
                               display: "flex",
                               flexDirection: "column",
-                              gap: 16,
+                              gap: 0,
                             }}
                           >
-                            {/* TOP BADGE (e.g., FREE AC UNIT INSPECTION, FREE AC GAS, BESTSELLER) */}
+                            {/* ── BADGE (green pill, in-flow top-left) ── */}
                             {pkg.badge && (
-                              <span
-                                style={{
-                                  position: "absolute",
-                                  top: -12,
-                                  left: 20,
+                              <div style={{ marginBottom: 10 }}>
+                                <span style={{
+                                  display: "inline-block",
                                   background: "#10B981",
                                   color: "white",
-                                  fontSize: "0.68rem",
-                                  fontWeight: 900,
-                                  padding: "3px 10px",
-                                  borderRadius: 4,
-                                  letterSpacing: "0.08em",
+                                  fontSize: "0.65rem",
+                                  fontWeight: 700,
+                                  padding: "3px 8px",
+                                  borderRadius: 3,
+                                  letterSpacing: "0.03em",
                                   textTransform: "uppercase",
-                                  boxShadow: "0 2px 8px rgba(16,185,129,0.3)",
-                                }}
-                              >
-                                {pkg.badge}
-                              </span>
+                                }}>
+                                  {pkg.badge}
+                                </span>
+                              </div>
                             )}
 
-                            {/* Package Card Main Layout */}
-                            <div style={{ display: "grid", gridTemplateColumns: "180px 1fr", gap: 20, alignItems: "start" }} className="package-card-inner">
-                              {/* Left Thumbnail */}
-                              <div style={{ width: "100%", height: 135, borderRadius: 10, overflow: "hidden", background: "#f5f5f5" }}>
+                            {/* ── ROW 1: Image + Details side by side ── */}
+                            <div style={{ display: "flex", gap: 14, alignItems: "flex-start", marginBottom: 10 }}>
+
+                              {/* Left: Thumbnail - SMALL SQUARE */}
+                              <div style={{
+                                width: 145,
+                                minWidth: 145,
+                                height: 145,
+                                borderRadius: 6,
+                                overflow: "hidden",
+                                background: "#f5f5f5",
+                                flexShrink: 0,
+                              }}>
                                 <img src={pkg.thumbnail} alt={pkg.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                               </div>
 
-                              {/* Right Details */}
-                              <div>
-                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                                  <h4 style={{ fontSize: "1.25rem", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif" }}>
+                              {/* Right: Title + time chip + specs + checklist + rating */}
+                              <div style={{ flex: 1, minWidth: 0 }}>
+
+                                {/* Title row */}
+                                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8, marginBottom: 4 }}>
+                                  <h4 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif", lineHeight: 1.25 }}>
                                     {pkg.title}
                                   </h4>
-                                  <span style={{ fontSize: "0.75rem", background: "var(--bg-secondary)", border: "1px solid var(--border)", padding: "3px 10px", borderRadius: 100, color: "var(--text-muted)", display: "flex", alignItems: "center", gap: 4, fontWeight: 600 }}>
-                                    ⏱️ {pkg.timeTaken}
+                                  <span style={{
+                                    flexShrink: 0,
+                                    fontSize: "0.68rem",
+                                    color: "#666",
+                                    background: "var(--bg-secondary)",
+                                    border: "1px solid var(--border)",
+                                    padding: "2px 8px",
+                                    borderRadius: 12,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 3,
+                                    fontWeight: 500,
+                                    whiteSpace: "nowrap",
+                                  }}>
+                                    🕐 {pkg.timeTaken}
                                   </span>
                                 </div>
 
-                                {/* Specs subtitle */}
-                                <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)", marginBottom: 12, lineHeight: 1.5 }}>
-                                  • {pkg.timeTaken} &nbsp;• {pkg.warranty} &nbsp;• {pkg.recommendedInterval}
-                                  {pkg.note && <div style={{ marginTop: 2, color: "#777", fontSize: "0.75rem" }}>• {pkg.note}</div>}
-                                </div>
+                                {/* Specs line - COMPACT SINGLE LINE */}
+                                <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", margin: "0 0 10px", lineHeight: 1.3 }}>
+                                  • {pkg.timeTaken} • {pkg.warranty} • {pkg.recommendedInterval}
+                                  {pkg.note && <> • {pkg.note}</>}
+                                </p>
 
-                                {/* Green Checklist */}
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 16px", marginBottom: 12 }}>
+                                {/* Checklist 2-col - TIGHT SPACING */}
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px 14px", marginBottom: 8 }}>
                                   {pkg.checklist.map((item, idx) => (
-                                    <div key={idx} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.82rem", color: "var(--text)", fontWeight: 500 }}>
-                                      <CheckCircle2 size={16} color="#10B981" style={{ flexShrink: 0 }} />
+                                    <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: 6, fontSize: "0.8rem", color: "var(--text)", fontWeight: 500, lineHeight: 1.3 }}>
+                                      <CheckCircle2 size={14} color="#10B981" style={{ flexShrink: 0, marginTop: 1 }} />
                                       <span>{item}</span>
                                     </div>
                                   ))}
                                 </div>
 
-                                {/* Optional Rating or View All */}
-                                <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 4 }}>
+                                {/* Rating + View All row - COMPACT */}
+                                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                                   {pkg.rating && (
-                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                      <span style={{ background: "#FF6B6B", color: "white", padding: "2px 8px", borderRadius: 100, fontSize: "0.75rem", fontWeight: 800, display: "flex", alignItems: "center", gap: 4 }}>
-                                        <Star size={12} fill="white" /> {pkg.rating}
+                                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                      <span style={{
+                                        background: "#FF6B6B",
+                                        color: "white",
+                                        padding: "2px 7px",
+                                        borderRadius: 12,
+                                        fontSize: "0.7rem",
+                                        fontWeight: 700,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 3,
+                                      }}>
+                                        <Star size={10} fill="white" /> {pkg.rating}
                                       </span>
-                                      <span style={{ color: "#4285F4", fontSize: "0.85rem", fontWeight: 600 }}>Expert Rating</span>
+                                      <span style={{ color: "#4285F4", fontSize: "0.75rem", fontWeight: 600 }}>Expert Rating</span>
                                     </div>
                                   )}
-                                  
                                   {pkg.moreCount > 0 && (
-                                    <button
-                                      onClick={() => setViewingPackage(pkg)}
-                                      style={{ background: "none", border: "none", color: "#0066FF", fontWeight: 800, fontSize: "0.85rem", cursor: "pointer", padding: 0 }}
-                                    >
+                                    <button onClick={() => setViewingPackage(pkg)} style={{ background: "none", border: "none", color: "#0066FF", fontWeight: 700, fontSize: "0.75rem", cursor: "pointer", padding: 0 }}>
                                       + {pkg.moreCount} more View All
                                     </button>
                                   )}
                                 </div>
+
                               </div>
                             </div>
 
-                            {/* Card Bottom Bar: Price & Add To Cart Button */}
-                            <div style={{ borderTop: "1px solid var(--border)", paddingTop: 14, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                              <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-                                {pkg.originalPrice && (
-                                  <span style={{ fontSize: "0.9rem", color: "#888", textDecoration: "line-through" }}>
-                                    Rs. {pkg.originalPrice}
-                                  </span>
-                                )}
-                                <span style={{ fontSize: "1.4rem", fontWeight: 900, color: "var(--text)" }}>
-                                  ₹ {pkg.basePrice.toLocaleString()}
-                                </span>
-                              </div>
-
-                              <button
-                                onClick={() => {
-                                  if (!selectedCar) {
-                                    const el = document.getElementById("model-selector-widget");
-                                    if (el) el.scrollIntoView({ behavior: "smooth" });
-                                  } else {
-                                    handleCheckPrices();
-                                  }
-                                }}
-                                style={{
-                                  background: selectedCar ? "#E2001A" : "none",
-                                  border: selectedCar ? "none" : "1.5px solid #E2001A",
-                                  color: selectedCar ? "white" : "#E2001A",
-                                  padding: "8px 22px",
-                                  borderRadius: 6,
-                                  fontWeight: 900,
-                                  fontSize: "0.88rem",
-                                  cursor: "pointer",
-                                  transition: "all 0.2s ease",
-                                  boxShadow: selectedCar ? "0 4px 14px rgba(226,0,26,0.3)" : "none",
-                                }}
-                              >
-                                + ADD TO CART
-                              </button>
-                            </div>
-
-                            {/* Summer Sale Special Offer Bar (Matches GoMechanic reference screenshot) */}
+                            {/* ── Summer Offer Bar ── */}
                             {pkg.summerPrice && (
-                              <div
-                                style={{
-                                  background: "var(--bg-secondary)",
-                                  border: "1px solid var(--border)",
-                                  borderRadius: 8,
-                                  padding: "10px 14px",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "space-between",
-                                }}
-                              >
-                                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                                  <span style={{ fontSize: "1.2rem" }}>☀️</span>
-                                  <span style={{ fontSize: "0.86rem", color: "var(--text)", fontWeight: 700 }}>
-                                    Get at <strong style={{ color: "#E2001A", fontSize: "1rem" }}>₹ {pkg.summerPrice}</strong>
+                              <div style={{
+                                background: "var(--bg-secondary)",
+                                border: "1px solid var(--border)",
+                                borderRadius: 8,
+                                padding: "10px 14px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                marginBottom: 16,
+                              }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                  <span style={{ fontSize: "1.1rem" }}>☀️</span>
+                                  <span style={{ fontSize: "0.84rem", color: "var(--text)", fontWeight: 700 }}>
+                                    Get at <strong style={{ color: "#E2001A" }}>₹ {pkg.summerPrice}</strong>
                                   </span>
                                 </div>
-                                <span
-                                  style={{
-                                    background: "#10B981",
-                                    color: "white",
-                                    fontSize: "0.72rem",
-                                    fontWeight: 800,
-                                    padding: "3px 10px",
-                                    borderRadius: 4,
-                                  }}
-                                >
+                                <span style={{ background: "#10B981", color: "white", fontSize: "0.7rem", fontWeight: 800, padding: "3px 10px", borderRadius: 4 }}>
                                   {pkg.summerDiscount || "Extra 25% OFF"}
                                 </span>
                               </div>
                             )}
+
+                            {/* ── BOTTOM: Price + SELECT CAR & ADD TO CART ── */}
+                            <div style={{
+                              borderTop: "1px solid var(--border)",
+                              paddingTop: 16,
+                              marginTop: "auto",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              flexWrap: "wrap",
+                              gap: 12,
+                            }}>
+                              <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                                {pkg.originalPrice && (
+                                  <span style={{ fontSize: "0.88rem", color: "#999", textDecoration: "line-through" }}>
+                                    Rs. {pkg.originalPrice.toLocaleString()}
+                                  </span>
+                                )}
+                                <span style={{ fontSize: "1.5rem", fontWeight: 900, color: "var(--text)", fontFamily: "Outfit, sans-serif" }}>
+                                  ₹ {pkg.basePrice.toLocaleString()}
+                                </span>
+                              </div>
+
+                              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                                {/* SELECT CAR Button */}
+                                <button
+                                  onClick={() => {
+                                    setIsCarModalOpen(true);
+                                  }}
+                                  style={{
+                                    background: "none",
+                                    border: "1.5px solid #6B7280",
+                                    color: "var(--text)",
+                                    padding: "9px 16px",
+                                    borderRadius: 6,
+                                    fontWeight: 700,
+                                    fontSize: "0.84rem",
+                                    cursor: "pointer",
+                                    letterSpacing: "0.02em",
+                                    transition: "all 0.2s ease",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 6,
+                                  }}
+                                  onMouseEnter={e => {
+                                    (e.currentTarget as HTMLButtonElement).style.borderColor = "#E2001A";
+                                    (e.currentTarget as HTMLButtonElement).style.color = "#E2001A";
+                                  }}
+                                  onMouseLeave={e => {
+                                    (e.currentTarget as HTMLButtonElement).style.borderColor = "#6B7280";
+                                    (e.currentTarget as HTMLButtonElement).style.color = "var(--text)";
+                                  }}
+                                >
+                                  <Car size={16} />
+                                  <span>{selectedCar ? `${selectedCar.brand} ${selectedCar.model}` : "Select Car"}</span>
+                                </button>
+
+                                {/* ADD TO CART Button */}
+                                <button
+                                  onClick={() => {
+                                    // Always add item to cart (badge increment)
+                                    addToCart({
+                                      id: pkg.id,
+                                      name: pkg.title,
+                                      price: pkg.basePrice,
+                                    });
+                                    // Existing behaviour: prompt car selection or open booking
+                                    if (!selectedCar) {
+                                      setIsCarModalOpen(true);
+                                    } else {
+                                      handleCheckPrices();
+                                    }
+                                  }}
+                                  style={{
+                                    background: "none",
+                                    border: "1.5px solid #E2001A",
+                                    color: "#E2001A",
+                                    padding: "9px 20px",
+                                    borderRadius: 6,
+                                    fontWeight: 800,
+                                    fontSize: "0.88rem",
+                                    cursor: "pointer",
+                                    letterSpacing: "0.03em",
+                                    transition: "all 0.2s ease",
+                                  }}
+                                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "#E2001A"; (e.currentTarget as HTMLButtonElement).style.color = "white"; }}
+                                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "none"; (e.currentTarget as HTMLButtonElement).style.color = "#E2001A"; }}
+                                >
+                                  + ADD TO CART
+                                </button>
+                              </div>
+                            </div>
+
                           </motion.div>
                         ))}
                       </div>
                     ))}
                   </div>
                 ) : (
-                  /* PRIMARY 12 CATEGORIES GRID (Exact GoMechanic Square Box Grey Theme Layout) */
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(4, 1fr)",
-                      gap: 8,
-                    }}
-                    className="categories-4col-grid"
-                  >
-                    {SERVICE_CATEGORIES.map((cat) => {
-                      const isSelected = selectedCategory === cat.title;
-
-                      return (
-                        <motion.div
-                          key={cat.id}
-                          whileHover={{ y: -3, scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={() => {
-                            setSelectedCategory(cat.title);
-                          }}
-                          style={{
-                            position: "relative",
-                            background: isSelected ? "rgba(226,0,26,0.06)" : "var(--bg-secondary)",
-                            border: isSelected ? "2px solid #E2001A" : "1px solid var(--border)",
-                            borderRadius: 4,
-                            padding: "12px 6px 10px",
-                            height: 146,
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            textAlign: "center",
-                            cursor: "pointer",
-                            boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-                            transition: "all 0.2s ease",
-                          }}
-                        >
-                          {/* Badge */}
-                          {cat.badge && (
-                            <span
-                              style={{
-                                position: "absolute",
-                                top: 6,
-                                right: 6,
-                                background: "#E8F5E9",
-                                color: "#2E7D32",
-                                fontSize: "0.6rem",
-                                fontWeight: 700,
-                                padding: "1px 5px",
-                                borderRadius: 2,
-                              }}
-                            >
-                              {cat.badge}
-                            </span>
-                          )}
-
-                          {/* Clean Icon */}
-                          <div
-                            style={{
-                              width: 48,
-                              height: 48,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              marginBottom: 6,
-                            }}
-                          >
-                            <img
-                              src={cat.iconUrl}
-                              alt={cat.title}
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "contain",
-                              }}
-                            />
-                          </div>
-
-                          <h3
-                            style={{
-                              fontSize: "13px",
-                              fontWeight: 700,
-                              color: "var(--text)",
-                              margin: 0,
-                              lineHeight: 1.3,
-                            }}
-                          >
-                            {cat.title}
-                          </h3>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
+                  /* PRIMARY 12 CATEGORIES GRID (Exact GoMechanic Measured Layout) */
+                  <CategoryGrid
+                    categories={SERVICE_CATEGORIES}
+                    selectedCategory={selectedCategory}
+                    onSelectCategory={(title) => setSelectedCategory(title)}
+                  />
                 )}
 
                 {/* Miles Roadside Assistance Red Promo Banner */}
@@ -1741,116 +2790,187 @@ export default function Services({
           </motion.div>
 
           {/* RIGHT COLUMN: Model Selector & Quote Booking Widget */}
-          <motion.div
+          <div
             id="model-selector-widget"
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
             style={{
               position: "sticky",
-              top: 90,
+              top: "calc(var(--navbar-height, 72px) + 16px)",
               alignSelf: "start",
               zIndex: 10,
+              width: "394px",
             }}
           >
-              {/* RIGHT COLUMN: Conditionally render Model Selector when category is active, or Original Quote Form on main view */}
-              {selectedCategory ? (
-                /* 1. Model Selector Widget (For Category Packages View - Screenshot 1) */
+            {/* RIGHT COLUMN: Conditionally render Model Selector when category is active, or Original Quote Form on main view */}
+              {/* RIGHT COLUMN */}
+              {/* 1. Manufacturer Selection Panel */}
+              {selectedCategory && !selectedCar && !selectedBrand && (
+                <ManufacturerPanel
+                  brands={[
+                    "Maruti Suzuki",
+                    "Hyundai",
+                    "Honda",
+                    "Tata",
+                    "Ford",
+                    "Volkswagen",
+                    "Mahindra",
+                    "Renault",
+                    "Chevrolet",
+                    "Toyota",
+                    "Skoda",
+                    "Nissan",
+                    "Fiat",
+                    "Datsun",
+                    "BMW",
+                    "Kia",
+                    "Audi",
+                    "Mercedes-Benz",
+                    "MG",
+                    "Porsche",
+                    "Hindustan Motors"
+                  ]}
+                  selectedBrandId={selectedBrand}
+                  onSelectBrand={(brand) => {
+                    setSelectedBrand(brand);
+                    setModelSearchQuery("");
+                  }}
+                />
+              )}
+
+              {/* 2. Model Selector & Booking Form Container */}
+              {selectedCategory && (selectedCar || selectedBrand) && (
                 <div
                   style={{
-                    background: "var(--card)",
+                    background: "#fff",
                     border: "1px solid var(--border)",
-                    borderRadius: 16,
-                    padding: "20px",
-                    boxShadow: "0 12px 40px rgba(0,0,0,0.08)",
+                    borderRadius: 12,
+                    padding: "24px",
+                    boxShadow: "0 8px 28px rgba(0,0,0,0.06)",
                     position: "relative",
-                    overflow: "hidden",
                     display: "flex",
                     flexDirection: "column",
-                    gap: 16,
+                    gap: "1rem",
+                    fontSize: "14px",
+                    fontFamily: "Gilroy, sans-serif",
+                    userSelect: "none",
+                    WebkitTapHighlightColor: "transparent",
                   }}
                 >
                   {/* Widget Header */}
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid var(--border)", paddingBottom: 8, marginBottom: 12 }}>
                     <h3
                       style={{
-                        fontSize: "1.1rem",
-                        fontWeight: 900,
+                        fontSize: "0.95rem",
+                        fontWeight: 800,
                         color: "var(--text)",
                         fontFamily: "Outfit, sans-serif",
                         margin: 0,
                         display: "flex",
                         alignItems: "center",
-                        gap: 8,
+                        gap: 6,
                       }}
                     >
-                      <Car size={20} color="#E2001A" />
-                      {selectedCar ? "Selected Model" : "Select Model"}
+                      <Car size={16} color="#E2001A" />
+                      {selectedCar
+                        ? "Selected Model"
+                        : `Select ${selectedBrand} Model`}
                     </h3>
-                    {selectedCar && (
-                      <button
-                        onClick={() => setSelectedCar(null)}
-                        style={{ background: "none", border: "none", color: "#E2001A", fontWeight: 800, fontSize: "0.8rem", cursor: "pointer" }}
-                      >
-                        Change
-                      </button>
-                    )}
+                    <button
+                      onClick={() => {
+                        setSelectedCar(null);
+                        setSelectedBrand("");
+                      }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#E2001A",
+                        fontWeight: 700,
+                        fontSize: "0.75rem",
+                        cursor: "pointer",
+                        padding: 0,
+                      }}
+                    >
+                      Change
+                    </button>
                   </div>
 
-                  {/* Search Bar when model is NOT selected */}
-                  {!selectedCar && (
-                    <div style={{ position: "relative" }}>
-                      <Search size={16} color="var(--text-muted)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
-                      <input
-                        type="text"
-                        placeholder="Search Models"
-                        value={modelSearchQuery}
-                        onChange={(e) => setModelSearchQuery(e.target.value)}
+                  {/* Model Selection View */}
+                  {!selectedCar && selectedBrand && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                      <button
+                        onClick={() => setSelectedBrand("")}
                         style={{
-                          width: "100%",
-                          padding: "10px 12px 10px 36px",
-                          borderRadius: 8,
-                          border: "1px solid var(--border)",
-                          background: "var(--bg-secondary)",
-                          color: "var(--text)",
-                          fontSize: "0.85rem",
-                          outline: "none",
+                          background: "none",
+                          border: "none",
+                          color: "var(--accent)",
+                          fontSize: "0.8rem",
+                          fontWeight: 700,
+                          cursor: "pointer",
+                          padding: 0,
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                          textAlign: "left",
+                          alignSelf: "flex-start",
                         }}
-                      />
+                      >
+                        ← Back to manufacturers
+                      </button>
+
+                      {/* Search bar */}
+                      <div style={{ position: "relative" }}>
+                        <Search size={16} color="var(--text-muted)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
+                        <input
+                          type="text"
+                          placeholder={`Search ${selectedBrand} Models`}
+                          value={modelSearchQuery}
+                          onChange={(e) => setModelSearchQuery(e.target.value)}
+                          style={{
+                            width: "100%",
+                            padding: "10px 12px 10px 36px",
+                            borderRadius: 8,
+                            border: "1px solid var(--border)",
+                            background: "var(--bg-secondary)",
+                            color: "var(--text)",
+                            fontSize: "0.85rem",
+                            outline: "none",
+                          }}
+                        />
+                      </div>
+
+                      {/* Models List */}
+                      <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 350, overflowY: "auto", paddingRight: 4 }}>
+                        {(CAR_BRANDS_DB.find((b) => b.name === selectedBrand)?.models || ["Other Model"])
+                          .filter((m) => m.toLowerCase().includes(modelSearchQuery.toLowerCase()))
+                          .map((model) => (
+                            <motion.button
+                              key={model}
+                              whileHover={{ x: 2, background: "var(--bg-secondary)" }}
+                              onClick={() => setSelectedCar({ brand: selectedBrand, model })}
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                padding: "12px 16px",
+                                borderRadius: 10,
+                                border: "1px solid var(--border)",
+                                background: "var(--bg)",
+                                color: "var(--text)",
+                                fontWeight: 600,
+                                fontSize: "0.88rem",
+                                cursor: "pointer",
+                                textAlign: "left",
+                              }}
+                            >
+                              <span>{model}</span>
+                              <ChevronRight size={16} color="var(--text-muted)" />
+                            </motion.button>
+                          ))}
+                      </div>
                     </div>
                   )}
 
-                  {/* Model Selection Grid */}
-                  {!selectedCar ? (
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, maxHeight: 380, overflowY: "auto", paddingRight: 4 }}>
-                      {POPULAR_CAR_MODELS.filter((m) => m.name.toLowerCase().includes(modelSearchQuery.toLowerCase())).map((car) => (
-                        <motion.div
-                          key={car.name}
-                          whileHover={{ scale: 1.05, y: -2 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => setSelectedCar({ brand: car.brand, model: car.name })}
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            padding: "10px 4px",
-                            borderRadius: 12,
-                            border: "1px solid var(--border)",
-                            background: "var(--bg)",
-                            cursor: "pointer",
-                            textAlign: "center",
-                            boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
-                          }}
-                        >
-                          <div style={{ width: 64, height: 44, marginBottom: 6, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <img src={car.image} alt={car.name} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
-                          </div>
-                          <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.2 }}>{car.name}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  ) : (
-                    /* Booking Form & Cart Summary */
+                  {/* Booking Form View */}
+                  {selectedCar && (
                     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                       <div style={{ background: "rgba(16, 185, 129, 0.08)", border: "1px solid rgba(16, 185, 129, 0.25)", borderRadius: 12, padding: "14px", display: "flex", alignItems: "center", gap: 10 }}>
                         <CheckCircle2 size={22} color="#10B981" />
@@ -1860,22 +2980,27 @@ export default function Services({
                         </div>
                       </div>
 
-                      <input
-                        type="tel"
-                        placeholder="Enter 10-digit mobile number"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        style={{
-                          width: "100%",
-                          padding: "12px",
-                          borderRadius: 8,
-                          border: "1px solid var(--border)",
-                          background: "var(--bg-secondary)",
-                          color: "var(--text)",
-                          fontSize: "0.9rem",
-                          outline: "none",
-                        }}
-                      />
+                      <div style={{ position: "relative" }}>
+                        <Phone size={16} color="var(--text-muted)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
+                        <input
+                          type="tel"
+                          placeholder="Enter 10-digit mobile number"
+                          value={phone}
+                          maxLength={10}
+                          onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                          style={{
+                            width: "100%",
+                            padding: "12px 12px 12px 38px",
+                            borderRadius: 8,
+                            border: "1px solid var(--border)",
+                            background: "var(--bg-secondary)",
+                            color: "var(--text)",
+                            fontSize: "0.9rem",
+                            outline: "none",
+                            fontWeight: 600,
+                          }}
+                        />
+                      </div>
 
                       <button
                         onClick={handleCheckPrices}
@@ -1898,262 +3023,28 @@ export default function Services({
                     </div>
                   )}
                 </div>
-              ) : (
-                /* 2. Original Booking / Quote Widget (For Main 12 Categories View - Screenshot 2) */
-                <div
-                  style={{
-                    background: "var(--card)",
-                    border: "1px solid var(--border)",
-                    borderRadius: 12,
-                    padding: "24px 20px",
-                    boxShadow: "0 12px 40px rgba(0,0,0,0.08)",
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
-                  {/* Header */}
-                  <h3
-                    style={{
-                      fontSize: "1.2rem",
-                      fontWeight: 900,
-                      color: "var(--text)",
-                      fontFamily: "Outfit, sans-serif",
-                      margin: "0 0 4px 0",
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    Experience The Best Car Services In {selectedCity}
-                  </h3>
-                  <p
-                    style={{
-                      fontSize: "0.8rem",
-                      color: "var(--text-secondary)",
-                      margin: "0 0 18px 0",
-                    }}
-                  >
-                    Get instant quotes for your car service
-                  </p>
-
-                  {/* Success View */}
-                  {bookingSuccess ? (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      style={{ textAlign: "center", padding: "16px 0" }}
-                    >
-                      <div
-                        style={{
-                          width: 52,
-                          height: 52,
-                          borderRadius: "50%",
-                          background: "rgba(16, 185, 129, 0.15)",
-                          border: "2px solid #10B981",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          margin: "0 auto 12px",
-                          color: "#10B981",
-                        }}
-                      >
-                        <CheckCircle2 size={26} />
-                      </div>
-                      <h4 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text)", margin: "0 0 6px 0" }}>
-                        Quote Requested!
-                      </h4>
-                      <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: "0 0 16px 0" }}>
-                        Our service manager in <strong>{selectedCity}</strong> will contact you at <strong>+91 {phone}</strong> shortly.
-                      </p>
-                      <button
-                        onClick={() => {
-                          setBookingSuccess(false);
-                          setPhone("");
-                          setSelectedCar(null);
-                        }}
-                        style={{
-                          padding: "8px 16px",
-                          borderRadius: 6,
-                          background: "var(--bg-secondary)",
-                          border: "1px solid var(--border)",
-                          color: "var(--text)",
-                          fontSize: "0.8rem",
-                          fontWeight: 700,
-                          cursor: "pointer",
-                        }}
-                      >
-                        Check Another Quote
-                      </button>
-                    </motion.div>
-                  ) : (
-                    /* Form Fields */
-                    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                      {/* 1. City Select Dropdown */}
-                      <div style={{ position: "relative" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 8,
-                            padding: "11px 14px",
-                            borderRadius: 6,
-                            background: "var(--bg)",
-                            border: "1px solid var(--border)",
-                          }}
-                        >
-                          <MapPin size={16} color="#E2001A" />
-                          <select
-                            value={selectedCity}
-                            onChange={(e) => setSelectedCity(e.target.value)}
-                            style={{
-                              width: "100%",
-                              background: "none",
-                              border: "none",
-                              color: "var(--text)",
-                              fontSize: "0.85rem",
-                              fontWeight: 700,
-                              outline: "none",
-                              cursor: "pointer",
-                              appearance: "none",
-                              WebkitAppearance: "none",
-                              paddingRight: 20,
-                            }}
-                          >
-                            {CITIES.map((c) => (
-                              <option key={c} value={c} style={{ background: "var(--card)", color: "var(--text)" }}>
-                                {c}
-                              </option>
-                            ))}
-                          </select>
-                          <ChevronDown
-                            size={16}
-                            color="var(--text-muted)"
-                            style={{ position: "absolute", right: 12, pointerEvents: "none" }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* 2. Select Your Car Trigger */}
-                      <button
-                        onClick={() => setIsCarModalOpen(true)}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          padding: "11px 14px",
-                          borderRadius: 6,
-                          background: selectedCar ? "rgba(0, 102, 255, 0.05)" : "var(--bg)",
-                          border: selectedCar ? "2px solid var(--accent)" : "1px solid var(--border)",
-                          color: "var(--text)",
-                          cursor: "pointer",
-                          textAlign: "left",
-                          width: "100%",
-                          transition: "all 0.2s ease",
-                        }}
-                      >
-                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                          <Car size={16} color="var(--accent)" />
-                          <span style={{ fontSize: "0.85rem", fontWeight: selectedCar ? 800 : 600 }}>
-                            {selectedCar ? `${selectedCar.brand} ${selectedCar.model}` : "SELECT YOUR CAR"}
-                          </span>
-                        </div>
-                        <ChevronDown size={16} color="var(--text-muted)" />
-                      </button>
-
-                      {/* 3. Mobile Number Input */}
-                      <div style={{ position: "relative" }}>
-                        <Phone size={16} color="var(--text-muted)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
-                        <input
-                          type="tel"
-                          placeholder="ENTER MOBILE NUMBER"
-                          value={phone}
-                          maxLength={10}
-                          onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                          style={{
-                            width: "100%",
-                            padding: "11px 14px 11px 38px",
-                            borderRadius: 6,
-                            background: "var(--bg)",
-                            border: "1px solid var(--border)",
-                            color: "var(--text)",
-                            fontSize: "0.85rem",
-                            fontWeight: 600,
-                            outline: "none",
-                          }}
-                        />
-                      </div>
-
-                      {/* 4. Action Button */}
-                      <motion.button
-                        onClick={handleCheckPrices}
-                        disabled={loadingSubmit}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        style={{
-                          width: "100%",
-                          padding: "13px",
-                          borderRadius: 6,
-                          background: "#E2001A",
-                          color: "white",
-                          border: "none",
-                          cursor: loadingSubmit ? "wait" : "pointer",
-                          fontFamily: "Outfit, sans-serif",
-                          fontSize: "0.9rem",
-                          fontWeight: 800,
-                          letterSpacing: "0.05em",
-                          textTransform: "uppercase",
-                          boxShadow: "0 6px 20px rgba(226, 0, 26, 0.3)",
-                          marginTop: 2,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: 6,
-                        }}
-                      >
-                        {loadingSubmit ? (
-                          "Submitting..."
-                        ) : (
-                          <>
-                            CHECK PRICES FOR FREE
-                            <ArrowRight size={16} />
-                          </>
-                        )}
-                      </motion.button>
-                    </div>
-                  )}
-
-                  {/* Trust Footer */}
-                  <div
-                    style={{
-                      marginTop: 20,
-                      paddingTop: 16,
-                      borderTop: "1px solid var(--border)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <Star size={16} color="#F59E0B" fill="#F59E0B" />
-                      <div>
-                        <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--text)" }}>4.8/5</div>
-                        <div style={{ fontSize: "0.65rem", color: "var(--text-muted)" }}>Based on 150,000+ Reviews</div>
-                      </div>
-                    </div>
-
-                    <div style={{ height: 24, width: 1, background: "var(--border)" }} />
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <Users size={16} color="#0066FF" />
-                      <div>
-                        <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--text)" }}>2 Million+</div>
-                        <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Happy Customers</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               )}
-          </motion.div>
-        </div>
-      </div>
+
+              {/* 3. Main View Quote Widget */}
+              {!selectedCategory && (
+                <QuoteSidebar
+                  selectedCity={selectedCity}
+                  setSelectedCity={setSelectedCity}
+                  selectedCar={selectedCar}
+                  setSelectedCar={setSelectedCar}
+                  phone={phone}
+                  setPhone={setPhone}
+                  cities={CITIES}
+                  bookingSuccess={bookingSuccess}
+                  setBookingSuccess={setBookingSuccess}
+                  loadingSubmit={loadingSubmit}
+                  onOpenCarModal={() => setIsCarModalOpen(true)}
+                  onCheckPrices={handleCheckPrices}
+                />
+              )}
+          </div>{/* end sticky right column */}
+        </div>{/* end grid */}
+      </div>{/* end container */}
 
        {/* Checklist View All Modal */}
       {viewingPackage && (
@@ -2250,6 +3141,39 @@ export default function Services({
       <style>{`
         .mobile-only-gomechanic-view {
           display: none;
+        }
+
+        /* Package card: stack image above details on narrow left column */
+        .package-card-inner {
+          grid-template-columns: 160px 1fr;
+        }
+
+        /* Category Grid - Responsive Columns */
+        .categories-4col-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
+        }
+
+        @media (max-width: 1024px) {
+          .categories-4col-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .categories-4col-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+
+        @media (max-width: 1100px) {
+          .gomechanic-services-layout {
+            grid-template-columns: 1fr 200px !important;
+          }
+          .package-card-inner {
+            grid-template-columns: 120px 1fr !important;
+          }
         }
 
         @media (max-width: 768px) {

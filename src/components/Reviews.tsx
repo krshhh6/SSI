@@ -145,71 +145,121 @@ export default function Reviews() {
           </div>
         </div>
 
-        {/* Car Brand Logos — Static Grid */}
+        {/* ── OUR PARTNERS ── */}
         <div style={{
           position: "relative",
           zIndex: 4,
           marginBottom: 56,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          gap: 20,
-          padding: "12px 0",
+          padding: "44px 0 40px",
+          borderTop: "1px solid rgba(255,255,255,0.08)",
+          borderBottom: "1px solid rgba(255,255,255,0.08)",
         }}>
-          {[
-            { name: "Maruti Suzuki", file: "maruti.svg",  bg: "#003087" },
-            { name: "Hyundai",       file: "hyundai.svg", bg: "#002C5F" },
-            { name: "Toyota",        file: "toyota.svg",  bg: "#EB0A1E" },
-            { name: "Honda",         file: "honda.svg",   bg: "#CC0000" },
-            { name: "Renault",       file: "renault.svg", bg: "#181818" },
-            { name: "TATA",          file: "tata.svg",    bg: "#1A5BA7" },
-            { name: "Kia",           file: "kia.svg",     bg: "#05141F" },
-          ].map((brand) => (
-            <div
-              key={brand.name}
-              title={brand.name}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "10px 20px",
-                borderRadius: 10,
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.12)",
-                minWidth: 110,
-                height: 60,
-                flexShrink: 0,
-                cursor: "default",
-                transition: "all 0.25s ease",
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLDivElement;
-                el.style.background = "rgba(255,255,255,0.14)";
-                el.style.transform = "translateY(-3px)";
-                el.style.boxShadow = "0 8px 24px rgba(0,0,0,0.2)";
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLDivElement;
-                el.style.background = "rgba(255,255,255,0.06)";
-                el.style.transform = "translateY(0)";
-                el.style.boxShadow = "none";
-              }}
-            >
-              <img
-                src={`/logos/${brand.file}`}
-                alt={brand.name}
+          {/* Heading */}
+          <div style={{ textAlign: "center", marginBottom: 36 }}>
+            <h2 style={{
+              fontFamily: "Outfit, sans-serif",
+              fontSize: "clamp(2rem, 4vw, 3rem)",
+              fontWeight: 900,
+              lineHeight: 1.1,
+              margin: 0,
+              letterSpacing: "0.04em",
+              textTransform: "uppercase",
+            }}>
+              <span style={{ color: "#FFFFFF" }}>OUR </span>
+              <span style={{
+                background: "linear-gradient(90deg, #FF6B6B 0%, #FFB347 30%, #00D4FF 65%, #A855F7 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>PARTNERS</span>
+            </h2>
+            <p style={{
+              marginTop: 8,
+              fontSize: "0.85rem",
+              color: "rgba(255,255,255,0.45)",
+              fontWeight: 500,
+              letterSpacing: "0.06em",
+            }}>
+              Trusted collaborations powering better service for you
+            </p>
+          </div>
+
+          {/* Partners row */}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            gap: "16px 28px",
+          }}>
+            {[
+              {
+                name: "Bosch",
+                imgSrc: null,
+                svgLogo: (
+                  <svg width="100" height="36" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="2" width="56" height="56" rx="8" fill="#E2001A"/>
+                    <text x="28" y="44" fontFamily="Arial, Helvetica, sans-serif" fontSize="32" fontWeight="900" fill="white" textAnchor="middle">B</text>
+                    <text x="78" y="41" fontFamily="Arial Black, Helvetica, sans-serif" fontSize="26" fontWeight="900" fill="white" letterSpacing="1">BOSCH</text>
+                  </svg>
+                ),
+              },
+              { name: "Allianz Assistance", imgSrc: "/partners/allianz.svg",   svgLogo: null },
+              { name: "ATS Elgi",           imgSrc: "/partners/atselgi.svg",   svgLogo: null },
+              { name: "Autorox",            imgSrc: "/partners/autorox.svg",   svgLogo: null },
+              { name: "Autozilla",          imgSrc: "/partners/autozilla.svg", svgLogo: null },
+            ].map((partner) => (
+              <div
+                key={partner.name}
+                title={partner.name}
                 style={{
-                  height: 28,
-                  maxWidth: 100,
-                  objectFit: "contain",
-                  filter: "brightness(10)",
-                  opacity: 0.9,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "14px 28px",
+                  borderRadius: 14,
+                  background: "rgba(255,255,255,0.07)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  minWidth: 160,
+                  height: 80,
+                  flexShrink: 0,
+                  cursor: "default",
+                  transition: "all 0.25s ease",
                 }}
-              />
-            </div>
-          ))}
+                onMouseEnter={e => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.background = "rgba(255,255,255,0.15)";
+                  el.style.transform = "translateY(-4px)";
+                  el.style.boxShadow = "0 12px 32px rgba(0,0,0,0.3)";
+                  el.style.borderColor = "rgba(255,255,255,0.25)";
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.background = "rgba(255,255,255,0.07)";
+                  el.style.transform = "translateY(0)";
+                  el.style.boxShadow = "none";
+                  el.style.borderColor = "rgba(255,255,255,0.12)";
+                }}
+              >
+                {partner.imgSrc ? (
+                  <img
+                    src={partner.imgSrc}
+                    alt={partner.name}
+                    style={{
+                      height: 46,
+                      maxWidth: 200,
+                      objectFit: "contain",
+                      opacity: 0.95,
+                    }}
+                  />
+                ) : (
+                  partner.svgLogo
+                )}
+              </div>
+            ))}
+          </div>
         </div>
+
 
         {/* Section Header */}
         <motion.div

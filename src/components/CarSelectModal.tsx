@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Search, Check, ChevronRight, Car } from "lucide-react";
+import { X, Search, Check, Car } from "lucide-react";
+import BrandLogo from "./core/BrandLogos";
+import ManufacturerGrid from "./ManufacturerGrid";
 
 export interface SelectedCar {
   brand: string;
@@ -16,11 +18,22 @@ const CAR_BRANDS = [
   { name: "Honda", popular: true, models: ["City", "Amaze", "Elevate", "Civic", "WR-V", "Jazz"] },
   { name: "Toyota", popular: true, models: ["Fortuner", "Innova Crysta", "Innova Hycross", "Glanza", "Urban Cruiser Taisor", "Camry", "Hilux"] },
   { name: "Kia", popular: true, models: ["Seltos", "Sonet", "Carens", "EV6", "Carnival"] },
+  { name: "Ford", popular: false, models: ["EcoSport", "Endeavour", "Figo", "Freestyle", "Aspire"] },
   { name: "Volkswagen", popular: false, models: ["Virtus", "Taigun", "Tiguan", "Polo", "Vento"] },
+  { name: "Renault", popular: false, models: ["Kwid", "Triber", "Kiger", "Duster"] },
+  { name: "Chevrolet", popular: false, models: ["Beat", "Cruze", "Sail", "Spark", "Tavera"] },
+  { name: "Nissan", popular: false, models: ["Magnite", "Kicks", "Terrano", "Sunny", "Micra"] },
   { name: "Skoda", popular: false, models: ["Slavia", "Kushaq", "Kodiaq", "Octavia", "Superb"] },
+  { name: "Fiat", popular: false, models: ["Punto", "Linea", "Avventura", "Urban Cross"] },
+  { name: "Datsun", popular: false, models: ["redi-GO", "GO", "GO+"] },
+  { name: "MG", popular: false, models: ["Hector", "Astor", "ZS EV", "Comet EV", "Gloster"] },
   { name: "BMW", popular: false, models: ["3 Series", "5 Series", "X1", "X3", "X5", "7 Series"] },
   { name: "Mercedes-Benz", popular: false, models: ["C-Class", "E-Class", "GLC", "GLE", "S-Class", "A-Class"] },
   { name: "Audi", popular: false, models: ["A4", "A6", "Q3", "Q5", "Q7"] },
+  { name: "Jeep", popular: false, models: ["Compass", "Meridian", "Wrangler", "Grand Cherokee"] },
+  { name: "Volvo", popular: false, models: ["XC40", "XC60", "XC90", "S90"] },
+  { name: "Porsche", popular: false, models: ["911", "Cayenne", "Macan", "Panamera", "Taycan"] },
+  { name: "Hindustan Motors", popular: false, models: ["Ambassador", "Contessa"] },
   { name: "Other", popular: false, models: ["Other Model"] },
 ];
 
@@ -79,7 +92,7 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
           }}
         />
 
-        {/* Modal Container */}
+        {/* Modal Container - COMPACT 550px EXACT */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -88,60 +101,49 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
           style={{
             position: "relative",
             width: "100%",
-            maxWidth: 520,
-            maxHeight: "85vh",
-            background: "var(--card)",
-            border: "1px solid var(--border)",
-            borderRadius: 24,
-            boxShadow: "0 24px 60px rgba(0, 0, 0, 0.4)",
+            maxWidth: 550,
+            background: "#ffffff",
+            border: "1px solid #e0e0e0",
+            borderRadius: 12,
+            boxShadow: "0 12px 48px rgba(0, 0, 0, 0.15)",
+            padding: 24,
             display: "flex",
             flexDirection: "column",
             overflow: "hidden",
             zIndex: 1,
           }}
         >
-          {/* Header */}
+          {/* Header - Single Row: Title + Close Icon */}
           <div
             style={{
-              padding: "20px 24px",
-              borderBottom: "1px solid var(--border)",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              background: "var(--bg-secondary)",
+              marginBottom: 20,
             }}
           >
-            <div>
-              <h3 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--text)", margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
-                <Car size={20} color="var(--accent)" />
-                {selectedBrand ? `Select ${selectedBrand} Model` : "Select Your Car Brand"}
-              </h3>
-              <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", margin: "4px 0 0 0" }}>
-                {selectedBrand ? "Choose your car model for accurate pricing" : "Select brand to see available models"}
-              </p>
-            </div>
+            <h3 style={{ fontSize: "1.45rem", fontWeight: 700, color: "#1a1a1a", margin: 0, fontFamily: "Outfit, sans-serif" }}>
+              {selectedBrand ? `Select ${selectedBrand} Model` : "Select Manufacturer"}
+            </h3>
             <button
               onClick={onClose}
               style={{
-                background: "rgba(255,255,255,0.08)",
+                background: "none",
                 border: "none",
-                borderRadius: "50%",
-                width: 36,
-                height: 36,
+                padding: 0,
+                cursor: "pointer",
+                color: "#666",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "var(--text)",
-                cursor: "pointer",
-                transition: "background 0.2s",
               }}
             >
-              <X size={18} />
+              <X size={20} />
             </button>
           </div>
 
-          {/* Search Bar */}
-          <div style={{ padding: "16px 24px 12px", borderBottom: "1px solid var(--border)" }}>
+          {/* Search Bar - COMPACT 48px HEIGHT */}
+          <div style={{ marginBottom: 20 }}>
             <div
               style={{
                 position: "relative",
@@ -149,20 +151,21 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
                 alignItems: "center",
               }}
             >
-              <Search size={18} color="var(--text-muted)" style={{ position: "absolute", left: 14 }} />
+              <Search size={18} color="#999" style={{ position: "absolute", left: 16 }} />
               <input
                 type="text"
-                placeholder={selectedBrand ? `Search ${selectedBrand} models...` : "Search car brands..."}
+                placeholder="Search Brands"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
                   width: "100%",
-                  padding: "10px 16px 10px 42px",
-                  borderRadius: 12,
-                  background: "var(--bg)",
-                  border: "1px solid var(--border)",
-                  color: "var(--text)",
-                  fontSize: "0.9rem",
+                  height: 48,
+                  padding: "0 16px 0 46px",
+                  borderRadius: 8,
+                  background: "#ffffff",
+                  border: "1px solid #ddd",
+                  color: "#1a1a1a",
+                  fontSize: "0.95rem",
                   outline: "none",
                 }}
               />
@@ -175,11 +178,11 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
                   setSearchQuery("");
                 }}
                 style={{
-                  marginTop: 10,
+                  marginTop: 12,
                   background: "none",
                   border: "none",
-                  color: "var(--accent)",
-                  fontSize: "0.85rem",
+                  color: "#E2001A",
+                  fontSize: "0.9rem",
                   fontWeight: 600,
                   cursor: "pointer",
                   padding: 0,
@@ -193,47 +196,18 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
             )}
           </div>
 
-          {/* Content List */}
-          <div style={{ flex: 1, overflowY: "auto", padding: "16px 24px" }}>
+          {/* Content List - MAX HEIGHT 400px SCROLLABLE */}
+          <div style={{ maxHeight: 400, overflowY: "auto", overflowX: "hidden" }}>
             {!selectedBrand ? (
               /* Brand Selection Grid */
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
-                {filteredBrands.map((b) => (
-                  <button
-                    key={b.name}
-                    onClick={() => {
-                      setSelectedBrand(b.name);
-                      setSearchQuery("");
-                    }}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "14px 16px",
-                      borderRadius: 14,
-                      background: "var(--bg)",
-                      border: "1px solid var(--border)",
-                      color: "var(--text)",
-                      fontWeight: 600,
-                      fontSize: "0.9rem",
-                      cursor: "pointer",
-                      textAlign: "left",
-                      transition: "all 0.2s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = "var(--accent)";
-                      e.currentTarget.style.background = "var(--border-hover)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = "var(--border)";
-                      e.currentTarget.style.background = "var(--bg)";
-                    }}
-                  >
-                    <span>{b.name}</span>
-                    <ChevronRight size={16} color="var(--text-muted)" />
-                  </button>
-                ))}
-              </div>
+              <ManufacturerGrid
+                brands={CAR_BRANDS.map((b) => b.name)}
+                searchQuery={searchQuery}
+                onSelectBrand={(b) => {
+                  setSelectedBrand(b);
+                  setSearchQuery("");
+                }}
+              />
             ) : (
               /* Model Selection List */
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

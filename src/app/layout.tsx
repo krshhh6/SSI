@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/context/AuthContext";
+import { CartProvider } from "@/context/CartContext";
 import AnimatePresenceProvider from "@/components/AnimatePresenceProvider";
 import InitialLoader from "@/components/InitialLoader";
 
@@ -58,24 +59,23 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                let theme = localStorage.getItem('theme');
-                if (!theme) {
-                  theme = 'dark';
-                }
-                document.documentElement.setAttribute('data-theme', theme);
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
               } catch (e) {}
             `,
           }}
         />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <InitialLoader />
         <ThemeProvider>
-          <AuthProvider>
-            <AnimatePresenceProvider>
-              {children}
-            </AnimatePresenceProvider>
-          </AuthProvider>
+          <CartProvider>
+            <AuthProvider>
+              <AnimatePresenceProvider>
+                {children}
+              </AnimatePresenceProvider>
+            </AuthProvider>
+          </CartProvider>
         </ThemeProvider>
       </body>
     </html>

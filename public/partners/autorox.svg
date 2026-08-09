@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 140">
+  <!-- "auto" in sky blue -->
+  <text x="8" y="108" font-family="Arial Rounded MT Bold, Arial Black, sans-serif" font-size="96" font-weight="900" fill="#00AEEF">auto</text>
+  <!-- green chevron accent above "r" -->
+  <polygon points="252,10 266,24 280,10 280,24 266,38 252,24" fill="#39B54A"/>
+  <!-- "r" in sky blue -->
+  <text x="252" y="108" font-family="Arial Rounded MT Bold, Arial Black, sans-serif" font-size="96" font-weight="900" fill="#00AEEF">r</text>
+  <!-- "o" in black -->
+  <text x="300" y="108" font-family="Arial Rounded MT Bold, Arial Black, sans-serif" font-size="96" font-weight="900" fill="#FFFFFF">o</text>
+  <!-- "x" split black/yellow — black base -->
+  <text x="370" y="108" font-family="Arial Rounded MT Bold, Arial Black, sans-serif" font-size="96" font-weight="900" fill="#FFFFFF">x</text>
+  <!-- yellow right half of "x" using a clipping polygon -->
+  <clipPath id="xright">
+    <polygon points="408,12 500,12 500,120 408,120"/>
+  </clipPath>
+  <text x="370" y="108" font-family="Arial Rounded MT Bold, Arial Black, sans-serif" font-size="96" font-weight="900" fill="#F5A623" clip-path="url(#xright)">x</text>
+</svg>

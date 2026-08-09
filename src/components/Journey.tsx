@@ -219,6 +219,9 @@ export default function Journey() {
             gap: 24,
             justifyContent: "flex-start",
             overflowX: "auto",
+            overflowY: "hidden",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
             padding: "20px 0 60px 0", // Space for scrollbar and 3D hover scale
             margin: "0 auto",
             maxWidth: "100%",

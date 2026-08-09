@@ -13,12 +13,12 @@ export default function InitialLoader() {
     // Hide loader after 4 seconds
     const timer = setTimeout(() => {
       setIsLoading(false);
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "";
     }, 4000);
 
     return () => {
       clearTimeout(timer);
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "";
     };
   }, []);
 

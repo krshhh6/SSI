@@ -2961,21 +2961,21 @@ interface ViewingPackage {
                       justifyContent: "space-between",
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                      <Star size={14} color="#F59E0B" fill="#F59E0B" />
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <Star size={15} color="#F59E0B" fill="#F59E0B" />
                       <div>
-                        <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--text)" }}>4.8/5</div>
-                        <div style={{ fontSize: "0.62rem", color: "var(--text-muted)" }}>150k+ Reviews</div>
+                        <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--text)" }}>4.7 / 5</div>
+                        <div style={{ fontSize: "0.64rem", color: "var(--text-muted)" }}>535+ Maps Reviews</div>
                       </div>
                     </div>
 
                     <div style={{ height: 18, width: 1, background: "var(--border)" }} />
 
-                    <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                      <Users size={14} color="#0066FF" />
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <Users size={15} color="#0066FF" />
                       <div>
-                        <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--text)" }}>2 Million+</div>
-                        <div style={{ fontSize: "0.62rem", color: "var(--text-muted)" }}>Happy Drivers</div>
+                        <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--text)" }}>5,000+</div>
+                        <div style={{ fontSize: "0.64rem", color: "var(--text-muted)" }}>Happy Customers</div>
                       </div>
                     </div>
                   </div>

@@ -280,18 +280,18 @@ export default function QuoteSidebar({
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <Star size={16} color="#F59E0B" fill="#F59E0B" />
           <div>
-            <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "#1a1a1a" }}>4.8/5</div>
-            <div style={{ fontSize: "0.65rem", color: "#6b7280" }}>Based on 150,000+ Reviews</div>
+            <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--text, #1a1a1a)" }}>4.7 / 5</div>
+            <div style={{ fontSize: "0.68rem", color: "var(--text-secondary, #6b7280)" }}>535+ Google Reviews</div>
           </div>
         </div>
 
-        <div style={{ height: 24, width: 1, background: "#e5e7eb" }} />
+        <div style={{ height: 24, width: 1, background: "var(--border, #e5e7eb)" }} />
 
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <Users size={16} color="#0066FF" />
           <div>
-            <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "#1a1a1a" }}>2 Million+</div>
-            <div style={{ fontSize: "0.7rem", color: "#6b7280" }}>Happy Customers</div>
+            <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--text, #1a1a1a)" }}>5,000+</div>
+            <div style={{ fontSize: "0.68rem", color: "var(--text-secondary, #6b7280)" }}>Happy Customers</div>
           </div>
         </div>
       </div>

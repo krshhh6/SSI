@@ -2,6 +2,29 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "./ThemeProvider";
 
+const STATIC_STARS = [
+  { top: "86.6%", left: "50.0%", delay: "0.2s" },
+  { top: "84.8%", left: "62.4%", delay: "1.1s" },
+  { top: "79.6%", left: "73.5%", delay: "0.5s" },
+  { top: "71.6%", left: "82.1%", delay: "1.8s" },
+  { top: "61.7%", left: "87.3%", delay: "0.9s" },
+  { top: "50.0%", left: "88.5%", delay: "1.4s" },
+  { top: "38.3%", left: "87.3%", delay: "0.3s" },
+  { top: "28.4%", left: "82.1%", delay: "1.6s" },
+  { top: "20.4%", left: "73.5%", delay: "0.7s" },
+  { top: "15.2%", left: "62.4%", delay: "1.2s" },
+  { top: "13.4%", left: "50.0%", delay: "0.4s" },
+  { top: "15.2%", left: "37.6%", delay: "1.7s" },
+  { top: "20.4%", left: "26.5%", delay: "0.8s" },
+  { top: "28.4%", left: "17.9%", delay: "1.3s" },
+  { top: "38.3%", left: "12.7%", delay: "0.6s" },
+  { top: "50.0%", left: "11.5%", delay: "1.9s" },
+  { top: "61.7%", left: "12.7%", delay: "0.1s" },
+  { top: "71.6%", left: "17.9%", delay: "1.5s" },
+  { top: "79.6%", left: "26.5%", delay: "1.0s" },
+  { top: "84.8%", left: "37.6%", delay: "0.7s" },
+];
+
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -36,25 +59,18 @@ export default function ThemeToggle() {
         </span>
         <span className="galaxy">
           <span className="galaxy__ring">
-            {/* Generate 20 stars randomly placed in a ring */}
-            {Array.from({ length: 20 }).map((_, i) => {
-              const angle = (i / 20) * 360;
-              const radius = 35 + Math.random() * 15; // Random radius between 35% and 50%
-              const top = 50 + radius * Math.sin((angle * Math.PI) / 180);
-              const left = 50 + radius * Math.cos((angle * Math.PI) / 180);
-              return (
-                <span
-                  key={i}
-                  className="star"
-                  style={{
-                    top: `${top}%`,
-                    left: `${left}%`,
-                    animationDelay: `${Math.random() * 2}s`,
-                    transform: `translate(-50%, -50%) rotateX(-65deg)`, // Counter-rotate to face camera
-                  }}
-                ></span>
-              );
-            })}
+            {STATIC_STARS.map((star, i) => (
+              <span
+                key={i}
+                className="star"
+                style={{
+                  top: star.top,
+                  left: star.left,
+                  animationDelay: star.delay,
+                  transform: `translate(-50%, -50%) rotateX(-65deg)`,
+                }}
+              ></span>
+            ))}
           </span>
         </span>
         <span className="text">{isDark ? "🌙 Dark" : "☀️ Light"}</span>

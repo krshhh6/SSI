@@ -1836,7 +1836,7 @@ interface ViewingPackage {
             alignItems: "start",
             position: "relative",
           }}
-          className="gomechanic-services-layout desktop-only-services"
+          className="gomechanic-services-layout"
         >
           {/* LEFT COLUMN: Tab-Based View */}
           <motion.div
@@ -3078,16 +3078,21 @@ interface ViewingPackage {
 
       {/* Responsive Media Queries */}
       <style>{`
-        .mobile-only-gomechanic-view {
-          display: none;
+        @media (max-width: 960px) {
+          .gomechanic-services-layout {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+          }
+          .categories-4col-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 10px !important;
+          }
         }
 
-        @media (max-width: 768px) {
-          .desktop-only-services {
-            display: none !important;
-          }
-          .mobile-only-gomechanic-view {
-            display: block !important;
+        @media (max-width: 520px) {
+          .categories-4col-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 8px !important;
           }
         }
       `}</style>

@@ -19,7 +19,7 @@ import {
   Sparkles,
   Boxes,
   User,
-  PhoneCall,
+  ChevronDown,
 } from "lucide-react";
 
 import {
@@ -28,15 +28,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
 import {
   Sheet,
   SheetContent,
@@ -69,26 +60,26 @@ const MENU_ITEMS: MenuItem[] = [
     items: [
       {
         title: "Periodic Maintenance",
-        description: "Oil changes, filters, and comprehensive checks",
-        icon: <Boxes className="size-4 shrink-0 text-[#E2001A]" />,
+        description: "Comprehensive oil, filter, and multi-point inspections",
+        icon: <Boxes className="size-4 text-[#E2001A]" />,
         url: "/services/car-services",
       },
       {
         title: "AC Service & Repair",
-        description: "Cooling diagnostics, gas recharge & coil cleaning",
-        icon: <LayoutDashboard className="size-4 shrink-0 text-[#E2001A]" />,
+        description: "Cooling diagnostics, refrigerant recharge & evaporator deep clean",
+        icon: <LayoutDashboard className="size-4 text-[#E2001A]" />,
         url: "/services/ac-service",
       },
       {
         title: "Batteries & Electrical",
-        description: "Genuine Bosch battery testing and replacement",
-        icon: <Sparkles className="size-4 shrink-0 text-[#E2001A]" />,
+        description: "Genuine Bosch batteries with free testing & warranty",
+        icon: <Sparkles className="size-4 text-[#E2001A]" />,
         url: "/services/batteries",
       },
       {
         title: "Denting & Painting",
-        description: "Grade A paint booth, panel repair & scratch removal",
-        icon: <Palette className="size-4 shrink-0 text-[#E2001A]" />,
+        description: "Grade-A paint booth, flawless color match & scratch removal",
+        icon: <Palette className="size-4 text-[#E2001A]" />,
         url: "/services/denting-painting",
       },
     ],
@@ -99,26 +90,26 @@ const MENU_ITEMS: MenuItem[] = [
     items: [
       {
         title: "Bosch Advantage",
-        description: "Why SAM Wheels Bosch authorized workshop leads",
-        icon: <Book className="size-4 shrink-0 text-[#E2001A]" />,
+        description: "Why SAM Wheels Bosch certified workshop leads the industry",
+        icon: <Book className="size-4 text-[#E2001A]" />,
         url: "/bosch-advantage",
       },
       {
         title: "About Us",
-        description: "Our certified technicians & state-of-the-art facility",
-        icon: <Users className="size-4 shrink-0 text-[#E2001A]" />,
+        description: "Certified technicians and advanced diagnostic equipment",
+        icon: <Users className="size-4 text-[#E2001A]" />,
         url: "/why-different",
       },
       {
         title: "Booking Guide",
-        description: "Step-by-step seamless service appointment",
-        icon: <GraduationCap className="size-4 shrink-0 text-[#E2001A]" />,
+        description: "Simple step-by-step appointment & doorstep pickup",
+        icon: <GraduationCap className="size-4 text-[#E2001A]" />,
         url: "/booking",
       },
       {
         title: "Blog & Tips",
         description: "Expert car care tips and maintenance advice",
-        icon: <History className="size-4 shrink-0 text-[#E2001A]" />,
+        icon: <History className="size-4 text-[#E2001A]" />,
         url: "/blog",
       },
     ],
@@ -143,19 +134,33 @@ const MOBILE_EXTRA_LINKS = [
 export default function Navbar() {
   const [openSearch, setOpenSearch] = React.useState(false);
   const [sheetOpen, setSheetOpen] = React.useState(false);
+  const [activeDropdown, setActiveDropdown] = React.useState<string | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useAuth();
   const { cartCount } = useCart();
+  const navRef = React.useRef<HTMLDivElement>(null);
 
-  // Close search/sheet when pathname changes
+  // Close dropdown on click outside or route change
   React.useEffect(() => {
     setSheetOpen(false);
     setOpenSearch(false);
+    setActiveDropdown(null);
   }, [pathname]);
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleLinkClick = (url: string, e?: React.MouseEvent) => {
     setSheetOpen(false);
+    setActiveDropdown(null);
     if (url === "/") {
       if (e) e.preventDefault();
       if (pathname === "/") {
@@ -178,20 +183,20 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-xs h-[var(--navbar-height,64px)] flex items-center">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#09090b]/90 backdrop-blur-xl border-b border-white/[0.08] h-[64px] flex items-center transition-colors">
+      <div ref={navRef} className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6">
         
-        {/* LOGO & DESKTOP NAVIGATION */}
-        <div className="flex items-center gap-6 lg:gap-8">
+        {/* LOGO & DESKTOP NAV */}
+        <div className="flex items-center gap-8 lg:gap-10">
           <Link
             href="/"
             onClick={(e) => handleLinkClick("/", e)}
-            className="flex items-center gap-2.5 no-underline shrink-0 group"
+            className="flex items-center gap-3 no-underline shrink-0 group"
           >
-            <div className="w-9 h-9 rounded-lg p-1 bg-white border border-gray-200/80 shadow-xs flex items-center justify-center shrink-0 group-hover:border-red-200 transition-colors">
+            <div className="w-8 h-8 rounded-lg p-1 bg-white/10 border border-white/15 flex items-center justify-center shrink-0 group-hover:border-red-500/50 transition-colors">
               <Image
-                width={36}
-                height={36}
+                width={32}
+                height={32}
                 src="/bosch-logo.png"
                 className="w-full h-full object-contain"
                 alt="Bosch Car Service"
@@ -199,158 +204,182 @@ export default function Navbar() {
               />
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="text-[13.5px] font-extrabold leading-tight text-gray-900 tracking-tight whitespace-nowrap">
+              <span className="text-[13.5px] font-extrabold leading-tight text-white tracking-tight whitespace-nowrap">
                 BOSCH CAR SERVICE
               </span>
-              <span className="text-[9.5px] font-semibold text-gray-500 tracking-wider uppercase whitespace-nowrap">
+              <span className="text-[9px] font-semibold text-neutral-400 tracking-wider uppercase whitespace-nowrap">
                 SAM Wheels Pvt Ltd
               </span>
             </div>
           </Link>
 
-          {/* Radix Navigation Menu (Desktop) */}
-          <div className="hidden lg:flex items-center">
-            <NavigationMenu className="[&_[data-radix-navigation-menu-viewport]]:rounded-2xl">
-              <NavigationMenuList className="rounded-2xl gap-1">
-                {MENU_ITEMS.map((item) => {
-                  if (item.items) {
-                    return (
-                      <NavigationMenuItem key={item.title} className="text-muted-foreground !rounded-2xl">
-                        <NavigationMenuTrigger className="!rounded-2xl text-[13.5px] font-medium text-gray-700 hover:text-gray-900 bg-transparent">
-                          {item.title}
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent className="!rounded-2xl shadow-lg border border-gray-100 bg-white">
-                          <ul className="w-80 p-3 flex flex-col gap-1 list-none m-0">
-                            <NavigationMenuLink className="!rounded-2xl">
-                              {item.items.map((subItem) => (
-                                <li key={subItem.title}>
-                                  <Link
-                                    className="flex select-none gap-3 rounded-lg p-2.5 leading-none no-underline outline-none transition-colors hover:bg-gray-50 hover:text-gray-900"
-                                    href={subItem.url}
-                                  >
-                                    <div className="mt-0.5">{subItem.icon}</div>
-                                    <div>
-                                      <div className="text-[13px] font-semibold text-gray-900">
-                                        {subItem.title}
-                                      </div>
-                                      {subItem.description && (
-                                        <p className="text-[11.5px] leading-snug text-gray-500 mt-1 mb-0">
-                                          {subItem.description}
-                                        </p>
-                                      )}
-                                    </div>
-                                  </Link>
-                                </li>
-                              ))}
-                            </NavigationMenuLink>
-                          </ul>
-                        </NavigationMenuContent>
-                      </NavigationMenuItem>
-                    );
-                  }
-
-                  return (
-                    <Link
-                      key={item.title}
-                      className="group inline-flex h-9 w-max items-center justify-center rounded-lg bg-transparent px-3 py-1.5 text-[13.5px] font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 no-underline"
-                      href={item.url}
-                      onClick={(e) => handleLinkClick(item.url, e)}
+          {/* Desktop Navigation Links with Generous Spacing */}
+          <nav className="hidden lg:flex items-center gap-7">
+            {MENU_ITEMS.map((item) => {
+              if (item.items) {
+                const isOpen = activeDropdown === item.title;
+                return (
+                  <div
+                    key={item.title}
+                    className="relative"
+                    onMouseEnter={() => setActiveDropdown(item.title)}
+                    onMouseLeave={() => setActiveDropdown(null)}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setActiveDropdown(isOpen ? null : item.title)}
+                      className={`inline-flex items-center gap-1.5 text-[14px] font-medium transition-colors py-2 bg-transparent border-0 cursor-pointer outline-none ${
+                        isOpen ? "text-white" : "text-neutral-300 hover:text-white"
+                      }`}
                     >
-                      {item.title}
-                    </Link>
-                  );
-                })}
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
+                      <span>{item.title}</span>
+                      <ChevronDown
+                        className={`size-3.5 text-neutral-400 transition-transform duration-200 ${
+                          isOpen ? "rotate-180 text-white" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {/* Smooth Dropdown Card */}
+                    {isOpen && (
+                      <div className="absolute top-full left-0 pt-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                        <div className="w-[360px] rounded-2xl bg-[#121215] border border-white/[0.12] p-2.5 shadow-2xl shadow-black/80 backdrop-blur-2xl">
+                          <div className="flex flex-col gap-1">
+                            {item.items.map((subItem) => (
+                              <Link
+                                key={subItem.title}
+                                href={subItem.url}
+                                onClick={() => setActiveDropdown(null)}
+                                className="flex items-start gap-3.5 p-2.5 rounded-xl hover:bg-white/[0.06] transition-colors no-underline group/sub"
+                              >
+                                <div className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center shrink-0 mt-0.5 group-hover/sub:bg-[#E2001A]/15 transition-colors">
+                                  {subItem.icon}
+                                </div>
+                                <div className="flex flex-col min-w-0">
+                                  <span className="text-[13px] font-semibold text-white group-hover/sub:text-white transition-colors">
+                                    {subItem.title}
+                                  </span>
+                                  {subItem.description && (
+                                    <span className="text-[11.5px] text-neutral-400 leading-snug mt-0.5 line-clamp-2">
+                                      {subItem.description}
+                                    </span>
+                                  )}
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={item.title}
+                  href={item.url}
+                  onClick={(e) => handleLinkClick(item.url, e)}
+                  className="text-[14px] font-medium text-neutral-300 hover:text-white transition-colors no-underline py-2"
+                >
+                  {item.title}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
 
-        {/* DESKTOP ACTIONS */}
-        <div className="hidden lg:flex items-center gap-2.5">
+        {/* DESKTOP RIGHT ACTIONS */}
+        <div className="hidden lg:flex items-center gap-3">
           {/* Search Button */}
-          <Button
-            variant="ghost"
-            size="icon"
+          <button
+            type="button"
             onClick={() => setOpenSearch(true)}
             aria-label="Search"
-            className="w-9 h-9 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg cursor-pointer"
+            className="w-9 h-9 rounded-lg flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/10 transition-colors bg-transparent border-0 cursor-pointer"
           >
             <Search className="size-4" />
-          </Button>
+          </button>
 
           {/* Cart Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            asChild
-            className="relative w-9 h-9 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg cursor-pointer"
+          <Link
+            href="/my-bookings"
+            aria-label="View bookings"
+            className="relative w-9 h-9 rounded-lg flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/10 transition-colors no-underline"
           >
-            <Link href="/my-bookings" aria-label="View bookings">
-              <ShoppingCart className="size-4" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[17px] h-[17px] px-1 rounded-full bg-[#E2001A] text-white text-[10px] font-bold flex items-center justify-center shadow-xs">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
-          </Button>
+            <ShoppingCart className="size-4" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 min-w-[17px] h-[17px] px-1 rounded-full bg-[#E2001A] text-white text-[10px] font-bold flex items-center justify-center shadow-xs">
+                {cartCount}
+              </span>
+            )}
+          </Link>
 
           {/* Auth Button */}
           {user ? (
-            <Button asChild variant="outline" size="sm" className="h-9 font-semibold text-xs border-gray-200 gap-1.5">
-              <Link href="/my-bookings">
-                <User className="size-3.5" />
-                <span className="max-w-[90px] truncate">{user.displayName || "Account"}</span>
-              </Link>
-            </Button>
+            <Link
+              href="/my-bookings"
+              className="inline-flex items-center gap-1.5 border border-white/20 hover:border-white/40 bg-transparent text-white rounded-lg px-3.5 py-1.5 text-[13px] font-medium hover:bg-white/5 transition-all no-underline h-9"
+            >
+              <User className="size-3.5 text-neutral-300" />
+              <span className="max-w-[85px] truncate">{user.displayName || "Account"}</span>
+            </Link>
           ) : (
-            <Button asChild variant="outline" size="sm" className="h-9 font-semibold text-xs border-gray-200">
-              <Link href="/sign-in">Sign In</Link>
-            </Button>
+            <Link
+              href="/sign-in"
+              className="inline-flex items-center justify-center border border-white/20 hover:border-white/40 bg-transparent text-white rounded-lg px-4 py-1.5 text-[13px] font-medium hover:bg-white/5 transition-all no-underline h-9"
+            >
+              Sign in
+            </Link>
           )}
 
-          {/* Book Now Button */}
-          <Button asChild size="sm" className="h-9 bg-[#E2001A] hover:bg-[#c90017] text-white font-bold text-xs shadow-xs px-4 rounded-lg">
-            <Link href="/booking">
-              <PhoneCall className="size-3.5 mr-1.5" />
-              Book Service
-            </Link>
-          </Button>
+          {/* CTA Book Service Button (Clean Pill from Screenshot 2) */}
+          <Link
+            href="/booking"
+            className="inline-flex items-center justify-center bg-white text-black hover:bg-neutral-200 rounded-lg px-4 py-1.5 text-[13px] font-bold shadow-sm transition-all no-underline h-9 whitespace-nowrap"
+          >
+            Book Service
+          </Link>
         </div>
 
-        {/* MOBILE NAVBAR */}
+        {/* MOBILE TRIGGER & ACTIONS */}
         <div className="flex lg:hidden items-center gap-1">
           {/* Search Button */}
-          <Button
-            variant="ghost"
-            size="icon"
+          <button
+            type="button"
             onClick={() => setOpenSearch(true)}
             aria-label="Search"
-            className="w-9 h-9 text-gray-700"
+            className="w-9 h-9 flex items-center justify-center text-neutral-300 hover:text-white bg-transparent border-0 cursor-pointer"
           >
             <Search className="size-4" />
-          </Button>
+          </button>
 
           {/* Cart Button */}
-          <Button variant="ghost" size="icon" asChild className="relative w-9 h-9 text-gray-700">
-            <Link href="/my-bookings" aria-label="Cart">
-              <ShoppingCart className="size-4" />
-              {cartCount > 0 && (
-                <span className="absolute 0 top-0.5 right-0.5 min-w-[16px] h-[16px] px-0.5 rounded-full bg-[#E2001A] text-white text-[9px] font-bold flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
-          </Button>
+          <Link
+            href="/my-bookings"
+            aria-label="Cart"
+            className="relative w-9 h-9 flex items-center justify-center text-neutral-300 hover:text-white no-underline"
+          >
+            <ShoppingCart className="size-4" />
+            {cartCount > 0 && (
+              <span className="absolute top-0.5 right-0.5 min-w-[16px] h-[16px] px-0.5 rounded-full bg-[#E2001A] text-white text-[9px] font-bold flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </Link>
 
           {/* Mobile Menu Sheet */}
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="Open menu" className="w-9 h-9 text-gray-700">
+              <button
+                type="button"
+                aria-label="Open menu"
+                className="w-9 h-9 flex items-center justify-center text-white bg-transparent border-0 cursor-pointer"
+              >
                 <Menu className="size-5" />
-              </Button>
+              </button>
             </SheetTrigger>
-            <SheetContent className="overflow-y-auto w-[85vw] max-w-sm bg-white p-6">
+            <SheetContent className="overflow-y-auto w-[85vw] max-w-sm bg-[#0e0e11] text-white border-l border-white/10 p-6">
               <SheetHeader>
                 <SheetTitle className="text-left">
                   <Link
@@ -358,7 +387,7 @@ export default function Navbar() {
                     onClick={(e) => handleLinkClick("/", e)}
                     className="flex items-center gap-2.5 no-underline"
                   >
-                    <div className="w-8 h-8 rounded-md p-1 bg-white border border-gray-200 flex items-center justify-center shrink-0">
+                    <div className="w-8 h-8 rounded-md p-1 bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
                       <Image
                         width={32}
                         height={32}
@@ -368,8 +397,8 @@ export default function Navbar() {
                       />
                     </div>
                     <div className="flex flex-col text-left">
-                      <span className="text-[13px] font-bold text-gray-900">BOSCH CAR SERVICE</span>
-                      <span className="text-[9px] font-medium text-gray-500 uppercase">SAM Wheels</span>
+                      <span className="text-[13px] font-bold text-white">BOSCH CAR SERVICE</span>
+                      <span className="text-[9px] font-medium text-neutral-400 uppercase">SAM Wheels</span>
                     </div>
                   </Link>
                 </SheetTitle>
@@ -380,8 +409,8 @@ export default function Navbar() {
                   {MENU_ITEMS.map((item) => {
                     if (item.items) {
                       return (
-                        <AccordionItem key={item.title} value={item.title} className="border-b border-gray-100">
-                          <AccordionTrigger className="py-2.5 text-[14px] font-semibold text-gray-900 hover:no-underline">
+                        <AccordionItem key={item.title} value={item.title} className="border-b border-white/10">
+                          <AccordionTrigger className="py-2.5 text-[14px] font-semibold text-neutral-200 hover:text-white hover:no-underline">
                             {item.title}
                           </AccordionTrigger>
                           <AccordionContent className="mt-1 pb-2">
@@ -389,15 +418,15 @@ export default function Navbar() {
                               {item.items.map((subItem) => (
                                 <Link
                                   key={subItem.title}
-                                  className="flex select-none gap-3 rounded-lg p-2 leading-none outline-none transition-colors hover:bg-gray-100 no-underline text-gray-700"
+                                  className="flex select-none gap-3 rounded-lg p-2.5 leading-none outline-none transition-colors hover:bg-white/5 no-underline text-neutral-300 hover:text-white"
                                   href={subItem.url}
                                   onClick={() => setSheetOpen(false)}
                                 >
-                                  <div>{subItem.icon}</div>
+                                  <div className="mt-0.5">{subItem.icon}</div>
                                   <div>
-                                    <div className="text-[13px] font-medium text-gray-900">{subItem.title}</div>
+                                    <div className="text-[13px] font-medium text-white">{subItem.title}</div>
                                     {subItem.description && (
-                                      <p className="text-[11px] leading-snug text-gray-500 mt-0.5 mb-0">
+                                      <p className="text-[11px] leading-snug text-neutral-400 mt-0.5 mb-0">
                                         {subItem.description}
                                       </p>
                                     )}
@@ -411,11 +440,11 @@ export default function Navbar() {
                     }
 
                     return (
-                      <div key={item.title} className="border-b border-gray-100">
+                      <div key={item.title} className="border-b border-white/10">
                         <Link
                           href={item.url}
                           onClick={(e) => handleLinkClick(item.url, e)}
-                          className="text-[14px] font-semibold text-gray-900 py-2.5 no-underline block"
+                          className="text-[14px] font-semibold text-neutral-200 hover:text-white py-2.5 no-underline block"
                         >
                           {item.title}
                         </Link>
@@ -425,13 +454,13 @@ export default function Navbar() {
                 </Accordion>
 
                 {/* Extra Quick Links */}
-                <div className="border-t border-gray-100 pt-3">
-                  <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Quick Navigation</div>
+                <div className="border-t border-white/10 pt-3">
+                  <div className="text-[10.5px] font-bold text-neutral-400 uppercase tracking-wider mb-2">Quick Navigation</div>
                   <div className="grid grid-cols-2 gap-1.5">
                     {MOBILE_EXTRA_LINKS.map((link, idx) => (
                       <Link
                         key={idx}
-                        className="inline-flex h-8 items-center rounded-md px-2.5 text-xs font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 no-underline"
+                        className="inline-flex h-8 items-center rounded-md px-2.5 text-xs font-medium text-neutral-300 hover:bg-white/10 hover:text-white no-underline"
                         href={link.url}
                         onClick={(e) => handleLinkClick(link.url, e)}
                       >
@@ -441,26 +470,33 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                {/* Actions */}
-                <div className="flex flex-col gap-2 pt-2">
+                {/* Mobile Auth and Action */}
+                <div className="flex flex-col gap-2.5 pt-2">
                   {user ? (
-                    <Button asChild variant="outline" className="w-full justify-start text-xs font-semibold">
-                      <Link href="/my-bookings" onClick={() => setSheetOpen(false)}>
-                        <User className="size-3.5 mr-2" />
-                        My Account ({user.displayName || "User"})
-                      </Link>
-                    </Button>
-                  ) : (
-                    <Button asChild variant="outline" className="w-full text-xs font-semibold">
-                      <Link href="/sign-in" onClick={() => setSheetOpen(false)}>Sign In</Link>
-                    </Button>
-                  )}
-                  <Button asChild className="bg-[#E2001A] hover:bg-[#c90017] text-white font-bold w-full text-xs shadow-xs">
-                    <Link href="/booking" onClick={() => setSheetOpen(false)}>
-                      <PhoneCall className="size-3.5 mr-1.5" />
-                      Book Service Now
+                    <Link
+                      href="/my-bookings"
+                      onClick={() => setSheetOpen(false)}
+                      className="w-full flex items-center justify-center gap-2 border border-white/20 text-white rounded-lg h-9 text-xs font-semibold hover:bg-white/5 no-underline"
+                    >
+                      <User className="size-3.5" />
+                      My Account ({user.displayName || "User"})
                     </Link>
-                  </Button>
+                  ) : (
+                    <Link
+                      href="/sign-in"
+                      onClick={() => setSheetOpen(false)}
+                      className="w-full flex items-center justify-center border border-white/20 text-white rounded-lg h-9 text-xs font-semibold hover:bg-white/5 no-underline"
+                    >
+                      Sign In
+                    </Link>
+                  )}
+                  <Link
+                    href="/booking"
+                    onClick={() => setSheetOpen(false)}
+                    className="w-full flex items-center justify-center bg-white text-black hover:bg-neutral-200 rounded-lg h-9 text-xs font-bold shadow-sm no-underline"
+                  >
+                    Book Service Now
+                  </Link>
                 </div>
               </div>
             </SheetContent>
@@ -470,12 +506,12 @@ export default function Navbar() {
 
       {/* SEARCH COMMAND PALETTE (CMD+K) */}
       <CommandDialog open={openSearch} onOpenChange={setOpenSearch}>
-        <CommandInput placeholder="Search car services, batteries, periodic maintenance, AC..." />
-        <CommandList>
+        <CommandInput placeholder="Search car services, periodic maintenance, batteries, AC..." />
+        <CommandList className="bg-[#121215] text-white">
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup className="text-gray-500" heading="Popular Services">
+          <CommandGroup className="text-neutral-400" heading="Popular Services">
             <CommandItem
-              className="text-gray-800 cursor-pointer"
+              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
               onSelect={() => {
                 setOpenSearch(false);
                 router.push("/services/car-services");
@@ -485,7 +521,7 @@ export default function Navbar() {
               Periodic Maintenance & Comprehensive Car Service
             </CommandItem>
             <CommandItem
-              className="text-gray-800 cursor-pointer"
+              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
               onSelect={() => {
                 setOpenSearch(false);
                 router.push("/services/ac-service");
@@ -495,7 +531,7 @@ export default function Navbar() {
               AC Gas Recharge & Deep Evaporator Cleaning
             </CommandItem>
             <CommandItem
-              className="text-gray-800 cursor-pointer"
+              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
               onSelect={() => {
                 setOpenSearch(false);
                 router.push("/services/batteries");
@@ -505,7 +541,7 @@ export default function Navbar() {
               Bosch Genuine Battery Replacement & Electrical Check
             </CommandItem>
             <CommandItem
-              className="text-gray-800 cursor-pointer"
+              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
               onSelect={() => {
                 setOpenSearch(false);
                 router.push("/services/denting-painting");
@@ -516,19 +552,19 @@ export default function Navbar() {
             </CommandItem>
           </CommandGroup>
 
-          <CommandGroup className="text-gray-500" heading="Quick Links">
+          <CommandGroup className="text-neutral-400" heading="Quick Links">
             <CommandItem
-              className="text-gray-800 cursor-pointer"
+              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
               onSelect={() => {
                 setOpenSearch(false);
                 router.push("/booking");
               }}
             >
-              <PhoneCall className="size-4 mr-2 text-[#E2001A]" />
+              <Boxes className="size-4 mr-2 text-[#E2001A]" />
               Book a Service Appointment
             </CommandItem>
             <CommandItem
-              className="text-gray-800 cursor-pointer"
+              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
               onSelect={() => {
                 setOpenSearch(false);
                 router.push("/bosch-advantage");
@@ -538,7 +574,7 @@ export default function Navbar() {
               Why Choose SAM Wheels Bosch Workshop
             </CommandItem>
             <CommandItem
-              className="text-gray-800 cursor-pointer"
+              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
               onSelect={() => {
                 setOpenSearch(false);
                 router.push("/blog");

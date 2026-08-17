@@ -183,186 +183,207 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#09090b]/90 backdrop-blur-xl border-b border-white/[0.08] h-[64px] flex items-center transition-colors">
-      <div ref={navRef} className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6">
-        
-        {/* LOGO & DESKTOP NAV */}
-        <div className="flex items-center gap-8 lg:gap-10">
+    <header
+      style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: 'rgba(9,9,11,0.96)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderBottom: '1px solid rgba(255,255,255,0.07)', height: 60, display: 'flex', alignItems: 'center' }}
+    >
+      {/* ── 3-column layout: Logo | Center Nav | Right Actions ── */}
+      <div ref={navRef} style={{ width: '100%', maxWidth: 1280, margin: '0 auto', padding: '0 28px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
+
+        {/* LEFT — Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
           <Link
             href="/"
             onClick={(e) => handleLinkClick("/", e)}
-            className="flex items-center gap-3 no-underline shrink-0 group"
+            style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}
           >
-            <div className="w-8 h-8 rounded-lg p-1 bg-white/10 border border-white/15 flex items-center justify-center shrink-0 group-hover:border-red-500/50 transition-colors">
+            <div style={{ width: 34, height: 34, borderRadius: 9, padding: 4, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <Image
-                width={32}
-                height={32}
+                width={34}
+                height={34}
                 src="/bosch-logo.png"
-                className="w-full h-full object-contain"
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                 alt="Bosch Car Service"
                 priority
               />
             </div>
-            <div className="flex flex-col min-w-0">
-              <span className="text-[13.5px] font-extrabold leading-tight text-white tracking-tight whitespace-nowrap">
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span style={{ fontSize: 13, fontWeight: 800, lineHeight: 1.25, color: '#ffffff', letterSpacing: '-0.01em', whiteSpace: 'nowrap' }}>
                 BOSCH CAR SERVICE
               </span>
-              <span className="text-[9px] font-semibold text-neutral-400 tracking-wider uppercase whitespace-nowrap">
+              <span style={{ fontSize: 9, fontWeight: 600, color: '#71717a', letterSpacing: '0.08em', textTransform: 'uppercase' as const, whiteSpace: 'nowrap', marginTop: 1 }}>
                 SAM Wheels Pvt Ltd
               </span>
             </div>
           </Link>
-
-          {/* Desktop Navigation Links with Generous Spacing */}
-          <nav className="hidden lg:flex items-center gap-7">
-            {MENU_ITEMS.map((item) => {
-              if (item.items) {
-                const isOpen = activeDropdown === item.title;
-                return (
-                  <div
-                    key={item.title}
-                    className="relative"
-                    onMouseEnter={() => setActiveDropdown(item.title)}
-                    onMouseLeave={() => setActiveDropdown(null)}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setActiveDropdown(isOpen ? null : item.title)}
-                      className={`inline-flex items-center gap-1.5 text-[14px] font-medium transition-colors py-2 bg-transparent border-0 cursor-pointer outline-none ${
-                        isOpen ? "text-white" : "text-neutral-300 hover:text-white"
-                      }`}
-                    >
-                      <span>{item.title}</span>
-                      <ChevronDown
-                        className={`size-3.5 text-neutral-400 transition-transform duration-200 ${
-                          isOpen ? "rotate-180 text-white" : ""
-                        }`}
-                      />
-                    </button>
-
-                    {/* Smooth Dropdown Card */}
-                    {isOpen && (
-                      <div className="absolute top-full left-0 pt-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                        <div className="w-[360px] rounded-2xl bg-[#121215] border border-white/[0.12] p-2.5 shadow-2xl shadow-black/80 backdrop-blur-2xl">
-                          <div className="flex flex-col gap-1">
-                            {item.items.map((subItem) => (
-                              <Link
-                                key={subItem.title}
-                                href={subItem.url}
-                                onClick={() => setActiveDropdown(null)}
-                                className="flex items-start gap-3.5 p-2.5 rounded-xl hover:bg-white/[0.06] transition-colors no-underline group/sub"
-                              >
-                                <div className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center shrink-0 mt-0.5 group-hover/sub:bg-[#E2001A]/15 transition-colors">
-                                  {subItem.icon}
-                                </div>
-                                <div className="flex flex-col min-w-0">
-                                  <span className="text-[13px] font-semibold text-white group-hover/sub:text-white transition-colors">
-                                    {subItem.title}
-                                  </span>
-                                  {subItem.description && (
-                                    <span className="text-[11.5px] text-neutral-400 leading-snug mt-0.5 line-clamp-2">
-                                      {subItem.description}
-                                    </span>
-                                  )}
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-
-              return (
-                <Link
-                  key={item.title}
-                  href={item.url}
-                  onClick={(e) => handleLinkClick(item.url, e)}
-                  className="text-[14px] font-medium text-neutral-300 hover:text-white transition-colors no-underline py-2"
-                >
-                  {item.title}
-                </Link>
-              );
-            })}
-          </nav>
         </div>
 
-        {/* DESKTOP RIGHT ACTIONS */}
-        <div className="hidden lg:flex items-center gap-3">
-          {/* Search Button */}
-          <button
-            type="button"
-            onClick={() => setOpenSearch(true)}
-            aria-label="Search"
-            className="w-9 h-9 rounded-lg flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/10 transition-colors bg-transparent border-0 cursor-pointer"
-          >
-            <Search className="size-4" />
-          </button>
+        {/* CENTER — Desktop Navigation */}
+        <nav className="hidden lg:flex items-center" style={{ gap: 2 }}>
+          {MENU_ITEMS.map((item) => {
+            if (item.items) {
+              const isOpen = activeDropdown === item.title;
+              return (
+                <div
+                  key={item.title}
+                  style={{ position: 'relative' }}
+                  onMouseEnter={() => setActiveDropdown(item.title)}
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setActiveDropdown(isOpen ? null : item.title)}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 13.5, fontWeight: 500, color: isOpen ? '#ffffff' : '#a1a1aa', padding: '6px 12px', background: isOpen ? 'rgba(255,255,255,0.07)' : 'transparent', border: 0, borderRadius: 8, cursor: 'pointer', outline: 'none', transition: 'all 0.15s', fontFamily: 'inherit', whiteSpace: 'nowrap' }}
+                    onMouseEnter={(e) => { const el = e.currentTarget; el.style.color = '#ffffff'; el.style.background = 'rgba(255,255,255,0.07)'; }}
+                    onMouseLeave={(e) => { const el = e.currentTarget; if (!isOpen) { el.style.color = '#a1a1aa'; el.style.background = 'transparent'; } }}
+                  >
+                    <span>{item.title}</span>
+                    <ChevronDown
+                      size={13}
+                      style={{ color: isOpen ? '#ffffff' : '#71717a', transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                    />
+                  </button>
 
-          {/* Cart Button */}
-          <Link
-            href="/my-bookings"
-            aria-label="View bookings"
-            className="relative w-9 h-9 rounded-lg flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/10 transition-colors no-underline"
-          >
-            <ShoppingCart className="size-4" />
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-[17px] h-[17px] px-1 rounded-full bg-[#E2001A] text-white text-[10px] font-bold flex items-center justify-center shadow-xs">
-                {cartCount}
-              </span>
-            )}
-          </Link>
+                  {/* Dropdown Card */}
+                  {isOpen && (
+                    <div style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', paddingTop: 8, zIndex: 50 }}>
+                      <div style={{ width: 360, borderRadius: 16, background: '#111114', border: '1px solid rgba(255,255,255,0.12)', padding: 10, boxShadow: '0 25px 60px rgba(0,0,0,0.8)', backdropFilter: 'blur(30px)' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                          {item.items.map((subItem) => (
+                            <Link
+                              key={subItem.title}
+                              href={subItem.url}
+                              onClick={() => setActiveDropdown(null)}
+                              style={{ display: 'flex', alignItems: 'flex-start', gap: 14, padding: 10, borderRadius: 12, textDecoration: 'none', transition: 'background 0.15s' }}
+                              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.06)'; }}
+                              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+                            >
+                              <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
+                                {subItem.icon}
+                              </div>
+                              <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                                <span style={{ fontSize: 13, fontWeight: 600, color: '#ffffff' }}>
+                                  {subItem.title}
+                                </span>
+                                {subItem.description && (
+                                  <span style={{ fontSize: 11.5, color: '#9ca3af', lineHeight: 1.4, marginTop: 2 }}>
+                                    {subItem.description}
+                                  </span>
+                                )}
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
 
-          {/* Auth Button */}
+            return (
+              <Link
+                key={item.title}
+                href={item.url}
+                onClick={(e) => handleLinkClick(item.url, e)}
+                style={{ fontSize: 13.5, fontWeight: 500, color: '#a1a1aa', textDecoration: 'none', padding: '6px 12px', borderRadius: 8, transition: 'all 0.15s', whiteSpace: 'nowrap' }}
+                onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = '#ffffff'; el.style.background = 'rgba(255,255,255,0.07)'; }}
+                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = '#a1a1aa'; el.style.background = 'transparent'; }}
+              >
+                {item.title}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* RIGHT — Actions (desktop only) */}
+        <div className="hidden lg:flex items-center" style={{ gap: 6, justifyContent: 'flex-end' }}>
+
+          {/* Divider: icon buttons group */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            {/* Search */}
+            <button
+              type="button"
+              onClick={() => setOpenSearch(true)}
+              aria-label="Search"
+              style={{ width: 34, height: 34, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#71717a', background: 'transparent', border: 'none', outline: 'none', cursor: 'pointer', transition: 'color 0.15s, background 0.15s', flexShrink: 0 }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = '#e4e4e7'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = '#71717a'; e.currentTarget.style.background = 'transparent'; }}
+            >
+              <Search size={15} strokeWidth={2} />
+            </button>
+
+            {/* Cart */}
+            <Link
+              href="/my-bookings"
+              aria-label="View bookings"
+              style={{ position: 'relative', width: 34, height: 34, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#71717a', textDecoration: 'none', transition: 'color 0.15s, background 0.15s', flexShrink: 0 }}
+              onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = '#e4e4e7'; el.style.background = 'rgba(255,255,255,0.08)'; }}
+              onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = '#71717a'; el.style.background = 'transparent'; }}
+            >
+              <ShoppingCart size={15} strokeWidth={2} />
+              {cartCount > 0 && (
+                <span style={{ position: 'absolute', top: 3, right: 3, width: 8, height: 8, borderRadius: '50%', background: '#E2001A', border: '1.5px solid rgba(9,9,11,0.96)' }} />
+              )}
+            </Link>
+          </div>
+
+          {/* Thin separator */}
+          <div style={{ width: 1, height: 18, background: 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
+
+          {/* Auth */}
           {user ? (
             <Link
               href="/my-bookings"
-              className="inline-flex items-center gap-1.5 border border-white/20 hover:border-white/40 bg-transparent text-white rounded-lg px-3.5 py-1.5 text-[13px] font-medium hover:bg-white/5 transition-all no-underline h-9"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 5, border: '1px solid rgba(255,255,255,0.15)', background: 'transparent', color: '#d4d4d8', borderRadius: 7, padding: '0 12px', fontSize: 12.5, fontWeight: 500, textDecoration: 'none', height: 32, whiteSpace: 'nowrap', transition: 'all 0.15s', outline: 'none' }}
+              onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.3)'; el.style.color = '#ffffff'; el.style.background = 'rgba(255,255,255,0.05)'; }}
+              onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.15)'; el.style.color = '#d4d4d8'; el.style.background = 'transparent'; }}
             >
-              <User className="size-3.5 text-neutral-300" />
-              <span className="max-w-[85px] truncate">{user.displayName || "Account"}</span>
+              <User size={13} strokeWidth={2} />
+              <span style={{ maxWidth: 80, overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.displayName || 'Account'}</span>
             </Link>
           ) : (
             <Link
               href="/sign-in"
-              className="inline-flex items-center justify-center border border-white/20 hover:border-white/40 bg-transparent text-white rounded-lg px-4 py-1.5 text-[13px] font-medium hover:bg-white/5 transition-all no-underline h-9"
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.15)', background: 'transparent', color: '#d4d4d8', borderRadius: 7, padding: '0 14px', fontSize: 12.5, fontWeight: 500, textDecoration: 'none', height: 32, whiteSpace: 'nowrap', transition: 'all 0.15s', outline: 'none' }}
+              onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.3)'; el.style.color = '#ffffff'; el.style.background = 'rgba(255,255,255,0.05)'; }}
+              onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.15)'; el.style.color = '#d4d4d8'; el.style.background = 'transparent'; }}
             >
-              Sign in
+              Sign In
             </Link>
           )}
 
-          {/* CTA Book Service Button (Clean Pill from Screenshot 2) */}
+          {/* Book Service CTA — filled white pill */}
           <Link
             href="/booking"
-            className="inline-flex items-center justify-center bg-white text-black hover:bg-neutral-200 rounded-lg px-4 py-1.5 text-[13px] font-bold shadow-sm transition-all no-underline h-9 whitespace-nowrap"
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#E2001A', color: '#ffffff', border: 'none', outline: 'none', borderRadius: 7, padding: '0 16px', fontSize: 12.5, fontWeight: 700, textDecoration: 'none', height: 32, whiteSpace: 'nowrap', letterSpacing: '0.01em', transition: 'background 0.15s', boxShadow: '0 1px 3px rgba(226,0,26,0.35)' }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#c0001a'; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = '#E2001A'; }}
           >
             Book Service
           </Link>
         </div>
 
-        {/* MOBILE TRIGGER & ACTIONS */}
-        <div className="flex lg:hidden items-center gap-1">
+        {/* MOBILE TRIGGER & ACTIONS — shown only on < lg */}
+        <div className="flex lg:hidden items-center" style={{ gap: 4, justifyContent: 'flex-end' }}>
           {/* Search Button */}
           <button
             type="button"
             onClick={() => setOpenSearch(true)}
             aria-label="Search"
-            className="w-9 h-9 flex items-center justify-center text-neutral-300 hover:text-white bg-transparent border-0 cursor-pointer"
+            style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d4d4d8', background: 'transparent', border: 0, cursor: 'pointer' }}
           >
-            <Search className="size-4" />
+            <Search size={16} />
           </button>
 
           {/* Cart Button */}
           <Link
             href="/my-bookings"
             aria-label="Cart"
-            className="relative w-9 h-9 flex items-center justify-center text-neutral-300 hover:text-white no-underline"
+            style={{ position: 'relative', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d4d4d8', textDecoration: 'none' }}
           >
-            <ShoppingCart className="size-4" />
+            <ShoppingCart size={16} />
             {cartCount > 0 && (
-              <span className="absolute top-0.5 right-0.5 min-w-[16px] h-[16px] px-0.5 rounded-full bg-[#E2001A] text-white text-[9px] font-bold flex items-center justify-center">
+              <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 16, height: 16, padding: '0 3px', borderRadius: 999, background: '#E2001A', color: '#fff', fontSize: 9, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {cartCount}
               </span>
             )}
@@ -374,59 +395,63 @@ export default function Navbar() {
               <button
                 type="button"
                 aria-label="Open menu"
-                className="w-9 h-9 flex items-center justify-center text-white bg-transparent border-0 cursor-pointer"
+                style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', background: 'transparent', border: 0, cursor: 'pointer' }}
               >
-                <Menu className="size-5" />
+                <Menu size={20} />
               </button>
             </SheetTrigger>
-            <SheetContent className="overflow-y-auto w-[85vw] max-w-sm bg-[#0e0e11] text-white border-l border-white/10 p-6">
+            <SheetContent
+              style={{ overflowY: 'auto', width: '85vw', maxWidth: 384, background: '#0e0e11', color: '#ffffff', borderLeft: '1px solid rgba(255,255,255,0.1)', padding: 24 }}
+            >
               <SheetHeader>
-                <SheetTitle className="text-left">
+                <SheetTitle style={{ textAlign: 'left' }}>
                   <Link
                     href="/"
                     onClick={(e) => handleLinkClick("/", e)}
-                    className="flex items-center gap-2.5 no-underline"
+                    style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}
                   >
-                    <div className="w-8 h-8 rounded-md p-1 bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+                    <div style={{ width: 32, height: 32, borderRadius: 6, padding: 3, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <Image
                         width={32}
                         height={32}
                         src="/bosch-logo.png"
-                        className="w-full h-full object-contain"
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                         alt="Bosch Car Service"
                       />
                     </div>
-                    <div className="flex flex-col text-left">
-                      <span className="text-[13px] font-bold text-white">BOSCH CAR SERVICE</span>
-                      <span className="text-[9px] font-medium text-neutral-400 uppercase">SAM Wheels</span>
+                    <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: '#ffffff' }}>BOSCH CAR SERVICE</span>
+                      <span style={{ fontSize: 9, fontWeight: 500, color: '#a1a1aa', textTransform: 'uppercase' as const }}>SAM Wheels</span>
                     </div>
                   </Link>
                 </SheetTitle>
               </SheetHeader>
 
-              <div className="my-6 flex flex-col gap-5">
+              <div style={{ marginTop: 24, marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 20 }}>
                 <Accordion type="single" collapsible className="flex w-full flex-col gap-1">
                   {MENU_ITEMS.map((item) => {
                     if (item.items) {
                       return (
-                        <AccordionItem key={item.title} value={item.title} className="border-b border-white/10">
-                          <AccordionTrigger className="py-2.5 text-[14px] font-semibold text-neutral-200 hover:text-white hover:no-underline">
+                        <AccordionItem key={item.title} value={item.title} style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                          <AccordionTrigger style={{ padding: '10px 0', fontSize: 14, fontWeight: 600, color: '#e5e5e5' }}>
                             {item.title}
                           </AccordionTrigger>
-                          <AccordionContent className="mt-1 pb-2">
-                            <div className="flex flex-col gap-1 pl-2">
+                          <AccordionContent style={{ marginTop: 4, paddingBottom: 8 }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, paddingLeft: 8 }}>
                               {item.items.map((subItem) => (
                                 <Link
                                   key={subItem.title}
-                                  className="flex select-none gap-3 rounded-lg p-2.5 leading-none outline-none transition-colors hover:bg-white/5 no-underline text-neutral-300 hover:text-white"
+                                  style={{ display: 'flex', gap: 12, borderRadius: 8, padding: 10, textDecoration: 'none', color: '#d4d4d8', transition: 'background 0.15s' }}
                                   href={subItem.url}
                                   onClick={() => setSheetOpen(false)}
+                                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; }}
+                                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
                                 >
-                                  <div className="mt-0.5">{subItem.icon}</div>
+                                  <div style={{ marginTop: 2 }}>{subItem.icon}</div>
                                   <div>
-                                    <div className="text-[13px] font-medium text-white">{subItem.title}</div>
+                                    <div style={{ fontSize: 13, fontWeight: 500, color: '#ffffff' }}>{subItem.title}</div>
                                     {subItem.description && (
-                                      <p className="text-[11px] leading-snug text-neutral-400 mt-0.5 mb-0">
+                                      <p style={{ fontSize: 11, lineHeight: 1.4, color: '#a1a1aa', marginTop: 2, marginBottom: 0 }}>
                                         {subItem.description}
                                       </p>
                                     )}
@@ -440,11 +465,11 @@ export default function Navbar() {
                     }
 
                     return (
-                      <div key={item.title} className="border-b border-white/10">
+                      <div key={item.title} style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                         <Link
                           href={item.url}
                           onClick={(e) => handleLinkClick(item.url, e)}
-                          className="text-[14px] font-semibold text-neutral-200 hover:text-white py-2.5 no-underline block"
+                          style={{ fontSize: 14, fontWeight: 600, color: '#e5e5e5', padding: '10px 0', textDecoration: 'none', display: 'block' }}
                         >
                           {item.title}
                         </Link>
@@ -454,15 +479,17 @@ export default function Navbar() {
                 </Accordion>
 
                 {/* Extra Quick Links */}
-                <div className="border-t border-white/10 pt-3">
-                  <div className="text-[10.5px] font-bold text-neutral-400 uppercase tracking-wider mb-2">Quick Navigation</div>
-                  <div className="grid grid-cols-2 gap-1.5">
+                <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 12 }}>
+                  <div style={{ fontSize: 10.5, fontWeight: 700, color: '#a1a1aa', textTransform: 'uppercase' as const, letterSpacing: '0.1em', marginBottom: 8 }}>Quick Navigation</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
                     {MOBILE_EXTRA_LINKS.map((link, idx) => (
                       <Link
                         key={idx}
-                        className="inline-flex h-8 items-center rounded-md px-2.5 text-xs font-medium text-neutral-300 hover:bg-white/10 hover:text-white no-underline"
+                        style={{ display: 'inline-flex', height: 32, alignItems: 'center', borderRadius: 6, padding: '0 10px', fontSize: 12, fontWeight: 500, color: '#d4d4d8', textDecoration: 'none', transition: 'background 0.15s' }}
                         href={link.url}
                         onClick={(e) => handleLinkClick(link.url, e)}
+                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.1)'; }}
+                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
                       >
                         {link.name}
                       </Link>
@@ -471,21 +498,21 @@ export default function Navbar() {
                 </div>
 
                 {/* Mobile Auth and Action */}
-                <div className="flex flex-col gap-2.5 pt-2">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, paddingTop: 8 }}>
                   {user ? (
                     <Link
                       href="/my-bookings"
                       onClick={() => setSheetOpen(false)}
-                      className="w-full flex items-center justify-center gap-2 border border-white/20 text-white rounded-lg h-9 text-xs font-semibold hover:bg-white/5 no-underline"
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: 8, height: 36, fontSize: 12, fontWeight: 600, textDecoration: 'none', background: 'transparent' }}
                     >
-                      <User className="size-3.5" />
+                      <User size={14} />
                       My Account ({user.displayName || "User"})
                     </Link>
                   ) : (
                     <Link
                       href="/sign-in"
                       onClick={() => setSheetOpen(false)}
-                      className="w-full flex items-center justify-center border border-white/20 text-white rounded-lg h-9 text-xs font-semibold hover:bg-white/5 no-underline"
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: 8, height: 36, fontSize: 12, fontWeight: 600, textDecoration: 'none', background: 'transparent' }}
                     >
                       Sign In
                     </Link>
@@ -493,7 +520,7 @@ export default function Navbar() {
                   <Link
                     href="/booking"
                     onClick={() => setSheetOpen(false)}
-                    className="w-full flex items-center justify-center bg-white text-black hover:bg-neutral-200 rounded-lg h-9 text-xs font-bold shadow-sm no-underline"
+                    style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#ffffff', color: '#000', borderRadius: 8, height: 36, fontSize: 12, fontWeight: 700, textDecoration: 'none', border: 'none' }}
                   >
                     Book Service Now
                   </Link>

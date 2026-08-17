@@ -96,16 +96,28 @@ export default function Navbar() {
   }, [pathname]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, link: NavLinkDef) => {
+    setMenuOpen(false);
+    if (link.href === "/") {
+      e.preventDefault();
+      if (pathname === "/") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        router.push("/");
+      }
+      return;
+    }
     if (!link.isPage) {
       e.preventDefault();
-      setMenuOpen(false);
       const anchor = link.href.split("#")[1];
       if (pathname === "/") {
         document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth" });
       } else {
         router.push(link.href);
       }
+      return;
     }
+    e.preventDefault();
+    router.push(link.href);
   };
 
   const isActive = (link: NavLinkDef) => {
@@ -120,8 +132,16 @@ export default function Navbar() {
         {/* LOGO SECTION (left) */}
         <Link
           href="/"
-          onClick={(e) => handleNavClick(e as any, NAV_LINKS[0])}
-          className="navbar-logo-block flex items-center gap-3 max-w-[220px] shrink-0 no-underline"
+          onClick={(e) => {
+            e.preventDefault();
+            setMenuOpen(false);
+            if (pathname === "/") {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+              router.push("/");
+            }
+          }}
+          className="navbar-logo-block flex items-center gap-3 max-w-[220px] shrink-0 no-underline cursor-pointer"
         >
           <img
             src="/bosch-logo.png"

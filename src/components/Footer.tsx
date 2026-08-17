@@ -113,11 +113,19 @@ export default function Footer() {
           <div>
             {/* Logo */}
             <div
+              onClick={() => {
+                if (pathname === "/") {
+                  scrollToTop();
+                } else {
+                  router.push("/");
+                }
+              }}
               style={{
-                display: "flex",
+                display: "inline-flex",
                 alignItems: "center",
                 gap: 10,
                 marginBottom: 20,
+                cursor: "pointer",
               }}
             >
               <div

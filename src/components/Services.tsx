@@ -1682,7 +1682,7 @@ interface ViewingPackage {
         
         {/* 1. Sub-Navbar Bar */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
           style={{
@@ -1690,10 +1690,10 @@ interface ViewingPackage {
             alignItems: "center",
             background: "var(--card)",
             border: "1px solid var(--border)",
-            borderRadius: 100,
-            padding: "6px 12px",
-            marginBottom: 48,
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
+            borderRadius: 14,
+            padding: "4px 8px",
+            marginBottom: 36,
+            boxShadow: "0 2px 12px rgba(0, 0, 0, 0.03)",
             position: "relative",
           }}
         >
@@ -1709,7 +1709,7 @@ interface ViewingPackage {
               alignItems: "center",
             }}
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
 
           <div
@@ -1717,12 +1717,12 @@ interface ViewingPackage {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 8,
+              gap: 4,
               overflowX: "auto",
               scrollBehavior: "smooth",
               scrollbarWidth: "none",
               flex: 1,
-              padding: "4px 8px",
+              padding: "2px 4px",
             }}
           >
             {NAV_TABS.map((tab, idx) => {
@@ -1733,16 +1733,16 @@ interface ViewingPackage {
                   onClick={() => setActiveTab(idx)}
                   style={{
                     position: "relative",
-                    background: "none",
+                    background: isActive ? "var(--bg-secondary)" : "none",
                     border: "none",
-                    padding: "10px 20px",
-                    borderRadius: 100,
-                    fontSize: "0.9rem",
+                    padding: "8px 16px",
+                    borderRadius: 10,
+                    fontSize: "0.82rem",
                     fontWeight: isActive ? 700 : 500,
                     color: isActive ? "var(--text)" : "var(--text-secondary)",
                     cursor: "pointer",
                     whiteSpace: "nowrap",
-                    transition: "color 0.2s ease",
+                    transition: "all 0.2s ease",
                   }}
                 >
                   {tab}
@@ -1751,10 +1751,10 @@ interface ViewingPackage {
                       layoutId="activeSubTab"
                       style={{
                         position: "absolute",
-                        bottom: -2,
-                        left: 16,
-                        right: 16,
-                        height: 3,
+                        bottom: -1,
+                        left: 12,
+                        right: 12,
+                        height: 2.5,
                         borderRadius: 2,
                         background: "#E2001A",
                       }}
@@ -1778,41 +1778,38 @@ interface ViewingPackage {
               alignItems: "center",
             }}
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={18} />
           </button>
         </motion.div>
 
         {/* 2. Section Heading Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          style={{ marginBottom: 40 }}
+          transition={{ duration: 0.5 }}
+          style={{ marginBottom: 28 }}
         >
-          <span
+          <div
             style={{
-              display: "inline-block",
-              padding: "4px 14px",
-              borderRadius: 100,
-              border: "1px solid var(--border-hover)",
-              color: "var(--accent)",
-              fontSize: "0.75rem",
-              fontWeight: 700,
-              letterSpacing: "0.1em",
+              fontSize: "0.72rem",
+              fontWeight: 800,
+              letterSpacing: "0.12em",
+              color: "#E2001A",
               textTransform: "uppercase",
-              marginBottom: 12,
+              marginBottom: 6,
             }}
           >
             SERVICES FOR ALL CAR BRANDS
-          </span>
+          </div>
           <h2
             style={{
-              fontSize: "2.25rem",
-              fontWeight: 900,
+              fontSize: "1.85rem",
+              fontWeight: 800,
               color: "var(--text)",
-              margin: "0 0 12px 0",
+              margin: "0 0 8px 0",
               fontFamily: "Outfit, sans-serif",
-              lineHeight: 1.2,
+              lineHeight: 1.25,
+              letterSpacing: "-0.02em",
             }}
           >
             Car Services Available In{" "}
@@ -1821,10 +1818,10 @@ interface ViewingPackage {
           <p
             style={{
               color: "var(--text-secondary)",
-              fontSize: "1rem",
-              maxWidth: 680,
+              fontSize: "0.9rem",
+              maxWidth: 620,
               margin: 0,
-              lineHeight: 1.6,
+              lineHeight: 1.55,
             }}
           >
             Choose from a wide assortment of car services from periodic car servicing, car care services, wheel care services, cashless Insurance claims and much more!
@@ -2091,7 +2088,7 @@ interface ViewingPackage {
                     style={{
                       display: "grid",
                       gridTemplateColumns: "repeat(4, 1fr)",
-                      gap: 8,
+                      gap: 12,
                     }}
                     className="categories-4col-grid"
                   >
@@ -2101,7 +2098,7 @@ interface ViewingPackage {
                       return (
                         <motion.div
                           key={cat.id}
-                          whileHover={{ y: -3, scale: 1.02 }}
+                          whileHover={{ y: -2, scale: 1.01 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => {
                             if (onCategorySelect) {
@@ -2112,18 +2109,18 @@ interface ViewingPackage {
                           }}
                           style={{
                             position: "relative",
-                            background: isSelected ? "rgba(226,0,26,0.06)" : "var(--bg-secondary)",
-                            border: isSelected ? "2px solid #E2001A" : "1px solid var(--border)",
-                            borderRadius: 4,
-                            padding: "12px 6px 10px",
-                            height: 146,
+                            background: isSelected ? "rgba(226,0,26,0.04)" : "var(--card)",
+                            border: isSelected ? "1.5px solid #E2001A" : "1px solid var(--border)",
+                            borderRadius: 12,
+                            padding: "14px 8px 12px",
+                            height: 116,
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
                             justifyContent: "center",
                             textAlign: "center",
                             cursor: "pointer",
-                            boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                            boxShadow: isSelected ? "0 4px 12px rgba(226,0,26,0.08)" : "0 1px 3px rgba(0,0,0,0.02)",
                             transition: "all 0.2s ease",
                           }}
                         >
@@ -2134,12 +2131,13 @@ interface ViewingPackage {
                                 position: "absolute",
                                 top: 6,
                                 right: 6,
-                                background: "#E8F5E9",
-                                color: "#2E7D32",
-                                fontSize: "0.6rem",
+                                background: "#ECFDF5",
+                                color: "#059669",
+                                fontSize: "0.58rem",
                                 fontWeight: 700,
                                 padding: "1px 5px",
-                                borderRadius: 2,
+                                borderRadius: 4,
+                                border: "1px solid rgba(5,150,105,0.2)",
                               }}
                             >
                               {cat.badge}
@@ -2149,12 +2147,12 @@ interface ViewingPackage {
                           {/* Clean Icon */}
                           <div
                             style={{
-                              width: 48,
-                              height: 48,
+                              width: 38,
+                              height: 38,
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              marginBottom: 6,
+                              marginBottom: 8,
                             }}
                           >
                             <img
@@ -2170,11 +2168,12 @@ interface ViewingPackage {
 
                           <h3
                             style={{
-                              fontSize: "13px",
+                              fontSize: "12px",
                               fontWeight: 700,
                               color: "var(--text)",
                               margin: 0,
-                              lineHeight: 1.3,
+                              lineHeight: 1.2,
+                              letterSpacing: "-0.01em",
                             }}
                           >
                             {cat.title}
@@ -2732,9 +2731,9 @@ interface ViewingPackage {
                   style={{
                     background: "var(--card)",
                     border: "1px solid var(--border)",
-                    borderRadius: 12,
-                    padding: "24px 20px",
-                    boxShadow: "0 12px 40px rgba(0,0,0,0.08)",
+                    borderRadius: 14,
+                    padding: "20px 18px",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
                     position: "relative",
                     overflow: "hidden",
                   }}
@@ -2742,53 +2741,54 @@ interface ViewingPackage {
                   {/* Header */}
                   <h3
                     style={{
-                      fontSize: "1.2rem",
-                      fontWeight: 900,
+                      fontSize: "1.05rem",
+                      fontWeight: 800,
                       color: "var(--text)",
                       fontFamily: "Outfit, sans-serif",
-                      margin: "0 0 4px 0",
+                      margin: "0 0 3px 0",
                       lineHeight: 1.3,
+                      letterSpacing: "-0.01em",
                     }}
                   >
                     Experience The Best Car Services In {selectedCity}
                   </h3>
                   <p
                     style={{
-                      fontSize: "0.8rem",
+                      fontSize: "0.75rem",
                       color: "var(--text-secondary)",
-                      margin: "0 0 18px 0",
+                      margin: "0 0 14px 0",
                     }}
                   >
-                    Get instant quotes for your car service
+                    Get instant upfront quotes for your car service
                   </p>
 
                   {/* Success View */}
                   {bookingSuccess ? (
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.9 }}
+                      initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      style={{ textAlign: "center", padding: "16px 0" }}
+                      style={{ textAlign: "center", padding: "12px 0" }}
                     >
                       <div
                         style={{
-                          width: 52,
-                          height: 52,
+                          width: 44,
+                          height: 44,
                           borderRadius: "50%",
-                          background: "rgba(16, 185, 129, 0.15)",
-                          border: "2px solid #10B981",
+                          background: "rgba(16, 185, 129, 0.12)",
+                          border: "1.5px solid #10B981",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          margin: "0 auto 12px",
+                          margin: "0 auto 10px",
                           color: "#10B981",
                         }}
                       >
-                        <CheckCircle2 size={26} />
+                        <CheckCircle2 size={22} />
                       </div>
-                      <h4 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text)", margin: "0 0 6px 0" }}>
+                      <h4 style={{ fontSize: "1rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0" }}>
                         Quote Requested!
                       </h4>
-                      <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: "0 0 16px 0" }}>
+                      <p style={{ fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: "0 0 14px 0" }}>
                         Our service manager in <strong>{selectedCity}</strong> will contact you at <strong>+91 {phone}</strong> shortly.
                       </p>
                       <button
@@ -2798,12 +2798,12 @@ interface ViewingPackage {
                           setSelectedCar(null);
                         }}
                         style={{
-                          padding: "8px 16px",
+                          padding: "7px 14px",
                           borderRadius: 6,
                           background: "var(--bg-secondary)",
                           border: "1px solid var(--border)",
                           color: "var(--text)",
-                          fontSize: "0.8rem",
+                          fontSize: "0.75rem",
                           fontWeight: 700,
                           cursor: "pointer",
                         }}
@@ -2813,7 +2813,7 @@ interface ViewingPackage {
                     </motion.div>
                   ) : (
                     /* Form Fields */
-                    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                       {/* 1. City Select Dropdown */}
                       <div style={{ position: "relative" }}>
                         <div
@@ -2821,13 +2821,13 @@ interface ViewingPackage {
                             display: "flex",
                             alignItems: "center",
                             gap: 8,
-                            padding: "11px 14px",
-                            borderRadius: 6,
-                            background: "var(--bg)",
+                            padding: "9px 12px",
+                            borderRadius: 8,
+                            background: "var(--bg-secondary)",
                             border: "1px solid var(--border)",
                           }}
                         >
-                          <MapPin size={16} color="#E2001A" />
+                          <MapPin size={15} color="#E2001A" />
                           <select
                             value={selectedCity}
                             onChange={(e) => setSelectedCity(e.target.value)}
@@ -2836,7 +2836,7 @@ interface ViewingPackage {
                               background: "none",
                               border: "none",
                               color: "var(--text)",
-                              fontSize: "0.85rem",
+                              fontSize: "0.82rem",
                               fontWeight: 700,
                               outline: "none",
                               cursor: "pointer",
@@ -2852,9 +2852,9 @@ interface ViewingPackage {
                             ))}
                           </select>
                           <ChevronDown
-                            size={16}
+                            size={14}
                             color="var(--text-muted)"
-                            style={{ position: "absolute", right: 12, pointerEvents: "none" }}
+                            style={{ position: "absolute", right: 10, pointerEvents: "none" }}
                           />
                         </div>
                       </div>
@@ -2866,10 +2866,10 @@ interface ViewingPackage {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "space-between",
-                          padding: "11px 14px",
-                          borderRadius: 6,
-                          background: selectedCar ? "rgba(0, 102, 255, 0.05)" : "var(--bg)",
-                          border: selectedCar ? "2px solid var(--accent)" : "1px solid var(--border)",
+                          padding: "9px 12px",
+                          borderRadius: 8,
+                          background: selectedCar ? "rgba(0, 102, 255, 0.05)" : "var(--bg-secondary)",
+                          border: selectedCar ? "1.5px solid var(--accent)" : "1px solid var(--border)",
                           color: "var(--text)",
                           cursor: "pointer",
                           textAlign: "left",
@@ -2878,32 +2878,32 @@ interface ViewingPackage {
                         }}
                       >
                         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                          <Car size={16} color="var(--accent)" />
-                          <span style={{ fontSize: "0.85rem", fontWeight: selectedCar ? 800 : 600 }}>
-                            {selectedCar ? `${selectedCar.brand} ${selectedCar.model}` : "SELECT YOUR CAR"}
+                          <Car size={15} color="var(--accent)" />
+                          <span style={{ fontSize: "0.82rem", fontWeight: selectedCar ? 700 : 600, color: selectedCar ? "var(--text)" : "var(--text-secondary)" }}>
+                            {selectedCar ? `${selectedCar.brand} ${selectedCar.model}` : "Select your car model"}
                           </span>
                         </div>
-                        <ChevronDown size={16} color="var(--text-muted)" />
+                        <ChevronDown size={14} color="var(--text-muted)" />
                       </button>
 
                       {/* 3. Mobile Number Input */}
                       <div style={{ position: "relative" }}>
-                        <Phone size={16} color="var(--text-muted)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
+                        <Phone size={14} color="var(--text-muted)" style={{ position: "absolute", left: 11, top: "50%", transform: "translateY(-50%)" }} />
                         <input
                           type="tel"
-                          placeholder="ENTER MOBILE NUMBER"
+                          placeholder="Enter 10-digit mobile number"
                           value={phone}
                           maxLength={10}
                           onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
                           style={{
                             width: "100%",
-                            padding: "11px 14px 11px 38px",
-                            borderRadius: 6,
-                            background: "var(--bg)",
+                            padding: "9px 12px 9px 34px",
+                            borderRadius: 8,
+                            background: "var(--bg-secondary)",
                             border: "1px solid var(--border)",
                             color: "var(--text)",
-                            fontSize: "0.85rem",
-                            fontWeight: 600,
+                            fontSize: "0.82rem",
+                            fontWeight: 500,
                             outline: "none",
                           }}
                         />
@@ -2913,22 +2913,22 @@ interface ViewingPackage {
                       <motion.button
                         onClick={handleCheckPrices}
                         disabled={loadingSubmit}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
                         style={{
                           width: "100%",
-                          padding: "13px",
-                          borderRadius: 6,
+                          padding: "10px 14px",
+                          borderRadius: 8,
                           background: "#E2001A",
                           color: "white",
                           border: "none",
                           cursor: loadingSubmit ? "wait" : "pointer",
                           fontFamily: "Outfit, sans-serif",
-                          fontSize: "0.9rem",
+                          fontSize: "0.82rem",
                           fontWeight: 800,
-                          letterSpacing: "0.05em",
+                          letterSpacing: "0.03em",
                           textTransform: "uppercase",
-                          boxShadow: "0 6px 20px rgba(226, 0, 26, 0.3)",
+                          boxShadow: "0 3px 12px rgba(226, 0, 26, 0.25)",
                           marginTop: 2,
                           display: "flex",
                           alignItems: "center",
@@ -2937,11 +2937,11 @@ interface ViewingPackage {
                         }}
                       >
                         {loadingSubmit ? (
-                          "Submitting..."
+                          "Processing..."
                         ) : (
                           <>
-                            CHECK PRICES FOR FREE
-                            <ArrowRight size={16} />
+                            Check Prices For Free
+                            <ArrowRight size={14} />
                           </>
                         )}
                       </motion.button>
@@ -2951,29 +2951,29 @@ interface ViewingPackage {
                   {/* Trust Footer */}
                   <div
                     style={{
-                      marginTop: 20,
-                      paddingTop: 16,
+                      marginTop: 16,
+                      paddingTop: 12,
                       borderTop: "1px solid var(--border)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <Star size={16} color="#F59E0B" fill="#F59E0B" />
+                    <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                      <Star size={14} color="#F59E0B" fill="#F59E0B" />
                       <div>
-                        <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--text)" }}>4.8/5</div>
-                        <div style={{ fontSize: "0.65rem", color: "var(--text-muted)" }}>Based on 150,000+ Reviews</div>
+                        <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--text)" }}>4.8/5</div>
+                        <div style={{ fontSize: "0.62rem", color: "var(--text-muted)" }}>150k+ Reviews</div>
                       </div>
                     </div>
 
-                    <div style={{ height: 24, width: 1, background: "var(--border)" }} />
+                    <div style={{ height: 18, width: 1, background: "var(--border)" }} />
 
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <Users size={16} color="#0066FF" />
+                    <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                      <Users size={14} color="#0066FF" />
                       <div>
-                        <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--text)" }}>2 Million+</div>
-                        <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Happy Customers</div>
+                        <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--text)" }}>2 Million+</div>
+                        <div style={{ fontSize: "0.62rem", color: "var(--text-muted)" }}>Happy Drivers</div>
                       </div>
                     </div>
                   </div>

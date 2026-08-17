@@ -1689,10 +1689,10 @@ interface ViewingPackage {
             alignItems: "center",
             background: "var(--card)",
             border: "1px solid var(--border)",
-            borderRadius: 14,
-            padding: "4px 8px",
-            marginBottom: 36,
-            boxShadow: "0 2px 12px rgba(0, 0, 0, 0.03)",
+            borderRadius: 10,
+            padding: "3px 6px",
+            marginBottom: 24,
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.03)",
             position: "relative",
           }}
         >
@@ -1703,12 +1703,12 @@ interface ViewingPackage {
               border: "none",
               color: "var(--text-muted)",
               cursor: "pointer",
-              padding: 6,
+              padding: 4,
               display: "flex",
               alignItems: "center",
             }}
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={16} />
           </button>
 
           <div
@@ -1716,12 +1716,12 @@ interface ViewingPackage {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 4,
+              gap: 3,
               overflowX: "auto",
               scrollBehavior: "smooth",
               scrollbarWidth: "none",
               flex: 1,
-              padding: "2px 4px",
+              padding: "2px",
             }}
           >
             {NAV_TABS.map((tab, idx) => {
@@ -1734,9 +1734,9 @@ interface ViewingPackage {
                     position: "relative",
                     background: isActive ? "var(--bg-secondary)" : "none",
                     border: "none",
-                    padding: "8px 16px",
-                    borderRadius: 10,
-                    fontSize: "0.82rem",
+                    padding: "5px 12px",
+                    borderRadius: 7,
+                    fontSize: "0.75rem",
                     fontWeight: isActive ? 700 : 500,
                     color: isActive ? "var(--text)" : "var(--text-secondary)",
                     cursor: "pointer",
@@ -1751,9 +1751,9 @@ interface ViewingPackage {
                       style={{
                         position: "absolute",
                         bottom: -1,
-                        left: 12,
-                        right: 12,
-                        height: 2.5,
+                        left: 8,
+                        right: 8,
+                        height: 2,
                         borderRadius: 2,
                         background: "#E2001A",
                       }}
@@ -1772,12 +1772,12 @@ interface ViewingPackage {
               border: "none",
               color: "var(--text-muted)",
               cursor: "pointer",
-              padding: 6,
+              padding: 4,
               display: "flex",
               alignItems: "center",
             }}
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={16} />
           </button>
         </motion.div>
 

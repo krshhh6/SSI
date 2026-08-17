@@ -1636,6 +1636,7 @@ interface ViewingPackage {
 
   const tabsNavRef = useRef<HTMLDivElement>(null);
   const curatedScrollRef = useRef<HTMLDivElement>(null);
+  const summerScrollRef = useRef<HTMLDivElement>(null);
 
   const scrollTabs = (direction: "left" | "right") => {
     if (tabsNavRef.current) {
@@ -2219,61 +2220,71 @@ interface ViewingPackage {
 
                 {/* Curated Custom Services Section displaying 4 parts at a time with > navigation */}
                 <div>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-                    <h3 style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                    <h3 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif" }}>
                       Curated Custom Services
                     </h3>
                     <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                      {Array.from({ length: maxCuratedIndex + 1 }).map((_, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setCuratedIndex(idx)}
-                          style={{
-                            width: curatedIndex === idx ? 20 : 8,
-                            height: 8,
-                            borderRadius: 4,
-                            background: curatedIndex === idx ? "#E2001A" : "var(--border)",
-                            border: "none",
-                            cursor: "pointer",
-                            transition: "all 0.3s ease",
-                          }}
-                          aria-label={`Go to slide ${idx + 1}`}
-                        />
-                      ))}
+                      <motion.button
+                        whileHover={{ scale: 1.08, background: "#E2001A", color: "#ffffff", borderColor: "#E2001A" }}
+                        whileTap={{ scale: 0.92 }}
+                        onClick={() => {
+                          prevCurated();
+                          if (curatedScrollRef.current) {
+                            curatedScrollRef.current.scrollBy({ left: -180, behavior: "smooth" });
+                          }
+                        }}
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: "50%",
+                          background: "var(--card)",
+                          border: "1px solid var(--border)",
+                          color: "var(--text)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: "pointer",
+                          boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+                          transition: "all 0.2s ease",
+                        }}
+                        aria-label="Previous Curated Service"
+                      >
+                        <ChevronLeft size={16} />
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.08, background: "#E2001A", color: "#ffffff", borderColor: "#E2001A" }}
+                        whileTap={{ scale: 0.92 }}
+                        onClick={() => {
+                          nextCurated();
+                          if (curatedScrollRef.current) {
+                            curatedScrollRef.current.scrollBy({ left: 180, behavior: "smooth" });
+                          }
+                        }}
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: "50%",
+                          background: "var(--card)",
+                          border: "1px solid var(--border)",
+                          color: "var(--text)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: "pointer",
+                          boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+                          transition: "all 0.2s ease",
+                        }}
+                        aria-label="Next Curated Service"
+                      >
+                        <ChevronRight size={16} />
+                      </motion.button>
                     </div>
                   </div>
 
                   <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-                    {/* Left Arrow Button < */}
-                    <motion.button
-                      className="carousel-nav-arrow"
-                      whileHover={{ scale: 1.15, background: "#E2001A", color: "#ffffff" }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={prevCurated}
-                      style={{
-                        position: "absolute",
-                        left: -16,
-                        zIndex: 10,
-                        width: 38,
-                        height: 38,
-                        borderRadius: "50%",
-                        background: "var(--card)",
-                        border: "1px solid var(--border)",
-                        color: "var(--text)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        boxShadow: "0 4px 14px rgba(0,0,0,0.15)",
-                        transition: "all 0.2s ease",
-                      }}
-                      aria-label="Previous Part"
-                    >
-                      <ChevronLeft size={22} />
-                    </motion.button>
-
-                    {/* Outer Viewport (Hides items outside the 4 visible slots) */}
-                    <div className="curated-scroll-container" style={{ overflow: "hidden", width: "100%", borderRadius: 16, padding: "4px 0" }}>
+                    {/* Outer Viewport */}
+                    <div ref={curatedScrollRef} className="curated-scroll-container" style={{ overflow: "hidden", width: "100%", borderRadius: 16, padding: "4px 0" }}>
                       <motion.div
                         animate={{ x: `calc(-${curatedIndex} * (25% + 4px))` }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -2367,94 +2378,76 @@ interface ViewingPackage {
                         ))}
                       </motion.div>
                     </div>
-
-                    {/* Right Arrow Button > */}
-                    <motion.button
-                      className="carousel-nav-arrow"
-                      whileHover={{ scale: 1.15, background: "#E2001A", color: "#ffffff" }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={nextCurated}
-                      style={{
-                        position: "absolute",
-                        right: -16,
-                        zIndex: 10,
-                        width: 38,
-                        height: 38,
-                        borderRadius: "50%",
-                        background: "var(--card)",
-                        border: "1px solid var(--border)",
-                        color: "var(--text)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        boxShadow: "0 4px 14px rgba(0,0,0,0.15)",
-                        transition: "all 0.2s ease",
-                      }}
-                      aria-label="Next Part"
-                    >
-                      <ChevronRight size={22} />
-                    </motion.button>
                   </div>
                 </div>
 
                 {/* Get Summer Ready With Bosch Section with GoMechanic Banner Style & Carousel < > */}
                 <div>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-                    <h3 style={{ fontSize: "1.35rem", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                    <h3 style={{ fontSize: "1.25rem", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif" }}>
                       Get Summer Ready With Bosch
                     </h3>
                     <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                      {Array.from({ length: maxSummerIndex + 1 }).map((_, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setSummerIndex(idx)}
-                          style={{
-                            width: summerIndex === idx ? 20 : 8,
-                            height: 8,
-                            borderRadius: 4,
-                            background: summerIndex === idx ? "#E2001A" : "var(--border)",
-                            border: "none",
-                            cursor: "pointer",
-                            transition: "all 0.3s ease",
-                          }}
-                          aria-label={`Go to slide ${idx + 1}`}
-                        />
-                      ))}
+                      <motion.button
+                        whileHover={{ scale: 1.08, background: "#E2001A", color: "#ffffff", borderColor: "#E2001A" }}
+                        whileTap={{ scale: 0.92 }}
+                        onClick={() => {
+                          prevSummer();
+                          if (summerScrollRef.current) {
+                            summerScrollRef.current.scrollBy({ left: -260, behavior: "smooth" });
+                          }
+                        }}
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: "50%",
+                          background: "var(--card)",
+                          border: "1px solid var(--border)",
+                          color: "var(--text)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: "pointer",
+                          boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+                          transition: "all 0.2s ease",
+                        }}
+                        aria-label="Previous Summer Offer"
+                      >
+                        <ChevronLeft size={16} />
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.08, background: "#E2001A", color: "#ffffff", borderColor: "#E2001A" }}
+                        whileTap={{ scale: 0.92 }}
+                        onClick={() => {
+                          nextSummer();
+                          if (summerScrollRef.current) {
+                            summerScrollRef.current.scrollBy({ left: 260, behavior: "smooth" });
+                          }
+                        }}
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: "50%",
+                          background: "var(--card)",
+                          border: "1px solid var(--border)",
+                          color: "var(--text)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: "pointer",
+                          boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+                          transition: "all 0.2s ease",
+                        }}
+                        aria-label="Next Summer Offer"
+                      >
+                        <ChevronRight size={16} />
+                      </motion.button>
                     </div>
                   </div>
 
                   <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-                    {/* Left Arrow Button < */}
-                    <motion.button
-                      className="carousel-nav-arrow"
-                      whileHover={{ scale: 1.15, background: "#E2001A", color: "#ffffff" }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={prevSummer}
-                      style={{
-                        position: "absolute",
-                        left: -18,
-                        zIndex: 10,
-                        width: 40,
-                        height: 40,
-                        borderRadius: "50%",
-                        background: "var(--card)",
-                        border: "1px solid var(--border)",
-                        color: "var(--text)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-                        transition: "all 0.2s ease",
-                      }}
-                      aria-label="Previous Summer Offer"
-                    >
-                      <ChevronLeft size={24} />
-                    </motion.button>
-
-                    {/* Visible Outer Container (Hides items outside 3 visible slots) */}
-                    <div className="summer-scroll-container" style={{ overflow: "hidden", width: "100%", borderRadius: 16, padding: "4px 0" }}>
+                    {/* Visible Outer Container */}
+                    <div ref={summerScrollRef} className="summer-scroll-container" style={{ overflow: "hidden", width: "100%", borderRadius: 16, padding: "4px 0" }}>
                       <motion.div
                         animate={{ x: `calc(-${summerIndex} * (33.333% + 5.33px))` }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -2529,34 +2522,6 @@ interface ViewingPackage {
                         ))}
                       </motion.div>
                     </div>
-
-                    {/* Right Arrow Button > */}
-                    <motion.button
-                      className="carousel-nav-arrow"
-                      whileHover={{ scale: 1.15, background: "#E2001A", color: "#ffffff" }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={nextSummer}
-                      style={{
-                        position: "absolute",
-                        right: -18,
-                        zIndex: 10,
-                        width: 40,
-                        height: 40,
-                        borderRadius: "50%",
-                        background: "var(--card)",
-                        border: "1px solid var(--border)",
-                        color: "var(--text)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-                        transition: "all 0.2s ease",
-                      }}
-                      aria-label="Next Summer Offer"
-                    >
-                      <ChevronRight size={24} />
-                    </motion.button>
                   </div>
                 </div>
               </div>

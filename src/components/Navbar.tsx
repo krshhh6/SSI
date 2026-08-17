@@ -187,7 +187,7 @@ export default function Navbar() {
       style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: 'rgba(9,9,11,0.96)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderBottom: '1px solid rgba(255,255,255,0.07)', height: 60, display: 'flex', alignItems: 'center' }}
     >
       {/* ── 3-column layout: Logo | Center Nav | Right Actions ── */}
-      <div ref={navRef} style={{ width: '100%', maxWidth: 1280, margin: '0 auto', padding: '0 28px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
+      <div ref={navRef} className="px-3 sm:px-6 lg:px-7" style={{ width: '100%', maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
 
         {/* LEFT — Logo */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
@@ -296,36 +296,18 @@ export default function Navbar() {
         </nav>
 
         {/* RIGHT — Actions (desktop only) */}
-        <div className="hidden lg:flex items-center" style={{ gap: 6, justifyContent: 'flex-end' }}>
-
-          {/* Divider: icon buttons group */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            {/* Search */}
-            <button
-              type="button"
-              onClick={() => setOpenSearch(true)}
-              aria-label="Search"
-              style={{ width: 34, height: 34, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#71717a', background: 'transparent', border: 'none', outline: 'none', cursor: 'pointer', transition: 'color 0.15s, background 0.15s', flexShrink: 0 }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = '#e4e4e7'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = '#71717a'; e.currentTarget.style.background = 'transparent'; }}
-            >
-              <Search size={15} strokeWidth={2} />
-            </button>
-
-            {/* Cart */}
-            <Link
-              href="/my-bookings"
-              aria-label="View bookings"
-              style={{ position: 'relative', width: 34, height: 34, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#71717a', textDecoration: 'none', transition: 'color 0.15s, background 0.15s', flexShrink: 0 }}
-              onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = '#e4e4e7'; el.style.background = 'rgba(255,255,255,0.08)'; }}
-              onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = '#71717a'; el.style.background = 'transparent'; }}
-            >
-              <ShoppingCart size={15} strokeWidth={2} />
-              {cartCount > 0 && (
-                <span style={{ position: 'absolute', top: 3, right: 3, width: 8, height: 8, borderRadius: '50%', background: '#E2001A', border: '1.5px solid rgba(9,9,11,0.96)' }} />
-              )}
-            </Link>
-          </div>
+        <div className="hidden lg:flex items-center" style={{ gap: 8, justifyContent: 'flex-end' }}>
+          {/* Search Button */}
+          <button
+            type="button"
+            onClick={() => setOpenSearch(true)}
+            aria-label="Search"
+            style={{ width: 34, height: 34, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#71717a', background: 'transparent', border: 'none', outline: 'none', cursor: 'pointer', transition: 'color 0.15s, background 0.15s', flexShrink: 0 }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#e4e4e7'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = '#71717a'; e.currentTarget.style.background = 'transparent'; }}
+          >
+            <Search size={15} strokeWidth={2} />
+          </button>
 
           {/* Thin separator */}
           <div style={{ width: 1, height: 18, background: 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
@@ -352,7 +334,7 @@ export default function Navbar() {
             </Link>
           )}
 
-          {/* Book Service CTA — filled white pill */}
+          {/* Book Service CTA — filled red pill */}
           <Link
             href="/booking"
             style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#E2001A', color: '#ffffff', border: 'none', outline: 'none', borderRadius: 7, padding: '0 16px', fontSize: 12.5, fontWeight: 700, textDecoration: 'none', height: 32, whiteSpace: 'nowrap', letterSpacing: '0.01em', transition: 'background 0.15s', boxShadow: '0 1px 3px rgba(226,0,26,0.35)' }}
@@ -370,23 +352,17 @@ export default function Navbar() {
             type="button"
             onClick={() => setOpenSearch(true)}
             aria-label="Search"
-            style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d4d4d8', background: 'transparent', border: 0, cursor: 'pointer' }}
+            style={{ width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d4d4d8', background: 'transparent', border: 0, cursor: 'pointer' }}
           >
             <Search size={16} />
           </button>
 
-          {/* Cart Button */}
+          {/* Book Service Quick Button */}
           <Link
-            href="/my-bookings"
-            aria-label="Cart"
-            style={{ position: 'relative', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d4d4d8', textDecoration: 'none' }}
+            href="/booking"
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#E2001A', color: '#ffffff', border: 'none', outline: 'none', borderRadius: 7, padding: '0 11px', fontSize: 11.5, fontWeight: 700, textDecoration: 'none', height: 30, whiteSpace: 'nowrap' }}
           >
-            <ShoppingCart size={16} />
-            {cartCount > 0 && (
-              <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 16, height: 16, padding: '0 3px', borderRadius: 999, background: '#E2001A', color: '#fff', fontSize: 9, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {cartCount}
-              </span>
-            )}
+            Book
           </Link>
 
           {/* Mobile Menu Sheet */}
@@ -395,7 +371,7 @@ export default function Navbar() {
               <button
                 type="button"
                 aria-label="Open menu"
-                style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', background: 'transparent', border: 0, cursor: 'pointer' }}
+                style={{ width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', background: 'transparent', border: 0, cursor: 'pointer' }}
               >
                 <Menu size={20} />
               </button>

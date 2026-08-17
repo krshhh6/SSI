@@ -2083,20 +2083,14 @@ interface ViewingPackage {
                   </div>
                 ) : (
                   /* PRIMARY 12 CATEGORIES GRID (Exact GoMechanic Square Box Grey Theme Layout) */
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(4, 1fr)",
-                      gap: 12,
-                    }}
-                    className="categories-4col-grid"
-                  >
+                  <div className="categories-grid-container">
                     {SERVICE_CATEGORIES.map((cat) => {
                       const isSelected = selectedCategory === cat.title;
 
                       return (
                         <motion.div
                           key={cat.id}
+                          className="category-card-item"
                           whileHover={{ y: -2, scale: 1.01 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => {
@@ -2107,20 +2101,9 @@ interface ViewingPackage {
                             }
                           }}
                           style={{
-                            position: "relative",
                             background: isSelected ? "rgba(226,0,26,0.04)" : "var(--card)",
                             border: isSelected ? "1.5px solid #E2001A" : "1px solid var(--border)",
-                            borderRadius: 12,
-                            padding: "14px 8px 12px",
-                            height: 116,
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            textAlign: "center",
-                            cursor: "pointer",
                             boxShadow: isSelected ? "0 4px 12px rgba(226,0,26,0.08)" : "0 1px 3px rgba(0,0,0,0.02)",
-                            transition: "all 0.2s ease",
                           }}
                         >
                           {/* Badge */}
@@ -2128,14 +2111,14 @@ interface ViewingPackage {
                             <span
                               style={{
                                 position: "absolute",
-                                top: 6,
-                                right: 6,
+                                top: 5,
+                                right: 5,
                                 background: "#ECFDF5",
                                 color: "#059669",
-                                fontSize: "0.58rem",
+                                fontSize: "0.55rem",
                                 fontWeight: 700,
-                                padding: "1px 5px",
-                                borderRadius: 4,
+                                padding: "1px 4px",
+                                borderRadius: 3,
                                 border: "1px solid rgba(5,150,105,0.2)",
                               }}
                             >
@@ -2146,12 +2129,12 @@ interface ViewingPackage {
                           {/* Clean Icon */}
                           <div
                             style={{
-                              width: 38,
-                              height: 38,
+                              width: 32,
+                              height: 32,
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              marginBottom: 8,
+                              marginBottom: 6,
                             }}
                           >
                             <img
@@ -2167,7 +2150,7 @@ interface ViewingPackage {
 
                           <h3
                             style={{
-                              fontSize: "12px",
+                              fontSize: "11px",
                               fontWeight: 700,
                               color: "var(--text)",
                               margin: 0,
@@ -2187,23 +2170,24 @@ interface ViewingPackage {
                 <div
                   style={{
                     background: "linear-gradient(135deg, #E2001A 0%, #B30014 100%)",
-                    borderRadius: 16,
-                    padding: "24px 28px",
+                    borderRadius: 14,
+                    padding: "16px 20px",
                     color: "white",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    boxShadow: "0 10px 30px rgba(226, 0, 26, 0.25)",
+                    gap: 12,
+                    boxShadow: "0 8px 24px rgba(226, 0, 26, 0.25)",
                     position: "relative",
                     overflow: "hidden",
                   }}
                 >
-                  <div>
-                    <div style={{ fontSize: "1.8rem", fontWeight: 900, fontFamily: "Outfit, sans-serif", marginBottom: 4 }}>
-                      Miles
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: "1.35rem", fontWeight: 900, fontFamily: "Outfit, sans-serif", marginBottom: 2, lineHeight: 1.1 }}>
+                      Miles RSA
                     </div>
-                    <div style={{ fontSize: "0.95rem", fontWeight: 600, opacity: 0.9 }}>
-                      Free Road Side Assistance & 24x7 Emergency Towing
+                    <div style={{ fontSize: "0.82rem", fontWeight: 600, opacity: 0.95, lineHeight: 1.3 }}>
+                      Free Roadside Assistance & 24×7 Emergency Towing
                     </div>
                   </div>
                   <motion.button
@@ -2214,8 +2198,8 @@ interface ViewingPackage {
                       if (!selectedCar) setIsCarModalOpen(true);
                     }}
                     style={{
-                      width: 46,
-                      height: 46,
+                      width: 40,
+                      height: 40,
                       borderRadius: "50%",
                       background: "white",
                       color: "#E2001A",
@@ -2224,10 +2208,12 @@ interface ViewingPackage {
                       alignItems: "center",
                       justifyContent: "center",
                       cursor: "pointer",
-                      boxShadow: "0 4px 14px rgba(0,0,0,0.15)",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                      flexShrink: 0,
                     }}
+                    aria-label="Request Roadside Assistance"
                   >
-                    <ArrowRight size={22} />
+                    <ArrowRight size={20} />
                   </motion.button>
                 </div>
 
@@ -2260,6 +2246,7 @@ interface ViewingPackage {
                   <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
                     {/* Left Arrow Button < */}
                     <motion.button
+                      className="carousel-nav-arrow"
                       whileHover={{ scale: 1.15, background: "#E2001A", color: "#ffffff" }}
                       whileTap={{ scale: 0.9 }}
                       onClick={prevCurated}
@@ -2286,20 +2273,21 @@ interface ViewingPackage {
                     </motion.button>
 
                     {/* Outer Viewport (Hides items outside the 4 visible slots) */}
-                    <div style={{ overflow: "hidden", width: "100%", borderRadius: 16, padding: "4px 0" }}>
+                    <div className="curated-scroll-container" style={{ overflow: "hidden", width: "100%", borderRadius: 16, padding: "4px 0" }}>
                       <motion.div
                         animate={{ x: `calc(-${curatedIndex} * (25% + 4px))` }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         style={{
                           display: "flex",
-                          gap: 16,
+                          gap: 14,
                           width: "100%",
                         }}
                       >
                         {CURATED_SERVICES.map((item) => (
                           <motion.div
                             key={item.title}
-                            whileHover={{ y: -6, scale: 1.02 }}
+                            className="curated-card-item"
+                            whileHover={{ y: -4, scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => {
                               const match = getCategoryByIdOrTitle(item.title);
@@ -2311,12 +2299,12 @@ interface ViewingPackage {
                               }
                             }}
                             style={{
-                              flex: "0 0 calc((100% - 48px) / 4)",
-                              minWidth: "calc((100% - 48px) / 4)",
+                              flex: "0 0 calc((100% - 42px) / 4)",
+                              minWidth: "calc((100% - 42px) / 4)",
                               background: "var(--card)",
                               border: "1px solid var(--border)",
-                              borderRadius: 16,
-                              padding: "14px",
+                              borderRadius: 14,
+                              padding: "12px 10px",
                               display: "flex",
                               flexDirection: "column",
                               alignItems: "center",
@@ -2331,17 +2319,16 @@ interface ViewingPackage {
                               <span
                                 style={{
                                   position: "absolute",
-                                  top: 8,
-                                  right: 8,
+                                  top: 6,
+                                  right: 6,
                                   background: item.badge === "SALE" ? "#E2001A" : item.badge === "POPULAR" ? "#FF8800" : "#10B981",
                                   color: "white",
-                                  fontSize: "0.58rem",
+                                  fontSize: "0.55rem",
                                   fontWeight: 800,
-                                  padding: "2px 6px",
-                                  borderRadius: 4,
+                                  padding: "2px 5px",
+                                  borderRadius: 3,
                                   textTransform: "uppercase",
                                   zIndex: 2,
-                                  boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
                                 }}
                               >
                                 {item.badge}
@@ -2352,12 +2339,12 @@ interface ViewingPackage {
                             <div
                               style={{
                                 width: "100%",
-                                height: 125,
-                                marginBottom: 12,
+                                height: 90,
+                                marginBottom: 8,
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                padding: 6,
+                                padding: 4,
                               }}
                             >
                               <img
@@ -2367,13 +2354,13 @@ interface ViewingPackage {
                                   maxHeight: "100%",
                                   maxWidth: "100%",
                                   objectFit: "contain",
-                                  filter: "drop-shadow(0 6px 14px rgba(0, 0, 0, 0.15))",
+                                  filter: "drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12))",
                                   transition: "transform 0.3s ease",
                                 }}
                               />
                             </div>
 
-                            <span style={{ fontSize: "1.05rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.2 }}>
+                            <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text)", lineHeight: 1.2 }}>
                               {item.title}
                             </span>
                           </motion.div>
@@ -2383,6 +2370,7 @@ interface ViewingPackage {
 
                     {/* Right Arrow Button > */}
                     <motion.button
+                      className="carousel-nav-arrow"
                       whileHover={{ scale: 1.15, background: "#E2001A", color: "#ffffff" }}
                       whileTap={{ scale: 0.9 }}
                       onClick={nextCurated}
@@ -2412,8 +2400,8 @@ interface ViewingPackage {
 
                 {/* Get Summer Ready With Bosch Section with GoMechanic Banner Style & Carousel < > */}
                 <div>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
-                    <h3 style={{ fontSize: "1.5rem", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+                    <h3 style={{ fontSize: "1.35rem", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif" }}>
                       Get Summer Ready With Bosch
                     </h3>
                     <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
@@ -2439,6 +2427,7 @@ interface ViewingPackage {
                   <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
                     {/* Left Arrow Button < */}
                     <motion.button
+                      className="carousel-nav-arrow"
                       whileHover={{ scale: 1.15, background: "#E2001A", color: "#ffffff" }}
                       whileTap={{ scale: 0.9 }}
                       onClick={prevSummer}
@@ -2465,27 +2454,28 @@ interface ViewingPackage {
                     </motion.button>
 
                     {/* Visible Outer Container (Hides items outside 3 visible slots) */}
-                    <div style={{ overflow: "hidden", width: "100%", borderRadius: 20, padding: "4px 0" }}>
+                    <div className="summer-scroll-container" style={{ overflow: "hidden", width: "100%", borderRadius: 16, padding: "4px 0" }}>
                       <motion.div
                         animate={{ x: `calc(-${summerIndex} * (33.333% + 5.33px))` }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         style={{
                           display: "flex",
-                          gap: 16,
+                          gap: 14,
                           width: "100%",
                         }}
                       >
                         {SUMMER_SERVICES.map((item) => (
                           <motion.div
                             key={item.title}
-                            whileHover={{ y: -6, scale: 1.01 }}
+                            className="summer-card-item"
+                            whileHover={{ y: -4, scale: 1.01 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => {
                               router.push(`/services/ac-service`);
                             }}
                             style={{
-                              flex: "0 0 calc((100% - 32px) / 3)",
-                              minWidth: "calc((100% - 32px) / 3)",
+                              flex: "0 0 calc((100% - 28px) / 3)",
+                              minWidth: "calc((100% - 28px) / 3)",
                               display: "flex",
                               flexDirection: "column",
                               cursor: "pointer",
@@ -2495,11 +2485,11 @@ interface ViewingPackage {
                             <div
                               style={{
                                 width: "100%",
-                                height: 220,
-                                borderRadius: 18,
+                                height: 180,
+                                borderRadius: 14,
                                 overflow: "hidden",
                                 position: "relative",
-                                boxShadow: "0 8px 24px rgba(0, 196, 214, 0.2)",
+                                boxShadow: "0 6px 20px rgba(0, 196, 214, 0.2)",
                                 background: "linear-gradient(135deg, #00C5D8 0%, #0099AA 100%)",
                               }}
                             >
@@ -2519,15 +2509,21 @@ interface ViewingPackage {
                             {/* Bottom Centered Title Label */}
                             <div
                               style={{
-                                marginTop: 12,
+                                padding: "10px 4px",
                                 textAlign: "center",
-                                fontSize: "1.05rem",
-                                fontWeight: 800,
-                                color: "var(--text)",
-                                fontFamily: "Outfit, sans-serif",
                               }}
                             >
-                              {item.title}
+                              <h4
+                                style={{
+                                  fontSize: "0.95rem",
+                                  fontWeight: 800,
+                                  color: "var(--text)",
+                                  margin: 0,
+                                  lineHeight: 1.25,
+                                }}
+                              >
+                                {item.title}
+                              </h4>
                             </div>
                           </motion.div>
                         ))}
@@ -2536,6 +2532,7 @@ interface ViewingPackage {
 
                     {/* Right Arrow Button > */}
                     <motion.button
+                      className="carousel-nav-arrow"
                       whileHover={{ scale: 1.15, background: "#E2001A", color: "#ffffff" }}
                       whileTap={{ scale: 0.9 }}
                       onClick={nextSummer}
@@ -2565,7 +2562,6 @@ interface ViewingPackage {
               </div>
             )}
           </motion.div>
-
           {/* RIGHT COLUMN: Model Selector & Quote Booking Widget */}
           <motion.div
             id="model-selector-widget"
@@ -2919,32 +2915,34 @@ interface ViewingPackage {
                         whileTap={{ scale: 0.99 }}
                         style={{
                           width: "100%",
-                          padding: "10px 14px",
+                          height: 44,
+                          padding: "0 14px",
                           borderRadius: 8,
                           background: "#E2001A",
-                          color: "white",
+                          color: "#ffffff",
                           border: "none",
                           cursor: loadingSubmit ? "wait" : "pointer",
                           fontFamily: "Outfit, sans-serif",
-                          fontSize: "0.82rem",
+                          fontSize: "0.86rem",
                           fontWeight: 800,
                           letterSpacing: "0.03em",
                           textTransform: "uppercase",
-                          boxShadow: "0 3px 12px rgba(226, 0, 26, 0.25)",
-                          marginTop: 2,
+                          boxShadow: "0 4px 14px rgba(226, 0, 26, 0.35)",
+                          marginTop: 4,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                           gap: 6,
+                          textAlign: "center",
                         }}
                       >
                         {loadingSubmit ? (
-                          "Processing..."
+                          <span style={{ color: "#ffffff", fontWeight: 800 }}>Processing...</span>
                         ) : (
-                          <>
+                          <span style={{ color: "#ffffff", fontWeight: 800, display: "inline-flex", alignItems: "center", gap: 6 }}>
                             Check Prices For Free
-                            <ArrowRight size={14} />
-                          </>
+                            <ArrowRight size={15} color="#ffffff" />
+                          </span>
                         )}
                       </motion.button>
                     </div>
@@ -2953,29 +2951,30 @@ interface ViewingPackage {
                   {/* Trust Footer */}
                   <div
                     style={{
-                      marginTop: 16,
-                      paddingTop: 12,
+                      marginTop: 14,
+                      paddingTop: 10,
                       borderTop: "1px solid var(--border)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
+                      gap: 8,
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <Star size={15} color="#F59E0B" fill="#F59E0B" />
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+                      <Star size={14} color="#F59E0B" fill="#F59E0B" />
                       <div>
-                        <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--text)" }}>4.7 / 5</div>
-                        <div style={{ fontSize: "0.64rem", color: "var(--text-muted)" }}>535+ Maps Reviews</div>
+                        <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.1 }}>4.7 / 5</div>
+                        <div style={{ fontSize: "0.64rem", color: "var(--text-muted)", whiteSpace: "nowrap" }}>535+ Maps Reviews</div>
                       </div>
                     </div>
 
-                    <div style={{ height: 18, width: 1, background: "var(--border)" }} />
+                    <div style={{ height: 16, width: 1, background: "var(--border)", flexShrink: 0 }} />
 
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <Users size={15} color="#0066FF" />
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+                      <Users size={14} color="#0066FF" />
                       <div>
-                        <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--text)" }}>5,000+</div>
-                        <div style={{ fontSize: "0.64rem", color: "var(--text-muted)" }}>Happy Customers</div>
+                        <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.1 }}>5,000+</div>
+                        <div style={{ fontSize: "0.64rem", color: "var(--text-muted)", whiteSpace: "nowrap" }}>Happy Customers</div>
                       </div>
                     </div>
                   </div>

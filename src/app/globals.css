@@ -678,10 +678,81 @@ body::after {
   .hero-car-mobile { display: block !important; }
 }
 
-/* Services grid mobile */
-@media (max-width: 480px) {
-  .services-grid {
+/* Services Section Responsive Rules */
+.gomechanic-services-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 24px;
+  align-items: start;
+}
+
+.categories-grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.category-card-item {
+  position: relative;
+  border-radius: 12px;
+  padding: 12px 8px;
+  height: 112px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 960px) {
+  .gomechanic-services-layout {
     grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .categories-grid-container {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+  .category-card-item {
+    height: 96px !important;
+    padding: 8px 4px !important;
+  }
+  .carousel-nav-arrow {
+    display: none !important;
+  }
+  .curated-scroll-container,
+  .summer-scroll-container {
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 4px 2px 8px !important;
+  }
+  .curated-scroll-container::-webkit-scrollbar,
+  .summer-scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+  .curated-card-item {
+    flex: 0 0 135px !important;
+    min-width: 135px !important;
+    scroll-snap-align: start !important;
+  }
+  .summer-card-item {
+    flex: 0 0 255px !important;
+    min-width: 255px !important;
+    scroll-snap-align: start !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .categories-grid-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
   }
 }
 

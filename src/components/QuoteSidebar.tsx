@@ -235,32 +235,34 @@ export default function QuoteSidebar({
               whileTap={{ scale: 0.98 }}
               style={{
                 width: "100%",
-                padding: "13px",
-                borderRadius: 6,
+                height: 44,
+                padding: "0 14px",
+                borderRadius: 8,
                 background: "#E2001A",
-                color: "white",
+                color: "#ffffff",
                 border: "none",
                 cursor: loadingSubmit ? "wait" : "pointer",
                 fontFamily: "Outfit, sans-serif",
-                fontSize: "0.9rem",
+                fontSize: "0.86rem",
                 fontWeight: 800,
-                letterSpacing: "0.05em",
+                letterSpacing: "0.04em",
                 textTransform: "uppercase",
                 boxShadow: "0 6px 20px rgba(226, 0, 26, 0.3)",
-                marginTop: 2,
+                marginTop: 4,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 gap: 6,
+                textAlign: "center",
               }}
             >
               {loadingSubmit ? (
-                "Submitting..."
+                <span style={{ color: "#ffffff", fontWeight: 800 }}>Submitting...</span>
               ) : (
-                <>
+                <span style={{ color: "#ffffff", fontWeight: 800, display: "inline-flex", alignItems: "center", gap: 6 }}>
                   CHECK PRICES FOR FREE
-                  <ArrowRight size={16} />
-                </>
+                  <ArrowRight size={15} color="#ffffff" />
+                </span>
               )}
             </motion.button>
           </div>
@@ -270,18 +272,19 @@ export default function QuoteSidebar({
       {/* Trust Footer */}
       <div
         style={{
-          paddingTop: 16,
+          paddingTop: 12,
           borderTop: "1px solid #e5e7eb",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          gap: 8,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <Star size={16} color="#F59E0B" fill="#F59E0B" />
+        <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+          <Star size={14} color="#F59E0B" fill="#F59E0B" />
           <div>
-            <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--text, #1a1a1a)" }}>4.7 / 5</div>
-            <div style={{ fontSize: "0.68rem", color: "var(--text-secondary, #6b7280)" }}>535+ Google Reviews</div>
+            <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--text, #1a1a1a)", lineHeight: 1.1 }}>4.7 / 5</div>
+            <div style={{ fontSize: "0.64rem", color: "var(--text-secondary, #6b7280)", whiteSpace: "nowrap" }}>535+ Reviews</div>
           </div>
         </div>
 

@@ -2083,8 +2083,16 @@ interface ViewingPackage {
                     ))}
                   </div>
                 ) : (
-                  /* PRIMARY 12 CATEGORIES GRID (Exact GoMechanic Square Box Grey Theme Layout) */
-                  <div className="categories-grid-container">
+                  /* PRIMARY 12 CATEGORIES GRID (Compact 4-Column Layout - All 12 Visible) */
+                  <div
+                    className="categories-grid-container"
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(4, 1fr)",
+                      gap: 6,
+                      width: "100%",
+                    }}
+                  >
                     {SERVICE_CATEGORIES.map((cat) => {
                       const isSelected = selectedCategory === cat.title;
 
@@ -2102,9 +2110,19 @@ interface ViewingPackage {
                             }
                           }}
                           style={{
+                            position: "relative",
                             background: isSelected ? "rgba(226,0,26,0.04)" : "var(--card)",
                             border: isSelected ? "1.5px solid #E2001A" : "1px solid var(--border)",
                             boxShadow: isSelected ? "0 4px 12px rgba(226,0,26,0.08)" : "0 1px 3px rgba(0,0,0,0.02)",
+                            borderRadius: 8,
+                            padding: "6px 2px 4px",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            textAlign: "center",
+                            cursor: "pointer",
+                            minHeight: 74,
                           }}
                         >
                           {/* Badge */}
@@ -2112,13 +2130,13 @@ interface ViewingPackage {
                             <span
                               style={{
                                 position: "absolute",
-                                top: 5,
-                                right: 5,
+                                top: 2,
+                                right: 2,
                                 background: "#ECFDF5",
                                 color: "#059669",
-                                fontSize: "0.55rem",
+                                fontSize: "0.48rem",
                                 fontWeight: 700,
-                                padding: "1px 4px",
+                                padding: "1px 3px",
                                 borderRadius: 3,
                                 border: "1px solid rgba(5,150,105,0.2)",
                               }}
@@ -2130,12 +2148,12 @@ interface ViewingPackage {
                           {/* Clean Icon */}
                           <div
                             style={{
-                              width: 32,
-                              height: 32,
+                              width: 24,
+                              height: 24,
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              marginBottom: 6,
+                              marginBottom: 3,
                             }}
                           >
                             <img
@@ -2151,12 +2169,13 @@ interface ViewingPackage {
 
                           <h3
                             style={{
-                              fontSize: "11px",
+                              fontSize: "10px",
                               fontWeight: 700,
                               color: "var(--text)",
                               margin: 0,
-                              lineHeight: 1.2,
+                              lineHeight: 1.15,
                               letterSpacing: "-0.01em",
+                              textAlign: "center",
                             }}
                           >
                             {cat.title}
@@ -3040,26 +3059,6 @@ interface ViewingPackage {
         }}
       />
 
-      {/* Responsive Media Queries */}
-      <style>{`
-        @media (max-width: 960px) {
-          .gomechanic-services-layout {
-            grid-template-columns: 1fr !important;
-            gap: 28px !important;
-          }
-          .categories-4col-grid {
-            grid-template-columns: repeat(3, 1fr) !important;
-            gap: 10px !important;
-          }
-        }
-
-        @media (max-width: 520px) {
-          .categories-4col-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 8px !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }

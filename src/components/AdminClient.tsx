@@ -362,7 +362,7 @@ export default function AdminClient() {
       <div style={{ position: "absolute", top: "5%", left: "5%", width: 600, height: 600, background: "radial-gradient(circle, rgba(0,102,255,0.07) 0%, transparent 60%)", filter: "blur(60px)", borderRadius: "50%", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: "5%", right: "5%", width: 500, height: 500, background: "radial-gradient(circle, rgba(226,0,26,0.05) 0%, transparent 60%)", filter: "blur(60px)", borderRadius: "50%", pointerEvents: "none" }} />
       <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} style={{ width: "100%", maxWidth: 420, background: "var(--card)", backdropFilter: "blur(40px)", border: "1px solid var(--border)", borderRadius: 32, padding: "48px 40px", position: "relative", zIndex: 10, boxShadow: "0 24px 80px rgba(0,0,0,0.5)" }}>
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "linear-gradient(90deg, #0066FF, #0066FF)", borderRadius: "32px 32px 0 0" }} />
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "var(--bosch-red)", borderRadius: "32px 32px 0 0" }} />
         <div style={{ textAlign: "center", marginBottom: 36 }}>
           <div style={{ width: 60, height: 60, borderRadius: 16, background: "var(--bosch-red)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", boxShadow: "0 0 32px rgba(226,0,26,0.4)" }}>
             <Wrench size={28} color="white" />
@@ -383,7 +383,7 @@ export default function AdminClient() {
             style={{ width: "100%", padding: "15px 18px", borderRadius: 12, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none" }}
             onFocus={e => { e.target.style.borderColor = "var(--accent)"; }} onBlur={e => { e.target.style.borderColor = "var(--border)"; }} />
           <motion.button type="submit" disabled={loginLoading} whileHover={!loginLoading ? { scale: 1.01 } : {}} whileTap={!loginLoading ? { scale: 0.99 } : {}}
-            style={{ marginTop: 8, padding: "16px", borderRadius: 12, background: loginLoading ? "rgba(226,0,26,0.5)" : "#0066FF", color: "var(--text)", border: "none", cursor: loginLoading ? "wait" : "pointer", fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1rem", letterSpacing: "0.06em", boxShadow: "0 8px 28px rgba(226,0,26,0.35)" }}>
+            style={{ marginTop: 8, padding: "16px", borderRadius: 12, background: loginLoading ? "rgba(226,0,26,0.5)" : "var(--bosch-red)", color: "#ffffff", border: "none", cursor: loginLoading ? "wait" : "pointer", fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1rem", letterSpacing: "0.06em", boxShadow: "0 8px 28px rgba(226,0,26,0.35)" }}>
             {loginLoading ? "Authenticating…" : "Sign In to Admin"}
           </motion.button>
         </form>
@@ -396,14 +396,14 @@ export default function AdminClient() {
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
       {/* Background glows */}
-      <div style={{ position: "fixed", top: "-10%", right: "-5%", width: "60vw", height: "60vw", background: "radial-gradient(circle, rgba(0,102,255,0.025) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
+      <div style={{ position: "fixed", top: "-10%", right: "-5%", width: "60vw", height: "60vw", background: "radial-gradient(circle, rgba(226,0,26,0.025) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
 
       {/* ── NAV ── */}
       <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "var(--navbar-bg)", backdropFilter: "blur(24px)", borderBottom: "1px solid var(--border)", padding: "0 28px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         {/* Left */}
         <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: "#0066FF", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 14px rgba(226,0,26,0.4)" }}>
+            <div style={{ width: 32, height: 32, borderRadius: 8, background: "var(--bosch-red)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 14px rgba(226,0,26,0.4)" }}>
               <Wrench size={16} color="white" />
             </div>
             <span style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "0.95rem", color: "var(--text)", letterSpacing: "0.04em" }}>SAM WHEELS ADMIN</span>
@@ -911,7 +911,7 @@ service cloud.firestore {
                   </div>
 
                   <button type="submit" disabled={offlineLoading}
-                    style={{ padding: "14px", borderRadius: 10, background: "#0066FF", border: "none", color: "var(--text)", fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.95rem", cursor: offlineLoading ? "wait" : "pointer", marginTop: 8 }}>
+                    style={{ padding: "14px", borderRadius: 10, background: "var(--bosch-red)", border: "none", color: "#ffffff", fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.95rem", cursor: offlineLoading ? "wait" : "pointer", marginTop: 8 }}>
                     {offlineLoading ? "Adding..." : "Add Offline Booking"}
                   </button>
                 </form>
@@ -943,7 +943,7 @@ service cloud.firestore {
                     }}
                   />
                   <select value={editBookingId} onChange={e => setEditBookingId(e.target.value)}
-                    style={{ width: "100%", padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid rgba(0,102,255,0.3)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "inherit" }}>
+                    style={{ width: "100%", padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid rgba(226,0,26,0.3)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "inherit" }}>
                     <option value="" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>-- Select a Booking to Edit --</option>
                     {bookings.slice()
                       .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
@@ -1009,7 +1009,7 @@ service cloud.firestore {
                     </div>
 
                     <button type="submit" disabled={editLoading}
-                      style={{ padding: "14px", borderRadius: 10, background: "#10B981", border: "none", color: "var(--text)", fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.95rem", cursor: editLoading ? "wait" : "pointer", marginTop: 8 }}>
+                      style={{ padding: "14px", borderRadius: 10, background: "#10B981", border: "none", color: "#ffffff", fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.95rem", cursor: editLoading ? "wait" : "pointer", marginTop: 8 }}>
                       {editLoading ? "Saving..." : "Save Changes"}
                     </button>
                   </form>
@@ -1029,48 +1029,53 @@ service cloud.firestore {
         {selectedBooking && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setSelectedBooking(null)}
-            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", backdropFilter: "blur(12px)", zIndex: 300, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-            <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.65)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", zIndex: 300, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+            <motion.div initial={{ scale: 0.95, y: 15 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 15 }}
               onClick={e => e.stopPropagation()}
-              style={{ background: "rgba(12,14,18,0.95)", border: "1px solid var(--border)", borderRadius: 28, padding: "36px", width: "100%", maxWidth: 560, position: "relative", boxShadow: "0 24px 80px rgba(0,0,0,0.7)", maxHeight: "90vh", overflowY: "auto" }}>
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "linear-gradient(90deg, #0066FF, #0066FF)", borderRadius: "28px 28px 0 0" }} />
+              className="admin-modal"
+              style={{ borderRadius: 24, padding: "32px 30px", width: "100%", maxWidth: 560, position: "relative", boxShadow: "0 24px 70px rgba(0,0,0,0.4)", maxHeight: "90vh", overflowY: "auto" }}>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "var(--bosch-red)", borderRadius: "24px 24px 0 0" }} />
 
               {/* Header */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
-                <div>
-                  <h2 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.5rem", color: "var(--text)", marginBottom: 6 }}>{selectedBooking.name}</h2>
-                  <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-                    <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.85rem", color: "var(--text-secondary)" }}><Mail size={13} />{selectedBooking.userEmail || "—"}</span>
-                    <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.85rem", color: "var(--text-secondary)" }}><Phone size={13} />{selectedBooking.phone}</span>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
+                <div style={{ minWidth: 0, flex: 1, paddingRight: 12 }}>
+                  <h2 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.5rem", color: "var(--text)", marginBottom: 4, lineHeight: 1.2, wordBreak: "break-word" }}>{selectedBooking.name}</h2>
+                  <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 6 }}>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "0.82rem", color: "var(--text-secondary)" }}><Mail size={13} style={{ flexShrink: 0 }} />{selectedBooking.userEmail || "—"}</span>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "0.82rem", color: "var(--text-secondary)" }}><Phone size={13} style={{ flexShrink: 0 }} />{selectedBooking.phone}</span>
                   </div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8, flexShrink: 0 }}>
                   <StatusBadge status={selectedBooking.status} size="lg" />
-                  <button onClick={() => setSelectedBooking(null)} style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", padding: 4 }}><X size={18} /></button>
+                  <button onClick={() => setSelectedBooking(null)} aria-label="Close" style={{ background: "transparent", border: "none", color: "var(--text-muted)", cursor: "pointer", padding: 6, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8 }}>
+                    <X size={18} />
+                  </button>
                 </div>
               </div>
 
               {/* Details grid */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 24 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
                 {[
                   { icon: Car,         label: "Vehicle",     value: `${selectedBooking.brand} ${selectedBooking.model}` },
                   { icon: Wrench,      label: "Service",     value: selectedBooking.service },
                   { icon: CalendarDays,label: "Pref. Date",  value: selectedBooking.date || "Not specified" },
                   { icon: Clock,       label: "Booked On",   value: selectedBooking.createdAt ? `${fmtDate(selectedBooking.createdAt.seconds)} · ${fmtTime(selectedBooking.createdAt.seconds)}` : "—" },
                 ].map(item => (
-                  <div key={item.label} style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 14, padding: "14px 16px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5, color: "var(--text-muted)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                      <item.icon size={12} />{item.label}
+                  <div key={item.label} className="admin-modal-card" style={{ borderRadius: 14, padding: "14px 16px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, color: "var(--text-muted)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                      <item.icon size={13} />{item.label}
                     </div>
-                    <div style={{ color: "var(--text)", fontWeight: 600, fontSize: "0.92rem", wordBreak: "break-word" }}>{item.value}</div>
+                    <div style={{ color: "var(--text)", fontWeight: 600, fontSize: "0.92rem", wordBreak: "break-word", lineHeight: 1.35 }}>{item.value}</div>
                   </div>
                 ))}
               </div>
 
               {selectedBooking.message && (
-                <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 14, padding: "14px 16px", marginBottom: 24 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, color: "var(--text-muted)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}><MessageSquare size={12} />Additional Message</div>
-                  <p style={{ color: "var(--text)", fontSize: "0.92rem", lineHeight: 1.6 }}>{selectedBooking.message}</p>
+                <div className="admin-modal-card" style={{ borderRadius: 14, padding: "14px 16px", marginBottom: 20 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, color: "var(--text-muted)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                    <MessageSquare size={13} />Additional Message
+                  </div>
+                  <p style={{ color: "var(--text)", fontSize: "0.9rem", lineHeight: 1.55, margin: 0 }}>{selectedBooking.message}</p>
                 </div>
               )}
 
@@ -1083,7 +1088,7 @@ service cloud.firestore {
                     const active = selectedBooking.status === s;
                     return (
                       <button key={s} onClick={() => updateStatus(selectedBooking.id, s)} disabled={active || updatingId === selectedBooking.id}
-                        style={{ padding: "10px 18px", borderRadius: 100, border: `1px solid ${active ? c.color : "var(--border)"}`, background: active ? c.bg : "transparent", color: active ? c.color : "var(--text-secondary)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: active ? "default" : "pointer", transition: "all 0.2s", opacity: updatingId === selectedBooking.id ? 0.5 : 1 }}>
+                        style={{ padding: "8px 16px", borderRadius: 100, border: `1px solid ${active ? c.color : "var(--border)"}`, background: active ? c.bg : "var(--bg-secondary)", color: active ? c.color : "var(--text-secondary)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.82rem", cursor: active ? "default" : "pointer", transition: "all 0.15s", opacity: updatingId === selectedBooking.id ? 0.5 : 1 }}>
                         {c.label}
                       </button>
                     );
@@ -1092,13 +1097,17 @@ service cloud.firestore {
               </div>
 
               {/* Actions */}
-              <div style={{ display: "flex", gap: 10, paddingTop: 20, borderTop: "1px solid var(--border)" }}>
+              <div style={{ display: "flex", gap: 10, paddingTop: 18, borderTop: "1px solid var(--border)", alignItems: "center" }}>
                 <button onClick={() => deleteBooking(selectedBooking.id)}
-                  style={{ display: "flex", alignItems: "center", gap: 7, padding: "11px 18px", borderRadius: 12, border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.08)", color: "#EF4444", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.88rem", cursor: "pointer" }}>
-                  <Trash2 size={15} />Delete Booking
+                  style={{ display: "flex", alignItems: "center", gap: 7, padding: "10px 16px", borderRadius: 10, border: "1px solid rgba(239,68,68,0.25)", background: "rgba(239,68,68,0.08)", color: "#EF4444", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", transition: "all 0.15s" }}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(239,68,68,0.15)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "rgba(239,68,68,0.08)"}>
+                  <Trash2 size={14} />Delete Booking
                 </button>
                 <button onClick={() => setSelectedBooking(null)}
-                  style={{ marginLeft: "auto", padding: "11px 24px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.88rem", cursor: "pointer" }}>
+                  style={{ marginLeft: "auto", padding: "10px 22px", borderRadius: 10, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", transition: "all 0.15s" }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = "var(--border-hover)"}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border)"}>
                   Close
                 </button>
               </div>
@@ -1110,6 +1119,28 @@ service cloud.firestore {
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
         .animate-spin { animation: spin 0.8s linear infinite; }
+        
+        /* Modal Theme Styles */
+        .admin-modal {
+          background: #ffffff;
+          color: #111111;
+          border: 1px solid #e2e8f0;
+        }
+        .admin-modal-card {
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+        }
+        
+        [data-theme="dark"] .admin-modal {
+          background: #111318;
+          color: #ffffff;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        [data-theme="dark"] .admin-modal-card {
+          background: #181b22;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
         /* Force dark dropdown options in dark mode */
         [data-theme="dark"] .admin-select option,
         [data-theme="dark"] select option {

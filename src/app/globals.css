@@ -129,6 +129,9 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  width: 100% !important;
 }
 
 body {
@@ -138,6 +141,9 @@ body {
   transition: background-color 0.4s ease, color 0.4s ease;
   line-height: 1.6;
   position: relative;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  width: 100% !important;
 }
 
 /* Ambient Background Blobs to highlight glassmorphism */

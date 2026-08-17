@@ -357,6 +357,15 @@ export default function Navbar() {
             <Search size={16} />
           </button>
 
+          {/* User Account Icon Button (Left of Book) */}
+          <Link
+            href={user ? "/my-bookings" : "/sign-in"}
+            aria-label={user ? "Account" : "Sign In"}
+            style={{ width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: user ? '#ffffff' : '#d4d4d8', background: 'transparent', border: 0, textDecoration: 'none' }}
+          >
+            <User size={17} strokeWidth={2} />
+          </Link>
+
           {/* Book Service Quick Button */}
           <Link
             href="/booking"

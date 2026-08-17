@@ -3,6 +3,8 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
   position: relative;
   z-index: 10;
   /* Adjusting height to fit a stats banner */
@@ -12,8 +14,8 @@
 .curved-loop-svg {
   user-select: none;
   width: 100%;
-  /* Removed aspect-ratio to let it fit its container better */
-  overflow: visible;
+  max-width: 100%;
+  overflow: hidden;
   display: block;
   font-size: 1.8rem; /* Made significantly smaller so it doesn't overlap car */
   fill: var(--accent); /* Using theme accent color */

@@ -188,10 +188,10 @@ export default function Navbar() {
       style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: 'rgba(9,9,11,0.96)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderBottom: '1px solid rgba(255,255,255,0.07)', height: 60, display: 'flex', alignItems: 'center' }}
     >
       {/* ── 3-column layout: Logo | Center Nav | Right Actions ── */}
-      <div ref={navRef} className="px-4 sm:px-6 lg:px-8" style={{ width: '100%', maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
+      <div ref={navRef} className="navbar-container px-4 sm:px-6 lg:px-8">
 
         {/* LEFT — Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+        <div className="navbar-logo-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
           <Link
             href="/"
             onClick={(e) => handleLinkClick("/", e)}
@@ -347,13 +347,13 @@ export default function Navbar() {
         </div>
 
         {/* MOBILE TRIGGER & ACTIONS — shown only on < lg */}
-        <div className="flex lg:hidden items-center" style={{ gap: 4, justifyContent: 'flex-end' }}>
+        <div className="navbar-mobile-actions flex lg:hidden items-center" style={{ gap: 5, justifyContent: 'flex-end' }}>
           {/* Search Button */}
           <button
             type="button"
             onClick={() => setOpenSearch(true)}
             aria-label="Search"
-            style={{ width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d4d4d8', background: 'transparent', border: 0, cursor: 'pointer' }}
+            style={{ width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d4d4d8', background: 'transparent', border: 0, cursor: 'pointer' }}
           >
             <Search size={16} />
           </button>
@@ -362,7 +362,7 @@ export default function Navbar() {
           <Link
             href={user ? "/my-bookings" : "/sign-in"}
             aria-label={user ? "Account" : "Sign In"}
-            style={{ width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: user ? '#ffffff' : '#d4d4d8', background: 'transparent', border: 0, textDecoration: 'none' }}
+            style={{ width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', color: user ? '#ffffff' : '#d4d4d8', background: 'transparent', border: 0, textDecoration: 'none' }}
           >
             <User size={17} strokeWidth={2} />
           </Link>
@@ -370,7 +370,7 @@ export default function Navbar() {
           {/* Book Service Quick Button */}
           <Link
             href="/booking"
-            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#E2001A', color: '#ffffff', border: 'none', outline: 'none', borderRadius: 7, padding: '0 11px', fontSize: 11.5, fontWeight: 700, textDecoration: 'none', height: 30, whiteSpace: 'nowrap' }}
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#E2001A', color: '#ffffff', border: 'none', outline: 'none', borderRadius: 7, padding: '0 12px', fontSize: 11.5, fontWeight: 700, textDecoration: 'none', height: 30, whiteSpace: 'nowrap' }}
           >
             Book
           </Link>

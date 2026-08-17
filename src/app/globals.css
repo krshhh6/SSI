@@ -129,7 +129,7 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden !important;
+  overflow-x: clip !important;
   max-width: 100% !important;
   width: 100% !important;
 }
@@ -141,7 +141,7 @@ body {
   transition: background-color 0.4s ease, color 0.4s ease;
   line-height: 1.6;
   position: relative;
-  overflow-x: hidden !important;
+  overflow-x: clip !important;
   max-width: 100% !important;
   width: 100% !important;
 }
@@ -727,45 +727,211 @@ body::after {
 
 .categories-grid-container {
   display: grid !important;
-  grid-template-columns: repeat(4, 1fr) !important;
-  gap: 10px !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 24px !important;
   width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .category-card-item {
-  position: relative;
-  border-radius: 10px;
-  padding: 10px 4px;
-  height: 96px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  position: relative !important;
+  border-radius: 12px !important;
+  padding: 20px 12px !important;
+  width: 100% !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  aspect-ratio: 0.9 / 1 !important;
+  min-height: 175px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  gap: 12px !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
 }
 
-@media (max-width: 960px) {
+.service-card__icon {
+  width: 52px !important;
+  height: 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.service-card__icon img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+.service-card__label {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+  color: var(--text) !important;
+  max-width: 110px !important;
+  margin: 0 !important;
+  text-align: center !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Dual-Column Layout & Sticky Form Positioning */
+@media (min-width: 1024px) {
   .gomechanic-services-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 420px !important;
+    gap: 40px !important;
+    align-items: start !important; /* FIXED: align-items: start prevents sticky floating overlap */
+    position: relative !important;
+  }
+
+  .sticky-form-card-container {
+    position: sticky !important;
+    top: calc(var(--navbar-height, 60px) + 20px) !important;
+    align-self: start !important;
+    height: fit-content !important; /* FIXED: height fit-content contains form rigidly inside column 2 */
+    z-index: 10 !important;
+    width: 420px !important;
+    max-width: 420px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Ultra-Wide Screens (>= 1440px): 5 columns */
+@media (min-width: 1440px) {
+  .categories-grid-container {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 24px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Standard Laptops & Desktop Monitors (1024px – 1439px): 4 columns */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .categories-grid-container {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Tablet (768px – 1023px): 3 columns, stacked form */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .gomechanic-services-layout {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  .categories-grid-container {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .sticky-form-card-container {
+    position: static !important;
+    top: auto !important;
+    align-self: auto !important;
+    z-index: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Mobile (<768px): 2 columns, stacked form, reduced card/form dimensions */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 80px !important; /* Prevents fixed bottom FloatingContact bar from overlapping page content */
+  }
+
+  .gomechanic-services-layout {
+    display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 24px !important;
+  }
+
+  .categories-grid-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .category-card-item {
+    aspect-ratio: 0.95 / 1 !important;
+    min-height: 140px !important;
+    padding: 16px 12px !important;
+    gap: 10px !important;
+  }
+
+  .service-card__icon {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .service-card__label {
+    font-size: 13px !important;
+    max-width: 100% !important;
+  }
+
+  .sticky-form-card-container {
+    position: static !important;
+    top: auto !important;
+    align-self: auto !important;
+    z-index: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Form Card Mobile Scaling */
+  .sticky-form-card-container > div {
+    padding: 24px 20px !important;
+    gap: 16px !important;
+    border-radius: 14px !important;
+  }
+
+  .sticky-form-card-container h3 {
+    font-size: 1.15rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .sticky-form-card-container p {
+    font-size: 0.8rem !important;
+    margin-bottom: 16px !important;
+  }
+
+  .sticky-form-card-container select,
+  .sticky-form-card-container input,
+  .sticky-form-card-container button {
+    font-size: 0.86rem !important;
+  }
+
+  .sticky-form-card-container div[style*="height: 56"],
+  .sticky-form-card-container button[style*="height: 56"] {
+    height: 48px !important;
+  }
+
+  .sticky-form-card-container input[style*="height: 56"] {
+    height: 48px !important;
   }
 }
 
 @media (max-width: 768px) {
-  .categories-grid-container {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 6px !important;
-    width: 100% !important;
-  }
-  .category-card-item {
-    height: 74px !important;
-    min-height: 74px !important;
-    padding: 5px 2px 3px !important;
-    border-radius: 8px !important;
-  }
   .carousel-nav-arrow {
     display: none !important;
   }
@@ -1083,6 +1249,75 @@ body::after {
 
 .animate-accordion-up {
   animation: accordion-up 0.2s ease-out;
+}
+
+/* ── SEARCH DROPDOWN CMDK SPACING ── */
+[cmdk-root] {
+  padding: 16px 24px !important;
+  background: #ffffff !important;
+  color: #1a1a1a !important;
+  box-sizing: border-box !important;
+}
+
+[cmdk-input-wrapper] {
+  padding: 12px 16px !important;
+  margin-bottom: 16px !important;
+  border: 1px solid #e5e5e5 !important;
+  border-radius: 12px !important;
+  background: #ffffff !important;
+}
+
+[cmdk-input] {
+  font-size: 15px !important;
+  color: #1a1a1a !important;
+}
+
+[cmdk-group-heading] {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  margin-top: 16px !important;
+  margin-bottom: 8px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #888888 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.8px !important;
+}
+
+[cmdk-list] {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  max-height: 60vh !important;
+  overflow-y: auto !important;
+}
+
+[cmdk-item] {
+  padding: 10px 12px !important;
+  margin-bottom: 4px !important;
+  border-radius: 8px !important;
+  font-size: 14.5px !important;
+  font-weight: 600 !important;
+  color: #1a1a1a !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  transition: background-color 0.15s ease, padding-left 0.15s ease !important;
+  box-sizing: border-box !important;
+}
+
+[cmdk-item][data-selected="true"],
+[cmdk-item]:hover {
+  background-color: #fdeaea !important;
+  color: #E2001A !important;
+  padding-left: 16px !important;
+}
+
+[cmdk-separator] {
+  margin-top: 16px !important;
+  margin-bottom: 8px !important;
+  border-top: 1px solid #eeeeee !important;
+  height: 0 !important;
 }
 
 

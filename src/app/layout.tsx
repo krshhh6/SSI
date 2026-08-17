@@ -45,6 +45,14 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  icons: {
+    icon: [
+      { url: "/bosch-logo.png", type: "image/png" },
+      { url: "/favicon.ico" },
+    ],
+    shortcut: "/bosch-logo.png",
+    apple: "/bosch-logo.png",
+  },
 };
 
 export default function RootLayout({

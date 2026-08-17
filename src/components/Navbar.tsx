@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
+import { SERVICE_CATEGORIES } from "@/lib/servicesData";
 import {
   Search,
   ShoppingCart,
@@ -43,6 +44,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
 } from "@/components/ui/command";
 
 interface MenuItem {
@@ -155,8 +157,18 @@ export default function Navbar() {
         setActiveDropdown(null);
       }
     }
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setOpenSearch((prev) => !prev);
+      }
+    }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const handleLinkClick = (url: string, e?: React.MouseEvent) => {
@@ -532,82 +544,58 @@ export default function Navbar() {
 
       {/* SEARCH COMMAND PALETTE (CMD+K) */}
       <CommandDialog open={openSearch} onOpenChange={setOpenSearch}>
-        <CommandInput placeholder="Search car services, periodic maintenance, batteries, AC..." />
-        <CommandList className="bg-[#121215] text-white">
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup className="text-neutral-400" heading="Popular Services">
-            <CommandItem
-              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
-              onSelect={() => {
-                setOpenSearch(false);
-                router.push("/services/car-services");
-              }}
-            >
-              <Boxes className="size-4 mr-2 text-[#E2001A]" />
-              Periodic Maintenance & Comprehensive Car Service
-            </CommandItem>
-            <CommandItem
-              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
-              onSelect={() => {
-                setOpenSearch(false);
-                router.push("/services/ac-service");
-              }}
-            >
-              <LayoutDashboard className="size-4 mr-2 text-[#E2001A]" />
-              AC Gas Recharge & Deep Evaporator Cleaning
-            </CommandItem>
-            <CommandItem
-              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
-              onSelect={() => {
-                setOpenSearch(false);
-                router.push("/services/batteries");
-              }}
-            >
-              <Sparkles className="size-4 mr-2 text-[#E2001A]" />
-              Bosch Genuine Battery Replacement & Electrical Check
-            </CommandItem>
-            <CommandItem
-              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
-              onSelect={() => {
-                setOpenSearch(false);
-                router.push("/services/denting-painting");
-              }}
-            >
-              <Palette className="size-4 mr-2 text-[#E2001A]" />
-              Premium Denting & Painting (Grade A Booth)
-            </CommandItem>
+        <CommandInput placeholder="Search car services, periodic maintenance, batteries, AC..." autoFocus />
+        <CommandList>
+          <CommandEmpty>No services found matching your search.</CommandEmpty>
+          
+          <CommandGroup heading="Service Categories">
+            {SERVICE_CATEGORIES.map((cat) => (
+              <CommandItem
+                key={cat.id}
+                onSelect={() => {
+                  setOpenSearch(false);
+                  router.push(`/services/${cat.id}`);
+                }}
+              >
+                <span>{cat.title}</span>
+              </CommandItem>
+            ))}
           </CommandGroup>
 
-          <CommandGroup className="text-neutral-400" heading="Quick Links">
+          <CommandSeparator />
+
+          <CommandGroup heading="Quick Links">
             <CommandItem
-              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
               onSelect={() => {
                 setOpenSearch(false);
                 router.push("/booking");
               }}
             >
-              <Boxes className="size-4 mr-2 text-[#E2001A]" />
-              Book a Service Appointment
+              <span>Book a Service Appointment</span>
             </CommandItem>
             <CommandItem
-              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
               onSelect={() => {
                 setOpenSearch(false);
                 router.push("/bosch-advantage");
               }}
             >
-              <Book className="size-4 mr-2 text-[#E2001A]" />
-              Why Choose SAM Wheels Bosch Workshop
+              <span>Why Choose SAM Wheels Bosch Workshop</span>
             </CommandItem>
             <CommandItem
-              className="text-neutral-200 hover:text-white hover:bg-white/10 cursor-pointer"
+              onSelect={() => {
+                setOpenSearch(false);
+                router.push("/why-different");
+              }}
+            >
+              <span>About Bosch SAM Wheels Patna</span>
+            </CommandItem>
+            <CommandItem
               onSelect={() => {
                 setOpenSearch(false);
                 router.push("/blog");
               }}
             >
-              <History className="size-4 mr-2 text-[#E2001A]" />
-              Expert Car Care Blog & Maintenance Tips
+              <span>Expert Car Care Blog & Maintenance Tips</span>
             </CommandItem>
           </CommandGroup>
         </CommandList>

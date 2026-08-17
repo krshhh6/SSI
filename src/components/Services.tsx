@@ -43,46 +43,55 @@ const CURATED_SERVICES = [
     title: "Batteries",
     badge: "SALE",
     iconUrl: "/battery.png",
+    categoryId: "batteries",
   },
   {
     title: "Brakes",
     badge: "POPULAR",
     iconUrl: "/brakes_clean.png",
+    categoryId: "car-services",
   },
   {
     title: "AC Parts",
     badge: null,
     iconUrl: "/AC.png",
+    categoryId: "ac-service",
   },
   {
     title: "Bumpers",
     badge: "NEW",
     iconUrl: "/bumper.png",
+    categoryId: "denting-painting",
   },
   {
     title: "Seat",
     badge: null,
     iconUrl: "/seat.png",
+    categoryId: "car-spa-cleaning",
   },
   {
     title: "Side Mirrors",
     badge: null,
     iconUrl: "/sideMirror.png",
+    categoryId: "windshields-lights",
   },
   {
     title: "Suspension",
     badge: "POPULAR",
     iconUrl: "/suspension.png",
+    categoryId: "suspension-fitments",
   },
   {
     title: "Wheels",
     badge: null,
     iconUrl: "/wheel.png",
+    categoryId: "tyres-wheel-care",
   },
   {
     title: "Lights",
     badge: "NEW",
     iconUrl: "/light.png",
+    categoryId: "windshields-lights",
   },
 ];
 
@@ -92,24 +101,28 @@ const SUMMER_SERVICES = [
     desc: "Grade A paint booth finish for front bumper scratch & scuff removal.",
     bannerUrl: "/summer/bumper_paint.png",
     tag: "Cooling Offer",
+    categoryId: "denting-painting",
   },
   {
     title: "Rubbing & Polishing",
     desc: "High-shine Teflon paint restoration, anti-scratch sealant & swirl removal.",
     bannerUrl: "/summer/rubbing_polishing.png",
     tag: "Popular",
+    categoryId: "detailing-services",
   },
   {
     title: "Deep All Round Spa",
     desc: "Deep interior foam wash + anti-bacterial cabin sanitization & leather polish.",
     bannerUrl: "/summer/car_spa.png",
     tag: "Summer Special",
+    categoryId: "car-spa-cleaning",
   },
   {
     title: "AC Gas Top-Up & Chill Check",
     desc: "Cooling coil cleaning, AC gas refill & 100% compressor performance boost.",
     bannerUrl: "/summer/ac_topup.png",
     tag: "Best Seller",
+    categoryId: "ac-service",
   },
 ];
 
@@ -1730,7 +1743,10 @@ interface ViewingPackage {
               return (
                 <button
                   key={tab}
-                  onClick={() => setActiveTab(idx)}
+                  onClick={() => {
+                    setActiveTab(idx);
+                    setSelectedCategory(null);
+                  }}
                   style={{
                     position: "relative",
                     background: isActive ? "var(--bg-secondary)" : "none",
@@ -1830,13 +1846,6 @@ interface ViewingPackage {
 
         {/* 3. Dual-Column GoMechanic Layout */}
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(0, 1fr) 330px",
-            gap: 24,
-            alignItems: "start",
-            position: "relative",
-          }}
           className="gomechanic-services-layout"
         >
           {/* LEFT COLUMN: Tab-Based View */}
@@ -1844,6 +1853,7 @@ interface ViewingPackage {
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.1 }}
+            style={{ minWidth: 0, width: "100%" }}
           >
             {/* TAB 0: OUR SERVICES (ALL INCLUSIVE MAIN VIEW) */}
             {activeTab === 0 && (
@@ -2087,10 +2097,9 @@ interface ViewingPackage {
                   <div
                     className="categories-grid-container"
                     style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(4, 1fr)",
-                      gap: 6,
                       width: "100%",
+                      boxSizing: "border-box",
+                      minWidth: 0,
                     }}
                   >
                     {SERVICE_CATEGORIES.map((cat) => {
@@ -2100,7 +2109,7 @@ interface ViewingPackage {
                         <motion.div
                           key={cat.id}
                           className="category-card-item"
-                          whileHover={{ y: -2, scale: 1.01 }}
+                          whileHover={{ y: -3, scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => {
                             if (onCategorySelect) {
@@ -2111,18 +2120,23 @@ interface ViewingPackage {
                           }}
                           style={{
                             position: "relative",
-                            background: isSelected ? "rgba(226,0,26,0.04)" : "var(--card)",
+                            background: isSelected ? "rgba(226,0,26,0.06)" : "var(--card)",
                             border: isSelected ? "1.5px solid #E2001A" : "1px solid var(--border)",
-                            boxShadow: isSelected ? "0 4px 12px rgba(226,0,26,0.08)" : "0 1px 3px rgba(0,0,0,0.02)",
-                            borderRadius: 8,
-                            padding: "6px 2px 4px",
+                            boxShadow: isSelected ? "0 6px 16px rgba(226,0,26,0.12)" : "0 2px 8px rgba(0,0,0,0.03)",
+                            borderRadius: 12,
+                            padding: "24px 16px",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
                             justifyContent: "center",
                             textAlign: "center",
                             cursor: "pointer",
-                            minHeight: 74,
+                            width: "100%",
+                            aspectRatio: "0.9 / 1",
+                            minHeight: 190,
+                            gap: 16,
+                            boxSizing: "border-box",
+                            margin: 0,
                           }}
                         >
                           {/* Badge */}
@@ -2130,14 +2144,14 @@ interface ViewingPackage {
                             <span
                               style={{
                                 position: "absolute",
-                                top: 2,
-                                right: 2,
+                                top: 8,
+                                right: 8,
                                 background: "#ECFDF5",
                                 color: "#059669",
-                                fontSize: "0.48rem",
-                                fontWeight: 700,
-                                padding: "1px 3px",
-                                borderRadius: 3,
+                                fontSize: "0.62rem",
+                                fontWeight: 800,
+                                padding: "2px 6px",
+                                borderRadius: 4,
                                 border: "1px solid rgba(5,150,105,0.2)",
                               }}
                             >
@@ -2145,15 +2159,16 @@ interface ViewingPackage {
                             </span>
                           )}
 
-                          {/* Clean Icon */}
+                          {/* 56px Clean Icon */}
                           <div
+                            className="service-card__icon"
                             style={{
-                              width: 24,
-                              height: 24,
+                              width: 56,
+                              height: 56,
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              marginBottom: 3,
+                              flexShrink: 0,
                             }}
                           >
                             <img
@@ -2168,14 +2183,17 @@ interface ViewingPackage {
                           </div>
 
                           <h3
+                            className="service-card__label"
                             style={{
-                              fontSize: "10px",
-                              fontWeight: 700,
+                              fontSize: "15px",
+                              fontWeight: 600,
                               color: "var(--text)",
                               margin: 0,
-                              lineHeight: 1.15,
+                              lineHeight: 1.3,
                               letterSpacing: "-0.01em",
                               textAlign: "center",
+                              maxWidth: 120,
+                              wordBreak: "break-word",
                             }}
                           >
                             {cat.title}
@@ -2483,7 +2501,14 @@ interface ViewingPackage {
                             whileHover={{ y: -4, scale: 1.01 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => {
-                              router.push(`/services/ac-service`);
+                              const match = getCategoryByIdOrTitle(item.categoryId || item.title);
+                              if (onCategorySelect && match) {
+                                onCategorySelect(match);
+                              } else if (match) {
+                                setSelectedCategory(match.title);
+                              } else {
+                                router.push(`/services/${item.categoryId}`);
+                              }
                             }}
                             style={{
                               flex: "0 0 calc((100% - 28px) / 3)",
@@ -2545,6 +2570,258 @@ interface ViewingPackage {
                 </div>
               </div>
             )}
+
+            {/* TAB 1: CURATED CUSTOM SERVICES DEDICATED VIEW */}
+            {activeTab === 1 && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                <div style={{ marginBottom: 4 }}>
+                  <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0", fontFamily: "Outfit, sans-serif" }}>
+                    Curated Custom Services
+                  </h3>
+                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", margin: 0 }}>
+                    Select genuine parts & custom repairs tailored for your car
+                  </p>
+                </div>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gap: 16,
+                    width: "100%",
+                  }}
+                >
+                  {CURATED_SERVICES.map((item) => (
+                    <motion.div
+                      key={item.title}
+                      whileHover={{ y: -4, scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => {
+                        const match = getCategoryByIdOrTitle(item.categoryId || item.title);
+                        if (onCategorySelect && match) {
+                          onCategorySelect(match);
+                        } else if (match) {
+                          setSelectedCategory(match.title);
+                        } else {
+                          router.push(`/services/${item.categoryId}`);
+                        }
+                      }}
+                      style={{
+                        background: "var(--card)",
+                        border: "1px solid var(--border)",
+                        borderRadius: 14,
+                        padding: "16px 14px",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        textAlign: "center",
+                        cursor: "pointer",
+                        position: "relative",
+                        boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
+                        transition: "all 0.2s ease",
+                      }}
+                    >
+                      {item.badge && (
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: 8,
+                            right: 8,
+                            background: item.badge === "SALE" ? "#E2001A" : item.badge === "POPULAR" ? "#FF8800" : "#10B981",
+                            color: "white",
+                            fontSize: "0.6rem",
+                            fontWeight: 800,
+                            padding: "2px 6px",
+                            borderRadius: 4,
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          {item.badge}
+                        </span>
+                      )}
+                      <div
+                        style={{
+                          width: "100%",
+                          height: 90,
+                          marginBottom: 10,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <img
+                          src={item.iconUrl}
+                          alt={item.title}
+                          style={{
+                            maxHeight: "100%",
+                            maxWidth: "100%",
+                            objectFit: "contain",
+                            filter: "drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12))",
+                          }}
+                        />
+                      </div>
+                      <span style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text)", lineHeight: 1.2 }}>
+                        {item.title}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB 2: SUMMER SERVICES DEDICATED VIEW */}
+            {activeTab === 2 && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                <div style={{ marginBottom: 4 }}>
+                  <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0", fontFamily: "Outfit, sans-serif" }}>
+                    Get Summer Ready With Bosch
+                  </h3>
+                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", margin: 0 }}>
+                    Specialized AC, cooling, and interior hygiene packages for peak summer
+                  </p>
+                </div>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: 16,
+                    width: "100%",
+                  }}
+                >
+                  {SUMMER_SERVICES.map((item) => (
+                    <motion.div
+                      key={item.title}
+                      whileHover={{ y: -4, scale: 1.01 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => {
+                        const match = getCategoryByIdOrTitle(item.categoryId || item.title);
+                        if (onCategorySelect && match) {
+                          onCategorySelect(match);
+                        } else if (match) {
+                          setSelectedCategory(match.title);
+                        } else {
+                          router.push(`/services/${item.categoryId}`);
+                        }
+                      }}
+                      style={{
+                        background: "var(--card)",
+                        border: "1px solid var(--border)",
+                        borderRadius: 14,
+                        overflow: "hidden",
+                        cursor: "pointer",
+                        boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "100%",
+                          height: 160,
+                          position: "relative",
+                          background: "linear-gradient(135deg, #00C5D8 0%, #0099AA 100%)",
+                        }}
+                      >
+                        <img
+                          src={item.bannerUrl}
+                          alt={item.title}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: 8,
+                            right: 8,
+                            background: "#E2001A",
+                            color: "white",
+                            fontSize: "0.6rem",
+                            fontWeight: 800,
+                            padding: "3px 8px",
+                            borderRadius: 4,
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          {item.tag}
+                        </span>
+                      </div>
+                      <div style={{ padding: "14px 16px" }}>
+                        <h4 style={{ fontSize: "1rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0" }}>
+                          {item.title}
+                        </h4>
+                        <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", margin: 0, lineHeight: 1.4 }}>
+                          {item.desc}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB 3: HOW BOSCH WORKS DEDICATED VIEW */}
+            {activeTab === 3 && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                <div style={{ marginBottom: 4 }}>
+                  <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0", fontFamily: "Outfit, sans-serif" }}>
+                    How Bosch Car Service Works
+                  </h3>
+                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", margin: 0 }}>
+                    Hassle-free 4-step car servicing with doorstep pick-up & 1,000 km warranty
+                  </p>
+                </div>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: 16,
+                    width: "100%",
+                  }}
+                >
+                  {HOW_BOSCH_WORKS_STEPS.map((step) => (
+                    <div
+                      key={step.step}
+                      style={{
+                        background: "var(--card)",
+                        border: "1px solid var(--border)",
+                        borderRadius: 14,
+                        padding: "20px 18px",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 10,
+                        boxShadow: "0 4px 16px rgba(0,0,0,0.03)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: 8,
+                          background: "rgba(226, 0, 26, 0.1)",
+                          color: "#E2001A",
+                          fontWeight: 900,
+                          fontSize: "0.95rem",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {step.step}
+                      </div>
+                      <h4 style={{ fontSize: "1.05rem", fontWeight: 800, color: "var(--text)", margin: 0 }}>
+                        {step.title}
+                      </h4>
+                      <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", margin: 0, lineHeight: 1.45 }}>
+                        {step.desc}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </motion.div>
           {/* RIGHT COLUMN: Model Selector & Quote Booking Widget */}
           <motion.div
@@ -2552,13 +2829,7 @@ interface ViewingPackage {
             initial={{ opacity: 0, x: 20 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            style={{
-              position: "sticky",
-              top: 76,
-              alignSelf: "start",
-              zIndex: 15,
-              width: "100%",
-            }}
+            className="sticky-form-card-container"
           >
               {/* RIGHT COLUMN: Conditionally render Model Selector when category is active, or Original Quote Form on main view */}
               {selectedCategory ? (
@@ -2567,15 +2838,15 @@ interface ViewingPackage {
                   style={{
                     background: "var(--card)",
                     border: "1px solid var(--border)",
-                    borderRadius: 16,
-                    padding: "20px",
-                    boxShadow: "0 12px 40px rgba(0,0,0,0.08)",
+                    borderRadius: 18,
+                    padding: "40px 32px",
+                    boxShadow: "0 16px 45px rgba(0,0,0,0.08)",
                     position: "relative",
                     width: "100%",
                     boxSizing: "border-box",
                     display: "flex",
                     flexDirection: "column",
-                    gap: 16,
+                    gap: 20,
                   }}
                 >
                   {/* Widget Header */}
@@ -2712,9 +2983,9 @@ interface ViewingPackage {
                   style={{
                     background: "var(--card)",
                     border: "1px solid var(--border)",
-                    borderRadius: 16,
-                    padding: "20px 18px",
-                    boxShadow: "0 8px 30px rgba(0,0,0,0.06)",
+                    borderRadius: 18,
+                    padding: "40px 32px",
+                    boxShadow: "0 16px 45px rgba(0,0,0,0.08)",
                     position: "relative",
                     width: "100%",
                     boxSizing: "border-box",
@@ -2723,12 +2994,12 @@ interface ViewingPackage {
                   {/* Header */}
                   <h3
                     style={{
-                      fontSize: "1.05rem",
+                      fontSize: "1.4rem",
                       fontWeight: 800,
                       color: "var(--text)",
                       fontFamily: "Outfit, sans-serif",
-                      margin: "0 0 3px 0",
-                      lineHeight: 1.3,
+                      margin: "0 0 6px 0",
+                      lineHeight: 1.25,
                       letterSpacing: "-0.01em",
                     }}
                   >
@@ -2736,12 +3007,13 @@ interface ViewingPackage {
                   </h3>
                   <p
                     style={{
-                      fontSize: "0.75rem",
+                      fontSize: "0.88rem",
                       color: "var(--text-secondary)",
-                      margin: "0 0 14px 0",
+                      margin: "0 0 24px 0",
+                      lineHeight: 1.4,
                     }}
                   >
-                    Get instant upfront quotes for your car service
+                    Get instant quotes for your car service
                   </p>
 
                   {/* Success View */}
@@ -2749,28 +3021,28 @@ interface ViewingPackage {
                     <motion.div
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      style={{ textAlign: "center", padding: "12px 0" }}
+                      style={{ textAlign: "center", padding: "20px 0" }}
                     >
                       <div
                         style={{
-                          width: 44,
-                          height: 44,
+                          width: 52,
+                          height: 52,
                           borderRadius: "50%",
                           background: "rgba(16, 185, 129, 0.12)",
                           border: "1.5px solid #10B981",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          margin: "0 auto 10px",
+                          margin: "0 auto 14px",
                           color: "#10B981",
                         }}
                       >
-                        <CheckCircle2 size={22} />
+                        <CheckCircle2 size={26} />
                       </div>
-                      <h4 style={{ fontSize: "1rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0" }}>
+                      <h4 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text)", margin: "0 0 6px 0" }}>
                         Quote Requested!
                       </h4>
-                      <p style={{ fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: "0 0 14px 0" }}>
+                      <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: "0 0 18px 0" }}>
                         Our service manager in <strong>{selectedCity}</strong> will contact you at <strong>+91 {phone}</strong> shortly.
                       </p>
                       <button
@@ -2780,12 +3052,12 @@ interface ViewingPackage {
                           setSelectedCar(null);
                         }}
                         style={{
-                          padding: "7px 14px",
-                          borderRadius: 6,
+                          padding: "10px 18px",
+                          borderRadius: 8,
                           background: "var(--bg-secondary)",
                           border: "1px solid var(--border)",
                           color: "var(--text)",
-                          fontSize: "0.75rem",
+                          fontSize: "0.82rem",
                           fontWeight: 700,
                           cursor: "pointer",
                         }}
@@ -2795,21 +3067,22 @@ interface ViewingPackage {
                     </motion.div>
                   ) : (
                     /* Form Fields */
-                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                       {/* 1. City Select Dropdown */}
                       <div style={{ position: "relative" }}>
                         <div
                           style={{
                             display: "flex",
                             alignItems: "center",
-                            gap: 8,
-                            padding: "9px 12px",
+                            gap: 10,
+                            height: 56,
+                            padding: "0 16px",
                             borderRadius: 8,
                             background: "var(--bg-secondary)",
                             border: "1px solid var(--border)",
                           }}
                         >
-                          <MapPin size={15} color="#E2001A" />
+                          <MapPin size={18} color="#E2001A" />
                           <select
                             value={selectedCity}
                             onChange={(e) => setSelectedCity(e.target.value)}
@@ -2818,7 +3091,7 @@ interface ViewingPackage {
                               background: "none",
                               border: "none",
                               color: "var(--text)",
-                              fontSize: "0.82rem",
+                              fontSize: "0.92rem",
                               fontWeight: 700,
                               outline: "none",
                               cursor: "pointer",
@@ -2834,9 +3107,9 @@ interface ViewingPackage {
                             ))}
                           </select>
                           <ChevronDown
-                            size={14}
+                            size={16}
                             color="var(--text-muted)"
-                            style={{ position: "absolute", right: 10, pointerEvents: "none" }}
+                            style={{ position: "absolute", right: 14, pointerEvents: "none" }}
                           />
                         </div>
                       </div>
@@ -2848,7 +3121,8 @@ interface ViewingPackage {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "space-between",
-                          padding: "9px 12px",
+                          height: 56,
+                          padding: "0 16px",
                           borderRadius: 8,
                           background: selectedCar ? "rgba(0, 102, 255, 0.05)" : "var(--bg-secondary)",
                           border: selectedCar ? "1.5px solid var(--accent)" : "1px solid var(--border)",
@@ -2859,18 +3133,18 @@ interface ViewingPackage {
                           transition: "all 0.2s ease",
                         }}
                       >
-                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                          <Car size={15} color="var(--accent)" />
-                          <span style={{ fontSize: "0.82rem", fontWeight: selectedCar ? 700 : 600, color: selectedCar ? "var(--text)" : "var(--text-secondary)" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <Car size={18} color="var(--accent)" />
+                          <span style={{ fontSize: "0.92rem", fontWeight: selectedCar ? 700 : 600, color: selectedCar ? "var(--text)" : "var(--text-secondary)" }}>
                             {selectedCar ? `${selectedCar.brand} ${selectedCar.model}` : "Select your car model"}
                           </span>
                         </div>
-                        <ChevronDown size={14} color="var(--text-muted)" />
+                        <ChevronDown size={16} color="var(--text-muted)" />
                       </button>
 
                       {/* 3. Mobile Number Input */}
                       <div style={{ position: "relative" }}>
-                        <Phone size={14} color="var(--text-muted)" style={{ position: "absolute", left: 11, top: "50%", transform: "translateY(-50%)" }} />
+                        <Phone size={18} color="var(--text-muted)" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }} />
                         <input
                           type="tel"
                           placeholder="Enter 10-digit mobile number"
@@ -2879,12 +3153,13 @@ interface ViewingPackage {
                           onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
                           style={{
                             width: "100%",
-                            padding: "9px 12px 9px 34px",
+                            height: 56,
+                            padding: "0 16px 0 44px",
                             borderRadius: 8,
                             background: "var(--bg-secondary)",
                             border: "1px solid var(--border)",
                             color: "var(--text)",
-                            fontSize: "0.82rem",
+                            fontSize: "0.92rem",
                             fontWeight: 500,
                             outline: "none",
                           }}
@@ -2899,66 +3174,66 @@ interface ViewingPackage {
                         whileTap={{ scale: 0.99 }}
                         style={{
                           width: "100%",
-                          height: 44,
-                          padding: "0 14px",
+                          height: 56,
+                          padding: "0 16px",
                           borderRadius: 8,
                           background: "#E2001A",
                           color: "#ffffff",
                           border: "none",
                           cursor: loadingSubmit ? "wait" : "pointer",
                           fontFamily: "Outfit, sans-serif",
-                          fontSize: "0.86rem",
+                          fontSize: "0.95rem",
                           fontWeight: 800,
                           letterSpacing: "0.03em",
                           textTransform: "uppercase",
-                          boxShadow: "0 4px 14px rgba(226, 0, 26, 0.35)",
-                          marginTop: 4,
+                          boxShadow: "0 6px 18px rgba(226, 0, 26, 0.35)",
+                          marginTop: 8,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          gap: 6,
+                          gap: 8,
                           textAlign: "center",
                         }}
                       >
                         {loadingSubmit ? (
-                          <span style={{ color: "#ffffff", fontWeight: 800 }}>Processing...</span>
+                          <span style={{ color: "#ffffff", fontWeight: 800 }}>PROCESSING...</span>
                         ) : (
-                          <span style={{ color: "#ffffff", fontWeight: 800, display: "inline-flex", alignItems: "center", gap: 6 }}>
-                            Check Prices For Free
-                            <ArrowRight size={15} color="#ffffff" />
+                          <span style={{ color: "#ffffff", fontWeight: 800, display: "inline-flex", alignItems: "center", gap: 8 }}>
+                            CHECK PRICES FOR FREE
+                            <ArrowRight size={17} color="#ffffff" />
                           </span>
                         )}
                       </motion.button>
                     </div>
                   )}
 
-                  {/* Trust Footer */}
+                  {/* Trust Stats Footer */}
                   <div
                     style={{
-                      marginTop: 14,
-                      paddingTop: 10,
+                      marginTop: 24,
+                      paddingTop: 20,
                       borderTop: "1px solid var(--border)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
-                      gap: 8,
+                      gap: 12,
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-                      <Star size={14} color="#F59E0B" fill="#F59E0B" />
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                      <Star size={18} color="#F59E0B" fill="#F59E0B" />
                       <div>
-                        <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.1 }}>4.7 / 5</div>
-                        <div style={{ fontSize: "0.64rem", color: "var(--text-muted)", whiteSpace: "nowrap" }}>535+ Maps Reviews</div>
+                        <div style={{ fontSize: "0.92rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.1 }}>4.7 / 5</div>
+                        <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", whiteSpace: "nowrap" }}>535+ Maps Reviews</div>
                       </div>
                     </div>
 
-                    <div style={{ height: 16, width: 1, background: "var(--border)", flexShrink: 0 }} />
+                    <div style={{ height: 28, width: 1, background: "var(--border)", flexShrink: 0 }} />
 
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-                      <Users size={14} color="#0066FF" />
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                      <Users size={18} color="#0066FF" />
                       <div>
-                        <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.1 }}>5,000+</div>
-                        <div style={{ fontSize: "0.64rem", color: "var(--text-muted)", whiteSpace: "nowrap" }}>Happy Customers</div>
+                        <div style={{ fontSize: "0.92rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.1 }}>5,000+</div>
+                        <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", whiteSpace: "nowrap" }}>Happy Customers</div>
                       </div>
                     </div>
                   </div>

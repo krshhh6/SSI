@@ -4,17 +4,29 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function InitialLoader() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [mounted, setMounted] = useState<boolean>(false);
 
   useEffect(() => {
+    setMounted(true);
+    // Check if user has already seen loader in this session
+    const hasLoaded = sessionStorage.getItem("sam_wheels_loaded");
+    if (hasLoaded) {
+      setIsLoading(false);
+      return;
+    }
+
     // Prevent scrolling while loader is active
     document.body.style.overflow = "hidden";
     
-    // Hide loader after 4 seconds
+    // Snappy, fast 950ms loader
     const timer = setTimeout(() => {
       setIsLoading(false);
+      try {
+        sessionStorage.setItem("sam_wheels_loaded", "true");
+      } catch (e) {}
       document.body.style.overflow = "";
-    }, 4000);
+    }, 950);
 
     return () => {
       clearTimeout(timer);
@@ -22,13 +34,15 @@ export default function InitialLoader() {
     };
   }, []);
 
+  if (!mounted || !isLoading) return null;
+
   return (
     <AnimatePresence>
       {isLoading && (
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
           className="page-loader-card"
         >
           <div className="tire-loader-container">

@@ -91,12 +91,14 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
       
       {/* Actual Card */}
       <motion.div
-        className="w-full relative overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/80 shadow-sm bg-white aspect-square"
+        className="w-full relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-sm aspect-square"
         style={{
           rotateX,
           rotateY,
           transformStyle: "preserve-3d",
           zIndex: 1,
+          border: "1px solid var(--border)",
+          background: "var(--card)",
         }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
@@ -149,28 +151,63 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
 
 export default function Journey() {
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-gray-50/50 relative overflow-hidden border-t border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center">
+    <section
+      className="py-14 sm:py-18 md:py-24 relative overflow-hidden border-t"
+      style={{
+        background: "var(--bg)",
+        borderColor: "var(--border)",
+      }}
+    >
+      {/* Background Radial Glow */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: 1000,
+          height: 500,
+          borderRadius: "50%",
+          background: "radial-gradient(ellipse, rgba(226, 0, 26, 0.04) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center">
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-8 sm:mb-12 max-w-2xl w-full"
+          className="text-center mb-10 sm:mb-14 max-w-2xl w-full"
         >
-          <div className="text-[11px] font-bold tracking-widest text-[#E2001A] uppercase mb-1.5">
+          <div
+            className="inline-block px-3.5 py-1 rounded-full text-[11px] font-bold tracking-widest uppercase mb-3 border"
+            style={{
+              color: "#E2001A",
+              background: "rgba(226, 0, 26, 0.06)",
+              borderColor: "rgba(226, 0, 26, 0.18)",
+            }}
+          >
             SEAMLESS SERVICE EXPERIENCE
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight mb-2">
+          <h2
+            className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3"
+            style={{ color: "var(--text)", fontFamily: "Outfit, sans-serif" }}
+          >
             Your Journey, Simplified
           </h2>
-          <p className="text-xs sm:text-sm text-gray-500 leading-relaxed max-w-lg mx-auto">
+          <p
+            className="text-xs sm:text-sm md:text-base leading-relaxed max-w-xl mx-auto"
+            style={{ color: "var(--text-secondary)" }}
+          >
             From the moment you book to when you get your car back, we make the entire process simple, transparent, and stress-free.
           </p>
         </motion.div>
 
-        {/* 2x2 Grid on Mobile, 4-Cols on Desktop */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 w-full max-w-5xl mx-auto">
+        {/* 2x2 Grid on Mobile, 4-Cols spanning full width on Desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 w-full max-w-7xl">
           {STEPS.map((step, i) => (
             <JourneyCard key={step.title} step={step} index={i} />
           ))}

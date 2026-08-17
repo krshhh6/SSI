@@ -152,10 +152,18 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
 export default function Journey() {
   return (
     <section
-      className="py-14 sm:py-18 md:py-24 relative overflow-hidden border-t"
       style={{
+        width: "100%",
+        paddingTop: "70px",
+        paddingBottom: "80px",
+        position: "relative",
+        overflow: "hidden",
+        borderTop: "1px solid var(--border)",
         background: "var(--bg)",
-        borderColor: "var(--border)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
       {/* Background Radial Glow */}
@@ -173,41 +181,95 @@ export default function Journey() {
         }}
       />
 
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center">
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 1280,
+          marginLeft: "auto",
+          marginRight: "auto",
+          paddingLeft: 24,
+          paddingRight: 24,
+          position: "relative",
+          zIndex: 10,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 sm:mb-14 max-w-2xl w-full"
+          style={{
+            textAlign: "center",
+            marginBottom: 44,
+            maxWidth: 640,
+            width: "100%",
+            marginLeft: "auto",
+            marginRight: "auto",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
           <div
-            className="inline-block px-3.5 py-1 rounded-full text-[11px] font-bold tracking-widest uppercase mb-3 border"
             style={{
+              display: "inline-block",
+              padding: "4px 14px",
+              borderRadius: 100,
+              fontSize: "11px",
+              fontWeight: 800,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              marginBottom: 12,
               color: "#E2001A",
               background: "rgba(226, 0, 26, 0.06)",
-              borderColor: "rgba(226, 0, 26, 0.18)",
+              border: "1px solid rgba(226, 0, 26, 0.18)",
             }}
           >
             SEAMLESS SERVICE EXPERIENCE
           </div>
           <h2
-            className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3"
-            style={{ color: "var(--text)", fontFamily: "Outfit, sans-serif" }}
+            style={{
+              fontSize: "clamp(1.6rem, 3.5vw, 2.4rem)",
+              fontWeight: 800,
+              letterSpacing: "-0.02em",
+              marginBottom: 10,
+              color: "var(--text)",
+              fontFamily: "Outfit, sans-serif",
+              textAlign: "center",
+            }}
           >
             Your Journey, Simplified
           </h2>
           <p
-            className="text-xs sm:text-sm md:text-base leading-relaxed max-w-xl mx-auto"
-            style={{ color: "var(--text-secondary)" }}
+            style={{
+              fontSize: "0.92rem",
+              lineHeight: 1.6,
+              maxWidth: 520,
+              marginLeft: "auto",
+              marginRight: "auto",
+              color: "var(--text-secondary)",
+              textAlign: "center",
+            }}
           >
             From the moment you book to when you get your car back, we make the entire process simple, transparent, and stress-free.
           </p>
         </motion.div>
 
         {/* 2x2 Grid on Mobile, 4-Cols spanning full width on Desktop */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 w-full max-w-7xl">
+        <div
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-7"
+          style={{
+            width: "100%",
+            maxWidth: 1280,
+            marginLeft: "auto",
+            marginRight: "auto",
+            justifyContent: "center",
+          }}
+        >
           {STEPS.map((step, i) => (
             <JourneyCard key={step.title} step={step} index={i} />
           ))}

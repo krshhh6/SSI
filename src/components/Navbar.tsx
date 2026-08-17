@@ -19,6 +19,7 @@ import {
   Sparkles,
   Boxes,
   User,
+  LogOut,
   ChevronDown,
 } from "lucide-react";
 
@@ -137,7 +138,7 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = React.useState<string | null>(null);
   const pathname = usePathname();
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { cartCount } = useCart();
   const navRef = React.useRef<HTMLDivElement>(null);
 
@@ -187,7 +188,7 @@ export default function Navbar() {
       style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: 'rgba(9,9,11,0.96)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderBottom: '1px solid rgba(255,255,255,0.07)', height: 60, display: 'flex', alignItems: 'center' }}
     >
       {/* ── 3-column layout: Logo | Center Nav | Right Actions ── */}
-      <div ref={navRef} className="px-3 sm:px-6 lg:px-7" style={{ width: '100%', maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
+      <div ref={navRef} className="px-4 sm:px-6 lg:px-8" style={{ width: '100%', maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
 
         {/* LEFT — Logo */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
@@ -485,19 +486,32 @@ export default function Navbar() {
                 {/* Mobile Auth and Action */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, paddingTop: 8 }}>
                   {user ? (
-                    <Link
-                      href="/my-bookings"
-                      onClick={() => setSheetOpen(false)}
-                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: 8, height: 36, fontSize: 12, fontWeight: 600, textDecoration: 'none', background: 'transparent' }}
-                    >
-                      <User size={14} />
-                      My Account ({user.displayName || "User"})
-                    </Link>
+                    <div style={{ display: 'flex', gap: 8, width: '100%' }}>
+                      <Link
+                        href="/my-bookings"
+                        onClick={() => setSheetOpen(false)}
+                        style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', borderRadius: 8, height: 38, fontSize: 12.5, fontWeight: 600, textDecoration: 'none', background: 'rgba(255,255,255,0.06)', whiteSpace: 'nowrap' }}
+                      >
+                        <User size={14} />
+                        <span style={{ whiteSpace: 'nowrap' }}>Account</span>
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          await logout();
+                          setSheetOpen(false);
+                        }}
+                        style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, border: '1px solid rgba(226,0,26,0.35)', color: '#ff4d4f', borderRadius: 8, height: 38, fontSize: 12.5, fontWeight: 600, background: 'rgba(226,0,26,0.08)', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                      >
+                        <LogOut size={14} />
+                        <span style={{ whiteSpace: 'nowrap' }}>Sign Out</span>
+                      </button>
+                    </div>
                   ) : (
                     <Link
                       href="/sign-in"
                       onClick={() => setSheetOpen(false)}
-                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: 8, height: 36, fontSize: 12, fontWeight: 600, textDecoration: 'none', background: 'transparent' }}
+                      style={{ width: '100%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: 8, height: 38, fontSize: 12.5, fontWeight: 600, textDecoration: 'none', background: 'rgba(255,255,255,0.06)', whiteSpace: 'nowrap' }}
                     >
                       Sign In
                     </Link>
@@ -505,7 +519,7 @@ export default function Navbar() {
                   <Link
                     href="/booking"
                     onClick={() => setSheetOpen(false)}
-                    style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#ffffff', color: '#000', borderRadius: 8, height: 36, fontSize: 12, fontWeight: 700, textDecoration: 'none', border: 'none' }}
+                    style={{ width: '100%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#E2001A', color: '#ffffff', borderRadius: 8, height: 38, fontSize: 12.5, fontWeight: 700, textDecoration: 'none', border: 'none', whiteSpace: 'nowrap', boxShadow: '0 2px 10px rgba(226,0,26,0.35)' }}
                   >
                     Book Service Now
                   </Link>

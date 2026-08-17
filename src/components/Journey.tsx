@@ -150,13 +150,13 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
 export default function Journey() {
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-gray-50/50 relative overflow-hidden border-t border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-8 sm:mb-12 max-w-2xl mx-auto"
+          className="text-center mb-8 sm:mb-12 max-w-2xl w-full"
         >
           <div className="text-[11px] font-bold tracking-widest text-[#E2001A] uppercase mb-1.5">
             SEAMLESS SERVICE EXPERIENCE
@@ -170,7 +170,7 @@ export default function Journey() {
         </motion.div>
 
         {/* 2x2 Grid on Mobile, 4-Cols on Desktop */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 max-w-6xl mx-auto w-full">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 w-full max-w-5xl mx-auto">
           {STEPS.map((step, i) => (
             <JourneyCard key={step.title} step={step} index={i} />
           ))}

@@ -1658,7 +1658,6 @@ interface ViewingPackage {
       style={{
         background: "var(--bg)",
         position: "relative",
-        overflow: "hidden",
         paddingTop: 60,
         paddingBottom: 80,
       }}
@@ -1678,7 +1677,7 @@ interface ViewingPackage {
         }}
       />
 
-      <div className="container" style={{ position: "relative", zIndex: 1, maxWidth: "100%", overflowX: "hidden" }}>
+      <div style={{ width: "100%", maxWidth: 1280, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
         
         {/* 1. Sub-Navbar Bar */}
         <motion.div
@@ -1832,8 +1831,8 @@ interface ViewingPackage {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 340px",
-            gap: 28,
+            gridTemplateColumns: "minmax(0, 1fr) 330px",
+            gap: 24,
             alignItems: "start",
             position: "relative",
           }}
@@ -2570,14 +2569,15 @@ interface ViewingPackage {
           {/* RIGHT COLUMN: Model Selector & Quote Booking Widget */}
           <motion.div
             id="model-selector-widget"
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 20 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
             style={{
               position: "sticky",
-              top: 90,
+              top: 76,
               alignSelf: "start",
-              zIndex: 10,
+              zIndex: 15,
+              width: "100%",
             }}
           >
               {/* RIGHT COLUMN: Conditionally render Model Selector when category is active, or Original Quote Form on main view */}
@@ -2591,7 +2591,8 @@ interface ViewingPackage {
                     padding: "20px",
                     boxShadow: "0 12px 40px rgba(0,0,0,0.08)",
                     position: "relative",
-                    overflow: "hidden",
+                    width: "100%",
+                    boxSizing: "border-box",
                     display: "flex",
                     flexDirection: "column",
                     gap: 16,
@@ -2731,11 +2732,12 @@ interface ViewingPackage {
                   style={{
                     background: "var(--card)",
                     border: "1px solid var(--border)",
-                    borderRadius: 14,
+                    borderRadius: 16,
                     padding: "20px 18px",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
+                    boxShadow: "0 8px 30px rgba(0,0,0,0.06)",
                     position: "relative",
-                    overflow: "hidden",
+                    width: "100%",
+                    boxSizing: "border-box",
                   }}
                 >
                   {/* Header */}

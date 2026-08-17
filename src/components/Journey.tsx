@@ -43,11 +43,11 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
-  const rotateX = useTransform(smoothY, [0, 1], [15, -15]);
-  const rotateY = useTransform(smoothX, [0, 1], [-15, 15]);
+  const rotateX = useTransform(smoothY, [0, 1], [10, -10]);
+  const rotateY = useTransform(smoothX, [0, 1], [-10, 10]);
 
   const glareBackground = useMotionTemplate`radial-gradient(circle at ${useTransform(smoothX, v => v * 100)}% ${useTransform(smoothY, v => v * 100)}%, ${step.color}35 0%, transparent 60%)`;
-  const outerGlow = useMotionTemplate`radial-gradient(circle at ${useTransform(smoothX, v => v * 100)}% ${useTransform(smoothY, v => v * 100)}%, ${step.color}60 0%, transparent 60%)`;
+  const outerGlow = useMotionTemplate`radial-gradient(circle at ${useTransform(smoothX, v => v * 100)}% ${useTransform(smoothY, v => v * 100)}%, ${step.color}50 0%, transparent 60%)`;
 
   function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -67,28 +67,23 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      className="w-full relative"
       style={{
         perspective: 1000,
-        width: 280, 
-        position: "relative",
       }}
     >
-      {/* Outer tracking glow (blurred behind the card) */}
+      {/* Outer tracking glow */}
       <motion.div
+        className="hidden sm:block absolute -inset-2 rounded-2xl filter blur-xl z-0 pointer-events-none"
         style={{
-          position: "absolute",
-          inset: -15,
           background: outerGlow,
-          filter: "blur(20px)",
-          zIndex: 0,
-          borderRadius: step.image ? 24 : 140,
         }}
         animate={{ opacity: isHovered ? 1 : 0 }}
         transition={{ duration: 0.3 }}
@@ -96,96 +91,56 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
       
       {/* Actual Card */}
       <motion.div
+        className="w-full relative overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/80 shadow-sm bg-white aspect-square"
         style={{
           rotateX,
           rotateY,
-          minHeight: step.image ? 280 : 400,
-          borderRadius: step.image ? 24 : 140,
-          background: "var(--card)",
-          backdropFilter: "blur(10px)",
-          border: "1px solid var(--border)",
-          position: "relative",
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: step.image ? 0 : "56px 24px",
-          textAlign: "center",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
           transformStyle: "preserve-3d",
           zIndex: 1,
         }}
-        animate={{ scale: isHovered ? 1.02 : 1 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.2 }}
       >
         {/* Inner Tracking Glare */}
         <motion.div 
+          className="absolute inset-0 z-10 pointer-events-none"
           style={{
-            position: "absolute",
-            inset: 0,
             background: glareBackground,
-            zIndex: 0,
-            pointerEvents: "none",
           }}
           animate={{ opacity: isHovered ? 1 : 0 }}
           transition={{ duration: 0.3 }}
         />
 
-        {/* Default static bottom glow */}
-        <div style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: "65%",
-          background: `radial-gradient(circle at center bottom, ${step.color}25 0%, transparent 70%)`,
-          opacity: 0.8,
-          pointerEvents: "none",
-          zIndex: 0,
-        }} />
-
-        {/* Card Content */}
+        {/* Card Content - Promo Image */}
         {step.image ? (
           <img
             src={step.image}
             alt={step.title}
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              zIndex: 2,
-            }}
+            className="w-full h-full object-cover relative z-0"
+            loading="lazy"
           />
         ) : (
-          <>
-            <div style={{
-              width: 72,
-              height: 72,
-              borderRadius: "50%",
-              background: "rgba(128,128,128,0.05)",
-              border: "1px solid var(--border)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 32,
-              color: step.color,
-              position: "relative",
-              zIndex: 2,
-              transform: "translateZ(30px)", 
-            }}>
-              <step.icon size={30} strokeWidth={1.5} />
+          <div className="w-full h-full flex flex-col items-center justify-center p-4 sm:p-6 text-center">
+            <div
+              className="w-12 h-12 rounded-full flex items-center justify-center mb-3"
+              style={{
+                background: "rgba(128,128,128,0.05)",
+                border: "1px solid var(--border)",
+                color: step.color,
+              }}
+            >
+              <step.icon size={22} strokeWidth={1.75} />
             </div>
 
-            <h3 style={{ fontSize: "1.3rem", fontWeight: 600, marginBottom: 16, position: "relative", zIndex: 2, transform: "translateZ(20px)" }}>
+            <h3 className="text-sm sm:text-base font-bold mb-1.5 text-gray-900">
               {step.title}
             </h3>
             
-            <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: 1.6, position: "relative", zIndex: 2, transform: "translateZ(10px)" }}>
+            <p className="text-xs text-gray-500 line-clamp-3 leading-relaxed">
               {step.desc}
             </p>
-          </>
+          </div>
         )}
       </motion.div>
     </motion.div>
@@ -194,40 +149,28 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
 
 export default function Journey() {
   return (
-    <section className="section-padding" style={{ background: "var(--bg-secondary)", position: "relative", overflow: "hidden" }}>
-      <div className="container" style={{ position: "relative", zIndex: 1 }}>
+    <section className="py-12 sm:py-16 md:py-20 bg-gray-50/50 relative overflow-hidden border-t border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.7 }}
-          style={{ textAlign: "center", marginBottom: 64 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-8 sm:mb-12 max-w-2xl mx-auto"
         >
-          <h2 className="display-lg" style={{ marginBottom: 16 }}>
+          <div className="text-[11px] font-bold tracking-widest text-[#E2001A] uppercase mb-1.5">
+            SEAMLESS SERVICE EXPERIENCE
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight mb-2">
             Your Journey, Simplified
           </h2>
-          <p style={{ color: "var(--text-secondary)", maxWidth: 650, margin: "0 auto", fontSize: "1.05rem", lineHeight: 1.6 }}>
-            From the moment you book to when you get your car back, we make the entire process simple and stress-free.
+          <p className="text-xs sm:text-sm text-gray-500 leading-relaxed max-w-lg mx-auto">
+            From the moment you book to when you get your car back, we make the entire process simple, transparent, and stress-free.
           </p>
         </motion.div>
 
-        <div 
-          className="hide-scrollbar"
-          style={{
-            display: "flex",
-            flexWrap: "nowrap",
-            gap: 24,
-            justifyContent: "flex-start",
-            overflowX: "auto",
-            overflowY: "hidden",
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-            padding: "20px 0 60px 0", // Space for scrollbar and 3D hover scale
-            margin: "0 auto",
-            maxWidth: "100%",
-            width: "max-content", // Centers items when container is wide enough
-          }}
-        >
+        {/* 2x2 Grid on Mobile, 4-Cols on Desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 max-w-6xl mx-auto w-full">
           {STEPS.map((step, i) => (
             <JourneyCard key={step.title} step={step} index={i} />
           ))}

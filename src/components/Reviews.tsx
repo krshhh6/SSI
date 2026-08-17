@@ -145,116 +145,63 @@ export default function Reviews() {
           </div>
         </div>
 
-        {/* ── OUR PARTNERS ── */}
+        {/* Car Brand Logos Marquee */}
         <div style={{
           position: "relative",
           zIndex: 4,
           marginBottom: 56,
-          padding: "44px 0 40px",
-          borderTop: "1px solid rgba(255,255,255,0.08)",
-          borderBottom: "1px solid rgba(255,255,255,0.08)",
+          overflow: "hidden",
+          WebkitMaskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
+          maskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
         }}>
-          {/* Heading */}
-          <div style={{ textAlign: "center", marginBottom: 36 }}>
-            <h2 style={{
-              fontFamily: "Outfit, sans-serif",
-              fontSize: "clamp(2rem, 4vw, 3rem)",
-              fontWeight: 900,
-              lineHeight: 1.1,
-              margin: 0,
-              letterSpacing: "0.04em",
-              textTransform: "uppercase",
-            }}>
-              <span style={{ color: "#FFFFFF" }}>OUR </span>
-              <span style={{
-                background: "linear-gradient(90deg, #FF6B6B 0%, #FFB347 30%, #00D4FF 65%, #A855F7 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}>PARTNERS</span>
-            </h2>
-            <p style={{
-              marginTop: 8,
-              fontSize: "0.85rem",
-              color: "rgba(255,255,255,0.45)",
-              fontWeight: 500,
-              letterSpacing: "0.06em",
-            }}>
-              Trusted collaborations powering better service for you
-            </p>
-          </div>
-
-          {/* Partners row */}
           <div style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexWrap: "wrap",
-            gap: "16px 28px",
+            width: "max-content",
+            animation: "marquee-straight-reverse 35s linear infinite",
           }}>
-            {[
-              {
-                name: "Bosch",
-                imgSrc: null,
-                svgLogo: (
-                  <svg width="100" height="36" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0" y="2" width="56" height="56" rx="8" fill="#E2001A"/>
-                    <text x="28" y="44" fontFamily="Arial, Helvetica, sans-serif" fontSize="32" fontWeight="900" fill="white" textAnchor="middle">B</text>
-                    <text x="78" y="41" fontFamily="Arial Black, Helvetica, sans-serif" fontSize="26" fontWeight="900" fill="white" letterSpacing="1">BOSCH</text>
-                  </svg>
-                ),
-              },
-              { name: "Allianz Assistance", imgSrc: "/partners/allianz.svg",   svgLogo: null },
-              { name: "ATS Elgi",           imgSrc: "/partners/atselgi.svg",   svgLogo: null },
-              { name: "Autorox",            imgSrc: "/partners/autorox.svg",   svgLogo: null },
-              { name: "Autozilla",          imgSrc: "/partners/autozilla.svg", svgLogo: null },
-            ].map((partner) => (
-              <div
-                key={partner.name}
-                title={partner.name}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "14px 28px",
-                  borderRadius: 14,
-                  background: "rgba(255,255,255,0.07)",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  minWidth: 160,
-                  height: 80,
-                  flexShrink: 0,
-                  cursor: "default",
-                  transition: "all 0.25s ease",
-                }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget as HTMLDivElement;
-                  el.style.background = "rgba(255,255,255,0.15)";
-                  el.style.transform = "translateY(-4px)";
-                  el.style.boxShadow = "0 12px 32px rgba(0,0,0,0.3)";
-                  el.style.borderColor = "rgba(255,255,255,0.25)";
-                }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget as HTMLDivElement;
-                  el.style.background = "rgba(255,255,255,0.07)";
-                  el.style.transform = "translateY(0)";
-                  el.style.boxShadow = "none";
-                  el.style.borderColor = "rgba(255,255,255,0.12)";
-                }}
-              >
-                {partner.imgSrc ? (
-                  <img
-                    src={partner.imgSrc}
-                    alt={partner.name}
-                    style={{
-                      height: 46,
-                      maxWidth: 200,
-                      objectFit: "contain",
-                      opacity: 0.95,
-                    }}
-                  />
-                ) : (
-                  partner.svgLogo
-                )}
+            {[0, 1].map((key) => (
+              <div key={key} style={{ display: "flex", alignItems: "center", gap: 32, paddingRight: 32 }}>
+                {[
+                  { name: "Maruti Suzuki", color: "#0033A0" },
+                  { name: "Hyundai", color: "#002C5F" },
+                  { name: "Tata Motors", color: "#1A5BA7" },
+                  { name: "Mahindra", color: "#CC0000" },
+                  { name: "Toyota", color: "#EB0A1E" },
+                  { name: "Honda", color: "#E40521" },
+                  { name: "Kia", color: "#05141F" },
+                  { name: "Volkswagen", color: "#001E50" },
+                  { name: "Skoda", color: "#4BA82E" },
+                  { name: "MG Motors", color: "#B5121B" },
+                  { name: "Renault", color: "#FFCC00" },
+                  { name: "BMW", color: "#1C6DC1" },
+                  { name: "Mercedes", color: "#A0A0A0" },
+                  { name: "Audi", color: "#BB0A30" },
+                  { name: "Ford", color: "#003476" },
+                  { name: "Jeep", color: "#2C3E50" },
+                ].map((brand) => (
+                  <div key={brand.name} style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "10px 24px",
+                    borderRadius: 12,
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    minWidth: 120,
+                    flexShrink: 0,
+                    transition: "all 0.3s ease",
+                  }}>
+                    <span style={{
+                      fontSize: "0.95rem",
+                      fontWeight: 800,
+                      letterSpacing: "0.08em",
+                      color: brand.color,
+                      fontFamily: "Outfit, sans-serif",
+                      textTransform: "uppercase",
+                      filter: "brightness(1.3)",
+                    }}>{brand.name}</span>
+                  </div>
+                ))}
               </div>
             ))}
           </div>

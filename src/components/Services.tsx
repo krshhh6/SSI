@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
@@ -23,115 +24,19 @@ import CarSelectModal, { SelectedCar } from "./CarSelectModal";
 import AuthModal from "./AuthModal";
 
 // Cities list
-const CITIES = ["PATNA"];
+export const CITIES = ["PATNA"];
 
 // Sub-Navbar Tabs
-const NAV_TABS = [
+export const NAV_TABS = [
   "Our Services",
   "Curated Custom Service",
   "Summer Services",
   "How Bosch Works?",
 ];
 
-// Service Categories matching GoMechanic reference
-const SERVICE_CATEGORIES = [
-  {
-    id: "car-services",
-    title: "Car Services",
-    desc: "Periodic oil change, filter replacement & total engine health check.",
-    iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/car%20service%204.png",
-    color: "#E2001A",
-    badge: null,
-  },
-  {
-    id: "ac-service",
-    title: "AC Service & Repair",
-    desc: "Gas refill, cooling coil cleaning & compressor diagnostics.",
-    iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/ac%20repair.svg",
-    color: "#0066FF",
-    badge: null,
-  },
-  {
-    id: "batteries",
-    title: "Batteries",
-    desc: "Bosch heavy-duty battery replacement with doorstep installation.",
-    iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/14.png",
-    color: "#FF8800",
-    badge: null,
-  },
-  {
-    id: "tyres-wheel",
-    title: "Tyres & Wheel Care",
-    desc: "3D computerized alignment, wheel balancing & tyre replacement.",
-    iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/6.png",
-    color: "#00C896",
-    badge: null,
-  },
-  {
-    id: "denting-painting",
-    title: "Denting & Painting",
-    desc: "Grade A paint booth, panel repair & scratch removal.",
-    iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/denting1.svg",
-    color: "#AA66FF",
-    badge: null,
-  },
-  {
-    id: "detailing",
-    title: "Detailing Services",
-    desc: "9H ceramic coating, Teflon paint protection & interior restoration.",
-    iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/8.png",
-    color: "#FF4466",
-    badge: null,
-  },
-  {
-    id: "car-spa",
-    title: "Car Spa & Cleaning",
-    desc: "Deep foam wash, anti-bacterial sanitization & leather polish.",
-    iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/car%20spa.svg",
-    color: "#00AAFF",
-    badge: null,
-  },
-  {
-    id: "car-inspections",
-    title: "Car Inspections",
-    desc: "Comprehensive 100-point inspection report for secondhand & overall check.",
-    iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/Car-Inspection.png",
-    color: "#10B981",
-    badge: "New",
-  },
-  {
-    id: "windshield-glass",
-    title: "Windshields & Lights",
-    desc: "OEM glass replacement, wiper blade upgrades & window repairs.",
-    iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/10new.png",
-    color: "#F59E0B",
-    badge: null,
-  },
-  {
-    id: "suspension-fitments",
-    title: "Suspension & Fitments",
-    desc: "Brake pad replacement, disc resurfacing & shock absorber inspection.",
-    iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/Suspension-_-Fitments.png",
-    color: "#6366F1",
-    badge: null,
-  },
-  {
-    id: "clutch-body",
-    title: "Clutch & Body Parts",
-    desc: "Clutch plate replacement, flywheel overhaul & body panel fitments.",
-    iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/11new.png",
-    color: "#E2001A",
-    badge: "New",
-  },
-  {
-    id: "insurance-claims",
-    title: "Insurance Claims",
-    desc: "Hassle-free cashless insurance claims with all major companies.",
-    iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/7.png",
-    color: "#10B981",
-    badge: null,
-  },
-];
+import { SERVICE_CATEGORIES, getCategoryByIdOrTitle, ServiceCategory } from "@/lib/servicesData";
+export { SERVICE_CATEGORIES, getCategoryByIdOrTitle };
+export type { ServiceCategory };
 
 const CURATED_SERVICES = [
   {
@@ -682,6 +587,896 @@ const BATTERIES_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = 
   },
 ];
 
+const TYRES_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Tyres Replacement",
+    packages: [
+      {
+        id: "apollo-alnac-4g",
+        title: "Apollo Alnac 4G (185/65 R15)",
+        timeTaken: "Takes 2 Hours",
+        warranty: "5 Years Warranty",
+        recommendedInterval: "Free Alignment, Balancing & Fitting",
+        thumbnail: "/tyres/apollo_alnac.png",
+        originalPrice: 5499,
+        basePrice: 4299,
+        summerPrice: 3899,
+        summerDiscount: "Extra 10% OFF",
+        isRecommended: true,
+        checklist: [
+          "Tubeless Tyre Replacement",
+          "Free Nitrogen Air Top-up",
+          "Free Tyre Valves Included",
+          "Doorstep & Workshop Fitting Available",
+        ],
+        moreCount: 3,
+        allDetails: [
+          "High Precision Steering & High Speed Stability",
+          "Low Noise Tread Compound",
+          "5 Years Manufacturer Warranty",
+          "Free 3D Wheel Balancing with purchase",
+        ],
+      },
+      {
+        id: "ceat-securadrive",
+        title: "CEAT SecuraDrive (185/65 R15)",
+        timeTaken: "Takes 2 Hours",
+        warranty: "5 Years Warranty",
+        recommendedInterval: "Free Fitting & Wheel Balancing",
+        thumbnail: "/tyres/ceat_secura_drive.png",
+        originalPrice: 5199,
+        basePrice: 4149,
+        isRecommended: false,
+        checklist: [
+          "Exceptional Wet & Dry Braking",
+          "Wide Longitudinal Grooves",
+          "Tubeless High Durability",
+          "Free Installation",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Optimized Tread Siping For Quiet Rides",
+          "5-Year Unconditional Warranty Cover",
+          "Premium Compound for Indian Roads",
+        ],
+      },
+      {
+        id: "mrf-ztx",
+        title: "MRF ZTX (165/80 R14)",
+        timeTaken: "Takes 2 Hours",
+        warranty: "5 Years Warranty",
+        recommendedInterval: "Long Tread Life • Free Fitting",
+        thumbnail: "/tyres/mrf_ztx.png",
+        originalPrice: 4699,
+        basePrice: 3899,
+        isRecommended: false,
+        checklist: [
+          "Extended Mileage Life",
+          "High Puncture Resistance",
+          "Tubeless Fitment",
+          "Free Fitting",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Specially Engineered for High Fuel Economy",
+          "5-Year Manufacturer Warranty",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Wheel Care",
+    packages: [
+      {
+        id: "wheel-alignment-balancing",
+        title: "3D Wheel Alignment & Balancing",
+        timeTaken: "Takes 1 Hour",
+        warranty: "500 Kms / 1 Month Warranty",
+        recommendedInterval: "Every 5,000 Kms (Recommended)",
+        thumbnail: "/wheel.png",
+        originalPrice: 1499,
+        basePrice: 999,
+        isRecommended: true,
+        checklist: [
+          "3D Computerized Laser Alignment",
+          "Dynamic 4-Wheel Balancing (Weights Included)",
+          "Tyre Rotation",
+          "Nitrogen Air Top-up",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "3D Sensor Based Toe, Camber, Caster Calibration",
+          "High Speed Wheel Balance Calibration",
+          "Tyre Tread Depth & Pressure Inspection",
+        ],
+      },
+    ],
+  },
+];
+
+const DENTING_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Panel Painting",
+    packages: [
+      {
+        id: "front-bumper-paint",
+        title: "Front Bumper Paint",
+        timeTaken: "Takes 24 Hours",
+        warranty: "2 Years Color & Gloss Warranty",
+        recommendedInterval: "Grade-A Dust-Free Paint Booth",
+        thumbnail: "/images/front-bumper-paint.jpg",
+        originalPrice: 2800,
+        basePrice: 2199,
+        summerPrice: 1899,
+        summerDiscount: "15% OFF",
+        isRecommended: true,
+        checklist: [
+          "Grade A Paint Booth Painting",
+          "Computerized Color Matching",
+          "Scratch & Dent Removal",
+          "Premium Clear Coat Gloss Finish",
+        ],
+        moreCount: 3,
+        allDetails: [
+          "Precision Sanding & Primer Application",
+          "OEM Spec High-Solid Clear Coat",
+          "Oven Baked Finish for Long Lasting Durability",
+          "2 Years Guarantee against peeling/fading",
+        ],
+      },
+      {
+        id: "rear-bumper-paint",
+        title: "Rear Bumper Paint",
+        timeTaken: "Takes 24 Hours",
+        warranty: "2 Years Color & Gloss Warranty",
+        recommendedInterval: "Grade-A Paint Booth",
+        thumbnail: "/packages/rear_bumper_paint.png",
+        originalPrice: 2800,
+        basePrice: 2199,
+        isRecommended: false,
+        checklist: [
+          "High Quality Nippon/DuPont Paint",
+          "Dent Pulling & Smoothing",
+          "Computerized Color Match",
+          "Rubbing & Polishing Finish",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Full Bumper Removal & Refitting",
+          "Oven Baked Chamber Paint Process",
+        ],
+      },
+      {
+        id: "bonnet-paint",
+        title: "Bonnet Paint & Repair",
+        timeTaken: "Takes 24 Hours",
+        warranty: "2 Years Paint Warranty",
+        recommendedInterval: "Dust-Free Oven Chamber",
+        thumbnail: "/images/bonnet-paint.avif",
+        originalPrice: 3800,
+        basePrice: 2999,
+        isRecommended: false,
+        checklist: [
+          "Stone Chip & Scratch Removal",
+          "Precision Color Matching",
+          "Multi-Layer Primer & Base Coat",
+          "High Gloss Buffing Finish",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Engine bay protective masking",
+          "High temperature heat-resistant clear coat",
+        ],
+      },
+      {
+        id: "boot-paint",
+        title: "Boot Paint & Tailgate",
+        timeTaken: "Takes 24 Hours",
+        warranty: "2 Years Paint Warranty",
+        recommendedInterval: "Dust-Free Oven Chamber",
+        thumbnail: "/packages/boot_paint.png",
+        originalPrice: 3400,
+        basePrice: 2699,
+        isRecommended: false,
+        checklist: [
+          "Dent Pulling & Alignment",
+          "Computerized Color Matching",
+          "Oven Baking & Clear Coat",
+          "Mirror Gloss Polishing",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Emblem removal & refitting included",
+          "2 Years paint warranty",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Full Body Denting & Painting",
+    packages: [
+      {
+        id: "full-body-dent-paint",
+        title: "Full Body Dent & Paint Overhaul",
+        timeTaken: "Takes 5-7 Days",
+        warranty: "3 Years Comprehensive Paint Warranty",
+        recommendedInterval: "Complete Showroom Resto Finish",
+        thumbnail: "/packages/full_body_dent_paint.png",
+        originalPrice: 32000,
+        basePrice: 24999,
+        summerPrice: 21999,
+        summerDiscount: "Summer Mega Deal",
+        isRecommended: true,
+        checklist: [
+          "All Panels Dent Removal & Alignment",
+          "Full Body Dual-Layer Clear Coat",
+          "Teflon Polish & Deep Shine Buffing",
+          "Interior Deep Dry Cleaning (Free Bonus)",
+        ],
+        moreCount: 4,
+        allDetails: [
+          "Complete Exterior Dismantling & Masking",
+          "Anti-Rust Primer Application on all bare metal",
+          "3-Coat Metallic/Pearl Base Coat Application",
+          "Final High-Gloss Compound & Machine Buffing",
+        ],
+      },
+    ],
+  },
+];
+
+const DETAILING_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Ceramic Coating",
+    packages: [
+      {
+        id: "9h-ceramic-coating",
+        title: "9H Nano Ceramic Coating",
+        timeTaken: "Takes 48 Hours",
+        warranty: "3 Years Warranty (Includes 2 Free Top-ups)",
+        recommendedInterval: "Ultimate Hydrophobic & UV Shield",
+        thumbnail: "/packages/ceramic_coating_bottle.png",
+        originalPrice: 19999,
+        basePrice: 14999,
+        summerPrice: 12999,
+        summerDiscount: "Save ₹2,000 Extra",
+        isRecommended: true,
+        checklist: [
+          "3-Stage Paint Correction & Swirl Removal",
+          "9H German Nano Ceramic Coating (2 Layers)",
+          "Hydrophobic Water Repellent Effect",
+          "Windshield & Alloy Wheel Coating Included",
+        ],
+        moreCount: 3,
+        allDetails: [
+          "Clay Bar Decontamination & Iron Fallout Removal",
+          "Machine Compounding to remove 95%+ swirl marks",
+          "High Gloss Mirror Reflection & Chemical Resistance",
+          "2 Free Maintenance Booster Top-ups at 12 & 24 Months",
+        ],
+      },
+      {
+        id: "meguiars-ceramic-coating",
+        title: "Meguiar's Ceramic Paint Protection",
+        timeTaken: "Takes 24 Hours",
+        warranty: "2 Years Paint Warranty",
+        recommendedInterval: "Deep Gloss & Hydrophobic Shield",
+        thumbnail: "/packages/meguiars_ceramic_coating.png",
+        originalPrice: 16500,
+        basePrice: 12499,
+        isRecommended: false,
+        checklist: [
+          "Meguiar's USA Ceramic Coating Formula",
+          "Dual Action Paint Polishing",
+          "UV & Acid Rain Protection",
+          "Free Interior Foam Wash",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Deep wet-look reflection",
+          "Superior water beading and self-cleaning effect",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Teflon & Rubbing Polishing",
+    packages: [
+      {
+        id: "meguiars-teflon-coating",
+        title: "Meguiar's Teflon Paint Sealant",
+        timeTaken: "Takes 6 Hours",
+        warranty: "6 Months Warranty",
+        recommendedInterval: "Every 6 Months (Recommended)",
+        thumbnail: "/packages/meguiars_teflon_coating.png",
+        originalPrice: 6500,
+        basePrice: 4999,
+        isRecommended: false,
+        checklist: [
+          "Full Body Machine Compound Rubbing",
+          "Meguiar's Synthetic Sealant Application",
+          "Minor Scratch & Swirl Removal",
+          "Exterior Trim & Tyre Dressing",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Restores showroom paint luster",
+          "Smooth slick surface finish with synthetic wax",
+        ],
+      },
+      {
+        id: "rubbing-polishing-buffer",
+        title: "Deep Machine Rubbing & Polishing",
+        timeTaken: "Takes 4 Hours",
+        warranty: "3 Months Gloss Guarantee",
+        recommendedInterval: "Pre-Monsoon & Post-Summer",
+        thumbnail: "/packages/teflon_polishing_buffer.png",
+        originalPrice: 3999,
+        basePrice: 2999,
+        isRecommended: false,
+        checklist: [
+          "Rotary Buffer Paint Compounding",
+          "High Gloss Finish Polish",
+          "All Chrome & Glass Polishing",
+          "Tyre & Plastic Trim Shine",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Removes oxidation, minor blemishes, and water spots",
+          "Deep shine with premium carnauba wax seal",
+        ],
+      },
+    ],
+  },
+];
+
+const CAR_SPA_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Spa & Wash Packages",
+    packages: [
+      {
+        id: "deep-car-spa",
+        title: "Deep All-Round Car Spa",
+        timeTaken: "Takes 4 Hours",
+        warranty: "Anti-Bacterial Sanitized",
+        recommendedInterval: "Every 3 Months (Recommended)",
+        thumbnail: "/packages/car_wash_wax.png",
+        originalPrice: 2199,
+        basePrice: 1499,
+        summerPrice: 1199,
+        summerDiscount: "Summer Special",
+        isRecommended: true,
+        checklist: [
+          "High-Pressure Underbody & Foam Wash",
+          "Interior Carpet & Roof Dry Cleaning",
+          "Dashboard & Door Trim Conditioning",
+          "AC Vent Anti-Bacterial Sanitization",
+        ],
+        moreCount: 3,
+        allDetails: [
+          "Stain Removal from Fabric & Leather Seats",
+          "Trunk / Boot Area Deep Vacuuming",
+          "Engine Bay De-greasing & Protective Spray",
+          "Tyre Dressing & Alloy Wheel Cleaning",
+        ],
+      },
+      {
+        id: "foam-wash-wax",
+        title: "Car Foam Wash & Liquid Wax",
+        timeTaken: "Takes 1.5 Hours",
+        warranty: "Instant Gloss Finish",
+        recommendedInterval: "Monthly",
+        thumbnail: "/packages/premium_top_wash.png",
+        originalPrice: 999,
+        basePrice: 699,
+        isRecommended: false,
+        checklist: [
+          "pH Neutral Snow Foam Wash",
+          "High Gloss Spray Wax Seal",
+          "Interior Floor Vacuuming",
+          "Glass & Mirror Streak-Free Cleaning",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "High pressure water rinse",
+          "Microfiber dry and tyre polish",
+        ],
+      },
+      {
+        id: "interior-dry-clean",
+        title: "Deep Interior Dry Cleaning",
+        timeTaken: "Takes 3 Hours",
+        warranty: "100% Odor Removal",
+        recommendedInterval: "Every 6 Months",
+        thumbnail: "/packages/car_vacuuming.png",
+        originalPrice: 1699,
+        basePrice: 1199,
+        isRecommended: false,
+        checklist: [
+          "Seats Foam Scrubbing & Extraction",
+          "Carpet & Floor Mats Deep Cleaning",
+          "Roof Lining Gentle Cleaning",
+          "Dashboard UV Protection Coating",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Removes pet hair, food spills, and mold",
+          "Eco-friendly germicidal sanitization",
+        ],
+      },
+    ],
+  },
+];
+
+const INSPECTIONS_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Inspection Services",
+    packages: [
+      {
+        id: "100-point-inspection",
+        title: "Comprehensive 100-Point Inspection",
+        timeTaken: "Takes 2 Hours",
+        warranty: "Detailed Digital Health Report",
+        recommendedInterval: "Before Long Trips / Buy-Sell",
+        thumbnail: "/packages/car_inspection_diagnostics.png",
+        originalPrice: 1499,
+        basePrice: 999,
+        isRecommended: true,
+        checklist: [
+          "Full Engine & Transmission Diagnostic Check",
+          "Brake, Suspension & Steering Evaluation",
+          "Battery & Alternator Electrical Health Test",
+          "Body & Paint Accidental History Inspection",
+        ],
+        moreCount: 3,
+        allDetails: [
+          "Comprehensive Digital Scorecard with Photos",
+          "Fluid Level & Leakage Inspection (10 checkpoints)",
+          "Tyre Wear, Tread Depth & Alignment Status",
+          "Road Test Evaluation by Bosch Master Technician",
+        ],
+      },
+      {
+        id: "second-hand-inspection",
+        title: "Second Hand Car Buy Inspection",
+        timeTaken: "Takes 3 Hours",
+        warranty: "Accidental & Odometer Tamper Check",
+        recommendedInterval: "Before purchasing any used car",
+        thumbnail: "/packages/second_hand_inspection.png",
+        originalPrice: 2200,
+        basePrice: 1499,
+        isRecommended: true,
+        checklist: [
+          "Odometer Tampering & Chassis Rust Check",
+          "Accidental Major Impact Damage Detection",
+          "Engine Compression & Smoke Diagnostics",
+          "Estimated Repair & Valuation Report",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Comprehensive 120-Point Checklist",
+          "ECU Scan for hidden fault codes and mileage logs",
+        ],
+      },
+      {
+        id: "ecu-scanner-diagnostics",
+        title: "Bosch ECU Scanner Diagnostics",
+        timeTaken: "Takes 1 Hour",
+        warranty: "Bosch KTS Diagnostic Scanner",
+        recommendedInterval: "When Check Engine Light appears",
+        thumbnail: "/packages/ecu_scanner_inspection.png",
+        originalPrice: 1200,
+        basePrice: 799,
+        isRecommended: false,
+        checklist: [
+          "OBD-II Multi-System Error Code Scan",
+          "Live Sensor Data Stream Analysis",
+          "Check Engine & ABS Light Reset",
+          "Component Actuation Tests",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Pinpoint electrical faults without guessing",
+          "Detailed printout of DTC error codes",
+        ],
+      },
+    ],
+  },
+];
+
+const WINDSHIELD_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Windshield & Glass",
+    packages: [
+      {
+        id: "front-windshield-replacement",
+        title: "Front Windshield Replacement",
+        timeTaken: "Takes 4 Hours",
+        warranty: "1 Year Leakage & Fitting Warranty",
+        recommendedInterval: "AIS / Saint-Gobain OEM Glass",
+        thumbnail: "/packages/front_windshield_replacement.png",
+        originalPrice: 6999,
+        basePrice: 5499,
+        isRecommended: true,
+        checklist: [
+          "100% Genuine Laminated Safety Glass",
+          "DOW / Sika Polyurethane Adhesive Fitting",
+          "Cashless Insurance Claims Available",
+          "Sensor & Fastag Safe Transfer",
+        ],
+        moreCount: 3,
+        allDetails: [
+          "AIS (Asahi India) / Saint-Gobain Certified OEM Glass",
+          "Zero optical distortion guaranteed",
+          "1 Year Warranty against water/air leakage",
+        ],
+      },
+      {
+        id: "rear-windshield-replacement",
+        title: "Rear Windshield Replacement",
+        timeTaken: "Takes 4 Hours",
+        warranty: "1 Year Fitting Warranty",
+        recommendedInterval: "Defogger Compatible",
+        thumbnail: "/packages/rear_windshield_replacement.png",
+        originalPrice: 5500,
+        basePrice: 4299,
+        isRecommended: false,
+        checklist: [
+          "Tempered Glass with Built-in Defogger Lines",
+          "OEM Quality Sealant Fitment",
+          "Fastag & Rear Wiper Assembly Transfer",
+          "Free Vacuuming of broken glass",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "High thermal shock resistance",
+          "Cashless Insurance claim support",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Lights & Assemblies",
+    packages: [
+      {
+        id: "front-headlight-assembly",
+        title: "Front Headlight Assembly Replacement",
+        timeTaken: "Takes 2 Hours",
+        warranty: "1 Year Warranty",
+        recommendedInterval: "Lumax / Minda OEM Parts",
+        thumbnail: "/packages/front_headlight.png",
+        originalPrice: 3800,
+        basePrice: 2899,
+        isRecommended: false,
+        checklist: [
+          "OEM High-Clarity Polycarbonate Lens",
+          "Bulb & Beam Alignment Calibration",
+          "Moisture-Proof Sealed Assembly",
+          "Plug & Play OEM Connector",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Exact factory fitment",
+          "Clear beam pattern for safe night driving",
+        ],
+      },
+      {
+        id: "rear-taillight-assembly",
+        title: "Rear Taillight Assembly",
+        timeTaken: "Takes 1.5 Hours",
+        warranty: "1 Year Warranty",
+        recommendedInterval: "OEM Fitment",
+        thumbnail: "/packages/rear_taillight.png",
+        originalPrice: 2600,
+        basePrice: 1999,
+        isRecommended: false,
+        checklist: [
+          "Brake, Reverse & Indicator Light Assembly",
+          "Weatherproof Gasket Seal",
+          "OEM Genuine Fit",
+          "Free Installation",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Vibration and impact resistant housing",
+        ],
+      },
+      {
+        id: "fog-light-kit",
+        title: "High Intensity Fog Light Kit",
+        timeTaken: "Takes 2 Hours",
+        warranty: "1 Year Warranty",
+        recommendedInterval: "All Weather Fog / Rain Visibility",
+        thumbnail: "/packages/fog_light.png",
+        originalPrice: 2100,
+        basePrice: 1499,
+        isRecommended: false,
+        checklist: [
+          "Pair of Fog Lamp Units with Bulbs",
+          "Relay & Wiring Harness Included",
+          "Bumper Cutout & Clean Mount",
+          "High Penetration Yellow/White Beam",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Waterproof IP67 rated fog lamps",
+        ],
+      },
+    ],
+  },
+];
+
+const SUSPENSION_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Suspension Care",
+    packages: [
+      {
+        id: "front-shock-absorbers",
+        title: "Front Shock Absorber Replacement",
+        timeTaken: "Takes 4 Hours",
+        warranty: "1 Year Warranty",
+        recommendedInterval: "Gabriel / Monroe OEM Gas Struts",
+        thumbnail: "/suspension.png",
+        originalPrice: 4800,
+        basePrice: 3899,
+        isRecommended: true,
+        checklist: [
+          "Pair of Front Gas Shock Absorbers",
+          "Strut Mount & Buffer Inspection",
+          "Eliminates thud noises and body roll",
+          "Free Wheel Alignment included",
+        ],
+        moreCount: 3,
+        allDetails: [
+          "OEM Grade Nitrogen Gas Charged Struts",
+          "Smoother ride over potholes and speed breakers",
+          "1 Year Manufacturer Warranty",
+        ],
+      },
+      {
+        id: "rear-shock-absorbers",
+        title: "Rear Shock Absorber Replacement",
+        timeTaken: "Takes 3 Hours",
+        warranty: "1 Year Warranty",
+        recommendedInterval: "Every 40,000 Kms",
+        thumbnail: "/suspension.png",
+        originalPrice: 4200,
+        basePrice: 3299,
+        isRecommended: false,
+        checklist: [
+          "Pair of Rear Gas Shocks",
+          "Coil Spring & Bushing Health Check",
+          "Improved high-speed stability",
+          "Free Suspension Inspection",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Heavy duty damping rate for Indian road conditions",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Brake Services",
+    packages: [
+      {
+        id: "front-brake-pads-bosch",
+        title: "Bosch Front Brake Pads Replacement",
+        timeTaken: "Takes 2 Hours",
+        warranty: "10,000 Kms / 6 Months Warranty",
+        recommendedInterval: "Every 15,000 Kms (Recommended)",
+        thumbnail: "/brakes_clean.png",
+        originalPrice: 2200,
+        basePrice: 1699,
+        isRecommended: true,
+        checklist: [
+          "100% Genuine Bosch Low-Metallic Brake Pads",
+          "Brake Caliper Pin Lubrication",
+          "Disc Rotor Cleaning & De-glazing",
+          "Brake Fluid Level Top-up",
+        ],
+        moreCount: 3,
+        allDetails: [
+          "Superior stopping power with minimal brake dust",
+          "Quiet operation with anti-squeal shims",
+          "Prevents premature disc wear",
+        ],
+      },
+      {
+        id: "disc-lathe-resurfacing",
+        title: "Brake Disc Rotor Lathe Resurfacing",
+        timeTaken: "Takes 2 Hours",
+        warranty: "Judder-Free Braking Guaranteed",
+        recommendedInterval: "Eliminates steering wheel brake vibrations",
+        thumbnail: "/brakes_clean.png",
+        originalPrice: 1499,
+        basePrice: 999,
+        isRecommended: false,
+        checklist: [
+          "High Precision On-Car Lathe Machining",
+          "Removes ridges, grooves, and warping",
+          "Restores flat friction contact area",
+          "Extends brake pad life",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Eliminates pedal pulsation and brake shudder",
+        ],
+      },
+    ],
+  },
+];
+
+const CLUTCH_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Clutch Overhaul",
+    packages: [
+      {
+        id: "clutch-set-replacement",
+        title: "Complete Clutch Set Replacement",
+        timeTaken: "Takes 6 Hours",
+        warranty: "10,000 Kms / 6 Months Warranty",
+        recommendedInterval: "Valeo / Ceekay / Luk OEM Clutch",
+        thumbnail: "/brakes_clean.png",
+        originalPrice: 7500,
+        basePrice: 5999,
+        isRecommended: true,
+        checklist: [
+          "Clutch Plate + Pressure Plate Replacement",
+          "Clutch Release Bearing Replacement",
+          "Flywheel Resurfacing & Inspection",
+          "Transmission Gear Oil Replacement Included",
+        ],
+        moreCount: 3,
+        allDetails: [
+          "Restores effortless, smooth gear shifting",
+          "Eliminates clutch slippage and RPM surging",
+          "Improves pickup and fuel economy",
+        ],
+      },
+      {
+        id: "flywheel-overhaul",
+        title: "Flywheel Overhaul & Resurfacing",
+        timeTaken: "Takes 4 Hours",
+        warranty: "Smooth Engagement Guarantee",
+        recommendedInterval: "Done during clutch overhaul",
+        thumbnail: "/brakes_clean.png",
+        originalPrice: 2200,
+        basePrice: 1499,
+        isRecommended: false,
+        checklist: [
+          "Surface Grinding & Trueing",
+          "Ring Gear Teeth Inspection",
+          "Eliminates clutch shudder on startup",
+          "Balanced rotational trueing",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Ensures maximum clutch pad friction grip",
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Body Fitments",
+    packages: [
+      {
+        id: "side-mirror-replacement",
+        title: "Side View Mirror Assembly Replacement",
+        timeTaken: "Takes 1.5 Hours",
+        warranty: "1 Year Fitting Warranty",
+        recommendedInterval: "OEM Fitment with Indicator",
+        thumbnail: "/sideMirror.png",
+        originalPrice: 1800,
+        basePrice: 1199,
+        isRecommended: false,
+        checklist: [
+          "Complete Mirror Assembly (Left/Right)",
+          "Electrical Motor & Indicator Wiring Fit",
+          "Mirror Glass & Outer Cover Included",
+          "Free Installation",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "OEM motorized adjustment compatible",
+        ],
+      },
+    ],
+  },
+];
+
+const INSURANCE_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = [
+  {
+    sectionTitle: "Cashless Insurance Assistance",
+    packages: [
+      {
+        id: "cashless-accidental-claim",
+        title: "Cashless Accidental Claim Settlement",
+        timeTaken: "Fast 3-5 Days Turnaround",
+        warranty: "All Major Insurers Supported",
+        recommendedInterval: "Hassle-Free End-to-End Claim Management",
+        thumbnail: "/images/book-service-promo.jpg",
+        originalPrice: 1500,
+        basePrice: 0,
+        isRecommended: true,
+        checklist: [
+          "Cashless Tie-ups with ICICI, HDFC, Bajaj, Tata AIG, etc.",
+          "Digital Document Submission & FIR Assistance",
+          "On-site Insurance Surveyor Inspection & Approval",
+          "100% Genuine Bosch Parts for all repairs",
+        ],
+        moreCount: 3,
+        allDetails: [
+          "We handle all paperwork directly with your insurance company",
+          "You only pay the compulsory deductible / depreciation",
+          "Free Pickup & Drop facility during claim repair",
+          "Lifetime paint warranty on accidental repairs",
+        ],
+      },
+      {
+        id: "windshield-insurance-claim",
+        title: "Zero-Depreciation Windshield Claim",
+        timeTaken: "Same Day Approval",
+        warranty: "Preserve No Claim Bonus (NCB) Assistance",
+        recommendedInterval: "Cashless Glass Replacement",
+        thumbnail: "/packages/front_windshield_replacement.png",
+        originalPrice: 1200,
+        basePrice: 0,
+        isRecommended: false,
+        checklist: [
+          "Instant Cashless Approval for broken windshields",
+          "AIS OEM Glass Replacement",
+          "Fastag Safe Transfer",
+          "Zero Out-of-Pocket processing fee",
+        ],
+        moreCount: 2,
+        allDetails: [
+          "Same day claim processing and fitment",
+        ],
+      },
+    ],
+  },
+];
+
+export function getCategoryPackages(categoryNameOrId?: string | null): { sectionTitle: string; packages: PackageItem[] }[] {
+  if (!categoryNameOrId) {
+    return [{ sectionTitle: "Service Packages", packages: SCHEDULED_PACKAGES }];
+  }
+  const match = getCategoryByIdOrTitle(categoryNameOrId);
+  const id = match ? match.id : categoryNameOrId.toLowerCase();
+
+  switch (id) {
+    case "ac-service":
+      return AC_PACKAGES;
+    case "batteries":
+      return BATTERIES_PACKAGES;
+    case "tyres":
+    case "tyres-wheel":
+      return TYRES_PACKAGES;
+    case "denting-painting":
+      return DENTING_PACKAGES;
+    case "detailing":
+      return DETAILING_PACKAGES;
+    case "car-spa":
+      return CAR_SPA_PACKAGES;
+    case "car-inspections":
+    case "inspection":
+      return INSPECTIONS_PACKAGES;
+    case "windshield-glass":
+    case "windshields-lights":
+      return WINDSHIELD_PACKAGES;
+    case "suspension-fitments":
+      return SUSPENSION_PACKAGES;
+    case "clutch-body":
+      return CLUTCH_PACKAGES;
+    case "insurance-claims":
+      return INSURANCE_PACKAGES;
+    case "car-services":
+    default:
+      return [{ sectionTitle: "Service Packages", packages: SCHEDULED_PACKAGES }];
+  }
+}
+
 const POPULAR_CAR_MODELS = [
   { name: "Swift", brand: "Maruti Suzuki", image: "/cars/swift.png" },
   { name: "WagonR", brand: "Maruti Suzuki", image: "/cars/wagonr.png" },
@@ -718,15 +1513,20 @@ const HOW_BOSCH_WORKS_STEPS = [
   },
 ];
 
-interface ServicesProps {
+export interface ServicesProps {
   selectedCategory?: string | null;
   setSelectedCategory?: (cat: string | null) => void;
+  isDedicatedPage?: boolean;
+  onCategorySelect?: (cat: (typeof SERVICE_CATEGORIES)[0]) => void;
 }
 
 export default function Services({
   selectedCategory: selectedCategoryProp,
   setSelectedCategory: setSelectedCategoryProp,
+  isDedicatedPage = false,
+  onCategorySelect,
 }: ServicesProps = {}) {
+  const router = useRouter();
   const { user } = useAuth();
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-60px" });
@@ -1059,7 +1859,13 @@ interface ViewingPackage {
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                       <div>
                         <button
-                          onClick={() => setSelectedCategory(null)}
+                          onClick={() => {
+                            if (isDedicatedPage) {
+                              router.push("/#services");
+                            } else {
+                              setSelectedCategory(null);
+                            }
+                          }}
                           style={{
                             background: "none",
                             border: "none",
@@ -1087,13 +1893,8 @@ interface ViewingPackage {
                       )}
                     </div>
 
-                    {/* Section Groups (e.g. Service Packages, Pollution, AC Fitments for AC Service & Repair) */}
-                    {(selectedCategory === "AC Service & Repair"
-                      ? AC_PACKAGES
-                      : selectedCategory === "Batteries"
-                      ? BATTERIES_PACKAGES
-                      : [{ sectionTitle: "Service Packages", packages: SCHEDULED_PACKAGES }]
-                    ).map((sec, secIdx) => (
+                    {/* Section Groups for selected category */}
+                    {getCategoryPackages(selectedCategory).map((sec, secIdx) => (
                       <div key={secIdx} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                         <h3 style={{ fontSize: "1.4rem", fontWeight: 900, color: "var(--text)", margin: "8px 0 0 0", fontFamily: "Outfit, sans-serif" }}>
                           {sec.sectionTitle}
@@ -1303,7 +2104,11 @@ interface ViewingPackage {
                           whileHover={{ y: -3, scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => {
-                            setSelectedCategory(cat.title);
+                            if (onCategorySelect) {
+                              onCategorySelect(cat);
+                            } else {
+                              router.push(`/services/${cat.id}`);
+                            }
                           }}
                           style={{
                             position: "relative",
@@ -1499,8 +2304,13 @@ interface ViewingPackage {
                             whileHover={{ y: -6, scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => {
-                              setSelectedCategory(item.title);
-                              if (!selectedCar) setIsCarModalOpen(true);
+                              const match = getCategoryByIdOrTitle(item.title);
+                              if (match) {
+                                router.push(`/services/${match.id}`);
+                              } else {
+                                setSelectedCategory(item.title);
+                                if (!selectedCar) setIsCarModalOpen(true);
+                              }
                             }}
                             style={{
                               flex: "0 0 calc((100% - 48px) / 4)",
@@ -1673,8 +2483,7 @@ interface ViewingPackage {
                             whileHover={{ y: -6, scale: 1.01 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => {
-                              setSelectedCategory(item.title);
-                              if (!selectedCar) setIsCarModalOpen(true);
+                              router.push(`/services/ac-service`);
                             }}
                             style={{
                               flex: "0 0 calc((100% - 32px) / 3)",

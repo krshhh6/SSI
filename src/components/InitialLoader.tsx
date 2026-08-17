@@ -19,14 +19,14 @@ export default function InitialLoader() {
     // Prevent scrolling while loader is active
     document.body.style.overflow = "hidden";
     
-    // Snappy, fast 950ms loader
+    // 2-second loading animation
     const timer = setTimeout(() => {
       setIsLoading(false);
       try {
         sessionStorage.setItem("sam_wheels_loaded", "true");
       } catch (e) {}
       document.body.style.overflow = "";
-    }, 950);
+    }, 2000);
 
     return () => {
       clearTimeout(timer);

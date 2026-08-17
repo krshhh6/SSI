@@ -754,6 +754,13 @@ body::after {
   }
 }
 
+@media (max-width: 640px) {
+  .package-card-inner {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+}
+
 @media (max-width: 340px) {
   .categories-grid-container {
     grid-template-columns: repeat(3, 1fr) !important;

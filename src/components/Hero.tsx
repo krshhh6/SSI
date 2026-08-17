@@ -161,73 +161,61 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* Tag */}
+          {/* Top Unified Verification & Rating Pill */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            style={{ marginBottom: 24, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            style={{ marginBottom: 22, display: "inline-flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}
           >
-            <span
+            <div
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: 8,
-                padding: "6px 16px",
+                gap: 10,
+                padding: "6px 14px 6px 10px",
                 borderRadius: 100,
-                border: "1px solid rgba(226, 0, 26, 0.4)",
-                background: "rgba(226, 0, 26, 0.08)",
-                color: "#FF3355",
-                fontSize: "0.78rem",
-                fontWeight: 600,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
+                border: "1px solid rgba(255, 255, 255, 0.14)",
+                background: "rgba(255, 255, 255, 0.05)",
+                backdropFilter: "blur(16px)",
+                WebkitBackdropFilter: "blur(16px)",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
               }}
             >
-              <span
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: "#E2001A",
-                  boxShadow: "0 0 8px #E2001A",
-                }}
-              />
-              Bosch Authorized Workshop · Patna, Bihar
-            </span>
-
-            {/* Clean 4.7 Star Rating (No Box) */}
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                fontSize: "0.85rem",
-                fontWeight: 800,
-                letterSpacing: "0.02em",
-              }}
-            >
-              <Star size={16} fill="#FFC107" color="#FFC107" style={{ filter: "drop-shadow(0 0 4px rgba(255,193,7,0.6))" }} />
-              <span style={{ color: "#FFD54F", fontWeight: 900 }}>4.7</span>
-              <span style={{ color: "rgba(255,255,255,0.75)", fontWeight: 600, fontSize: "0.78rem" }}>
-                Google Rating (535+ Reviews)
-              </span>
-            </span>
+              <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                <span
+                  style={{
+                    width: 7,
+                    height: 7,
+                    borderRadius: "50%",
+                    background: "#E2001A",
+                    boxShadow: "0 0 10px #E2001A",
+                    display: "inline-block",
+                  }}
+                />
+                <span style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.08em", color: "#ffffff", textTransform: "uppercase" }}>
+                  Bosch Authorized · Patna
+                </span>
+              </div>
+              <div style={{ width: 1, height: 14, background: "rgba(255, 255, 255, 0.18)" }} />
+              <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                <Star size={13} fill="#FFC107" color="#FFC107" />
+                <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "#FFD54F" }}>4.7</span>
+                <span style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.65)", fontWeight: 500 }}>(535+ Reviews)</span>
+              </div>
+            </div>
           </motion.div>
 
           {/* Headline */}
           <div
             className="display-xl"
-            style={{ maxWidth: 640, marginBottom: 8, display: "flex", flexDirection: "column" }}
+            style={{ maxWidth: 640, marginBottom: 12, display: "flex", flexDirection: "column" }}
           >
             <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
               BOSCH CERTIFIED
             </motion.span>
-            <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} style={{ color: "var(--bosch-red)" }}>
-              CAR CARE
-            </motion.span>
-            <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}>
-              EXCELLENCE
+            <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} style={{ color: "var(--bosch-red)", textShadow: "0 0 35px rgba(226,0,26,0.3)" }}>
+              CAR CARE EXCELLENCE
             </motion.span>
           </div>
 
@@ -235,92 +223,135 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
             style={{
-              color: "var(--text-secondary)",
-              fontSize: "clamp(1rem, 1.8vw, 1.2rem)",
+              color: "rgba(255, 255, 255, 0.7)",
+              fontSize: "clamp(0.92rem, 1.4vw, 1.05rem)",
               fontWeight: 400,
-              marginTop: 20,
-              marginBottom: 36,
-              maxWidth: 440,
-              lineHeight: 1.7,
+              marginTop: 14,
+              marginBottom: 28,
+              maxWidth: 460,
+              lineHeight: 1.6,
             }}
           >
-            Expert Diagnostics. Genuine Parts.
-            <br />
-            Certified Technicians for Every Brand.
+            Patna's premier multi-brand workshop equipped with advanced Bosch KTS diagnostics, genuine OEM parts, and certified master technicians.
           </motion.p>
 
           {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.7 }}
-            style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 56 }}
+            transition={{ duration: 0.7, delay: 0.5 }}
+            style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}
           >
-            <MagneticButton strength={10}>
-              <Link href="/booking" style={{ textDecoration: "none", display: "block" }}>
-                <motion.div
-                  className="btn-primary"
-                  whileTap={{ scale: 0.97 }}
-                  style={{
-                    background: "var(--bosch-red)",
-                    color: "#ffffff",
-                    boxShadow: "0 4px 24px rgba(226, 0, 26, 0.35)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
-                  <CalendarCheck size={18} />
-                  Book Service
-                </motion.div>
-              </Link>
-            </MagneticButton>
-            <MagneticButton strength={10}>
-              <motion.a
-                href="tel:+919028384499"
-                className="btn-secondary"
-                whileTap={{ scale: 0.97 }}
-                style={{ fontSize: "1rem", padding: "15px 36px", display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}
-              >
-                <Phone size={18} />
-                Call Now
-              </motion.a>
-            </MagneticButton>
+            <Link
+              href="/booking"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                background: "#E2001A",
+                color: "#ffffff",
+                padding: "13px 26px",
+                borderRadius: 9,
+                fontWeight: 800,
+                fontSize: "0.9rem",
+                textDecoration: "none",
+                boxShadow: "0 6px 20px rgba(226, 0, 26, 0.4)",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#c0001a"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#E2001A"; }}
+            >
+              <CalendarCheck size={17} />
+              <span>Book Service</span>
+            </Link>
+
+            <a
+              href="tel:+919028384499"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                background: "rgba(255, 255, 255, 0.07)",
+                border: "1px solid rgba(255, 255, 255, 0.16)",
+                color: "#ffffff",
+                padding: "13px 22px",
+                borderRadius: 9,
+                fontWeight: 700,
+                fontSize: "0.9rem",
+                textDecoration: "none",
+                backdropFilter: "blur(10px)",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.12)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.07)"; }}
+            >
+              <Phone size={16} />
+              <span>Call Now</span>
+            </a>
           </motion.div>
 
-          {/* Mobile Car Render */}
+          {/* Micro Trust Bullet Perks */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 16,
+              flexWrap: "wrap",
+              fontSize: "0.76rem",
+              color: "rgba(255, 255, 255, 0.55)",
+              fontWeight: 500,
+              marginBottom: 32,
+            }}
+          >
+            <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+              <ShieldCheck size={13} color="#10B981" /> 100% Genuine Bosch Parts
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+              <Car size={13} color="#0066FF" /> Doorstep Pickup Available
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+              <Star size={13} color="#FFB800" /> 6-Month Service Warranty
+            </span>
+          </motion.div>
+
+          {/* Mobile Car Stage Render */}
           <motion.div
             className="hero-car-mobile"
             style={{
               display: "none",
               position: "relative",
               width: "100%",
-              height: "280px",
-              marginBottom: 20,
+              height: "260px",
+              marginBottom: 24,
               zIndex: 2,
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
           >
+            {/* Ambient Stage Lighting */}
             <div
               style={{
                 position: "absolute",
-                bottom: "5%",
-                left: "15%",
-                right: "15%",
-                height: "20px",
-                background: "radial-gradient(ellipse, rgba(0, 102, 255, 0.3) 0%, transparent 70%)",
-                filter: "blur(15px)",
+                bottom: "8%",
+                left: "8%",
+                right: "8%",
+                height: "36px",
+                background: "radial-gradient(ellipse, rgba(226, 0, 26, 0.3) 0%, rgba(0, 102, 255, 0.15) 50%, transparent 75%)",
+                filter: "blur(18px)",
                 zIndex: 1,
+                pointerEvents: "none",
               }}
             />
             <motion.div
-              animate={{ y: [0, -10, 0] }}
+              animate={{ y: [0, -8, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               style={{ position: "relative", zIndex: 2, width: "100%", height: "100%" }}
             >
@@ -333,7 +364,7 @@ export default function Hero() {
                   width: "100%", 
                   height: "100%", 
                   objectFit: "contain", 
-                  filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))",
+                  filter: "drop-shadow(0 15px 25px rgba(0,0,0,0.5))",
                 }}
               >
                 <source src="/carhero.webm" type="video/webm" />
@@ -350,7 +381,7 @@ export default function Hero() {
               style={{
                 display: "flex",
                 flexWrap: "wrap",
-                gap: 12,
+                gap: 10,
                 maxWidth: 560,
               }}
             >
@@ -364,18 +395,18 @@ export default function Hero() {
                     display: "flex",
                     alignItems: "center",
                     gap: 8,
-                    padding: "8px 14px",
+                    padding: "7px 12px",
                     borderRadius: 8,
-                    background: "var(--card)",
-                    border: "1px solid var(--border)",
+                    background: "rgba(255, 255, 255, 0.04)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
                     backdropFilter: "blur(10px)",
                   }}
                 >
-                  <badge.icon size={14} color={badge.color} strokeWidth={2.5} />
-                  <span style={{ fontSize: "0.82rem", fontWeight: 700, color: badge.color }}>
+                  <badge.icon size={13} color={badge.color} strokeWidth={2.5} />
+                  <span style={{ fontSize: "0.8rem", fontWeight: 700, color: badge.color }}>
                     {badge.value}
                   </span>
-                  <span style={{ fontSize: "0.78rem", color: "var(--text-secondary)", fontWeight: 400 }}>
+                  <span style={{ fontSize: "0.75rem", color: "rgba(255, 255, 255, 0.6)", fontWeight: 500 }}>
                     {badge.label}
                   </span>
                 </motion.div>

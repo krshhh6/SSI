@@ -166,42 +166,45 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            style={{ marginBottom: 22, display: "inline-flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}
+            style={{ marginBottom: 20, display: "inline-flex", alignItems: "center" }}
           >
             <div
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: 10,
-                padding: "6px 14px 6px 10px",
+                gap: 8,
+                padding: "5px 12px 5px 10px",
                 borderRadius: 100,
                 border: "1px solid rgba(255, 255, 255, 0.14)",
                 background: "rgba(255, 255, 255, 0.05)",
                 backdropFilter: "blur(16px)",
                 WebkitBackdropFilter: "blur(16px)",
                 boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                whiteSpace: "nowrap",
+                maxWidth: "100%",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
                 <span
                   style={{
-                    width: 7,
-                    height: 7,
+                    width: 6,
+                    height: 6,
                     borderRadius: "50%",
                     background: "#E2001A",
-                    boxShadow: "0 0 10px #E2001A",
+                    boxShadow: "0 0 8px #E2001A",
                     display: "inline-block",
+                    flexShrink: 0,
                   }}
                 />
-                <span style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.08em", color: "#ffffff", textTransform: "uppercase" }}>
+                <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.06em", color: "#ffffff", textTransform: "uppercase", whiteSpace: "nowrap" }}>
                   Bosch Authorized · Patna
                 </span>
               </div>
-              <div style={{ width: 1, height: 14, background: "rgba(255, 255, 255, 0.18)" }} />
-              <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                <Star size={13} fill="#FFC107" color="#FFC107" />
-                <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "#FFD54F" }}>4.7</span>
-                <span style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.65)", fontWeight: 500 }}>(535+ Reviews)</span>
+              <div style={{ width: 1, height: 12, background: "rgba(255, 255, 255, 0.18)", flexShrink: 0 }} />
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 4, whiteSpace: "nowrap", flexShrink: 0 }}>
+                <Star size={12} fill="#FFC107" color="#FFC107" style={{ flexShrink: 0 }} />
+                <span style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FFD54F", whiteSpace: "nowrap" }}>4.7</span>
+                <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.65)", fontWeight: 500, whiteSpace: "nowrap" }}>(535+ Reviews)</span>
               </div>
             </div>
           </motion.div>

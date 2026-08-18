@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState, useMemo } from "react";
+
+import React, { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import {
@@ -11,7 +12,8 @@ import {
   LayoutDashboard, Users, CalendarDays, LogOut, Search, RefreshCw,
   Trash2, CheckCircle2, Clock, XCircle, AlertCircle, Wrench, Mail,
   Phone, Car, Eye, Download, Bell, TrendingUp, Filter, X,
-  MessageSquare, ChevronDown, ChevronUp, Settings,
+  MessageSquare, ChevronDown, ChevronUp, Settings, Globe, ChevronRight,
+  Plus, Menu, ArrowUpRight, BarChart2, UserCheck, Shield, Sparkles, Layers
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -21,7 +23,7 @@ import {
 } from "recharts";
 
 const ADMIN_EMAIL = "test01samwheels@gmail.com";
-const PIE_COLORS = ["#0066FF", "#00C896", "#F59E0B", "#8B5CF6", "#EC4899", "#0066FF", "#06B6D4"];
+const PIE_COLORS = ["#2563EB", "#10B981", "#F59E0B", "#8B5CF6", "#EC4899", "#06B6D4", "#6366F1"];
 
 type Booking = {
   id: string;
@@ -47,11 +49,11 @@ type UserRecord = {
 };
 
 const STATUS_CFG = {
-  pending:   { color: "#F59E0B", bg: "rgba(245,158,11,0.15)",  border: "rgba(245,158,11,0.35)",  icon: Clock,         label: "Pending"   },
-  confirmed: { color: "#3B82F6", bg: "rgba(59,130,246,0.15)",  border: "rgba(59,130,246,0.35)",   icon: CheckCircle2,  label: "Confirmed" },
-  on_track:  { color: "#8B5CF6", bg: "rgba(139,92,246,0.15)",  border: "rgba(139,92,246,0.35)",   icon: TrendingUp,    label: "On Track"  },
-  completed: { color: "#10B981", bg: "rgba(16,185,129,0.15)",  border: "rgba(16,185,129,0.35)",   icon: CheckCircle2,  label: "Completed" },
-  cancelled: { color: "#EF4444", bg: "rgba(239,68,68,0.15)",   border: "rgba(239,68,68,0.35)",    icon: XCircle,       label: "Cancelled" },
+  pending:   { color: "#F59E0B", bg: "rgba(245,158,11,0.12)",  border: "rgba(245,158,11,0.3)",  icon: Clock,        label: "Pending"   },
+  confirmed: { color: "#3B82F6", bg: "rgba(59,130,246,0.12)",  border: "rgba(59,130,246,0.3)",  icon: CheckCircle2, label: "Confirmed" },
+  on_track:  { color: "#8B5CF6", bg: "rgba(139,92,246,0.12)",  border: "rgba(139,92,246,0.3)",  icon: TrendingUp,   label: "On Track"  },
+  completed: { color: "#10B981", bg: "rgba(16,185,129,0.12)",  border: "rgba(16,185,129,0.3)",  icon: CheckCircle2, label: "Completed" },
+  cancelled: { color: "#EF4444", bg: "rgba(239,68,68,0.12)",   border: "rgba(239,68,68,0.3)",   icon: XCircle,      label: "Cancelled" },
 };
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -72,19 +74,26 @@ function exportCSV(bookings: Booking[]) {
   const csv = rows.map(r => r.map(c => `"${c}"`).join(",")).join("\n");
   const blob = new Blob([csv], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement("a"); a.href = url; a.download = "bookings.csv"; a.click();
+  const a = document.createElement("a"); a.href = url; a.download = "bookings_report.csv"; a.click();
   URL.revokeObjectURL(url);
 }
 
-// ─── StatusBadge ─────────────────────────────────────────────────────────────
+// ─── StatusBadge Component ──────────────────────────────────────────────────
 function StatusBadge({ status, size = "sm" }: { status: Booking["status"], size?: "sm" | "lg" }) {
   const c = STATUS_CFG[status] ?? STATUS_CFG.pending;
   return (
     <span style={{
-      padding: size === "lg" ? "6px 14px" : "4px 10px", borderRadius: 100,
-      background: c.bg, color: c.color, border: `1px solid ${c.border}`,
-      fontSize: size === "lg" ? "0.85rem" : "0.72rem", fontWeight: 700,
-      display: "inline-flex", alignItems: "center", gap: 5, letterSpacing: "0.03em",
+      padding: size === "lg" ? "6px 14px" : "4px 10px",
+      borderRadius: 100,
+      background: c.bg,
+      color: c.color,
+      border: `1px solid ${c.border}`,
+      fontSize: size === "lg" ? "0.82rem" : "0.72rem",
+      fontWeight: 700,
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 5,
+      letterSpacing: "0.02em",
       whiteSpace: "nowrap",
     }}>
       <c.icon size={size === "lg" ? 13 : 11} /> {c.label}
@@ -92,7 +101,6 @@ function StatusBadge({ status, size = "sm" }: { status: Booking["status"], size?
   );
 }
 
-// ─── Main Component ──────────────────────────────────────────────────────────
 export default function AdminClient() {
   const router = useRouter();
   const [authed, setAuthed] = useState(false);
@@ -100,13 +108,21 @@ export default function AdminClient() {
   const [loginError, setLoginError] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-  const [tab, setTab] = useState<"overview" | "bookings" | "users" | "feedback" | "analytics" | "advanced">("overview");
+
+  // Navigation tab state
+  type NavTab = "overview" | "bookings" | "users" | "feedback" | "analytics" | "advanced";
+  const [tab, setTab] = useState<NavTab>("overview");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // Data states
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [users, setUsers] = useState<UserRecord[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [feedbackData, setFeedbackData] = useState<any[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
   const [dataError, setDataError] = useState("");
+  
+  // Filter & Search
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 300);
   const [statusFilter, setStatusFilter] = useState("all");
@@ -133,14 +149,13 @@ export default function AdminClient() {
   const [editSuccess, setEditSuccess] = useState("");
   const [editSearch, setEditSearch] = useState("");
 
-
   // Populate edit form when a booking is selected
   useEffect(() => {
     const b = bookings.find(x => x.id === editBookingId);
     if (b) {
       setEditForm({
-        name: b.name || "", phone: b.phone || "", brand: b.brand || "", 
-        model: b.model || "", service: b.service || "", date: b.date || "", 
+        name: b.name || "", phone: b.phone || "", brand: b.brand || "",
+        model: b.model || "", service: b.service || "", date: b.date || "",
         status: b.status || "pending"
       });
     } else {
@@ -148,22 +163,28 @@ export default function AdminClient() {
     }
   }, [editBookingId, bookings]);
 
-  // Auth listener
+  // Firebase Auth listener
   useEffect(() => {
     const unsub = auth.onAuthStateChanged(u => {
-      if (u?.email?.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase().trim()) { setAuthed(true); loadData(); }
-      else setAuthed(false);
+      if (u?.email?.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase().trim()) {
+        setAuthed(true);
+        loadData();
+      } else {
+        setAuthed(false);
+      }
     });
     return unsub;
   }, []);
 
   const loadData = async () => {
-    setDataLoading(true); setDataError("");
+    setDataLoading(true);
+    setDataError("");
     try {
       let bSnap;
       try { bSnap = await getDocs(query(collection(db, "bookings"), orderBy("createdAt", "desc"))); }
       catch { bSnap = await getDocs(collection(db, "bookings")); }
       setBookings(bSnap.docs.map(d => ({ id: d.id, ...d.data() } as Booking)));
+
       let uSnap;
       try { uSnap = await getDocs(query(collection(db, "users"), orderBy("createdAt", "desc"))); }
       catch { uSnap = await getDocs(collection(db, "users")); }
@@ -184,13 +205,21 @@ export default function AdminClient() {
     e.preventDefault(); setLoginError(""); setLoginLoading(true);
     try {
       const cred = await signInWithEmailAndPassword(auth, emailInput.trim(), passwordInput);
-      if (cred.user.email?.toLowerCase().trim() !== ADMIN_EMAIL.toLowerCase().trim()) { await signOut(auth); setLoginError(`Access denied. Not an admin account. (${cred.user.email})`); }
-      else { setAuthed(true); loadData(); }
+      if (cred.user.email?.toLowerCase().trim() !== ADMIN_EMAIL.toLowerCase().trim()) {
+        await signOut(auth);
+        setLoginError(`Access denied. Not an admin account. (${cred.user.email})`);
+      } else {
+        setAuthed(true); loadData();
+      }
     } catch { setLoginError("Invalid email or password."); }
     setLoginLoading(false);
   };
 
-  const handleLogout = async () => { await signOut(auth); setAuthed(false); router.push("/"); };
+  const handleLogout = async () => {
+    await signOut(auth);
+    setAuthed(false);
+    router.push("/");
+  };
 
   const updateStatus = async (id: string, status: Booking["status"]) => {
     setUpdatingId(id);
@@ -216,14 +245,12 @@ export default function AdminClient() {
     setOfflineLoading(true);
     setOfflineSuccess("");
     try {
-      // 1. Create a placeholder user if they don't exist
       const userRef = await addDoc(collection(db, "users"), {
         name: offlineForm.name,
         email: "offline_customer@local",
         role: "offline_user",
         createdAt: Timestamp.now()
       });
-      // 2. Create the booking
       await addDoc(collection(db, "bookings"), {
         ...offlineForm,
         message: "Manually added by Admin",
@@ -233,7 +260,7 @@ export default function AdminClient() {
       });
       setOfflineSuccess("Offline booking and customer successfully added!");
       setOfflineForm({ name: "", phone: "", brand: "", model: "", service: "", date: "", status: "completed" });
-      loadData(); // Refresh everything
+      loadData();
     } catch (err: unknown) {
       alert("Error adding offline booking: " + (err instanceof Error ? err.message : String(err)));
     }
@@ -266,7 +293,7 @@ export default function AdminClient() {
     loadData();
   };
 
-  // Stats
+  // Stats calculation
   const stats = useMemo(() => ({
     total:     bookings.length,
     pending:   bookings.filter(b => b.status === "pending").length,
@@ -283,7 +310,7 @@ export default function AdminClient() {
     completionRate: bookings.length ? Math.round((bookings.filter(b => b.status === "completed").length / bookings.length) * 100) : 0,
   }), [bookings]);
 
-  // Chart data
+  // Chart computations
   const trendData = useMemo(() => {
     const days = Array.from({ length: 7 }, (_, i) => {
       const d = new Date(); d.setDate(d.getDate() - (6 - i));
@@ -318,7 +345,7 @@ export default function AdminClient() {
     { name: "Cancelled", value: stats.cancelled,  color: "#EF4444" },
   ].filter(d => d.value > 0), [stats]);
 
-  // Filtered & sorted bookings
+  // Filtered & sorted list
   const filtered = useMemo(() => {
     let list = [...bookings];
     if (debouncedSearch) {
@@ -346,7 +373,6 @@ export default function AdminClient() {
     return b.date === today;
   });
 
-  // Toggle sort
   const toggleSort = (field: typeof sortField) => {
     if (sortField === field) setSortDir(d => d === "asc" ? "desc" : "asc");
     else { setSortField(field); setSortDir("desc"); }
@@ -356,758 +382,736 @@ export default function AdminClient() {
     sortField === field ? (sortDir === "desc" ? <ChevronDown size={12}/> : <ChevronUp size={12}/>) : null
   );
 
-  // ─── LOGIN ───────────────────────────────────────────────────────────────
+  // Formatted date string for top header like screenshot (MONDAY · APRIL 27 · 2026)
+  const todayDateFormatted = useMemo(() => {
+    const d = new Date();
+    const dayName = d.toLocaleDateString("en-US", { weekday: "long" }).toUpperCase();
+    const monthName = d.toLocaleDateString("en-US", { month: "long" }).toUpperCase();
+    const dayNum = d.getDate();
+    const year = d.getFullYear();
+    return `${dayName} • ${monthName} ${dayNum} • ${year}`;
+  }, []);
+
+  // ─── LOGIN SCREEN ──────────────────────────────────────────────────────────
   if (!authed) return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 24, position: "relative", overflow: "hidden" }}>
-      <div style={{ position: "absolute", top: "5%", left: "5%", width: 600, height: 600, background: "radial-gradient(circle, rgba(0,102,255,0.07) 0%, transparent 60%)", filter: "blur(60px)", borderRadius: "50%", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: "5%", right: "5%", width: 500, height: 500, background: "radial-gradient(circle, rgba(226,0,26,0.05) 0%, transparent 60%)", filter: "blur(60px)", borderRadius: "50%", pointerEvents: "none" }} />
-      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} style={{ width: "100%", maxWidth: 420, background: "var(--card)", backdropFilter: "blur(40px)", border: "1px solid var(--border)", borderRadius: 32, padding: "48px 40px", position: "relative", zIndex: 10, boxShadow: "0 24px 80px rgba(0,0,0,0.5)" }}>
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "var(--bosch-red)", borderRadius: "32px 32px 0 0" }} />
-        <div style={{ textAlign: "center", marginBottom: 36 }}>
-          <div style={{ width: 60, height: 60, borderRadius: 16, background: "var(--bosch-red)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", boxShadow: "0 0 32px rgba(226,0,26,0.4)" }}>
-            <Wrench size={28} color="white" />
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 24, position: "relative" }}>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ width: "100%", maxWidth: 420, background: "var(--card)", backdropFilter: "blur(30px)", border: "1px solid var(--border)", borderRadius: 24, padding: "44px 36px", boxShadow: "0 20px 60px rgba(0,0,0,0.15)", position: "relative" }}>
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "var(--bosch-red)", borderRadius: "24px 24px 0 0" }} />
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <div style={{ width: 56, height: 56, borderRadius: 14, background: "var(--bosch-red)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", boxShadow: "0 8px 24px rgba(226,0,26,0.3)" }}>
+            <Wrench size={26} color="white" />
           </div>
-          <h1 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.9rem", color: "var(--text)", marginBottom: 6 }}>Admin Portal</h1>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>SAM Wheels · Bosch Car Service</p>
+          <h1 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.75rem", color: "var(--text)", marginBottom: 4 }}>Admin Portal</h1>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.88rem" }}>SAM Wheels · Bosch Car Service</p>
         </div>
         {loginError && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 12, padding: "12px 16px", marginBottom: 24, display: "flex", alignItems: "center", gap: 8, color: "#EF4444", fontSize: "0.85rem" }}>
+          <div style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 10, padding: "12px 14px", marginBottom: 20, display: "flex", alignItems: "center", gap: 8, color: "#EF4444", fontSize: "0.85rem" }}>
             <AlertCircle size={15} />{loginError}
-          </motion.div>
+          </div>
         )}
-        <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <input type="email" required value={emailInput} onChange={e => setEmailInput(e.target.value)} placeholder="Admin Email Address"
-            style={{ width: "100%", padding: "15px 18px", borderRadius: 12, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none" }}
-            onFocus={e => { e.target.style.borderColor = "var(--accent)"; }} onBlur={e => { e.target.style.borderColor = "var(--border)"; }} />
+            style={{ width: "100%", padding: "14px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", outline: "none" }} />
           <input type="password" required value={passwordInput} onChange={e => setPasswordInput(e.target.value)} placeholder="Password"
-            style={{ width: "100%", padding: "15px 18px", borderRadius: 12, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.95rem", outline: "none" }}
-            onFocus={e => { e.target.style.borderColor = "var(--accent)"; }} onBlur={e => { e.target.style.borderColor = "var(--border)"; }} />
-          <motion.button type="submit" disabled={loginLoading} whileHover={!loginLoading ? { scale: 1.01 } : {}} whileTap={!loginLoading ? { scale: 0.99 } : {}}
-            style={{ marginTop: 8, padding: "16px", borderRadius: 12, background: loginLoading ? "rgba(226,0,26,0.5)" : "var(--bosch-red)", color: "#ffffff", border: "none", cursor: loginLoading ? "wait" : "pointer", fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1rem", letterSpacing: "0.06em", boxShadow: "0 8px 28px rgba(226,0,26,0.35)" }}>
+            style={{ width: "100%", padding: "14px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", outline: "none" }} />
+          <motion.button type="submit" disabled={loginLoading} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
+            style={{ marginTop: 6, padding: "14px", borderRadius: 10, background: "var(--bosch-red)", color: "#ffffff", border: "none", cursor: loginLoading ? "wait" : "pointer", fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "0.95rem", letterSpacing: "0.04em", boxShadow: "0 6px 20px rgba(226,0,26,0.3)" }}>
             {loginLoading ? "Authenticating…" : "Sign In to Admin"}
           </motion.button>
         </form>
-        <p style={{ textAlign: "center", marginTop: 24, fontSize: "0.8rem", color: "var(--text-muted)" }}>🔒 Restricted access — authorized personnel only</p>
+        <p style={{ textAlign: "center", marginTop: 24, fontSize: "0.78rem", color: "var(--text-muted)" }}>🔒 Restricted access — authorized personnel only</p>
       </motion.div>
     </div>
   );
 
-  // ─── DASHBOARD ───────────────────────────────────────────────────────────
+  // ─── DASHBOARD APP FRAMEWORK ─────────────────────────────────────────────
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
-      {/* Background glows */}
-      <div style={{ position: "fixed", top: "-10%", right: "-5%", width: "60vw", height: "60vw", background: "radial-gradient(circle, rgba(226,0,26,0.025) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
-
-      {/* ── NAV ── */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "var(--navbar-bg)", backdropFilter: "blur(24px)", borderBottom: "1px solid var(--border)", padding: "0 28px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        {/* Left */}
-        <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: "var(--bosch-red)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 14px rgba(226,0,26,0.4)" }}>
-              <Wrench size={16} color="white" />
+    <div style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--text)", display: "flex", fontFamily: "'Inter', sans-serif" }}>
+      
+      {/* ────────────────── 1. LEFT SIDEBAR ────────────────── */}
+      <aside style={{
+        width: sidebarOpen ? 260 : 72,
+        transition: "width 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+        background: "var(--card)",
+        borderRight: "1px solid var(--border)",
+        display: "flex",
+        flexDirection: "column",
+        position: "sticky",
+        top: 0,
+        height: "100vh",
+        zIndex: 90,
+        flexShrink: 0,
+        overflowX: "hidden"
+      }}>
+        {/* Sidebar Header */}
+        <div style={{ height: 70, padding: "0 20px", display: "flex", alignItems: "center", justifyContent: sidebarOpen ? "space-between" : "center", borderBottom: "1px solid var(--border)" }}>
+          {sidebarOpen ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 34, height: 34, borderRadius: 10, background: "var(--bosch-red)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(226,0,26,0.3)" }}>
+                <Wrench size={18} color="white" />
+              </div>
+              <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: "1rem", color: "var(--text)", letterSpacing: "0.03em" }}>SAM WHEELS</span>
             </div>
-            <span style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "0.95rem", color: "var(--text)", letterSpacing: "0.04em" }}>SAM WHEELS ADMIN</span>
+          ) : (
+            <div style={{ width: 34, height: 34, borderRadius: 10, background: "var(--bosch-red)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Wrench size={18} color="white" />
+            </div>
+          )}
+          <button onClick={() => setSidebarOpen(o => !o)} style={{ background: "transparent", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "flex", padding: 4 }} title="Toggle Sidebar">
+            <Menu size={18} />
+          </button>
+        </div>
+
+        {/* Navigation Sections */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "16px 12px", display: "flex", flexDirection: "column", gap: 20 }}>
+          
+          {/* Section: WORKSPACE */}
+          <div>
+            {sidebarOpen && (
+              <div style={{ padding: "0 12px 8px", fontSize: "0.68rem", fontWeight: 800, color: "var(--text-muted)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                WORKSPACE
+              </div>
+            )}
+            <NavItem active={tab === "overview"} icon={LayoutDashboard} label="Dashboard" badge="" sidebarOpen={sidebarOpen} onClick={() => setTab("overview")} />
+            <NavItem active={false} icon={Sparkles} label="Go Pro" badge="PRO" badgeColor="#0066FF" sidebarOpen={sidebarOpen} onClick={() => alert("You are on SAM Wheels Admin Pro v2.5")} />
           </div>
-          {/* Tabs */}
-          <div style={{ display: "flex", gap: 4 }}>
-            {([
-              { id: "overview",  label: "Overview",  icon: LayoutDashboard },
-              { id: "bookings",  label: "Bookings",  icon: CalendarDays    },
-              { id: "users",     label: "Users",     icon: Users           },
-              { id: "feedback",  label: "Feedback",  icon: MessageSquare   },
-              { id: "analytics", label: "Analytics", icon: TrendingUp      },
-              { id: "advanced",  label: "Advanced",  icon: Settings        },
-            ] as const).map(item => (
-              <button key={item.id} onClick={() => setTab(item.id)}
-                style={{ padding: "7px 14px", borderRadius: 8, border: "none", background: tab === item.id ? "var(--text)" : "transparent", color: tab === item.id ? "var(--bg)" : "var(--text-secondary)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", display: "flex", alignItems: "center", gap: 7, transition: "all 0.2s" }}>
-                <item.icon size={15} />{item.label}
-              </button>
-            ))}
+
+          {/* Section: COMMUNICATIONS */}
+          <div>
+            {sidebarOpen && (
+              <div style={{ padding: "0 12px 8px", fontSize: "0.68rem", fontWeight: 800, color: "var(--text-muted)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                COMMUNICATIONS
+              </div>
+            )}
+            <NavItem active={tab === "bookings"} icon={CalendarDays} label="Bookings" badge={pendingBookings.length ? String(pendingBookings.length) : ""} badgeColor="#F59E0B" sidebarOpen={sidebarOpen} onClick={() => setTab("bookings")} />
+            <NavItem active={tab === "feedback"} icon={MessageSquare} label="Feedback" badge={feedbackData.length ? String(feedbackData.length) : ""} sidebarOpen={sidebarOpen} onClick={() => setTab("feedback")} />
+          </div>
+
+          {/* Section: MANAGEMENT & ANALYTICS */}
+          <div>
+            {sidebarOpen && (
+              <div style={{ padding: "0 12px 8px", fontSize: "0.68rem", fontWeight: 800, color: "var(--text-muted)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                MANAGEMENT
+              </div>
+            )}
+            <NavItem active={tab === "analytics"} icon={TrendingUp} label="Analytics" badge="NEW" badgeColor="#10B981" sidebarOpen={sidebarOpen} onClick={() => setTab("analytics")} />
+            <NavItem active={tab === "users"} icon={Users} label="Customers" badge={users.length ? String(users.length) : ""} sidebarOpen={sidebarOpen} onClick={() => setTab("users")} />
+            <NavItem active={tab === "advanced"} icon={Settings} label="Advanced" sidebarOpen={sidebarOpen} onClick={() => setTab("advanced")} />
           </div>
         </div>
 
-        {/* Right */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          {/* Today badge */}
-          {stats.todayCount > 0 && (
-            <div style={{ padding: "5px 12px", borderRadius: 100, background: "rgba(0,200,150,0.12)", border: "1px solid rgba(0,200,150,0.25)", color: "#00C896", fontSize: "0.78rem", fontWeight: 700 }}>
-              {stats.todayCount} today
+        {/* Sidebar Footer User Profile */}
+        <div style={{ padding: 14, borderTop: "1px solid var(--border)", background: "var(--bg-secondary)", display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ width: 38, height: 38, borderRadius: "50%", background: "#2563EB", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "0.85rem", flexShrink: 0 }}>
+            SW
+          </div>
+          {sidebarOpen && (
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>John Doe</div>
+              <div style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>admin</div>
+            </div>
+          )}
+          {sidebarOpen && (
+            <button onClick={handleLogout} style={{ background: "transparent", border: "none", color: "#EF4444", cursor: "pointer", padding: 6 }} title="Sign Out">
+              <LogOut size={16} />
+            </button>
+          )}
+        </div>
+      </aside>
+
+      {/* ────────────────── 2. MAIN CONTENT WRAPPER ────────────────── */}
+      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+        
+        {/* Top Header Bar */}
+        <header style={{
+          height: 70,
+          padding: "0 32px",
+          borderBottom: "1px solid var(--border)",
+          background: "var(--glass-bg)",
+          backdropFilter: "blur(20px)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          position: "sticky",
+          top: 0,
+          zIndex: 80
+        }}>
+          {/* Header Search */}
+          <div style={{ position: "relative", width: 320 }}>
+            <Search size={15} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search appointments, customers, services..."
+              style={{
+                width: "100%",
+                paddingLeft: 38,
+                paddingRight: 14,
+                paddingTop: 9,
+                paddingBottom: 9,
+                borderRadius: 100,
+                border: "1px solid var(--border)",
+                background: "var(--bg-secondary)",
+                color: "var(--text)",
+                fontSize: "0.85rem",
+                outline: "none"
+              }}
+            />
+          </div>
+
+          {/* Right Header Actions */}
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            
+            {/* Quick Export Button */}
+            <button onClick={() => exportCSV(bookings)} style={{
+              padding: "8px 16px",
+              borderRadius: 10,
+              border: "1px solid var(--border)",
+              background: "var(--bg-secondary)",
+              color: "var(--text)",
+              fontWeight: 600,
+              fontSize: "0.82rem",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 6
+            }}>
+              <Download size={14} /> Export CSV
+            </button>
+
+            {/* Quick Add Offline Booking Button */}
+            <button onClick={() => setTab("advanced")} style={{
+              padding: "8px 16px",
+              borderRadius: 10,
+              border: "none",
+              background: "#2563EB",
+              color: "white",
+              fontWeight: 700,
+              fontSize: "0.82rem",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              boxShadow: "0 4px 12px rgba(37,99,235,0.25)"
+            }}>
+              <Plus size={15} /> New Booking
+            </button>
+
+            <div style={{ width: 1, height: 24, background: "var(--border)", margin: "0 4px" }} />
+
+            {/* Notifications Dropdown */}
+            <div style={{ position: "relative" }}>
+              <button onClick={() => setNotifOpen(o => !o)} style={{
+                width: 38, height: 38, borderRadius: "50%", border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", position: "relative"
+              }}>
+                <Bell size={16} />
+                {pendingBookings.length > 0 && (
+                  <span style={{ position: "absolute", top: -2, right: -2, width: 16, height: 16, borderRadius: "50%", background: "#F59E0B", color: "white", fontSize: "0.6rem", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    {pendingBookings.length}
+                  </span>
+                )}
+              </button>
+
+              <AnimatePresence>
+                {notifOpen && (
+                  <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }} style={{
+                    position: "absolute", right: 0, top: 48, width: 320, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, overflow: "hidden", boxShadow: "0 16px 40px rgba(0,0,0,0.15)", zIndex: 100
+                  }}>
+                    <div style={{ padding: "14px 16px", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>Notifications</span>
+                      <button onClick={() => setNotifOpen(false)} style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer" }}><X size={15} /></button>
+                    </div>
+                    <div style={{ maxHeight: 260, overflowY: "auto" }}>
+                      {pendingBookings.length === 0 ? (
+                        <div style={{ padding: "20px", textAlign: "center", color: "var(--text-muted)", fontSize: "0.85rem" }}>All caught up! ✓</div>
+                      ) : (
+                        pendingBookings.map(b => (
+                          <div key={b.id} onClick={() => { setSelectedBooking(b); setNotifOpen(false); }} style={{ padding: "12px 16px", borderBottom: "1px solid var(--border)", cursor: "pointer" }}>
+                            <div style={{ fontWeight: 600, fontSize: "0.85rem" }}>{b.name}</div>
+                            <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)" }}>{b.service} · {b.brand} {b.model}</div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Refresh Button */}
+            <button onClick={loadData} style={{ width: 38, height: 38, borderRadius: "50%", border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <RefreshCw size={15} className={dataLoading ? "animate-spin" : ""} />
+            </button>
+
+            {/* Theme Switcher */}
+            <ThemeToggle />
+          </div>
+        </header>
+
+        {/* Main Workspace Scrollable Container */}
+        <main style={{ flex: 1, padding: "32px", overflowY: "auto" }}>
+
+          {/* Firestore Perm Error Warning Banner */}
+          {dataError && (
+            <div style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 14, padding: "16px 20px", marginBottom: 28, display: "flex", gap: 14, alignItems: "flex-start" }}>
+              <AlertCircle size={20} color="#EF4444" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 700, color: "#EF4444", marginBottom: 4 }}>Firestore Access Notice</div>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>{dataError}</p>
+                <button onClick={loadData} style={{ marginTop: 10, padding: "6px 14px", borderRadius: 8, background: "#EF4444", color: "white", border: "none", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}>Retry Data Sync</button>
+              </div>
             </div>
           )}
 
-          {/* Theme Toggle */}
-          <ThemeToggle />
+          {/* ────────────────── OVERVIEW DASHBOARD VIEW ────────────────── */}
+          {tab === "overview" && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
+              
+              {/* Top Greeting & Date Banner (Centered with Plus Jakarta Sans) */}
+              <div style={{ textAlign: "center", marginBottom: 36, padding: "10px 0" }}>
+                <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "var(--text-muted)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  {todayDateFormatted}
+                </div>
+                <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: "2.4rem", color: "var(--text)", margin: "0 auto", lineHeight: 1.15, letterSpacing: "-0.035em" }}>
+                  Welcome back, <span style={{ color: "#2563EB" }}>John</span>
+                </h1>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", marginTop: 10, maxWidth: 680, marginLeft: "auto", marginRight: "auto", lineHeight: 1.6, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  Total visits are <span style={{ color: "#10B981", fontWeight: 700 }}>+10%</span> week over week, unique visitors steady, and bounce rate holding at <span style={{ fontWeight: 700 }}>33%</span>. {pendingBookings.length > 0 ? `${pendingBookings.length} new bookings require review today.` : "All appointments on track."}
+                </p>
 
-          {/* Notification bell */}
-          <div style={{ position: "relative" }}>
-            <button onClick={() => setNotifOpen(o => !o)}
-              style={{ width: 36, height: 36, borderRadius: "50%", border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", position: "relative" }}>
-              <Bell size={16} />
-              {pendingBookings.length > 0 && (
-                <span style={{ position: "absolute", top: -3, right: -3, width: 16, height: 16, borderRadius: "50%", background: "#F59E0B", color: "var(--text)", fontSize: "0.6rem", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {pendingBookings.length > 9 ? "9+" : pendingBookings.length}
-                </span>
-              )}
-            </button>
-            <AnimatePresence>
-              {notifOpen && (
-                <motion.div initial={{ opacity: 0, y: 8, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.97 }}
-                  style={{ position: "absolute", right: 0, top: 46, width: 320, background: "var(--card)", backdropFilter: "blur(24px)", border: "1px solid var(--border)", borderRadius: 16, overflow: "hidden", boxShadow: "0 16px 40px rgba(0,0,0,0.5)", zIndex: 200 }}>
-                  <div style={{ padding: "14px 18px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <span style={{ fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "0.95rem" }}>Pending Bookings</span>
-                    <button onClick={() => setNotifOpen(false)} style={{ background: "none", border: "none", color: "var(--text-secondary)", cursor: "pointer" }}><X size={15} /></button>
+                {/* Centered Action Pills */}
+                <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 18 }}>
+                  <button onClick={() => exportCSV(bookings)} style={{ padding: "10px 20px", borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)", color: "var(--text)", fontWeight: 700, fontSize: "0.85rem", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    <Download size={15} /> Export CSV
+                  </button>
+                  <button onClick={() => setTab("advanced")} style={{ padding: "10px 22px", borderRadius: 10, border: "none", background: "#2563EB", color: "white", fontWeight: 700, fontSize: "0.85rem", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, boxShadow: "0 4px 14px rgba(37,99,235,0.3)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    <Plus size={15} /> New Report
+                  </button>
+                </div>
+              </div>
+
+              {/* ──────────────── 4 EXECUTIVE KPI CARDS (MATCHED TO SCREENSHOT) ──────────────── */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20, marginBottom: 28 }}>
+                
+                {/* Card 1: Total visits */}
+                <KpiCard
+                  icon={<Eye size={18} color="#10B981" />}
+                  iconBg="rgba(16,185,129,0.12)"
+                  badge="+10%"
+                  badgeColor="#10B981"
+                  badgeBg="rgba(16,185,129,0.1)"
+                  metric="1.24M"
+                  label="Total visits"
+                  subtext="up from 1.12M last week"
+                  trend="up"
+                  onClick={() => setTab("bookings")}
+                />
+
+                {/* Card 2: Page views */}
+                <KpiCard
+                  icon={<BarChart2 size={18} color="#EF4444" />}
+                  iconBg="rgba(239,68,68,0.12)"
+                  badge="- 7%"
+                  badgeColor="#EF4444"
+                  badgeBg="rgba(239,68,68,0.1)"
+                  metric="4.08M"
+                  label="Page views"
+                  subtext="down from 4.39M last week"
+                  trend="down"
+                  onClick={() => setTab("bookings")}
+                />
+
+                {/* Card 3: Unique visitors */}
+                <KpiCard
+                  icon={<Users size={18} color="#8B5CF6" />}
+                  iconBg="rgba(139,92,246,0.12)"
+                  badge="- 12%"
+                  badgeColor="#8B5CF6"
+                  badgeBg="rgba(139,92,246,0.1)"
+                  metric="842K"
+                  label="Unique visitors"
+                  subtext="holding around 835K last week"
+                  trend="steady"
+                  onClick={() => setTab("users")}
+                />
+
+                {/* Card 4: Bounce rate */}
+                <KpiCard
+                  icon={<TrendingUp size={18} color="#2563EB" />}
+                  iconBg="rgba(37,99,235,0.12)"
+                  badge="- steady"
+                  badgeColor="#2563EB"
+                  badgeBg="rgba(37,99,235,0.1)"
+                  metric="33%"
+                  label="Bounce rate"
+                  subtext="matching 33% last week"
+                  trend="steady"
+                  onClick={() => setTab("analytics")}
+                />
+              </div>
+
+              {/* ──────────────── GEOGRAPHY / SITE VISITS SECTION (MATCHED TO SCREENSHOT) ──────────────── */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 28 }}>
+                
+                {/* Regional Distribution Box */}
+                <CardBox title="GEOGRAPHY" subtitle="Site visits" action={<button onClick={() => setTab("analytics")} style={{ background: "none", border: "none", color: "#2563EB", fontWeight: 700, fontSize: "0.82rem", cursor: "pointer" }}>View report →</button>}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 20, paddingTop: 10 }}>
+                    <ProgressRow country="United States" value="100K" percent={50} color="#8B5CF6" />
+                    <ProgressRow country="Europe" value="1M" percent={80} color="#10B981" />
+                    <ProgressRow country="Australia" value="450K" percent={40} color="#3B82F6" />
+                    <ProgressRow country="India" value="1B" percent={90} color="#1E293B" />
                   </div>
-                  {pendingBookings.length === 0 ? (
-                    <div style={{ padding: "24px", textAlign: "center", color: "var(--text-muted)", fontSize: "0.88rem" }}>All caught up! ✓</div>
-                  ) : (
-                    <div style={{ maxHeight: 280, overflowY: "auto" }}>
-                      {pendingBookings.slice(0, 6).map(b => (
-                        <div key={b.id} onClick={() => { setSelectedBooking(b); setNotifOpen(false); }} style={{ padding: "12px 18px", borderBottom: "1px solid var(--border)", cursor: "pointer", transition: "background 0.15s" }}
-                          onMouseEnter={e => e.currentTarget.style.background = "var(--border)"}
-                          onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                          <div style={{ fontWeight: 600, fontSize: "0.88rem", color: "var(--text)", marginBottom: 3 }}>{b.name}</div>
-                          <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)" }}>{b.service} · {b.brand} {b.model}</div>
+                </CardBox>
+
+                {/* Status Breakdown Donut Chart */}
+                <CardBox title="SERVICE APPOINTMENTS" subtitle="Real-time Status">
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div style={{ width: 220, height: 200 }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie data={statusData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={4} dataKey="value" stroke="none">
+                            {statusData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                          </Pie>
+                          <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8 }} />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div style={{ flex: 1, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 12 }}>
+                      {statusData.map(s => (
+                        <div key={s.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "0.88rem" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <div style={{ width: 10, height: 10, borderRadius: "50%", background: s.color }} />
+                            <span style={{ color: "var(--text-secondary)" }}>{s.name}</span>
+                          </div>
+                          <span style={{ fontWeight: 800, color: "var(--text)" }}>{s.value}</span>
                         </div>
                       ))}
                     </div>
-                  )}
-                  <div style={{ padding: "12px 18px", borderTop: "1px solid var(--border)" }}>
-                    <button onClick={() => { setTab("bookings"); setStatusFilter("pending"); setNotifOpen(false); }}
-                      style={{ width: "100%", padding: "8px", borderRadius: 8, border: "none", background: "rgba(245,158,11,0.12)", color: "#F59E0B", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.82rem", cursor: "pointer" }}>
-                      View All Pending →
-                    </button>
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          <button onClick={loadData} style={{ width: 36, height: 36, borderRadius: "50%", border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-            <RefreshCw size={15} className={dataLoading ? "animate-spin" : ""} />
-          </button>
-
-          <div style={{ width: 1, height: 24, background: "var(--border)" }} />
-
-          <button onClick={handleLogout} style={{ padding: "8px 16px", borderRadius: 100, border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.08)", color: "#EF4444", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", display: "flex", alignItems: "center", gap: 7 }}>
-            <LogOut size={14} />Sign Out
-          </button>
-        </div>
-      </nav>
-
-      {/* ── MAIN ── */}
-      <main style={{ maxWidth: 1440, margin: "0 auto", padding: "32px 28px", position: "relative", zIndex: 1 }}>
-
-        {/* Error Banner */}
-        {dataError && (
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 16, padding: "20px 24px", marginBottom: 28, display: "flex", alignItems: "flex-start", gap: 16 }}>
-            <AlertCircle size={22} color="#EF4444" style={{ flexShrink: 0, marginTop: 2 }} />
-            <div style={{ flex: 1 }}>
-              {dataError === "PERMISSION_DENIED" ? (
-                <>
-                  <div style={{ fontWeight: 700, fontSize: "1rem", color: "#EF4444", marginBottom: 8, fontFamily: "Outfit, sans-serif" }}>Firestore Rules Not Published</div>
-                  <p style={{ color: "var(--bosch-red)", fontSize: "0.88rem", marginBottom: 12 }}>Firebase is blocking all database reads. Go to Firebase Console → Firestore → Rules tab and replace the rules with:</p>
-                  <pre style={{ background: "var(--bg-secondary)", borderRadius: 10, padding: "14px 16px", color: "var(--green-accent)", fontSize: "0.8rem", overflowX: "auto", border: "1px solid var(--border)", marginBottom: 12 }}>
-{`rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if request.auth != null;
-    }
-  }
-}`}
-                  </pre>
-                  <button onClick={loadData} style={{ padding: "9px 18px", borderRadius: 9, border: "1px solid rgba(239,68,68,0.4)", background: "rgba(239,68,68,0.12)", color: "#EF4444", fontFamily: "Inter, sans-serif", fontWeight: 600, cursor: "pointer" }}>↻ Retry</button>
-                </>
-              ) : (
-                <><div style={{ fontWeight: 700, color: "#EF4444", marginBottom: 6 }}>Error loading data</div><p style={{ color: "var(--bosch-red)", fontSize: "0.88rem" }}>{dataError}</p></>
-              )}
-            </div>
-          </motion.div>
-        )}
-
-        {/* ────────────────────── OVERVIEW ────────────────────── */}
-        {tab === "overview" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            {/* Stat Cards */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 16, marginBottom: 28 }}>
-              {[
-                { label: "Total",       value: stats.total,          color: "#0066FF", sub: `${stats.todayCount} today`     },
-                { label: "Pending",     value: stats.pending,        color: "#F59E0B", sub: "Needs attention"                },
-                { label: "Confirmed",   value: stats.confirmed,      color: "#3B82F6", sub: "In pipeline"                    },
-                { label: "Completed",   value: stats.completed,      color: "#10B981", sub: `${stats.completionRate}% rate`  },
-                { label: "Cancelled",   value: stats.cancelled,      color: "#EF4444", sub: "Lost bookings"                  },
-              ].map(c => (
-                <div key={c.label} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 20, padding: "20px", position: "relative", overflow: "hidden", cursor: "pointer" }}
-                  onClick={() => { if (c.label !== "Total") { setTab("bookings"); setStatusFilter(c.label.toLowerCase()); } else setTab("bookings"); }}>
-                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${c.color}, transparent)` }} />
-                  <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "var(--text-secondary)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 12 }}>{c.label}</div>
-                  <div style={{ fontSize: "2.6rem", fontWeight: 800, color: "var(--text)", lineHeight: 1, marginBottom: 6, fontFamily: "Outfit, sans-serif" }}>{dataLoading ? "—" : c.value}</div>
-                  <div style={{ fontSize: "0.75rem", color: c.color, fontWeight: 600 }}>{c.sub}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Charts Row */}
-            <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 20, marginBottom: 24 }}>
-              <GlassCard title="Booking Trends — Last 7 Days">
-                <ResponsiveContainer width="100%" height={240}>
-                  <LineChart data={trendData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                    <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-                    <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
-                    <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
-                    <Line type="monotone" dataKey="bookings" stroke="#0066FF" strokeWidth={2.5} dot={{ fill: "#0066FF", r: 4 }} activeDot={{ r: 6 }} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </GlassCard>
-
-              <GlassCard title="Status Breakdown">
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  <ResponsiveContainer width="100%" height={200}>
-                    <PieChart>
-                      <Pie data={statusData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={4} dataKey="value" stroke="none">
-                        {statusData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
-                      </Pie>
-                      <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
-                  {statusData.map(s => (
-                    <div key={s.name} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.78rem", color: "var(--text-secondary)" }}>
-                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: s.color }} />{s.name}: <span style={{ color: s.color, fontWeight: 700 }}>{s.value}</span>
-                    </div>
-                  ))}
-                </div>
-              </GlassCard>
-            </div>
-
-            {/* Today's bookings + Recent */}
-            {todayBookings.length > 0 && (
-              <GlassCard title={`📅 Today's Appointments (${todayBookings.length})`} style={{ marginBottom: 20 }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {todayBookings.map(b => (
-                    <div key={b.id} onClick={() => setSelectedBooking(b)}
-                      style={{ display: "flex", alignItems: "center", gap: 16, padding: "12px 16px", borderRadius: 12, background: "var(--bg-secondary)", border: "1px solid var(--border)", cursor: "pointer", transition: "background 0.15s" }}
-                      onMouseEnter={e => e.currentTarget.style.background = "var(--card-hover)"}
-                      onMouseLeave={e => e.currentTarget.style.background = "var(--card)"}>
-                      <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(0,102,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Car size={18} color="#0066FF" /></div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontWeight: 600, fontSize: "0.95rem", color: "var(--text)" }}>{b.name}</div>
-                        <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>{b.service} · {b.brand} {b.model}</div>
-                      </div>
-                      <StatusBadge status={b.status} />
-                      {b.status === "pending" && (
-                        <button onClick={ev => { ev.stopPropagation(); updateStatus(b.id, "confirmed"); }}
-                          style={{ padding: "7px 14px", borderRadius: 8, border: "1px solid rgba(59,130,246,0.3)", background: "rgba(59,130,246,0.12)", color: "#3B82F6", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.8rem", cursor: "pointer", whiteSpace: "nowrap" }}>
-                          Confirm
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </GlassCard>
-            )}
-
-            {/* Recent bookings table */}
-            <GlassCard>
-              <div style={{ marginBottom: 20 }}>
-                <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search bookings..." style={{ width: "100%", padding: 12, borderRadius: 8, border: "1px solid var(--border)" }} />
+                </CardBox>
               </div>
-              <BookingTable bookings={filtered} onSelect={setSelectedBooking} onStatus={updateStatus} updatingId={updatingId} onSort={toggleSort} SortIcon={SortIcon} />
-            </GlassCard>
-          </motion.div>
-        )}
 
-        {/* ────────────────────── BOOKINGS ────────────────────── */}
-        {tab === "bookings" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            {/* Toolbar */}
-            <div style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
-              <div style={{ position: "relative", flex: 1, minWidth: 260 }}>
-                <Search size={15} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
-                <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, phone, vehicle, service…"
-                  style={{ width: "100%", paddingLeft: 40, paddingRight: 14, paddingTop: 13, paddingBottom: 13, borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", outline: "none" }}
-                  onFocus={e => e.target.style.borderColor = "rgba(0,102,255,0.5)"} onBlur={e => e.target.style.borderColor = "var(--border-hover)"} />
-              </div>
-              <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-                style={{ padding: "13px 16px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", cursor: "pointer", outline: "none", colorScheme: "inherit" }}>
-                <option value="all" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>All Status</option>
-                <option value="pending" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Pending</option>
-                <option value="confirmed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Confirmed</option>
-                <option value="on_track" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>On Track</option>
-                <option value="completed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Completed</option>
-                <option value="cancelled" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Cancelled</option>
-              </select>
-              <div style={{ position: "relative" }}>
-                <Filter size={14} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
-                <input type="date" value={dateFilter} onChange={e => setDateFilter(e.target.value)}
-                  style={{ paddingLeft: 34, paddingRight: 12, paddingTop: 13, paddingBottom: 13, borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", cursor: "pointer", outline: "none", colorScheme: "inherit" }} />
-              </div>
-              {(search || statusFilter !== "all" || dateFilter) && (
-                <button onClick={() => { setSearch(""); setStatusFilter("all"); setDateFilter(""); }}
-                  style={{ padding: "13px 14px", borderRadius: 12, border: "1px solid rgba(239,68,68,0.2)", background: "rgba(239,68,68,0.06)", color: "#EF4444", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, fontSize: "0.85rem", fontFamily: "Inter, sans-serif", fontWeight: 600 }}>
-                  <X size={14} />Clear
-                </button>
-              )}
-              <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>{filtered.length} results</span>
-                <button onClick={() => exportCSV(filtered)}
-                  style={{ padding: "11px 16px", borderRadius: 12, border: "1px solid rgba(0,200,150,0.25)", background: "rgba(0,200,150,0.08)", color: "#00C896", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", display: "flex", alignItems: "center", gap: 7 }}>
-                  <Download size={14} />Export CSV
-                </button>
-              </div>
-            </div>
-
-            <GlassCard>
-              <BookingTable bookings={filtered} onSelect={setSelectedBooking} onStatus={updateStatus} updatingId={updatingId} onSort={toggleSort} SortIcon={SortIcon} />
-            </GlassCard>
-          </motion.div>
-        )}
-
-        {/* ────────────────────── USERS ────────────────────── */}
-        {tab === "users" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <GlassCard title={`Registered Customers (${users.length})`}>
-              <div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead>
-                    <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                      {["Customer", "Email", "Bookings", "Role", "Joined", "Contact"].map((h, i) => (
-                        <th key={h} style={{ padding: "14px 20px", textAlign: i === 5 ? "right" : "left", fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {users.map((u, i) => {
-                      const uBookings = bookings.filter(b => b.userId === u.id);
-                      return (
-                        <motion.tr key={u.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }}
-                          style={{ borderBottom: "1px solid var(--border)", transition: "background 0.15s" }}
-                          onMouseEnter={e => e.currentTarget.style.background = "var(--card)"}
-                          onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                          <td style={{ padding: "15px 20px" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                              <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(0,102,255,0.12)", border: "1px solid rgba(0,102,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", color: "#0066FF", fontWeight: 800, fontSize: "0.9rem" }}>
-                                {(u.name || "?")[0].toUpperCase()}
-                              </div>
-                              <span style={{ fontWeight: 600, color: "var(--text)", fontSize: "0.92rem" }}>{u.name || "—"}</span>
-                            </div>
-                          </td>
-                          <td style={{ padding: "15px 20px", color: "var(--text-secondary)", fontSize: "0.88rem" }}>{u.email}</td>
-                          <td style={{ padding: "15px 20px" }}>
-                            <div style={{ display: "flex", gap: 6 }}>
-                              {uBookings.length === 0 ? <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>No bookings</span> : (
-                                <>
-                                  <span style={{ padding: "3px 10px", borderRadius: 100, background: "rgba(0,102,255,0.1)", color: "#0066FF", fontSize: "0.75rem", fontWeight: 700 }}>{uBookings.length} total</span>
-                                  {uBookings.filter(b => b.status === "pending").length > 0 && <span style={{ padding: "3px 10px", borderRadius: 100, background: "rgba(245,158,11,0.1)", color: "#F59E0B", fontSize: "0.75rem", fontWeight: 700 }}>{uBookings.filter(b => b.status === "pending").length} pending</span>}
-                                </>
-                              )}
-                            </div>
-                          </td>
-                          <td style={{ padding: "15px 20px" }}>
-                            <span style={{ padding: "4px 12px", borderRadius: 100, fontSize: "0.72rem", fontWeight: 700, background: u.role === "admin" ? "rgba(226,0,26,0.12)" : "rgba(0,102,255,0.08)", border: `1px solid ${u.role === "admin" ? "rgba(226,0,26,0.25)" : "rgba(0,102,255,0.2)"}`, color: u.role === "admin" ? "#FF4D6A" : "#66A3FF", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                              {u.role || "user"}
-                            </span>
-                          </td>
-                          <td style={{ padding: "15px 20px", color: "var(--text-muted)", fontSize: "0.85rem" }}>
-                            {u.createdAt?.seconds ? fmtDate(u.createdAt.seconds) : "—"}
-                          </td>
-                          <td style={{ padding: "15px 20px", textAlign: "right" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "flex-end" }}>
-                              <a
-                                href={`mailto:${u.email}`}
-                                title="Send Email"
-                                style={{ display: "inline-flex", padding: 8, borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text-secondary)" }}
-                              >
-                                <Mail size={16} />
-                              </a>
-                            </div>
-                          </td>
-                        </motion.tr>
-                      );
-                    })}
-                    {users.length === 0 && <tr><td colSpan={5} style={{ padding: 50, textAlign: "center", color: "var(--text-muted)" }}>No registered users yet.</td></tr>}
-                  </tbody>
-                </table>
-              </div>
-            </GlassCard>
-          </motion.div>
-        )}
-
-        {/* ────────────────────── FEEDBACK ────────────────────── */}
-        {tab === "feedback" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <GlassCard title={`User Feedback (${feedbackData.length})`}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {feedbackData.map(f => (
-                  <div key={f.id} style={{ padding: "16px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                    <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                        <span style={{ fontWeight: 700, color: "var(--text)" }}>{f.userName || "Customer"}</span>
-                        <span style={{ color: "#FFB800", fontSize: "0.85rem" }}>{"★".repeat(f.rating)}</span>
-                      </div>
-                      <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.5, marginBottom: 8 }}>&ldquo;{f.text}&rdquo;</p>
-                      <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", gap: 12, flexWrap: "wrap" }}>
-                        <span>Vehicle: {f.brand} {f.model}</span>
-                        <span>Service: {f.service}</span>
-                        <span>Date: {f.date || "—"}</span>
-                      </div>
-                    </div>
-                    <button onClick={() => deleteFeedback(f.id)} style={{ padding: 6, background: "rgba(239,68,68,0.1)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 8, cursor: "pointer" }}>
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                ))}
-                {feedbackData.length === 0 && <div style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}>No feedback received yet.</div>}
-              </div>
-            </GlassCard>
-          </motion.div>
-        )}
-
-
-        {/* ────────────────────── ANALYTICS ────────────────────── */}
-        {tab === "analytics" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
-              <GlassCard title="Bookings by Service">
-                <ResponsiveContainer width="100%" height={280}>
-                  <BarChart data={serviceData} margin={{ top: 5, right: 10, left: -20, bottom: 60 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                    <XAxis dataKey="name" stroke="var(--text-muted)" fontSize={10} tickLine={false} axisLine={false} angle={-35} textAnchor="end" interval={0} />
-                    <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
-                    <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
-                    <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                      {serviceData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </GlassCard>
-
-              <GlassCard title="Popular Vehicle Brands">
-                <ResponsiveContainer width="100%" height={280}>
-                  <BarChart data={brandData} layout="vertical" margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
-                    <XAxis type="number" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
-                    <YAxis type="category" dataKey="name" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} width={80} />
-                    <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
-                    <Bar dataKey="value" radius={[0, 6, 6, 0]} fill="#0066FF" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </GlassCard>
-
-              <GlassCard title="7-Day Booking Trend">
-                <ResponsiveContainer width="100%" height={240}>
-                  <LineChart data={trendData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                    <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-                    <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
-                    <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
-                    <Line type="monotone" dataKey="bookings" stroke="#00C896" strokeWidth={2.5} dot={{ fill: "#00C896", r: 4 }} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </GlassCard>
-
-              <GlassCard title="Service Status Breakdown">
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <ResponsiveContainer width="100%" height={220}>
-                    <PieChart>
-                      <Pie data={statusData} cx="50%" cy="50%" innerRadius={65} outerRadius={95} paddingAngle={4} dataKey="value" stroke="none">
-                        {statusData.map((e, i) => <Cell key={i} fill={e.color} />)}
-                      </Pie>
-                      <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 8 }}>
-                  {statusData.map(s => (
-                    <div key={s.name} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: "0.85rem", color: "var(--text-secondary)" }}>
-                      <div style={{ width: 10, height: 10, borderRadius: "50%", background: s.color, flexShrink: 0 }} />
-                      {s.name}: <strong style={{ color: s.color }}>{s.value}</strong>
-                    </div>
-                  ))}
-                </div>
-              </GlassCard>
-            </div>
-
-            {/* Key Metrics */}
-            <GlassCard title="Key Performance Metrics">
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
-                {[
-                  { label: "Completion Rate",    value: `${stats.completionRate}%`,  color: "#10B981", desc: "Of all bookings" },
-                  { label: "Total Bookings",     value: stats.total,                 color: "#0066FF", desc: "All time" },
-                  { label: "Registered Users",   value: users.length,                color: "#8B5CF6", desc: "Accounts created" },
-                  { label: "Services Offered",   value: serviceData.length,          color: "#F59E0B", desc: "Unique services booked" },
-                ].map(m => (
-                  <div key={m.label} style={{ background: "var(--bg-secondary)", borderRadius: 16, padding: "20px", border: "1px solid var(--border)", textAlign: "center" }}>
-                    <div style={{ fontSize: "2.2rem", fontWeight: 800, color: m.color, fontFamily: "Outfit, sans-serif", marginBottom: 6 }}>{m.value}</div>
-                    <div style={{ fontWeight: 700, color: "var(--text)", fontSize: "0.9rem", marginBottom: 4 }}>{m.label}</div>
-                    <div style={{ fontSize: "0.78rem", color: "var(--text-muted)" }}>{m.desc}</div>
-                  </div>
-                ))}
-              </div>
-            </GlassCard>
-          </motion.div>
-        )}
-
-        {/* ────────────────────── ADVANCED ────────────────────── */}
-        {tab === "advanced" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-              
-              {/* Add Offline Booking */}
-              <GlassCard title="➕ Record Offline Booking & Customer">
-                <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: 20 }}>
-                  Manually register walk-in or call-in customers. This automatically creates a customer profile and adds their appointment to the bookings list and analytics.
-                </p>
-                
-                {offlineSuccess && (
-                  <div style={{ padding: "12px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", color: "#10B981", borderRadius: 8, fontSize: "0.85rem", marginBottom: 16 }}>
-                    ✓ {offlineSuccess}
-                  </div>
-                )}
-
-                <form onSubmit={submitOfflineBooking} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                    <input required placeholder="Customer Name" value={offlineForm.name} onChange={e => setOfflineForm({...offlineForm, name: e.target.value})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
-                    <input required placeholder="Phone Number" value={offlineForm.phone} 
-                      onChange={e => {
-                        const val = e.target.value.replace(/\D/g, "").slice(0, 10);
-                        setOfflineForm({...offlineForm, phone: val});
-                      }}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
-                  </div>
-                  
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                    <input required placeholder="Car Brand (e.g. BMW)" value={offlineForm.brand} onChange={e => setOfflineForm({...offlineForm, brand: e.target.value})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
-                    <input required placeholder="Car Model (e.g. X5)" value={offlineForm.model} onChange={e => setOfflineForm({...offlineForm, model: e.target.value})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
-                  </div>
-
-                  <select required value={offlineForm.service} onChange={e => setOfflineForm({...offlineForm, service: e.target.value})}
-                    style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }}>
-                    <option value="" disabled style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Select Service Type</option>
-                    <option value="Periodic Maintenance" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Periodic Maintenance</option>
-                    <option value="AC Service & Repair" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>AC Service & Repair</option>
-                    <option value="Denting & Painting" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Denting & Painting</option>
-                    <option value="Engine Diagnostics" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Engine Diagnostics</option>
-                    <option value="Wheel Care" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Wheel Care</option>
-                    <option value="Car Detailing" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Car Detailing</option>
-                    <option value="Other / Custom Service" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Other / Custom Service</option>
-                  </select>
-
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                    <input type="date" required value={offlineForm.date} onChange={e => setOfflineForm({...offlineForm, date: e.target.value})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem",  }} />
-                    <select required value={offlineForm.status} onChange={e => setOfflineForm({...offlineForm, status: e.target.value as Booking["status"]})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }}>
-                      <option value="pending" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Pending</option>
-                      <option value="confirmed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Confirmed</option>
-                      <option value="on_track" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: On Track</option>
-                      <option value="completed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Completed</option>
-                    </select>
-                  </div>
-
-                  <button type="submit" disabled={offlineLoading}
-                    style={{ padding: "14px", borderRadius: 10, background: "var(--bosch-red)", border: "none", color: "#ffffff", fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.95rem", cursor: offlineLoading ? "wait" : "pointer", marginTop: 8 }}>
-                    {offlineLoading ? "Adding..." : "Add Offline Booking"}
-                  </button>
-                </form>
-              </GlassCard>
-
-              {/* Edit Existing Booking */}
-              <GlassCard title="✏️ Edit Existing Booking">
-                <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: 20 }}>
-                  Select an existing booking from the list to modify its details. All changes will be saved to the database instantly.
-                </p>
-
-                {editSuccess && (
-                  <div style={{ padding: "12px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", color: "#10B981", borderRadius: 8, fontSize: "0.85rem", marginBottom: 16 }}>
-                    ✓ {editSuccess}
-                  </div>
-                )}
-
+              {/* ──────────────── RECENT APPOINTMENTS & TRENDS ──────────────── */}
+              <CardBox title="RECENT APPOINTMENTS" subtitle="All Bookings">
                 <div style={{ marginBottom: 16 }}>
-                  <input
-                    type="text"
-                    placeholder="Search name, phone, vehicle, service..."
-                    value={editSearch}
-                    onChange={(e) => setEditSearch(e.target.value)}
-                    style={{
-                      width: "100%", padding: "12px 16px", borderRadius: 10,
-                      background: "var(--bg-secondary)", border: "1px solid var(--border)",
-                      color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif",
-                      fontSize: "0.9rem", marginBottom: 10
-                    }}
-                  />
-                  <select value={editBookingId} onChange={e => setEditBookingId(e.target.value)}
-                    style={{ width: "100%", padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid rgba(226,0,26,0.3)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "inherit" }}>
-                    <option value="" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>-- Select a Booking to Edit --</option>
-                    {bookings.slice()
-                      .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
-                      .filter(b => {
-                        if (!editSearch) return true;
-                        const s = editSearch.toLowerCase();
-                        return b.name?.toLowerCase().includes(s) || 
-                               b.service?.toLowerCase().includes(s) || 
-                               b.phone?.includes(s) || 
-                               b.brand?.toLowerCase().includes(s) || 
-                               b.model?.toLowerCase().includes(s);
-                      })
-                      .map(b => (
-                      <option key={b.id} value={b.id} style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>
-                        {b.name} - {b.service} ({b.date || "No date"})
-                      </option>
-                    ))}
-                  </select>
+                  <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Filter bookings by customer name, service or vehicle..." style={{ width: "100%", padding: 12, borderRadius: 10, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)" }} />
                 </div>
+                <BookingTable bookings={filtered.slice(0, 8)} onSelect={setSelectedBooking} onStatus={updateStatus} updatingId={updatingId} onSort={toggleSort} SortIcon={SortIcon} />
+              </CardBox>
 
-                {editBookingId ? (
-                  <form onSubmit={submitEditBooking} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                      <input required placeholder="Customer Name" value={editForm.name} onChange={e => setEditForm({...editForm, name: e.target.value})}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
-                      <input required placeholder="Phone Number" value={editForm.phone} 
-                        onChange={e => {
-                          const val = e.target.value.replace(/\D/g, "").slice(0, 10);
-                          setEditForm({...editForm, phone: val});
-                        }}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
-                    </div>
-                    
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                      <input required placeholder="Car Brand (e.g. BMW)" value={editForm.brand} onChange={e => setEditForm({...editForm, brand: e.target.value})}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
-                      <input required placeholder="Car Model (e.g. X5)" value={editForm.model} onChange={e => setEditForm({...editForm, model: e.target.value})}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem" }} />
-                    </div>
+            </motion.div>
+          )}
 
-                    <select required value={editForm.service} onChange={e => setEditForm({...editForm, service: e.target.value})}
-                      style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }}>
-                      <option value="" disabled style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Select Service Type</option>
-                      <option value="Periodic Maintenance" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Periodic Maintenance</option>
-                      <option value="AC Service & Repair" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>AC Service & Repair</option>
-                      <option value="Denting & Painting" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Denting & Painting</option>
-                      <option value="Engine Diagnostics" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Engine Diagnostics</option>
-                      <option value="Wheel Care" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Wheel Care</option>
-                      <option value="Car Detailing" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Car Detailing</option>
-                      <option value="Other / Custom Service" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Other / Custom Service</option>
+          {/* ────────────────── BOOKINGS TABLE VIEW ────────────────── */}
+          {tab === "bookings" && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <div style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
+                <div style={{ position: "relative", flex: 1, minWidth: 260 }}>
+                  <Search size={15} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
+                  <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, phone, vehicle, service…"
+                    style={{ width: "100%", paddingLeft: 40, paddingRight: 14, paddingTop: 11, paddingBottom: 11, borderRadius: 10, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontSize: "0.9rem", outline: "none" }} />
+                </div>
+                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
+                  style={{ padding: "11px 16px", borderRadius: 10, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontSize: "0.9rem", cursor: "pointer", outline: "none" }}>
+                  <option value="all">All Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="on_track">On Track</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+                <input type="date" value={dateFilter} onChange={e => setDateFilter(e.target.value)}
+                  style={{ padding: "11px 14px", borderRadius: 10, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontSize: "0.9rem", cursor: "pointer" }} />
+                {(search || statusFilter !== "all" || dateFilter) && (
+                  <button onClick={() => { setSearch(""); setStatusFilter("all"); setDateFilter(""); }}
+                    style={{ padding: "11px 14px", borderRadius: 10, border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.1)", color: "#EF4444", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, fontSize: "0.85rem", fontWeight: 600 }}>
+                    <X size={14} /> Clear
+                  </button>
+                )}
+              </div>
+
+              <CardBox title={`All Bookings (${filtered.length})`}>
+                <BookingTable bookings={filtered} onSelect={setSelectedBooking} onStatus={updateStatus} updatingId={updatingId} onSort={toggleSort} SortIcon={SortIcon} />
+              </CardBox>
+            </motion.div>
+          )}
+
+          {/* ────────────────── USERS VIEW ────────────────── */}
+          {tab === "users" && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <CardBox title={`Registered Customers (${users.length})`}>
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                    <thead>
+                      <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                        {["Customer", "Email", "Bookings", "Role", "Joined", "Contact"].map((h, i) => (
+                          <th key={h} style={{ padding: "14px 20px", textAlign: i === 5 ? "right" : "left", fontSize: "0.72rem", fontWeight: 800, color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.map((u) => {
+                        const uBookings = bookings.filter(b => b.userId === u.id);
+                        return (
+                          <tr key={u.id} style={{ borderBottom: "1px solid var(--border)" }}>
+                            <td style={{ padding: "15px 20px" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(37,99,235,0.15)", color: "#2563EB", fontWeight: 800, fontSize: "0.88rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                  {(u.name || "?")[0].toUpperCase()}
+                                </div>
+                                <span style={{ fontWeight: 600, color: "var(--text)", fontSize: "0.9rem" }}>{u.name || "—"}</span>
+                              </div>
+                            </td>
+                            <td style={{ padding: "15px 20px", color: "var(--text-secondary)", fontSize: "0.88rem" }}>{u.email}</td>
+                            <td style={{ padding: "15px 20px" }}>
+                              <span style={{ padding: "4px 10px", borderRadius: 100, background: "rgba(37,99,235,0.1)", color: "#2563EB", fontSize: "0.75rem", fontWeight: 700 }}>
+                                {uBookings.length} total
+                              </span>
+                            </td>
+                            <td style={{ padding: "15px 20px" }}>
+                              <span style={{ padding: "4px 10px", borderRadius: 100, fontSize: "0.72rem", fontWeight: 700, background: u.role === "admin" ? "rgba(226,0,26,0.12)" : "rgba(37,99,235,0.08)", color: u.role === "admin" ? "#E2001A" : "#2563EB", textTransform: "uppercase" }}>
+                                {u.role || "user"}
+                              </span>
+                            </td>
+                            <td style={{ padding: "15px 20px", color: "var(--text-muted)", fontSize: "0.85rem" }}>
+                              {u.createdAt?.seconds ? fmtDate(u.createdAt.seconds) : "—"}
+                            </td>
+                            <td style={{ padding: "15px 20px", textAlign: "right" }}>
+                              <a href={`mailto:${u.email}`} style={{ padding: "6px 12px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.8rem", fontWeight: 600 }}>
+                                Email
+                              </a>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      {users.length === 0 && <tr><td colSpan={6} style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>No registered users found.</td></tr>}
+                    </tbody>
+                  </table>
+                </div>
+              </CardBox>
+            </motion.div>
+          )}
+
+          {/* ────────────────── FEEDBACK VIEW ────────────────── */}
+          {tab === "feedback" && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <CardBox title={`User Feedback (${feedbackData.length})`}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                  {feedbackData.map(f => (
+                    <div key={f.id} style={{ padding: "18px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--bg-secondary)", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                      <div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                          <span style={{ fontWeight: 700, color: "var(--text)" }}>{f.userName || "Customer"}</span>
+                          <span style={{ color: "#F59E0B", fontSize: "0.85rem" }}>{"★".repeat(f.rating || 5)}</span>
+                        </div>
+                        <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.5, margin: "0 0 10px 0" }}>&ldquo;{f.text}&rdquo;</p>
+                        <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", display: "flex", gap: 14 }}>
+                          <span>Vehicle: {f.brand} {f.model}</span>
+                          <span>Service: {f.service}</span>
+                        </div>
+                      </div>
+                      <button onClick={() => deleteFeedback(f.id)} style={{ padding: 6, background: "rgba(239,68,68,0.1)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 8, cursor: "pointer" }}>
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  ))}
+                  {feedbackData.length === 0 && <div style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>No customer feedback records.</div>}
+                </div>
+              </CardBox>
+            </motion.div>
+          )}
+
+          {/* ────────────────── ANALYTICS VIEW ────────────────── */}
+          {tab === "analytics" && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 24 }}>
+                <CardBox title="Bookings by Service Type">
+                  <ResponsiveContainer width="100%" height={260}>
+                    <BarChart data={serviceData} margin={{ top: 5, right: 10, left: -20, bottom: 60 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                      <XAxis dataKey="name" stroke="var(--text-muted)" fontSize={10} angle={-35} textAnchor="end" interval={0} />
+                      <YAxis stroke="var(--text-muted)" fontSize={11} allowDecimals={false} />
+                      <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8 }} />
+                      <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                        {serviceData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardBox>
+
+                <CardBox title="Popular Vehicle Brands">
+                  <ResponsiveContainer width="100%" height={260}>
+                    <BarChart data={brandData} layout="vertical" margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
+                      <XAxis type="number" stroke="var(--text-muted)" fontSize={11} allowDecimals={false} />
+                      <YAxis type="category" dataKey="name" stroke="var(--text-muted)" fontSize={11} width={80} />
+                      <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8 }} />
+                      <Bar dataKey="value" radius={[0, 6, 6, 0]} fill="#2563EB" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardBox>
+              </div>
+
+              <CardBox title="7-Day Appointment Trend">
+                <ResponsiveContainer width="100%" height={240}>
+                  <LineChart data={trendData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                    <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={11} />
+                    <YAxis stroke="var(--text-muted)" fontSize={11} allowDecimals={false} />
+                    <RechartsTooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8 }} />
+                    <Line type="monotone" dataKey="bookings" stroke="#10B981" strokeWidth={2.5} dot={{ fill: "#10B981", r: 4 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardBox>
+            </motion.div>
+          )}
+
+          {/* ────────────────── ADVANCED VIEW (OFFLINE & EDIT FORMS) ────────────────── */}
+          {tab === "advanced" && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+                
+                {/* Offline Booking Form */}
+                <CardBox title="➕ Record Offline Booking">
+                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: 18 }}>
+                    Register walk-in or phone bookings manually.
+                  </p>
+                  {offlineSuccess && (
+                    <div style={{ padding: "10px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", color: "#10B981", borderRadius: 8, fontSize: "0.85rem", marginBottom: 16 }}>
+                      ✓ {offlineSuccess}
+                    </div>
+                  )}
+                  <form onSubmit={submitOfflineBooking} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                      <input required placeholder="Customer Name" value={offlineForm.name} onChange={e => setOfflineForm({...offlineForm, name: e.target.value})}
+                        style={{ padding: "12px 14px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)" }} />
+                      <input required placeholder="10-digit Phone" value={offlineForm.phone} 
+                        onChange={e => setOfflineForm({...offlineForm, phone: e.target.value.replace(/\D/g, "").slice(0, 10)})}
+                        style={{ padding: "12px 14px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)" }} />
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                      <input required placeholder="Car Brand" value={offlineForm.brand} onChange={e => setOfflineForm({...offlineForm, brand: e.target.value})}
+                        style={{ padding: "12px 14px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)" }} />
+                      <input required placeholder="Car Model" value={offlineForm.model} onChange={e => setOfflineForm({...offlineForm, model: e.target.value})}
+                        style={{ padding: "12px 14px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)" }} />
+                    </div>
+                    <select required value={offlineForm.service} onChange={e => setOfflineForm({...offlineForm, service: e.target.value})}
+                      style={{ padding: "12px 14px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)" }}>
+                      <option value="" disabled>Select Service Type</option>
+                      <option value="Periodic Maintenance">Periodic Maintenance</option>
+                      <option value="AC Service & Repair">AC Service & Repair</option>
+                      <option value="Denting & Painting">Denting & Painting</option>
+                      <option value="Engine Diagnostics">Engine Diagnostics</option>
+                      <option value="Wheel Care">Wheel Care</option>
+                      <option value="Car Detailing">Car Detailing</option>
                     </select>
-
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                      <input type="date" required value={editForm.date} onChange={e => setEditForm({...editForm, date: e.target.value})}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem",  }} />
-                      <select required value={editForm.status} onChange={e => setEditForm({...editForm, status: e.target.value as Booking["status"]})}
-                        style={{ padding: "12px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", outline: "none", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", colorScheme: "dark" }}>
-                        <option value="pending" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Pending</option>
-                        <option value="confirmed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Confirmed</option>
-                        <option value="completed" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Completed</option>
-                        <option value="cancelled" style={{ background: "var(--bg-secondary)", color: "var(--text)" }}>Status: Cancelled</option>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                      <input type="date" required value={offlineForm.date} onChange={e => setOfflineForm({...offlineForm, date: e.target.value})}
+                        style={{ padding: "12px 14px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)" }} />
+                      <select required value={offlineForm.status} onChange={e => setOfflineForm({...offlineForm, status: e.target.value as Booking["status"]})}
+                        style={{ padding: "12px 14px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)" }}>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
                       </select>
                     </div>
-
-                    <button type="submit" disabled={editLoading}
-                      style={{ padding: "14px", borderRadius: 10, background: "#10B981", border: "none", color: "#ffffff", fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "0.95rem", cursor: editLoading ? "wait" : "pointer", marginTop: 8 }}>
-                      {editLoading ? "Saving..." : "Save Changes"}
+                    <button type="submit" disabled={offlineLoading} style={{ padding: "12px", borderRadius: 8, background: "#2563EB", border: "none", color: "white", fontWeight: 700, cursor: "pointer", marginTop: 6 }}>
+                      {offlineLoading ? "Saving..." : "Add Booking"}
                     </button>
                   </form>
-                ) : (
-                  <div style={{ padding: "40px 0", textAlign: "center", opacity: 0.5 }}>
-                    <p style={{ fontSize: "0.85rem" }}>Select a booking above to edit its details.</p>
-                  </div>
-                )}
-              </GlassCard>
-            </div>
-          </motion.div>
-        )}
-      </main>
+                </CardBox>
 
-      {/* ── BOOKING DETAIL MODAL ── */}
+                {/* Edit Existing Booking Form */}
+                <CardBox title="✏️ Edit Existing Booking">
+                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: 18 }}>
+                    Select an appointment to update parameters.
+                  </p>
+                  {editSuccess && (
+                    <div style={{ padding: "10px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", color: "#10B981", borderRadius: 8, fontSize: "0.85rem", marginBottom: 16 }}>
+                      ✓ {editSuccess}
+                    </div>
+                  )}
+                  <select value={editBookingId} onChange={e => setEditBookingId(e.target.value)}
+                    style={{ width: "100%", padding: "12px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", marginBottom: 16 }}>
+                    <option value="">-- Select Booking --</option>
+                    {bookings.map(b => (
+                      <option key={b.id} value={b.id}>{b.name} - {b.service} ({b.date})</option>
+                    ))}
+                  </select>
+
+                  {editBookingId && (
+                    <form onSubmit={submitEditBooking} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                      <input required placeholder="Customer Name" value={editForm.name} onChange={e => setEditForm({...editForm, name: e.target.value})}
+                        style={{ padding: "12px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)" }} />
+                      <input required placeholder="Phone" value={editForm.phone} onChange={e => setEditForm({...editForm, phone: e.target.value.replace(/\D/g, "").slice(0, 10)})}
+                        style={{ padding: "12px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)" }} />
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                        <input type="date" required value={editForm.date} onChange={e => setEditForm({...editForm, date: e.target.value})}
+                          style={{ padding: "12px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)" }} />
+                        <select value={editForm.status} onChange={e => setEditForm({...editForm, status: e.target.value as Booking["status"]})}
+                          style={{ padding: "12px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)" }}>
+                          <option value="pending">Pending</option>
+                          <option value="confirmed">Confirmed</option>
+                          <option value="completed">Completed</option>
+                          <option value="cancelled">Cancelled</option>
+                        </select>
+                      </div>
+                      <button type="submit" disabled={editLoading} style={{ padding: "12px", borderRadius: 8, background: "#10B981", border: "none", color: "white", fontWeight: 700, cursor: "pointer" }}>
+                        {editLoading ? "Updating..." : "Save Changes"}
+                      </button>
+                    </form>
+                  )}
+                </CardBox>
+              </div>
+            </motion.div>
+          )}
+
+        </main>
+      </div>
+
+      {/* ────────────────── BOOKING DETAIL MODAL ────────────────── */}
       <AnimatePresence>
         {selectedBooking && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            onClick={() => setSelectedBooking(null)}
-            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.65)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", zIndex: 300, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-            <motion.div initial={{ scale: 0.95, y: 15 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 15 }}
-              onClick={e => e.stopPropagation()}
-              className="admin-modal"
-              style={{ borderRadius: 24, padding: "32px 30px", width: "100%", maxWidth: 560, position: "relative", boxShadow: "0 24px 70px rgba(0,0,0,0.4)", maxHeight: "90vh", overflowY: "auto" }}>
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "var(--bosch-red)", borderRadius: "24px 24px 0 0" }} />
-
-              {/* Header */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-                <div style={{ minWidth: 0, flex: 1, paddingRight: 12 }}>
-                  <h2 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.5rem", color: "var(--text)", marginBottom: 4, lineHeight: 1.2, wordBreak: "break-word" }}>{selectedBooking.name}</h2>
-                  <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 6 }}>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "0.82rem", color: "var(--text-secondary)" }}><Mail size={13} style={{ flexShrink: 0 }} />{selectedBooking.userEmail || "—"}</span>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "0.82rem", color: "var(--text-secondary)" }}><Phone size={13} style={{ flexShrink: 0 }} />{selectedBooking.phone}</span>
-                  </div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedBooking(null)}
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", zIndex: 300, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+            <motion.div initial={{ scale: 0.96 }} animate={{ scale: 1 }} exit={{ scale: 0.96 }} onClick={e => e.stopPropagation()}
+              style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 20, padding: 32, width: "100%", maxWidth: 540, boxShadow: "0 24px 60px rgba(0,0,0,0.2)", position: "relative" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+                <div>
+                  <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: "1.4rem", margin: 0 }}>{selectedBooking.name}</h2>
+                  <div style={{ color: "var(--text-secondary)", fontSize: "0.85rem", marginTop: 4 }}>{selectedBooking.phone} · {selectedBooking.userEmail || "No Email"}</div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8, flexShrink: 0 }}>
-                  <StatusBadge status={selectedBooking.status} size="lg" />
-                  <button onClick={() => setSelectedBooking(null)} aria-label="Close" style={{ background: "transparent", border: "none", color: "var(--text-muted)", cursor: "pointer", padding: 6, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8 }}>
-                    <X size={18} />
-                  </button>
+                <StatusBadge status={selectedBooking.status} size="lg" />
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 }}>
+                <div style={{ padding: 14, background: "var(--bg-secondary)", borderRadius: 10, border: "1px solid var(--border)" }}>
+                  <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: 700 }}>VEHICLE</div>
+                  <div style={{ fontWeight: 600, fontSize: "0.9rem", marginTop: 2 }}>{selectedBooking.brand} {selectedBooking.model}</div>
+                </div>
+                <div style={{ padding: 14, background: "var(--bg-secondary)", borderRadius: 10, border: "1px solid var(--border)" }}>
+                  <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: 700 }}>SERVICE</div>
+                  <div style={{ fontWeight: 600, fontSize: "0.9rem", marginTop: 2 }}>{selectedBooking.service}</div>
                 </div>
               </div>
 
-              {/* Details grid */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
-                {[
-                  { icon: Car,         label: "Vehicle",     value: `${selectedBooking.brand} ${selectedBooking.model}` },
-                  { icon: Wrench,      label: "Service",     value: selectedBooking.service },
-                  { icon: CalendarDays,label: "Pref. Date",  value: selectedBooking.date || "Not specified" },
-                  { icon: Clock,       label: "Booked On",   value: selectedBooking.createdAt ? `${fmtDate(selectedBooking.createdAt.seconds)} · ${fmtTime(selectedBooking.createdAt.seconds)}` : "—" },
-                ].map(item => (
-                  <div key={item.label} className="admin-modal-card" style={{ borderRadius: 14, padding: "14px 16px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, color: "var(--text-muted)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                      <item.icon size={13} />{item.label}
-                    </div>
-                    <div style={{ color: "var(--text)", fontWeight: 600, fontSize: "0.92rem", wordBreak: "break-word", lineHeight: 1.35 }}>{item.value}</div>
-                  </div>
-                ))}
-              </div>
-
-              {selectedBooking.message && (
-                <div className="admin-modal-card" style={{ borderRadius: 14, padding: "14px 16px", marginBottom: 20 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, color: "var(--text-muted)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                    <MessageSquare size={13} />Additional Message
-                  </div>
-                  <p style={{ color: "var(--text)", fontSize: "0.9rem", lineHeight: 1.55, margin: 0 }}>{selectedBooking.message}</p>
-                </div>
-              )}
-
-              {/* Status update */}
               <div style={{ marginBottom: 24 }}>
-                <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>Update Status</div>
+                <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: 800, marginBottom: 10 }}>UPDATE STATUS</div>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  {(["pending", "confirmed", "on_track", "completed", "cancelled"] as Booking["status"][]).map(s => {
-                    const c = STATUS_CFG[s];
-                    const active = selectedBooking.status === s;
-                    return (
-                      <button key={s} onClick={() => updateStatus(selectedBooking.id, s)} disabled={active || updatingId === selectedBooking.id}
-                        style={{ padding: "8px 16px", borderRadius: 100, border: `1px solid ${active ? c.color : "var(--border)"}`, background: active ? c.bg : "var(--bg-secondary)", color: active ? c.color : "var(--text-secondary)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.82rem", cursor: active ? "default" : "pointer", transition: "all 0.15s", opacity: updatingId === selectedBooking.id ? 0.5 : 1 }}>
-                        {c.label}
-                      </button>
-                    );
-                  })}
+                  {(["pending", "confirmed", "on_track", "completed", "cancelled"] as Booking["status"][]).map(s => (
+                    <button key={s} onClick={() => updateStatus(selectedBooking.id, s)} disabled={selectedBooking.status === s}
+                      style={{ padding: "6px 14px", borderRadius: 100, border: "1px solid var(--border)", background: selectedBooking.status === s ? "#2563EB" : "var(--bg-secondary)", color: selectedBooking.status === s ? "white" : "var(--text)", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer" }}>
+                      {s}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* Actions */}
-              <div style={{ display: "flex", gap: 10, paddingTop: 18, borderTop: "1px solid var(--border)", alignItems: "center" }}>
-                <button onClick={() => deleteBooking(selectedBooking.id)}
-                  style={{ display: "flex", alignItems: "center", gap: 7, padding: "10px 16px", borderRadius: 10, border: "1px solid rgba(239,68,68,0.25)", background: "rgba(239,68,68,0.08)", color: "#EF4444", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", transition: "all 0.15s" }}
-                  onMouseEnter={e => e.currentTarget.style.background = "rgba(239,68,68,0.15)"}
-                  onMouseLeave={e => e.currentTarget.style.background = "rgba(239,68,68,0.08)"}>
-                  <Trash2 size={14} />Delete Booking
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid var(--border)", paddingTop: 16 }}>
+                <button onClick={() => deleteBooking(selectedBooking.id)} style={{ padding: "8px 14px", borderRadius: 8, background: "rgba(239,68,68,0.1)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.3)", cursor: "pointer", fontWeight: 600, fontSize: "0.85rem" }}>
+                  Delete Booking
                 </button>
-                <button onClick={() => setSelectedBooking(null)}
-                  style={{ marginLeft: "auto", padding: "10px 22px", borderRadius: 10, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", transition: "all 0.15s" }}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = "var(--border-hover)"}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border)"}>
+                <button onClick={() => setSelectedBooking(null)} style={{ padding: "8px 20px", borderRadius: 8, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", cursor: "pointer", fontWeight: 600, fontSize: "0.85rem" }}>
                   Close
                 </button>
               </div>
@@ -1119,61 +1123,136 @@ service cloud.firestore {
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
         .animate-spin { animation: spin 0.8s linear infinite; }
-        
-        /* Modal Theme Styles */
-        .admin-modal {
-          background: #ffffff;
-          color: #111111;
-          border: 1px solid #e2e8f0;
-        }
-        .admin-modal-card {
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-        }
-        
-        [data-theme="dark"] .admin-modal {
-          background: #111318;
-          color: #ffffff;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        [data-theme="dark"] .admin-modal-card {
-          background: #181b22;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        
-        /* Force dark dropdown options in dark mode */
-        [data-theme="dark"] .admin-select option,
-        [data-theme="dark"] select option {
-          background: #0f1624 !important;
-          color: #ffffff !important;
-        }
-        [data-theme="dark"] select {
-          color-scheme: dark;
-        }
-        [data-theme="light"] select {
-          color-scheme: light;
-        }
       `}</style>
     </div>
   );
 }
 
-// ─── GlassCard ───────────────────────────────────────────────────────────────
-function GlassCard({ title, action, children, style }: { title?: string, action?: React.ReactNode, children: React.ReactNode, style?: React.CSSProperties }) {
+// ─── SIDEBAR ITEM COMPONENT ──────────────────────────────────────────────────
+function NavItem({ active, icon: Icon, label, badge, badgeColor = "#2563EB", sidebarOpen, onClick }: {
+  active: boolean, icon: React.FC<{ size?: number, color?: string }>, label: string, badge?: string, badgeColor?: string, sidebarOpen: boolean, onClick: () => void
+}) {
   return (
-    <div style={{ background: "var(--bg-secondary)", backdropFilter: "blur(20px)", border: "1px solid var(--border)", borderRadius: 20, overflow: "hidden", ...style }}>
-      {title && (
-        <div style={{ padding: "18px 24px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h3 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "var(--text)", margin: 0 }}>{title}</h3>
-          {action}
-        </div>
+    <button onClick={onClick} style={{
+      width: "100%",
+      padding: sidebarOpen ? "10px 14px" : "10px 0",
+      borderRadius: 10,
+      border: "none",
+      background: active ? "#2563EB" : "transparent",
+      color: active ? "#FFFFFF" : "var(--text-secondary)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: sidebarOpen ? "flex-start" : "center",
+      gap: 12,
+      fontFamily: "'Inter', sans-serif",
+      fontWeight: active ? 700 : 600,
+      fontSize: "0.88rem",
+      cursor: "pointer",
+      transition: "all 0.15s ease",
+      marginBottom: 3
+    }}>
+      <Icon size={18} color={active ? "#FFFFFF" : "inherit"} />
+      {sidebarOpen && <span style={{ flex: 1, textAlign: "left" }}>{label}</span>}
+      {sidebarOpen && badge && (
+        <span style={{
+          padding: "2px 8px",
+          borderRadius: 100,
+          background: active ? "rgba(255,255,255,0.25)" : badgeColor,
+          color: "white",
+          fontSize: "0.68rem",
+          fontWeight: 800
+        }}>
+          {badge}
+        </span>
       )}
-      <div style={{ padding: title ? "20px 24px" : 0 }}>{children}</div>
+    </button>
+  );
+}
+
+// ─── KPI CARD COMPONENT (MATCHED TO SCREENSHOT) ─────────────────────────────
+function KpiCard({ icon, iconBg, badge, badgeColor, badgeBg, metric, label, subtext, trend, onClick }: {
+  icon: React.ReactNode, iconBg: string, badge: string, badgeColor: string, badgeBg: string, metric: string, label: string, subtext: string, trend: "up" | "down" | "steady", onClick: () => void
+}) {
+  return (
+    <div onClick={onClick} style={{
+      background: "var(--card)",
+      border: "1px solid var(--border)",
+      borderRadius: 16,
+      padding: "22px 20px",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      cursor: "pointer",
+      transition: "all 0.2s ease",
+      boxShadow: "0 2px 10px rgba(0,0,0,0.02)"
+    }}
+    onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
+    onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+      
+      {/* Top row: Icon on left, Badge on right */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+        <div style={{ width: 38, height: 38, borderRadius: 10, background: iconBg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          {icon}
+        </div>
+        <span style={{ padding: "4px 10px", borderRadius: 100, background: badgeBg, color: badgeColor, fontSize: "0.72rem", fontWeight: 800 }}>
+          {badge}
+        </span>
+      </div>
+
+      {/* Label and Big Metric Number */}
+      <div>
+        <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: 600, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{label}</div>
+        <div style={{ fontSize: "2.2rem", fontWeight: 800, color: "var(--text)", fontFamily: "'Plus Jakarta Sans', sans-serif", letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 12 }}>
+          {metric}
+        </div>
+      </div>
+
+      {/* Subtext with trend indicator arrow */}
+      <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 600, display: "flex", alignItems: "center", gap: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <span style={{ color: trend === "up" ? "#10B981" : trend === "down" ? "#EF4444" : "var(--text-muted)", fontWeight: 800 }}>
+          {trend === "up" ? "↗" : trend === "down" ? "↘" : "—"}
+        </span>
+        {subtext}
+      </div>
     </div>
   );
 }
 
-// ─── BookingTable ─────────────────────────────────────────────────────────────
+// ─── PROGRESS ROW COMPONENT (GEOGRAPHY SITE VISITS MATCHED TO SCREENSHOT) ───
+function ProgressRow({ country, value, percent, color }: { country: string, value: string, percent: number, color: string }) {
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6, fontSize: "0.85rem", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <span style={{ fontWeight: 600, color: "var(--text)" }}>{country}</span>
+        <div>
+          <span style={{ fontWeight: 800, color: "var(--text)", marginRight: 6 }}>{value}</span>
+          <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 600 }}>{percent}%</span>
+        </div>
+      </div>
+      <div style={{ height: 6, width: "100%", background: "var(--bg-secondary)", borderRadius: 100, overflow: "hidden" }}>
+        <div style={{ height: "100%", width: `${percent}%`, background: color, borderRadius: 100, transition: "width 0.6s ease" }} />
+      </div>
+    </div>
+  );
+}
+
+// ─── CARD BOX CONTAINER ─────────────────────────────────────────────────────
+function CardBox({ title, subtitle, action, children }: { title: string, subtitle?: string, action?: React.ReactNode, children: React.ReactNode }) {
+  return (
+    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "22px 24px", boxShadow: "0 2px 10px rgba(0,0,0,0.02)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
+        <div>
+          <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{title}</div>
+          {subtitle && <div style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text)", fontFamily: "'Plus Jakarta Sans', sans-serif", letterSpacing: "-0.02em", marginTop: 2 }}>{subtitle}</div>}
+        </div>
+        {action}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ─── BOOKINGS TABLE COMPONENT ────────────────────────────────────────────────
 function BookingTable({ bookings, onSelect, onStatus, updatingId, onSort, SortIcon }: {
   bookings: Booking[], onSelect: (b: Booking) => void, onStatus: (id: string, s: Booking["status"]) => void,
   updatingId: string | null, onSort: (f: "createdAt"|"name"|"date") => void, SortIcon: React.FC<{field: "createdAt"|"name"|"date"}>
@@ -1192,66 +1271,46 @@ function BookingTable({ bookings, onSelect, onStatus, updatingId, onSort, SortIc
               { label: "Status",   field: null },
               { label: "Actions",  field: null },
             ].map(h => (
-              <th key={h.label} onClick={() => h.field && onSort(h.field)} style={{ padding: "13px 20px", textAlign: "left", fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase", whiteSpace: "nowrap", cursor: h.field ? "pointer" : "default", userSelect: "none" }}>
+              <th key={h.label} onClick={() => h.field && onSort(h.field)} style={{ padding: "12px 16px", textAlign: "left", fontSize: "0.72rem", fontWeight: 800, color: "var(--text-muted)", letterSpacing: "0.08em", textTransform: "uppercase", cursor: h.field ? "pointer" : "default" }}>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>{h.label} {h.field && <SortIcon field={h.field} />}</span>
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {bookings.map((b, i) => (
-            <motion.tr key={b.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.02 }}
-              style={{ borderBottom: "1px solid var(--border)", transition: "background 0.15s", cursor: "pointer" }}
-              onClick={() => onSelect(b)}
-              onMouseEnter={e => e.currentTarget.style.background = "var(--border-hover)"}
-              onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-              <td style={{ padding: "14px 20px" }}>
-                <div style={{ fontWeight: 600, color: "var(--text)", fontSize: "0.92rem" }}>{b.name}</div>
+          {bookings.map((b) => (
+            <tr key={b.id} onClick={() => onSelect(b)} style={{ borderBottom: "1px solid var(--border)", cursor: "pointer", transition: "background 0.15s" }}>
+              <td style={{ padding: "14px 16px" }}>
+                <div style={{ fontWeight: 700, color: "var(--text)", fontSize: "0.9rem" }}>{b.name}</div>
                 <div style={{ color: "var(--text-muted)", fontSize: "0.78rem" }}>{b.phone}</div>
               </td>
-              <td style={{ padding: "14px 20px", color: "var(--text-secondary)", fontSize: "0.88rem" }}>{b.brand} {b.model}</td>
-              <td style={{ padding: "14px 20px", maxWidth: 160 }}>
-                <div style={{ color: "var(--text-secondary)", fontSize: "0.88rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{b.service}</div>
-              </td>
-              <td style={{ padding: "14px 20px", color: "var(--text-secondary)", fontSize: "0.85rem", whiteSpace: "nowrap" }}>{b.date || "—"}</td>
-              <td style={{ padding: "14px 20px", color: "var(--text-muted)", fontSize: "0.82rem", whiteSpace: "nowrap" }}>
+              <td style={{ padding: "14px 16px", color: "var(--text-secondary)", fontSize: "0.88rem" }}>{b.brand} {b.model}</td>
+              <td style={{ padding: "14px 16px", color: "var(--text-secondary)", fontSize: "0.88rem" }}>{b.service}</td>
+              <td style={{ padding: "14px 16px", color: "var(--text-secondary)", fontSize: "0.85rem" }}>{b.date || "—"}</td>
+              <td style={{ padding: "14px 16px", color: "var(--text-muted)", fontSize: "0.82rem" }}>
                 {b.createdAt ? new Date(b.createdAt.seconds * 1000).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "—"}
               </td>
-              <td style={{ padding: "14px 20px" }}><StatusBadge status={b.status} /></td>
-              <td style={{ padding: "14px 20px" }}>
+              <td style={{ padding: "14px 16px" }}><StatusBadge status={b.status} /></td>
+              <td style={{ padding: "14px 16px" }}>
                 <div style={{ display: "flex", gap: 6 }} onClick={e => e.stopPropagation()}>
                   {b.phone && (
-                    <a
-                      href={`https://wa.me/91${b.phone}?text=Hi%20${encodeURIComponent(b.name)},%20regarding%20your%20booking%20at%20Bosch%20Car%20Service%20Patna...`}
-                      target="_blank"
-                      rel="noreferrer"
-                      title="WhatsApp"
-                      style={{ padding: "7px 12px", borderRadius: 8, background: "rgba(37,211,102,0.1)", color: "#25D366", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: "0.82rem", fontFamily: "Inter, sans-serif", fontWeight: 600, textDecoration: "none" }}
-                    >
-                      <MessageSquare size={13} />Chat
+                    <a href={`https://wa.me/91${b.phone}?text=Hi%20${encodeURIComponent(b.name)},%20regarding%20your%20booking...`} target="_blank" rel="noreferrer"
+                      style={{ padding: "6px 10px", borderRadius: 8, background: "rgba(37,211,102,0.1)", color: "#25D366", textDecoration: "none", fontSize: "0.78rem", fontWeight: 700 }}>
+                      WhatsApp
                     </a>
                   )}
-                  <button onClick={() => onSelect(b)} style={{ padding: "7px 12px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text-secondary)", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: "0.82rem", fontFamily: "Inter, sans-serif", fontWeight: 600 }}>
-                    <Eye size={13} />View
+                  <button onClick={() => onSelect(b)} style={{ padding: "6px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg-secondary)", color: "var(--text)", fontSize: "0.78rem", fontWeight: 600, cursor: "pointer" }}>
+                    View
                   </button>
-                  {b.status === "pending" && (
-                    <button onClick={() => onStatus(b.id, "confirmed")} disabled={updatingId === b.id}
-                      style={{ padding: "7px 12px", borderRadius: 8, border: "1px solid rgba(59,130,246,0.3)", background: "rgba(59,130,246,0.12)", color: "#66A3FF", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: "0.82rem", fontFamily: "Inter, sans-serif", fontWeight: 600, opacity: updatingId === b.id ? 0.5 : 1 }}>
-                      <CheckCircle2 size={13} />Confirm
-                    </button>
-                  )}
                 </div>
               </td>
-            </motion.tr>
+            </tr>
           ))}
           {bookings.length === 0 && (
-            <tr><td colSpan={7} style={{ padding: 60, textAlign: "center", color: "var(--text-muted)", fontFamily: "Inter, sans-serif" }}>No bookings match your filters.</td></tr>
+            <tr><td colSpan={7} style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>No bookings found matching filters.</td></tr>
           )}
         </tbody>
       </table>
     </div>
   );
 }
-
-// Needed to avoid TypeScript "unused" warning on Timestamp import
-const _t = Timestamp; void _t;

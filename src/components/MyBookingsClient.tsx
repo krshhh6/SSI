@@ -177,22 +177,22 @@ export default function MyBookingsClient() {
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
 
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} style={{ marginBottom: 48 }}>
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} style={{ marginBottom: 36 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
             {/* User info */}
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
               {user?.photoURL ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={user.photoURL} alt={user.displayName || "User"} style={{ width: 56, height: 56, borderRadius: "50%", border: "2px solid var(--accent)", objectFit: "cover" }} />
+                <img src={user.photoURL} alt={user.displayName || "User"} style={{ width: 52, height: 52, borderRadius: "50%", border: "2px solid #2563EB", objectFit: "cover" }} />
               ) : (
-                <div style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <User size={28} color="white" />
+                <div style={{ width: 52, height: 52, borderRadius: "50%", background: "#2563EB", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "1.1rem" }}>
+                  {(user?.displayName || user?.email || "C")[0].toUpperCase()}
                 </div>
               )}
               <div>
-                <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontFamily: "Inter, sans-serif", marginBottom: 4 }}>Welcome back</p>
-                <h1 style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.6rem", fontWeight: 800, color: "var(--text)", margin: 0 }}>
-                  {user?.displayName?.split(" ")[0]}&apos;s Bookings
+                <p style={{ fontSize: "0.78rem", color: "var(--text-muted)", fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 2 }}>Welcome back</p>
+                <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "1.75rem", fontWeight: 800, color: "var(--text)", margin: 0, letterSpacing: "-0.03em" }}>
+                  {(user?.displayName || user?.email?.split("@")[0] || "Customer")}&apos;s Bookings
                 </h1>
               </div>
             </div>
@@ -201,30 +201,30 @@ export default function MyBookingsClient() {
             <div style={{ display: "flex", gap: 10 }}>
               <motion.button
                 onClick={handleRefresh}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 style={{
                   display: "flex", alignItems: "center", gap: 8,
-                  padding: "10px 16px", borderRadius: 10,
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.10)",
-                  color: "var(--text-secondary)", cursor: "pointer", fontSize: "0.85rem", fontFamily: "Inter, sans-serif",
+                  padding: "9px 16px", borderRadius: 10,
+                  background: "var(--card)",
+                  border: "1px solid var(--border)",
+                  color: "var(--text)", cursor: "pointer", fontSize: "0.85rem", fontWeight: 600, fontFamily: "'Plus Jakarta Sans', sans-serif",
                 }}
               >
-                <RefreshCw size={15} style={{ animation: refreshing ? "spin 0.8s linear infinite" : "none" }} />
+                <RefreshCw size={14} style={{ animation: refreshing ? "spin 0.8s linear infinite" : "none" }} />
                 Refresh
               </motion.button>
 
               <motion.button
                 onClick={() => router.push("/booking")}
-                whileHover={{ scale: 1.04, boxShadow: "0 8px 24px rgba(0,102,255,0.3)" }}
-                whileTap={{ scale: 0.96 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 style={{
                   display: "flex", alignItems: "center", gap: 8,
-                  padding: "10px 20px", borderRadius: 10,
-                  background: "var(--accent)", border: "none",
-                  color: "white", cursor: "pointer", fontSize: "0.85rem", fontWeight: 700, fontFamily: "Inter, sans-serif",
-                  boxShadow: "0 4px 20px rgba(0,102,255,0.25)",
+                  padding: "9px 18px", borderRadius: 10,
+                  background: "#2563EB", border: "none",
+                  color: "white", cursor: "pointer", fontSize: "0.85rem", fontWeight: 700, fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  boxShadow: "0 4px 14px rgba(37,99,235,0.25)",
                 }}
               >
                 <CalendarCheck size={15} />
@@ -233,31 +233,31 @@ export default function MyBookingsClient() {
 
               <motion.button
                 onClick={async () => { await logout(); router.push("/"); }}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 style={{
                   display: "flex", alignItems: "center", gap: 8,
-                  padding: "10px 16px", borderRadius: 10,
-                  background: "rgba(226,0,26,0.08)",
-                  border: "1px solid rgba(226,0,26,0.20)",
-                  color: "#0066FF", cursor: "pointer", fontSize: "0.85rem", fontFamily: "Inter, sans-serif",
+                  padding: "9px 16px", borderRadius: 10,
+                  background: "rgba(239,68,68,0.08)",
+                  border: "1px solid rgba(239,68,68,0.20)",
+                  color: "#EF4444", cursor: "pointer", fontSize: "0.85rem", fontWeight: 600, fontFamily: "'Plus Jakarta Sans', sans-serif",
                 }}
               >
-                <LogOut size={15} />
+                <LogOut size={14} />
                 Sign Out
               </motion.button>
             </div>
           </div>
 
           {/* Navigation Tabs */}
-          <div style={{ display: "flex", gap: 8, marginTop: 32, borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: 16 }}>
+          <div style={{ display: "flex", gap: 8, marginTop: 28, borderBottom: "1px solid var(--border)", paddingBottom: 12 }}>
             <button onClick={() => setTab("bookings")}
-              style={{ padding: "10px 20px", borderRadius: 10, background: tab === "bookings" ? "rgba(0,102,255,0.15)" : "transparent", border: tab === "bookings" ? "1px solid rgba(0,102,255,0.3)" : "1px solid transparent", color: tab === "bookings" ? "var(--accent)" : "var(--text-secondary)", fontWeight: 700, fontSize: "0.95rem", fontFamily: "Inter, sans-serif", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.2s" }}>
-              <CalendarCheck size={16} /> My Bookings
+              style={{ padding: "8px 18px", borderRadius: 8, background: tab === "bookings" ? "#2563EB" : "transparent", border: "none", color: tab === "bookings" ? "#FFFFFF" : "var(--text-secondary)", fontWeight: 700, fontSize: "0.88rem", fontFamily: "'Plus Jakarta Sans', sans-serif", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.2s" }}>
+              <CalendarCheck size={15} /> My Bookings
             </button>
             <button onClick={() => setTab("profile")}
-              style={{ padding: "10px 20px", borderRadius: 10, background: tab === "profile" ? "rgba(0,102,255,0.15)" : "transparent", border: tab === "profile" ? "1px solid rgba(0,102,255,0.3)" : "1px solid transparent", color: tab === "profile" ? "var(--accent)" : "var(--text-secondary)", fontWeight: 700, fontSize: "0.95rem", fontFamily: "Inter, sans-serif", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.2s" }}>
-              <User size={16} /> My Profile
+              style={{ padding: "8px 18px", borderRadius: 8, background: tab === "profile" ? "#2563EB" : "transparent", border: "none", color: tab === "profile" ? "#FFFFFF" : "var(--text-secondary)", fontWeight: 700, fontSize: "0.88rem", fontFamily: "'Plus Jakarta Sans', sans-serif", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.2s" }}>
+              <User size={15} /> My Profile
             </button>
           </div>
         </motion.div>
@@ -265,25 +265,24 @@ export default function MyBookingsClient() {
         {/* Tab Content: Bookings */}
         {tab === "bookings" && (
           <>
-            {/* Stats bar */}
-            <div style={{ display: "flex", gap: 16, marginBottom: 32, flexWrap: "wrap" }}>
+            {/* Stats bar with Constant Accent Colors */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 16, marginBottom: 28 }}>
             {[
-              { label: "Total Bookings", value: bookings.length, color: "#0066FF" },
-              { label: "Pending", value: bookings.filter(b => b.status === "pending").length, color: "#FF8800" },
-              { label: "Confirmed", value: bookings.filter(b => b.status === "confirmed").length, color: "#0066FF" },
-              { label: "On Track", value: bookings.filter(b => b.status === "on_track").length, color: "#8B5CF6" },
-              { label: "Completed", value: bookings.filter(b => b.status === "completed").length, color: "#00C896" },
+              { label: "Total Bookings", value: bookings.length },
+              { label: "Pending", value: bookings.filter(b => b.status === "pending").length },
+              { label: "Confirmed", value: bookings.filter(b => b.status === "confirmed").length },
+              { label: "On Track", value: bookings.filter(b => b.status === "on_track").length },
+              { label: "Completed", value: bookings.filter(b => b.status === "completed").length },
             ].map((stat) => (
               <div key={stat.label} style={{
-                flex: "1 1 140px",
-                background: "rgba(255,255,255,0.03)",
-                backdropFilter: "blur(16px)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "var(--card)",
+                border: "1px solid var(--border)",
                 borderRadius: 14,
-                padding: "16px 20px",
+                padding: "18px 20px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.02)"
               }}>
-                <div style={{ fontFamily: "Outfit, sans-serif", fontSize: "2rem", fontWeight: 800, color: stat.color }}>{stat.value}</div>
-                <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontFamily: "Inter, sans-serif" }}>{stat.label}</div>
+                <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "2rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.03em", lineHeight: 1.1 }}>{stat.value}</div>
+                <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)", fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 600, marginTop: 4 }}>{stat.label}</div>
               </div>
             ))}
             </div>
@@ -339,33 +338,30 @@ export default function MyBookingsClient() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: i * 0.07 }}
                     style={{
-                      background: "rgba(255,255,255,0.03)",
-                      backdropFilter: "blur(16px)",
-                      WebkitBackdropFilter: "blur(16px)",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      borderRadius: 18,
-                      padding: "24px 28px",
+                      background: "var(--card)",
+                      border: "1px solid var(--border)",
+                      borderRadius: 16,
+                      padding: "22px 26px",
                       display: "flex",
-                      gap: 24,
+                      gap: 20,
                       alignItems: "flex-start",
                       flexWrap: "wrap",
-                      transition: "box-shadow 0.2s ease",
+                      boxShadow: "0 2px 10px rgba(0,0,0,0.02)",
                     }}
-                    whileHover={{ boxShadow: "0 8px 40px rgba(0,0,0,0.2)" }}
                   >
                     {/* Icon */}
-                    <div style={{ width: 52, height: 52, borderRadius: 14, background: "rgba(0,102,255,0.12)", border: "1px solid rgba(0,102,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <Car size={24} color="var(--accent)" />
+                    <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(37,99,235,0.12)", border: "1px solid rgba(37,99,235,0.2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <Car size={22} color="#2563EB" />
                     </div>
 
                     {/* Details */}
                     <div style={{ flex: 1, minWidth: 200 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
-                        <h3 style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.05rem", fontWeight: 700, color: "var(--text)", margin: 0 }}>
+                        <h3 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "1.05rem", fontWeight: 700, color: "var(--text)", margin: 0, letterSpacing: "-0.02em" }}>
                           {booking.brand} {booking.model}
                         </h3>
                         {/* Status badge */}
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "3px 12px", borderRadius: 100, background: st.bg, border: `1px solid ${st.color}33`, fontSize: "0.72rem", fontWeight: 600, color: st.color, fontFamily: "Inter, sans-serif", letterSpacing: "0.06em" }}>
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "3px 10px", borderRadius: 100, background: st.bg, border: `1px solid ${st.color}44`, fontSize: "0.72rem", fontWeight: 700, color: st.color, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                           <span style={{ width: 6, height: 6, borderRadius: "50%", background: st.dot, display: "inline-block" }} />
                           {st.label}
                         </span>

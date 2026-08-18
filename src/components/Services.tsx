@@ -1992,7 +1992,7 @@ interface ViewingPackage {
                                   
                                   {pkg.moreCount > 0 && (
                                     <button
-                                      onClick={() => setViewingPackage(pkg)}
+                                      onClick={() => setViewingPackage(pkg as unknown as ViewingPackage)}
                                       style={{ background: "none", border: "none", color: "#0066FF", fontWeight: 800, fontSize: "0.85rem", cursor: "pointer", padding: 0 }}
                                     >
                                       + {pkg.moreCount} more View All

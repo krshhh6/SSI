@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import { Phone, MessageCircle, Award, ArrowUp } from "lucide-react";
@@ -112,12 +113,12 @@ export default function Footer() {
           {/* Brand Column */}
           <div>
             {/* Logo */}
-            <div
-              onClick={() => {
+            <Link
+              href="/"
+              onClick={(e) => {
                 if (pathname === "/") {
+                  e.preventDefault();
                   scrollToTop();
-                } else {
-                  router.push("/");
                 }
               }}
               style={{
@@ -126,6 +127,7 @@ export default function Footer() {
                 gap: 10,
                 marginBottom: 20,
                 cursor: "pointer",
+                textDecoration: "none",
               }}
             >
               <div
@@ -167,7 +169,7 @@ export default function Footer() {
                   SAM Wheels Pvt Ltd
                 </div>
               </div>
-            </div>
+            </Link>
 
             <p
               style={{

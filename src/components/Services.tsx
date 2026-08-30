@@ -22,6 +22,8 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import CarSelectModal, { SelectedCar } from "./CarSelectModal";
 import AuthModal from "./AuthModal";
+import { getCarSegment, BoschSegmentId, BoschVehicleSegment, BOSCH_SEGMENTS } from "@/lib/vehicleGrouping";
+import { buildSegmentPackages } from "@/lib/boschLabourSchedule";
 
 // Cities list
 export const CITIES = ["PATNA"];
@@ -35,8 +37,6 @@ export const NAV_TABS = [
 ];
 
 import { SERVICE_CATEGORIES, getCategoryByIdOrTitle, ServiceCategory } from "@/lib/servicesData";
-export { SERVICE_CATEGORIES, getCategoryByIdOrTitle };
-export type { ServiceCategory };
 
 const CURATED_SERVICES = [
   {
@@ -1451,56 +1451,48 @@ const INSURANCE_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = 
   },
 ];
 
-export function getCategoryPackages(categoryNameOrId?: string | null): { sectionTitle: string; packages: PackageItem[] }[] {
+export function getCategoryPackages(
+  categoryNameOrId?: string | null,
+  segmentId: BoschSegmentId = "1.2"
+): { sectionTitle: string; packages: PackageItem[] }[] {
+  const dynamicMap = buildSegmentPackages(segmentId);
   if (!categoryNameOrId) {
-    return [{ sectionTitle: "Service Packages", packages: SCHEDULED_PACKAGES }];
+    return (dynamicMap["car-services"] as unknown as { sectionTitle: string; packages: PackageItem[] }[]) || [{ sectionTitle: "Service Packages", packages: SCHEDULED_PACKAGES }];
   }
   const match = getCategoryByIdOrTitle(categoryNameOrId);
   const id = match ? match.id : categoryNameOrId.toLowerCase();
 
+  if (dynamicMap[id]) {
+    return dynamicMap[id] as unknown as { sectionTitle: string; packages: PackageItem[] }[];
+  }
+
   switch (id) {
-    case "ac-service":
-      return AC_PACKAGES;
     case "batteries":
       return BATTERIES_PACKAGES;
-    case "tyres":
-    case "tyres-wheel":
-      return TYRES_PACKAGES;
-    case "denting-painting":
-      return DENTING_PACKAGES;
     case "detailing":
       return DETAILING_PACKAGES;
-    case "car-spa":
-      return CAR_SPA_PACKAGES;
-    case "car-inspections":
-    case "inspection":
-      return INSPECTIONS_PACKAGES;
     case "windshield-glass":
     case "windshields-lights":
       return WINDSHIELD_PACKAGES;
-    case "suspension-fitments":
-      return SUSPENSION_PACKAGES;
-    case "clutch-body":
-      return CLUTCH_PACKAGES;
     case "insurance-claims":
       return INSURANCE_PACKAGES;
     case "car-services":
     default:
-      return [{ sectionTitle: "Service Packages", packages: SCHEDULED_PACKAGES }];
+      return (dynamicMap["car-services"] as unknown as { sectionTitle: string; packages: PackageItem[] }[]) || [{ sectionTitle: "Service Packages", packages: SCHEDULED_PACKAGES }];
   }
 }
 
 const POPULAR_CAR_MODELS = [
-  { name: "Swift", brand: "Maruti Suzuki", image: "/cars/swift.png" },
-  { name: "WagonR", brand: "Maruti Suzuki", image: "/cars/wagonr.png" },
-  { name: "Swift Dzire", brand: "Maruti Suzuki", image: "/cars/dzire.png" },
-  { name: "Baleno", brand: "Maruti Suzuki", image: "/cars/baleno.png" },
-  { name: "Alto", brand: "Maruti Suzuki", image: "/cars/alto.png" },
-  { name: "Ritz", brand: "Maruti Suzuki", image: "/cars/alto.png" },
-  { name: "Celerio", brand: "Maruti Suzuki", image: "/cars/wagonr.png" },
-  { name: "Brezza", brand: "Maruti Suzuki", image: "/cars/swift.png" },
-  { name: "Creta", brand: "Hyundai", image: "/cars/dzire.png" },
-  { name: "Nexon", brand: "Tata", image: "/cars/baleno.png" },
+  { name: "Swift", brand: "Maruti Suzuki", image: "/cars/swift.png", segment: "Grp 1.2" },
+  { name: "Wagon R", brand: "Maruti Suzuki", image: "/cars/wagonr.png", segment: "Grp 1.1" },
+  { name: "Dzire", brand: "Maruti Suzuki", image: "/cars/dzire.png", segment: "Grp 2.1" },
+  { name: "Baleno", brand: "Maruti Suzuki", image: "/cars/baleno.png", segment: "Grp 1.2" },
+  { name: "Alto", brand: "Maruti Suzuki", image: "/cars/alto.png", segment: "Grp 1.1" },
+  { name: "Brezza", brand: "Maruti Suzuki", image: "/cars/swift.png", segment: "Grp 3.1" },
+  { name: "City", brand: "Honda", image: "/cars/dzire.png", segment: "Grp 2.2" },
+  { name: "Creta", brand: "Hyundai", image: "/cars/dzire.png", segment: "Grp 3.2" },
+  { name: "Nexon", brand: "Tata", image: "/cars/baleno.png", segment: "Grp 3.1" },
+  { name: "Innova", brand: "Toyota", image: "/cars/dzire.png", segment: "Grp 3.2" },
 ];
 
 const HOW_BOSCH_WORKS_STEPS = [
@@ -1550,6 +1542,9 @@ export default function Services({
   const [selectedCar, setSelectedCar] = useState<SelectedCar | null>(null);
   const [phone, setPhone] = useState("");
   
+  // Dynamic Bosch Vehicle Segment resolved from selected car
+  const currentSegment = getCarSegment(selectedCar?.brand, selectedCar?.model);
+
   // Local fallback if props are not passed
   const [localCategory, setLocalCategory] = useState<string | null>(null);
   const selectedCategory = selectedCategoryProp !== undefined ? selectedCategoryProp : localCategory;
@@ -1632,10 +1627,12 @@ interface ViewingPackage {
         phone: phone.replace(/\D/g, ""),
         brand: selectedCar?.brand || "General",
         model: selectedCar?.model || "Car",
+        vehicleSegment: currentSegment.code,
+        vehicleSegmentTitle: currentSegment.title,
         service: selectedCategory || "General Servicing",
         city: selectedCity,
         status: "pending",
-        message: `Quote request from GoMechanic widget for ${selectedCity}`,
+        message: `Quote request for ${selectedCity} (${currentSegment.code} · ${currentSegment.title})`,
         createdAt: serverTimestamp(),
       });
       setBookingSuccess(true);
@@ -1693,21 +1690,24 @@ interface ViewingPackage {
 
       <div style={{ width: "100%", maxWidth: 1280, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
         
-        {/* 1. Sub-Navbar Bar */}
+        {/* 1. Sub-Navbar Navigation Bar */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
           style={{
-            display: "flex",
+            display: "inline-flex",
             alignItems: "center",
             background: "var(--card)",
             border: "1px solid var(--border)",
-            borderRadius: 10,
-            padding: "3px 6px",
+            borderRadius: 12,
+            padding: "4px 8px",
             marginBottom: 24,
-            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.03)",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
             position: "relative",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            maxWidth: "100%",
           }}
         >
           <button
@@ -1715,12 +1715,17 @@ interface ViewingPackage {
             style={{
               background: "none",
               border: "none",
-              color: "var(--text-muted)",
+              color: "var(--text-secondary)",
               cursor: "pointer",
-              padding: 4,
+              padding: "6px 8px",
               display: "flex",
               alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 6,
+              transition: "all 0.2s ease",
             }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--bg-secondary)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "none"; }}
           >
             <ChevronLeft size={16} />
           </button>
@@ -1730,12 +1735,12 @@ interface ViewingPackage {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 3,
+              gap: 4,
               overflowX: "auto",
               scrollBehavior: "smooth",
               scrollbarWidth: "none",
               flex: 1,
-              padding: "2px",
+              padding: "2px 4px",
             }}
           >
             {NAV_TABS.map((tab, idx) => {
@@ -1749,34 +1754,32 @@ interface ViewingPackage {
                   }}
                   style={{
                     position: "relative",
-                    background: isActive ? "var(--bg-secondary)" : "none",
+                    background: isActive ? "#E2001A" : "transparent",
                     border: "none",
-                    padding: "5px 12px",
-                    borderRadius: 7,
-                    fontSize: "0.75rem",
-                    fontWeight: isActive ? 700 : 500,
-                    color: isActive ? "var(--text)" : "var(--text-secondary)",
+                    padding: "6px 14px",
+                    borderRadius: 8,
+                    fontSize: "0.78rem",
+                    fontWeight: isActive ? 800 : 600,
+                    color: isActive ? "#ffffff" : "var(--text-secondary)",
                     cursor: "pointer",
                     whiteSpace: "nowrap",
                     transition: "all 0.2s ease",
+                    boxShadow: isActive ? "0 4px 12px rgba(226, 0, 26, 0.35)" : "none",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLElement).style.background = "var(--bg-secondary)";
+                      (e.currentTarget as HTMLElement).style.color = "var(--text)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLElement).style.background = "transparent";
+                      (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)";
+                    }
                   }}
                 >
                   {tab}
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeSubTab"
-                      style={{
-                        position: "absolute",
-                        bottom: -1,
-                        left: 8,
-                        right: 8,
-                        height: 2,
-                        borderRadius: 2,
-                        background: "#E2001A",
-                      }}
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    />
-                  )}
                 </button>
               );
             })}
@@ -1787,12 +1790,17 @@ interface ViewingPackage {
             style={{
               background: "none",
               border: "none",
-              color: "var(--text-muted)",
+              color: "var(--text-secondary)",
               cursor: "pointer",
-              padding: 4,
+              padding: "6px 8px",
               display: "flex",
               alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 6,
+              transition: "all 0.2s ease",
             }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--bg-secondary)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "none"; }}
           >
             <ChevronRight size={16} />
           </button>
@@ -1893,15 +1901,65 @@ interface ViewingPackage {
                           {selectedCategory} Packages
                         </h3>
                       </div>
-                      {selectedCar && (
-                        <div style={{ background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.3)", borderRadius: 100, padding: "6px 14px", fontSize: "0.8rem", fontWeight: 800, color: "#10B981", display: "flex", alignItems: "center", gap: 6 }}>
-                          🚗 {selectedCar.brand} - {selectedCar.model}
+                      {selectedCar ? (
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                          <div
+                            style={{
+                              background: currentSegment.badgeBg,
+                              border: `1px solid ${currentSegment.badgeText}40`,
+                              borderRadius: 100,
+                              padding: "6px 14px",
+                              fontSize: "0.8rem",
+                              fontWeight: 800,
+                              color: currentSegment.badgeText,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 6,
+                            }}
+                          >
+                            🚗 {selectedCar.brand} {selectedCar.model} · {currentSegment.code} ({currentSegment.shortLabel})
+                          </div>
+                          <button
+                            onClick={() => setIsCarModalOpen(true)}
+                            style={{
+                              background: "var(--card)",
+                              border: "1px solid var(--border)",
+                              borderRadius: 100,
+                              padding: "5px 12px",
+                              fontSize: "0.75rem",
+                              fontWeight: 700,
+                              color: "var(--text)",
+                              cursor: "pointer",
+                            }}
+                          >
+                            Change Car
+                          </button>
                         </div>
+                      ) : (
+                        <button
+                          onClick={() => setIsCarModalOpen(true)}
+                          style={{
+                            background: "#E2001A",
+                            color: "#ffffff",
+                            border: "none",
+                            borderRadius: 100,
+                            padding: "7px 16px",
+                            fontSize: "0.8rem",
+                            fontWeight: 800,
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                            boxShadow: "0 2px 8px rgba(226,0,26,0.3)",
+                          }}
+                        >
+                          🚗 Select Car for Exact Quote
+                        </button>
                       )}
                     </div>
 
                     {/* Section Groups for selected category */}
-                    {getCategoryPackages(selectedCategory).map((sec, secIdx) => (
+                    {getCategoryPackages(selectedCategory, currentSegment.id).map((sec, secIdx) => (
                       <div key={secIdx} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                         <h3 style={{ fontSize: "1.4rem", fontWeight: 900, color: "var(--text)", margin: "8px 0 0 0", fontFamily: "Outfit, sans-serif" }}>
                           {sec.sectionTitle}
@@ -2017,7 +2075,11 @@ interface ViewingPackage {
 
                               <a
                                 href={`https://wa.me/919028384499?text=${encodeURIComponent(
-                                  `Hello SAM Wheels, I want to book the "${pkg.title}" (₹${pkg.basePrice.toLocaleString()})${selectedCar ? ` for my ${selectedCar.brand} ${selectedCar.model}` : ""}.`
+                                  `Hello SAM Wheels, I want to book the "${pkg.title}" (₹${pkg.basePrice.toLocaleString()})${
+                                    selectedCar
+                                      ? ` for my ${selectedCar.brand} ${selectedCar.model} (${currentSegment.mainGroup} · ${currentSegment.code})`
+                                      : ""
+                                  } as per Bosch Standardised Labour Schedule.`
                                 )}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -2901,41 +2963,60 @@ interface ViewingPackage {
 
                   {/* Model Selection Grid */}
                   {!selectedCar ? (
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, maxHeight: 380, overflowY: "auto", paddingRight: 4 }}>
-                      {POPULAR_CAR_MODELS.filter((m) => m.name.toLowerCase().includes(modelSearchQuery.toLowerCase())).map((car) => (
-                        <motion.div
-                          key={car.name}
-                          whileHover={{ scale: 1.05, y: -2 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => setSelectedCar({ brand: car.brand, model: car.name })}
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            padding: "10px 4px",
-                            borderRadius: 12,
-                            border: "1px solid var(--border)",
-                            background: "var(--bg)",
-                            cursor: "pointer",
-                            textAlign: "center",
-                            boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
-                          }}
-                        >
-                          <div style={{ width: 64, height: 44, marginBottom: 6, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <img src={car.image} alt={car.name} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
-                          </div>
-                          <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.2 }}>{car.name}</span>
-                        </motion.div>
-                      ))}
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, maxHeight: 380, overflowY: "auto", paddingRight: 4 }}>
+                      {POPULAR_CAR_MODELS.filter((m) => m.name.toLowerCase().includes(modelSearchQuery.toLowerCase())).map((car) => {
+                        const carSeg = getCarSegment(car.brand, car.name);
+                        return (
+                          <motion.div
+                            key={car.name}
+                            whileHover={{ scale: 1.03, y: -2 }}
+                            whileTap={{ scale: 0.96 }}
+                            onClick={() => setSelectedCar({ brand: car.brand, model: car.name, segment: carSeg })}
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              padding: "8px 4px",
+                              borderRadius: 12,
+                              border: "1px solid var(--border)",
+                              background: "var(--bg)",
+                              cursor: "pointer",
+                              textAlign: "center",
+                              boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
+                              gap: 2,
+                            }}
+                          >
+                            <div style={{ width: 56, height: 38, marginBottom: 4, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <img src={car.image} alt={car.name} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
+                            </div>
+                            <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.2 }}>{car.name}</span>
+                            <span
+                              style={{
+                                fontSize: "0.62rem",
+                                fontWeight: 800,
+                                color: carSeg.badgeText,
+                                background: carSeg.badgeBg,
+                                padding: "1px 5px",
+                                borderRadius: 4,
+                                marginTop: 2,
+                              }}
+                            >
+                              {carSeg.code}
+                            </span>
+                          </motion.div>
+                        );
+                      })}
                     </div>
                   ) : (
                     /* Booking Form & Cart Summary */
                     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                      <div style={{ background: "rgba(16, 185, 129, 0.08)", border: "1px solid rgba(16, 185, 129, 0.25)", borderRadius: 12, padding: "14px", display: "flex", alignItems: "center", gap: 10 }}>
-                        <CheckCircle2 size={22} color="#10B981" />
+                      <div style={{ background: currentSegment.badgeBg, border: `1px solid ${currentSegment.badgeText}40`, borderRadius: 12, padding: "14px", display: "flex", alignItems: "center", gap: 10 }}>
+                        <CheckCircle2 size={22} color={currentSegment.badgeText} />
                         <div>
                           <div style={{ fontSize: "0.9rem", fontWeight: 900, color: "var(--text)" }}>{selectedCar.brand} - {selectedCar.model}</div>
-                          <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>Selected for accurate package pricing</div>
+                          <div style={{ fontSize: "0.75rem", color: currentSegment.badgeText, fontWeight: 700 }}>
+                            {currentSegment.mainGroup} · {currentSegment.subGroup} ({currentSegment.code})
+                          </div>
                         </div>
                       </div>
 

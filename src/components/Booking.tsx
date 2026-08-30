@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
+import { getCarSegment } from "@/lib/vehicleGrouping";
+
 const VEHICLE_BRANDS = [
   "Maruti Suzuki", "Hyundai", "Honda", "Toyota", "Tata",
   "Mahindra", "Kia", "Volkswagen", "Skoda", "Ford",
@@ -94,6 +96,8 @@ export default function Booking() {
       return;
     }
 
+    const resolvedSeg = getCarSegment(cleanBrand, cleanModel);
+
     setLoading(true);
     try {
       await addDoc(collection(db, "bookings"), {
@@ -101,6 +105,8 @@ export default function Booking() {
         phone: cleanPhone,
         brand: cleanBrand,
         model: cleanModel,
+        vehicleSegment: resolvedSeg.code,
+        vehicleSegmentTitle: resolvedSeg.title,
         service: cleanService,
         date: cleanDate,
         message: cleanMessage,

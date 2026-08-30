@@ -3,10 +3,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { MapPin, Car, Phone, ChevronDown, CheckCircle2, ArrowRight, Star, Users } from "lucide-react";
+import { getCarSegment, BoschVehicleSegment } from "@/lib/vehicleGrouping";
 
 export interface SelectedCar {
   brand: string;
   model: string;
+  segment?: BoschVehicleSegment;
 }
 
 interface QuoteSidebarProps {
@@ -186,8 +188,8 @@ export default function QuoteSidebar({
                 justifyContent: "space-between",
                 padding: "11px 14px",
                 borderRadius: 6,
-                background: selectedCar ? "rgba(0, 102, 255, 0.05)" : "#f9fafb",
-                border: selectedCar ? "2px solid #0066FF" : "1px solid #e5e7eb",
+                background: selectedCar ? "rgba(226, 0, 26, 0.05)" : "#f9fafb",
+                border: selectedCar ? "1.5px solid #E2001A" : "1px solid #e5e7eb",
                 color: "#1a1a1a",
                 cursor: "pointer",
                 textAlign: "left",
@@ -195,13 +197,36 @@ export default function QuoteSidebar({
                 transition: "all 0.2s ease",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <Car size={16} color="#0066FF" />
-                <span style={{ fontSize: "0.85rem", fontWeight: selectedCar ? 800 : 600 }}>
-                  {selectedCar ? `${selectedCar.brand} ${selectedCar.model}` : "SELECT YOUR CAR"}
-                </span>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, overflow: "hidden" }}>
+                <Car size={16} color="#E2001A" style={{ flexShrink: 0 }} />
+                <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+                  <span style={{ fontSize: "0.85rem", fontWeight: selectedCar ? 800 : 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {selectedCar ? `${selectedCar.brand} ${selectedCar.model}` : "SELECT YOUR CAR"}
+                  </span>
+                  {selectedCar && (
+                    <span style={{ fontSize: "0.68rem", color: "#6b7280", fontWeight: 600 }}>
+                      {getCarSegment(selectedCar.brand, selectedCar.model).mainGroup}
+                    </span>
+                  )}
+                </div>
               </div>
-              <ChevronDown size={16} color="#9ca3af" />
+              <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+                {selectedCar && (
+                  <span
+                    style={{
+                      background: getCarSegment(selectedCar.brand, selectedCar.model).badgeBg,
+                      color: getCarSegment(selectedCar.brand, selectedCar.model).badgeText,
+                      fontSize: "0.7rem",
+                      fontWeight: 800,
+                      padding: "2px 6px",
+                      borderRadius: 4,
+                    }}
+                  >
+                    {getCarSegment(selectedCar.brand, selectedCar.model).code}
+                  </span>
+                )}
+                <ChevronDown size={16} color="#9ca3af" />
+              </div>
             </button>
 
             {/* 3. Mobile Number Input */}

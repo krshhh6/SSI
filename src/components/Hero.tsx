@@ -27,7 +27,6 @@ const STATS = [
   { target: 15, suffix: "+", label: "Years Experience", decimals: 0 },
   { target: 30, suffix: "+", label: "Car Brands Serviced", decimals: 0 },
 ];
-
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -35,15 +34,8 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-
-
-  // Hero content parallax
-  const headlineY = useTransform(scrollYProgress, [0, 0.5], ["0%", "-30%"]);
-  const headlineOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
-
-  // Background orb parallax
-  const orb1Y = useTransform(scrollYProgress, [0, 1], ["-10%", "30%"]);
-  const orb2Y = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
+  // Hero scroll fade: starts at 100% full opacity on load, stays solid as you scroll, and fades out later towards services
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.35, 0.8], [1, 1, 0]);
 
   const badgesRef = useRef<HTMLDivElement>(null);
   const badgesInView = useInView(badgesRef, { once: true });
@@ -59,23 +51,15 @@ export default function Hero() {
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
-        background: "var(--bg-hero)",
+        background: "#101010",
         color: "var(--text)",
       }}
       className="hero-section"
     >
-      {/* Clean Light Background */}
+      {/* Clean Dark #101010 Solid Background */}
       <div
-        style={{ position: "absolute", inset: 0, overflow: "hidden", zIndex: 0, background: "var(--bg-hero)" }}
+        style={{ position: "absolute", inset: 0, overflow: "hidden", zIndex: 0, background: "#101010" }}
       >
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
         <div
           style={{
             position: "absolute",
@@ -83,11 +67,13 @@ export default function Hero() {
             left: 0,
             right: 0,
             height: "30%",
-            background: "linear-gradient(to bottom, transparent, var(--bg-hero))",
+            background: "linear-gradient(to bottom, transparent, #101010)",
             zIndex: 2,
           }}
         />
-      </div>      {/* Car render — desktop: absolute scroll-animated | mobile: inline below text */}
+      </div>
+
+      {/* Car render — desktop: absolute scroll-animated | mobile: inline below text */}
       <motion.div
         className="hero-car-desktop"
         style={{
@@ -99,9 +85,9 @@ export default function Hero() {
           maxWidth: 650,
           height: "55vh",
           minHeight: 400,
-
+          opacity: heroOpacity,
           zIndex: 2,
-          pointerEvents: "auto", // Ensure it's interactive
+          pointerEvents: "auto",
         }}
       >
         <div
@@ -156,10 +142,10 @@ export default function Hero() {
         className="hero-content"
       >
         <motion.div
-          style={{ y: headlineY, opacity: headlineOpacity }}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          style={{ opacity: heroOpacity }}
+          initial={{ y: 20 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         >
           {/* Top Unified Verification & Rating Pill */}
           <motion.div
@@ -367,7 +353,10 @@ export default function Hero() {
                   width: "100%", 
                   height: "100%", 
                   objectFit: "contain", 
+                  background: "#101010",
                   filter: "drop-shadow(0 15px 25px rgba(0,0,0,0.5))",
+                  WebkitMaskImage: "radial-gradient(ellipse 90% 85% at 50% 50%, black 65%, transparent 100%)",
+                  maskImage: "radial-gradient(ellipse 90% 85% at 50% 50%, black 65%, transparent 100%)",
                 }}
               >
                 <source src="/carhero.webm" type="video/webm" />
@@ -419,35 +408,33 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Redesigned Stats Row */}
+      {/* Luxury Glossy Center-Aligned Stats Row */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.0 }}
         className="hero-stats"
         style={{
           position: "absolute",
-          bottom: 24,
+          bottom: 20,
           left: 0,
           right: 0,
-          margin: "0 auto", // Safest way to center absolute elements
+          margin: "0 auto",
           zIndex: 10,
-          background: "var(--glass-bg)",
-          border: "1px solid var(--glass-border)",
-          boxShadow: "var(--shadow-card)",
+          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)",
+          border: "1px solid rgba(255, 255, 255, 0.14)",
+          boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.7), inset 0 1px 1px 0 rgba(255, 255, 255, 0.28), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
-          borderRadius: 24,
+          borderRadius: 18,
           width: "calc(100% - 48px)",
-          maxWidth: 1200,
-          overflow: "hidden"
+          maxWidth: 740,
+          overflow: "hidden",
+          opacity: heroOpacity,
         }}
       >
         <div
           className="hero-stats-grid"
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)", // Desktop default, mobile CSS overrides with !important
+            gridTemplateColumns: "repeat(4, 1fr)",
             position: "relative",
           }}
         >
@@ -456,32 +443,32 @@ export default function Hero() {
               key={stat.label}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 1.1 + i * 0.1 }}
+              transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
               className="hero-stat-card"
               style={{ 
                 position: "relative",
-                borderRight: i !== STATS.length - 1 ? "1px solid var(--glass-border)" : "none"
+                borderRight: i !== STATS.length - 1 ? "1px solid rgba(255, 255, 255, 0.09)" : "none"
               }}
-              whileHover={{ backgroundColor: "var(--card-hover)" }}
             >
               <GlareHover
-                glareColor="#0066FF"
-                glareOpacity={0.2}
+                glareColor="#ffffff"
+                glareOpacity={0.12}
                 glareAngle={-45}
-                glareSize={200}
-                transitionDuration={600}
+                glareSize={160}
+                transitionDuration={500}
                 playOnce={false}
-                style={{ width: "100%", height: "100%", padding: "24px 16px", boxSizing: "border-box" }}
+                style={{ width: "100%", height: "100%", padding: "12px 10px", boxSizing: "border-box", textAlign: "center" }}
               >
                 <div
                   style={{
-                    fontSize: "clamp(1.5rem, 3.5vw, 2.5rem)",
+                    fontSize: "clamp(1.18rem, 2.2vw, 1.55rem)",
                     fontWeight: 900,
-                    color: "var(--accent)",
+                    color: "#38BDF8",
                     fontFamily: "Outfit, sans-serif",
-                    lineHeight: 1,
-                    marginBottom: 8,
-                    textShadow: "0 0 20px rgba(0, 102, 255, 0.4)"
+                    lineHeight: 1.1,
+                    marginBottom: 3,
+                    textShadow: "0 0 16px rgba(56, 189, 248, 0.45)",
+                    letterSpacing: "-0.01em",
                   }}
                 >
                   <CountUp
@@ -492,7 +479,7 @@ export default function Hero() {
                     separator=","
                   />{stat.suffix}
                 </div>
-                <div style={{ fontSize: "0.85rem", color: "var(--text)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                <div style={{ fontSize: "0.66rem", color: "rgba(255, 255, 255, 0.8)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
                   {stat.label}
                 </div>
               </GlareHover>
@@ -500,8 +487,6 @@ export default function Hero() {
           ))}
         </div>
       </motion.div>
-
-
     </section>
   );
 }

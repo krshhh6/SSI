@@ -5,37 +5,13 @@ import { X, Search, Check, Car } from "lucide-react";
 import BrandLogo from "./core/BrandLogos";
 import ManufacturerGrid from "./ManufacturerGrid";
 
+import { CAR_BRANDS_CATALOG, getCarSegment, BoschVehicleSegment } from "@/lib/vehicleGrouping";
+
 export interface SelectedCar {
   brand: string;
   model: string;
+  segment?: BoschVehicleSegment;
 }
-
-const CAR_BRANDS = [
-  { name: "Maruti Suzuki", popular: true, models: ["Swift", "Baleno", "Brezza", "Dzire", "Ertiga", "WagonR", "Alto K10", "Grand Vitara", "Fronx", "Ciaz"] },
-  { name: "Hyundai", popular: true, models: ["Creta", "i20", "Venue", "Verna", "Grand i10 Nios", "Exster", "Alcazar", "Tucson"] },
-  { name: "Tata", popular: true, models: ["Nexon", "Punch", "Harrier", "Safari", "Tiago", "Tigor", "Altroz", "Curvv"] },
-  { name: "Mahindra", popular: true, models: ["Thar", "XUV700", "Scorpio-N", "Scorpio Classic", "XUV3XX", "Bolero", "XUV400"] },
-  { name: "Honda", popular: true, models: ["City", "Amaze", "Elevate", "Civic", "WR-V", "Jazz"] },
-  { name: "Toyota", popular: true, models: ["Fortuner", "Innova Crysta", "Innova Hycross", "Glanza", "Urban Cruiser Taisor", "Camry", "Hilux"] },
-  { name: "Kia", popular: true, models: ["Seltos", "Sonet", "Carens", "EV6", "Carnival"] },
-  { name: "Ford", popular: false, models: ["EcoSport", "Endeavour", "Figo", "Freestyle", "Aspire"] },
-  { name: "Volkswagen", popular: false, models: ["Virtus", "Taigun", "Tiguan", "Polo", "Vento"] },
-  { name: "Renault", popular: false, models: ["Kwid", "Triber", "Kiger", "Duster"] },
-  { name: "Chevrolet", popular: false, models: ["Beat", "Cruze", "Sail", "Spark", "Tavera"] },
-  { name: "Nissan", popular: false, models: ["Magnite", "Kicks", "Terrano", "Sunny", "Micra"] },
-  { name: "Skoda", popular: false, models: ["Slavia", "Kushaq", "Kodiaq", "Octavia", "Superb"] },
-  { name: "Fiat", popular: false, models: ["Punto", "Linea", "Avventura", "Urban Cross"] },
-  { name: "Datsun", popular: false, models: ["redi-GO", "GO", "GO+"] },
-  { name: "MG", popular: false, models: ["Hector", "Astor", "ZS EV", "Comet EV", "Gloster"] },
-  { name: "BMW", popular: false, models: ["3 Series", "5 Series", "X1", "X3", "X5", "7 Series"] },
-  { name: "Mercedes-Benz", popular: false, models: ["C-Class", "E-Class", "GLC", "GLE", "S-Class", "A-Class"] },
-  { name: "Audi", popular: false, models: ["A4", "A6", "Q3", "Q5", "Q7"] },
-  { name: "Jeep", popular: false, models: ["Compass", "Meridian", "Wrangler", "Grand Cherokee"] },
-  { name: "Volvo", popular: false, models: ["XC40", "XC60", "XC90", "S90"] },
-  { name: "Porsche", popular: false, models: ["911", "Cayenne", "Macan", "Panamera", "Taycan"] },
-  { name: "Hindustan Motors", popular: false, models: ["Ambassador", "Contessa"] },
-  { name: "Other", popular: false, models: ["Other Model"] },
-];
 
 interface CarSelectModalProps {
   isOpen: boolean;
@@ -50,18 +26,19 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
 
   if (!isOpen) return null;
 
-  const currentBrandObj = CAR_BRANDS.find((b) => b.name === selectedBrand);
+  const currentBrandObj = CAR_BRANDS_CATALOG.find((b) => b.name.toLowerCase() === selectedBrand.toLowerCase());
 
-  const filteredBrands = CAR_BRANDS.filter((b) =>
+  const filteredBrands = CAR_BRANDS_CATALOG.filter((b) =>
     b.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const filteredModels = currentBrandObj
-    ? currentBrandObj.models.filter((m) => m.toLowerCase().includes(searchQuery.toLowerCase()))
+    ? currentBrandObj.models.filter((m) => m.name.toLowerCase().includes(searchQuery.toLowerCase()))
     : [];
 
-  const handleSelectModel = (model: string) => {
-    onSelectCar({ brand: selectedBrand, model });
+  const handleSelectModel = (modelName: string) => {
+    const resolvedSegment = getCarSegment(selectedBrand, modelName);
+    onSelectCar({ brand: selectedBrand, model: modelName, segment: resolvedSegment });
     onClose();
   };
 
@@ -201,7 +178,7 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
             {!selectedBrand ? (
               /* Brand Selection Grid */
               <ManufacturerGrid
-                brands={CAR_BRANDS.map((b) => b.name)}
+                brands={CAR_BRANDS_CATALOG.map((b) => b.name)}
                 searchQuery={searchQuery}
                 onSelectBrand={(b) => {
                   setSelectedBrand(b);
@@ -209,42 +186,74 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
                 }}
               />
             ) : (
-              /* Model Selection List */
+              /* Model Selection List with Bosch Segment Indicators */
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {filteredModels.map((model) => (
-                  <button
-                    key={model}
-                    onClick={() => handleSelectModel(model)}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "14px 18px",
-                      borderRadius: 14,
-                      background: "var(--bg)",
-                      border: initialCar?.model === model && initialCar?.brand === selectedBrand ? "2px solid var(--accent)" : "1px solid var(--border)",
-                      color: "var(--text)",
-                      fontWeight: 600,
-                      fontSize: "0.95rem",
-                      cursor: "pointer",
-                      textAlign: "left",
-                      transition: "all 0.2s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = "var(--accent)";
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!(initialCar?.model === model && initialCar?.brand === selectedBrand)) {
-                        e.currentTarget.style.borderColor = "var(--border)";
-                      }
-                    }}
-                  >
-                    <span>{model}</span>
-                    {initialCar?.model === model && initialCar?.brand === selectedBrand && (
-                      <Check size={18} color="var(--accent)" />
-                    )}
-                  </button>
-                ))}
+                {filteredModels.map((item) => {
+                  const seg = getCarSegment(selectedBrand, item.name);
+                  const isCurrent = initialCar?.model === item.name && initialCar?.brand === selectedBrand;
+
+                  return (
+                    <button
+                      key={item.name}
+                      onClick={() => handleSelectModel(item.name)}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "12px 16px",
+                        borderRadius: 12,
+                        background: isCurrent ? "rgba(226,0,26,0.04)" : "#fafafa",
+                        border: isCurrent ? "1.5px solid #E2001A" : "1px solid #e5e7eb",
+                        color: "#111827",
+                        cursor: "pointer",
+                        textAlign: "left",
+                        transition: "all 0.15s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = "#E2001A";
+                        e.currentTarget.style.background = "rgba(226,0,26,0.02)";
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isCurrent) {
+                          e.currentTarget.style.borderColor = "#e5e7eb";
+                          e.currentTarget.style.background = "#fafafa";
+                        }
+                      }}
+                    >
+                      <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                        <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#111827" }}>
+                          {item.name}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: "0.72rem",
+                            fontWeight: 600,
+                            color: "#6b7280",
+                          }}
+                        >
+                          {seg.mainGroup} · {seg.subGroup}
+                        </span>
+                      </div>
+
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <span
+                          style={{
+                            background: seg.badgeBg,
+                            color: seg.badgeText,
+                            fontSize: "0.72rem",
+                            fontWeight: 800,
+                            padding: "3px 8px",
+                            borderRadius: 6,
+                            letterSpacing: "0.02em",
+                          }}
+                        >
+                          {seg.code}
+                        </span>
+                        {isCurrent && <Check size={18} color="#E2001A" />}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>

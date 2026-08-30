@@ -22,7 +22,9 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import CarSelectModal, { SelectedCar } from "./CarSelectModal";
 import AuthModal from "./AuthModal";
-import { getCarSegment, BoschSegmentId, BoschVehicleSegment, BOSCH_SEGMENTS } from "@/lib/vehicleGrouping";
+import BrandLogo from "./core/BrandLogos";
+import ManufacturerGrid from "./ManufacturerGrid";
+import { CAR_BRANDS_CATALOG, getCarSegment, BoschSegmentId, BoschVehicleSegment, BOSCH_SEGMENTS } from "@/lib/vehicleGrouping";
 import { buildSegmentPackages } from "@/lib/boschLabourSchedule";
 
 // Cities list
@@ -1483,16 +1485,16 @@ export function getCategoryPackages(
 }
 
 const POPULAR_CAR_MODELS = [
-  { name: "Swift", brand: "Maruti Suzuki", image: "/cars/swift.png", segment: "Grp 1.2" },
-  { name: "Wagon R", brand: "Maruti Suzuki", image: "/cars/wagonr.png", segment: "Grp 1.1" },
-  { name: "Dzire", brand: "Maruti Suzuki", image: "/cars/dzire.png", segment: "Grp 2.1" },
-  { name: "Baleno", brand: "Maruti Suzuki", image: "/cars/baleno.png", segment: "Grp 1.2" },
-  { name: "Alto", brand: "Maruti Suzuki", image: "/cars/alto.png", segment: "Grp 1.1" },
-  { name: "Brezza", brand: "Maruti Suzuki", image: "/cars/swift.png", segment: "Grp 3.1" },
-  { name: "City", brand: "Honda", image: "/cars/dzire.png", segment: "Grp 2.2" },
-  { name: "Creta", brand: "Hyundai", image: "/cars/dzire.png", segment: "Grp 3.2" },
-  { name: "Nexon", brand: "Tata", image: "/cars/baleno.png", segment: "Grp 3.1" },
-  { name: "Innova", brand: "Toyota", image: "/cars/dzire.png", segment: "Grp 3.2" },
+  { name: "Swift", brand: "Maruti Suzuki", image: "/cars/swift.png", segment: "Hatchback" },
+  { name: "Wagon R", brand: "Maruti Suzuki", image: "/cars/wagonr.png", segment: "Hatchback" },
+  { name: "Dzire", brand: "Maruti Suzuki", image: "/cars/dzire.png", segment: "Sedan" },
+  { name: "Baleno", brand: "Maruti Suzuki", image: "/cars/baleno.png", segment: "Hatchback" },
+  { name: "Alto", brand: "Maruti Suzuki", image: "/cars/alto.png", segment: "Hatchback" },
+  { name: "Brezza", brand: "Maruti Suzuki", image: "/cars/swift.png", segment: "SUV" },
+  { name: "City", brand: "Honda", image: "/cars/dzire.png", segment: "Sedan" },
+  { name: "Creta", brand: "Hyundai", image: "/cars/dzire.png", segment: "SUV" },
+  { name: "Nexon", brand: "Tata", image: "/cars/baleno.png", segment: "SUV" },
+  { name: "Innova", brand: "Toyota", image: "/cars/dzire.png", segment: "MUV / SUV" },
 ];
 
 const HOW_BOSCH_WORKS_STEPS = [
@@ -1589,6 +1591,9 @@ interface ViewingPackage {
   // Scheduled Packages & Model Selector State
   const [viewingPackage, setViewingPackage] = useState<ViewingPackage | null>(null);
   const [modelSearchQuery, setModelSearchQuery] = useState("");
+  const [sidebarBrand, setSidebarBrand] = useState<string>("");
+  const [isPriceRecalculating, setIsPriceRecalculating] = useState(false);
+  const [priceChangeKey, setPriceChangeKey] = useState(0);
 
   // Quick submission handler
   const handleCheckPrices = async () => {
@@ -1605,26 +1610,59 @@ interface ViewingPackage {
       return;
     }
 
-    // 3. User Auth Check
-    if (!user) {
-      setIsAuthModalOpen(true);
-      return;
+    // 3. Trigger 0.7s circle overlay animation & save lead to Firestore
+    setLoadingSubmit(true);
+    setIsPriceRecalculating(true);
+
+    try {
+      await addDoc(collection(db, "bookings"), {
+        userId: user?.uid || "guest_price_check",
+        userName: user?.displayName || `Customer (+91 ${cleanPhone})`,
+        userEmail: user?.email || "",
+        name: user?.displayName || `Customer (+91 ${cleanPhone})`,
+        phone: cleanPhone,
+        brand: selectedCar.brand,
+        model: selectedCar.model,
+        vehicleSegment: currentSegment.code,
+        vehicleSegmentTitle: currentSegment.title,
+        service: selectedCategory || "Car Services",
+        city: selectedCity,
+        status: "pending",
+        message: `Free Price Check Lead: ${selectedCar.brand} ${selectedCar.model} in ${selectedCity}`,
+        createdAt: serverTimestamp(),
+      });
+    } catch (err) {
+      console.error("Error saving lead to admin panel:", err);
+    } finally {
+      setLoadingSubmit(false);
     }
 
-    // Submit booking
-    await submitQuoteBooking();
+    // 4. Exact 0.7 second delay for sleek circle overlay load, then fade-in the updated prices
+    setTimeout(() => {
+      setIsPriceRecalculating(false);
+      setPriceChangeKey((k) => k + 1);
+      setBookingSuccess(true);
+      if (!selectedCategory) {
+        setSelectedCategory("Car Services");
+      }
+      document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+    }, 700);
   };
 
   const submitQuoteBooking = async () => {
-    if (!user) return;
+    const cleanPhone = phone.replace(/\D/g, "");
+    if (cleanPhone.length !== 10) {
+      alert("Please enter a valid 10-digit mobile number.");
+      return;
+    }
     setLoadingSubmit(true);
     try {
       await addDoc(collection(db, "bookings"), {
-        userId: user.uid,
-        userName: user.displayName || "Customer",
-        userEmail: user.email || "",
-        name: user.displayName || "Customer",
-        phone: phone.replace(/\D/g, ""),
+        userId: user?.uid || "guest_booking",
+        userName: user?.displayName || `Customer (+91 ${cleanPhone})`,
+        userEmail: user?.email || "",
+        name: user?.displayName || `Customer (+91 ${cleanPhone})`,
+        phone: cleanPhone,
         brand: selectedCar?.brand || "General",
         model: selectedCar?.model || "Car",
         vehicleSegment: currentSegment.code,
@@ -1632,7 +1670,7 @@ interface ViewingPackage {
         service: selectedCategory || "General Servicing",
         city: selectedCity,
         status: "pending",
-        message: `Quote request for ${selectedCity} (${currentSegment.code} · ${currentSegment.title})`,
+        message: `Booking request for ${selectedCity}${selectedCar ? ` - ${selectedCar.brand} ${selectedCar.model}` : ""}`,
         createdAt: serverTimestamp(),
       });
       setBookingSuccess(true);
@@ -1905,19 +1943,19 @@ interface ViewingPackage {
                         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                           <div
                             style={{
-                              background: currentSegment.badgeBg,
-                              border: `1px solid ${currentSegment.badgeText}40`,
+                              background: "rgba(226, 0, 26, 0.08)",
+                              border: "1px solid rgba(226, 0, 26, 0.2)",
                               borderRadius: 100,
                               padding: "6px 14px",
-                              fontSize: "0.8rem",
+                              fontSize: "0.82rem",
                               fontWeight: 800,
-                              color: currentSegment.badgeText,
+                              color: "#E2001A",
                               display: "flex",
                               alignItems: "center",
                               gap: 6,
                             }}
                           >
-                            🚗 {selectedCar.brand} {selectedCar.model} · {currentSegment.code} ({currentSegment.shortLabel})
+                            🚗 {selectedCar.brand} {selectedCar.model}
                           </div>
                           <button
                             onClick={() => setIsCarModalOpen(true)}
@@ -1958,169 +1996,228 @@ interface ViewingPackage {
                         </button>
                       )}
                     </div>
-
-                    {/* Section Groups for selected category */}
-                    {getCategoryPackages(selectedCategory, currentSegment.id).map((sec, secIdx) => (
-                      <div key={secIdx} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                        <h3 style={{ fontSize: "1.35rem", fontWeight: 900, color: "var(--text)", margin: "8px 0 0 0", fontFamily: "Outfit, sans-serif" }}>
-                          {sec.sectionTitle}
-                        </h3>
-
-                        {sec.packages.map((pkg) => (
+                      {/* Section Groups for selected category with relative position for circle overlay */}
+                    <div style={{ position: "relative" }}>
+                      {/* Circular Overlay Loader for 0.7s */}
+                      <AnimatePresence>
+                        {isPriceRecalculating && (
                           <motion.div
-                            key={pkg.id}
-                            whileHover={{ y: -2 }}
-                            className="package-card"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
                             style={{
-                              background: "var(--card)",
-                              border: pkg.isRecommended ? "2px solid #10B981" : "1px solid var(--border)",
-                              borderRadius: 14,
-                              position: "relative",
-                              boxShadow: "0 6px 20px rgba(0,0,0,0.04)",
+                              position: "absolute",
+                              inset: -10,
+                              zIndex: 50,
+                              background: "rgba(255, 255, 255, 0.78)",
+                              backdropFilter: "blur(6px)",
+                              borderRadius: 16,
                               display: "flex",
                               flexDirection: "column",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              gap: 14,
+                              minHeight: 300,
                             }}
                           >
-                            {/* TOP BADGE (e.g., FREE AC UNIT INSPECTION, FREE AC GAS, BESTSELLER) */}
-                            {pkg.badge && (
-                              <span
-                                className="package-card-badge"
-                                style={{
-                                  position: "absolute",
-                                  top: -12,
-                                  left: 20,
-                                  background: "#10B981",
-                                  color: "white",
-                                  fontSize: "0.68rem",
-                                  fontWeight: 900,
-                                  padding: "3px 10px",
-                                  borderRadius: 4,
-                                  letterSpacing: "0.08em",
-                                  textTransform: "uppercase",
-                                  boxShadow: "0 2px 8px rgba(16,185,129,0.3)",
-                                  zIndex: 2,
-                                }}
-                              >
-                                {pkg.badge}
-                              </span>
-                            )}
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{ repeat: Infinity, duration: 0.7, ease: "linear" }}
+                              style={{
+                                width: 44,
+                                height: 44,
+                                borderRadius: "50%",
+                                border: "3.5px solid rgba(226, 0, 26, 0.15)",
+                                borderTopColor: "#E2001A",
+                              }}
+                            />
+                            <span style={{ fontSize: "0.9rem", fontWeight: 800, color: "#111827", fontFamily: "Outfit, sans-serif" }}>
+                              Updating rates for {selectedCar?.brand} {selectedCar?.model}...
+                            </span>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
 
-                            {/* Package Card Main Layout */}
-                            <div className="package-card-inner">
-                              {/* Left Thumbnail */}
-                              <div className="package-card-thumb">
-                                <img src={pkg.thumbnail} alt={pkg.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                              </div>
+                      {getCategoryPackages(selectedCategory, currentSegment.id).map((sec, secIdx) => (
+                        <div key={secIdx} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                          <h3 style={{ fontSize: "1.35rem", fontWeight: 900, color: "var(--text)", margin: "8px 0 0 0", fontFamily: "Outfit, sans-serif" }}>
+                            {sec.sectionTitle}
+                          </h3>
 
-                              {/* Right Details */}
-                              <div className="package-card-body">
-                                <div className="package-card-header">
-                                  <h4 className="package-card-title">
-                                    {pkg.title}
-                                  </h4>
-                                  <span className="package-card-time">
-                                    ⏱️ {pkg.timeTaken}
-                                  </span>
-                                </div>
-
-                                {/* Specs subtitle */}
-                                <div className="package-card-specs">
-                                  • {pkg.timeTaken} &nbsp;• {pkg.warranty} &nbsp;• {pkg.recommendedInterval}
-                                  {pkg.note && <div style={{ marginTop: 2, color: "#777", fontSize: "0.75rem" }}>• {pkg.note}</div>}
-                                </div>
-
-                                {/* Green Checklist */}
-                                <div className="package-checklist">
-                                  {pkg.checklist.map((item, idx) => (
-                                    <div key={idx} className="package-checklist-item">
-                                      <CheckCircle2 size={16} color="#10B981" style={{ flexShrink: 0, marginTop: 2 }} />
-                                      <span>{item}</span>
-                                    </div>
-                                  ))}
-                                </div>
-
-                                {/* Optional Rating or View All */}
-                                <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 6, flexWrap: "wrap" }}>
-                                  {pkg.rating && (
-                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                      <span style={{ background: "#FF6B6B", color: "white", padding: "2px 8px", borderRadius: 100, fontSize: "0.75rem", fontWeight: 800, display: "flex", alignItems: "center", gap: 4 }}>
-                                        <Star size={12} fill="white" /> {pkg.rating}
-                                      </span>
-                                      <span style={{ color: "#4285F4", fontSize: "0.85rem", fontWeight: 600 }}>Expert Rating</span>
-                                    </div>
-                                  )}
-                                  
-                                  {pkg.moreCount > 0 && (
-                                    <button
-                                      onClick={() => setViewingPackage(pkg as unknown as ViewingPackage)}
-                                      style={{ background: "none", border: "none", color: "#0066FF", fontWeight: 800, fontSize: "0.85rem", cursor: "pointer", padding: 0 }}
-                                    >
-                                      + {pkg.moreCount} more View All
-                                    </button>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Card Bottom Bar: Price & Add To Cart Button */}
-                            <div className="package-card-footer">
-                              <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-                                {pkg.originalPrice && (
-                                  <span style={{ fontSize: "0.88rem", color: "#888", textDecoration: "line-through" }}>
-                                    Rs. {pkg.originalPrice}
-                                  </span>
-                                )}
-                                <span style={{ fontSize: "1.35rem", fontWeight: 900, color: "var(--text)" }}>
-                                  ₹ {pkg.basePrice.toLocaleString()}
-                                </span>
-                              </div>
-
-                              <a
-                                href={`https://wa.me/919028384499?text=${encodeURIComponent(
-                                  `Hello SAM Wheels, I want to book the "${pkg.title}" (₹${pkg.basePrice.toLocaleString()})${
-                                    selectedCar
-                                      ? ` for my ${selectedCar.brand} ${selectedCar.model} (${currentSegment.mainGroup} · ${currentSegment.code})`
-                                      : ""
-                                  } as per Bosch Standardised Labour Schedule.`
-                                )}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="package-book-btn"
-                              >
-                                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
-                                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51h-.57c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                                </svg>
-                                <span>Book via WhatsApp</span>
-                              </a>
-                            </div>
-
-                            {/* Summer Sale Special Offer Bar (Matches GoMechanic reference screenshot) */}
-                            {pkg.summerPrice && (
-                              <div className="package-summer-bar">
-                                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                                  <span style={{ fontSize: "1.2rem" }}>☀️</span>
-                                  <span style={{ fontSize: "0.86rem", color: "var(--text)", fontWeight: 700 }}>
-                                    Get at <strong style={{ color: "#E2001A", fontSize: "1rem" }}>₹ {pkg.summerPrice}</strong>
-                                  </span>
-                                </div>
+                          {sec.packages.map((pkg) => (
+                            <motion.div
+                              key={`${pkg.id}-${currentSegment.id}-${priceChangeKey}`}
+                              initial={{ opacity: 0.25, y: 6 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.45, ease: "easeOut" }}
+                              whileHover={{ y: -2 }}
+                              className="package-card"
+                              style={{
+                                background: "var(--card)",
+                                border: pkg.isRecommended ? "2px solid #10B981" : "1px solid var(--border)",
+                                borderRadius: 14,
+                                position: "relative",
+                                boxShadow: "0 6px 20px rgba(0,0,0,0.04)",
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              {/* TOP BADGE (e.g., FREE AC UNIT INSPECTION, FREE AC GAS, BESTSELLER) */}
+                              {pkg.badge && (
                                 <span
+                                  className="package-card-badge"
                                   style={{
+                                    position: "absolute",
+                                    top: -12,
+                                    left: 20,
                                     background: "#10B981",
                                     color: "white",
-                                    fontSize: "0.72rem",
-                                    fontWeight: 800,
+                                    fontSize: "0.68rem",
+                                    fontWeight: 900,
                                     padding: "3px 10px",
                                     borderRadius: 4,
+                                    letterSpacing: "0.08em",
+                                    textTransform: "uppercase",
+                                    boxShadow: "0 2px 8px rgba(16,185,129,0.3)",
+                                    zIndex: 2,
                                   }}
                                 >
-                                  {pkg.summerDiscount || "Extra 25% OFF"}
+                                  {pkg.badge}
                                 </span>
+                              )}
+
+                              {/* Package Card Main Layout */}
+                              <div className="package-card-inner">
+                                {/* Left Thumbnail */}
+                                <div className="package-card-thumb">
+                                  <img src={pkg.thumbnail} alt={pkg.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                </div>
+
+                                {/* Right Details */}
+                                <div className="package-card-body">
+                                  <div className="package-card-header">
+                                    <h4 className="package-card-title">
+                                      {pkg.title}
+                                    </h4>
+                                    <span className="package-card-time">
+                                      ⏱️ {pkg.timeTaken}
+                                    </span>
+                                  </div>
+
+                                  <div className="package-card-specs">
+                                    • {pkg.timeTaken} • {pkg.warranty} • {pkg.recommendedInterval}
+                                    {pkg.note && <div style={{ marginTop: 2, color: "#777", fontSize: "0.75rem" }}>• {pkg.note}</div>}
+                                  </div>
+
+                                  {/* Green Checklist */}
+                                  <div className="package-checklist">
+                                    {pkg.checklist.map((item, idx) => (
+                                      <div key={idx} className="package-checklist-item">
+                                        <CheckCircle2 size={16} color="#10B981" style={{ flexShrink: 0, marginTop: 2 }} />
+                                        <span>{item}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+
+                                  {/* Optional Rating or View All */}
+                                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 6, flexWrap: "wrap" }}>
+                                    {pkg.rating && (
+                                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                        <span style={{ background: "#FF6B6B", color: "white", padding: "2px 8px", borderRadius: 100, fontSize: "0.75rem", fontWeight: 800, display: "flex", alignItems: "center", gap: 4 }}>
+                                          <Star size={12} fill="white" /> {pkg.rating}
+                                        </span>
+                                        <span style={{ color: "#4285F4", fontSize: "0.85rem", fontWeight: 600 }}>Expert Rating</span>
+                                      </div>
+                                    )}
+                                    
+                                    {pkg.moreCount > 0 && (
+                                      <button
+                                        onClick={() => setViewingPackage(pkg as unknown as ViewingPackage)}
+                                        style={{ background: "none", border: "none", color: "#0066FF", fontWeight: 800, fontSize: "0.85rem", cursor: "pointer", padding: 0 }}
+                                      >
+                                        + {pkg.moreCount} more View All
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
                               </div>
-                            )}
-                          </motion.div>
-                        ))}
-                      </div>
-                    ))}
+
+                              {/* Card Bottom Bar: Price & Add To Cart Button with Faded Animation */}
+                              <div className="package-card-footer">
+                                <AnimatePresence mode="wait">
+                                  <motion.div
+                                    key={`${pkg.id}-${currentSegment.id}-${priceChangeKey}`}
+                                    initial={{ opacity: 0, y: 5 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.4 }}
+                                    style={{ display: "flex", flexDirection: "column", gap: 3 }}
+                                  >
+                                    <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
+                                      {pkg.originalPrice && (
+                                        <span style={{ fontSize: "0.88rem", color: "#888", textDecoration: "line-through" }}>
+                                          Rs. {pkg.originalPrice}
+                                        </span>
+                                      )}
+                                      <span style={{ fontSize: "1.35rem", fontWeight: 900, color: "var(--text)" }}>
+                                        ₹ {pkg.basePrice.toLocaleString()}
+                                      </span>
+                                    </div>
+                                    <span style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: 500 }}>
+                                      {selectedCar
+                                        ? `(Customized for ${selectedCar.brand} ${selectedCar.model})`
+                                        : `(Select your car model to get exact price)`}
+                                    </span>
+                                  </motion.div>
+                                </AnimatePresence>
+
+                                <a
+                                  href={`https://wa.me/919028384499?text=${encodeURIComponent(
+                                    `Hello SAM Wheels, I want to book the "${pkg.title}" (₹${pkg.basePrice.toLocaleString()})${
+                                      selectedCar
+                                        ? ` for my ${selectedCar.brand} ${selectedCar.model}`
+                                        : ""
+                                    }.`
+                                  )}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="package-book-btn"
+                                >
+                                  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51h-.57c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                                  </svg>
+                                  <span>Book via WhatsApp</span>
+                                </a>
+                              </div>
+
+                              {/* Summer Sale Special Offer Bar (Matches GoMechanic reference screenshot) */}
+                              {pkg.summerPrice && (
+                                <div className="package-summer-bar">
+                                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                                    <span style={{ fontSize: "1.2rem" }}>☀️</span>
+                                    <span style={{ fontSize: "0.86rem", color: "var(--text)", fontWeight: 700 }}>
+                                      Get at <strong style={{ color: "#E2001A", fontSize: "1rem" }}>₹ {pkg.summerPrice}</strong>
+                                    </span>
+                                  </div>
+                                  <span
+                                    style={{
+                                      background: "#10B981",
+                                      color: "white",
+                                      fontSize: "0.72rem",
+                                      fontWeight: 800,
+                                      padding: "3px 10px",
+                                      borderRadius: 4,
+                                    }}
+                                  >
+                                    {pkg.summerDiscount || "Extra 25% OFF"}
+                                  </span>
+                                </div>
+                              )}
+                            </motion.div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ) : (
                   /* PRIMARY 12 CATEGORIES GRID (Compact 4-Column Layout - All 12 Visible) */
@@ -2883,7 +2980,7 @@ interface ViewingPackage {
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <h3
                       style={{
-                        fontSize: "1.1rem",
+                        fontSize: "1.05rem",
                         fontWeight: 900,
                         color: "var(--text)",
                         fontFamily: "Outfit, sans-serif",
@@ -2894,96 +2991,161 @@ interface ViewingPackage {
                       }}
                     >
                       <Car size={20} color="#E2001A" />
-                      {selectedCar ? "Selected Model" : "Select Model"}
+                      {selectedCar
+                        ? "Selected Model"
+                        : sidebarBrand
+                        ? `Select ${sidebarBrand} Model`
+                        : "Select Manufacturer"}
                     </h3>
-                    {selectedCar && (
+                    {selectedCar ? (
                       <button
-                        onClick={() => setSelectedCar(null)}
+                        onClick={() => {
+                          setSelectedCar(null);
+                          setSidebarBrand("");
+                          setModelSearchQuery("");
+                        }}
                         style={{ background: "none", border: "none", color: "#E2001A", fontWeight: 800, fontSize: "0.8rem", cursor: "pointer" }}
                       >
                         Change
                       </button>
-                    )}
+                    ) : sidebarBrand ? (
+                      <button
+                        onClick={() => {
+                          setSidebarBrand("");
+                          setModelSearchQuery("");
+                        }}
+                        style={{ background: "none", border: "none", color: "#E2001A", fontWeight: 700, fontSize: "0.78rem", cursor: "pointer" }}
+                      >
+                        ← Brands
+                      </button>
+                    ) : null}
                   </div>
 
-                  {/* Search Bar when model is NOT selected */}
-                  {!selectedCar && (
-                    <div style={{ position: "relative" }}>
-                      <Search size={16} color="var(--text-muted)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
-                      <input
-                        type="text"
-                        placeholder="Search Models"
-                        value={modelSearchQuery}
-                        onChange={(e) => setModelSearchQuery(e.target.value)}
-                        style={{
-                          width: "100%",
-                          padding: "10px 12px 10px 36px",
-                          borderRadius: 8,
-                          border: "1px solid var(--border)",
-                          background: "var(--bg-secondary)",
-                          color: "var(--text)",
-                          fontSize: "0.85rem",
-                          outline: "none",
-                        }}
-                      />
-                    </div>
-                  )}
-
-                  {/* Model Selection Grid */}
                   {!selectedCar ? (
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, maxHeight: 380, overflowY: "auto", paddingRight: 4 }}>
-                      {POPULAR_CAR_MODELS.filter((m) => m.name.toLowerCase().includes(modelSearchQuery.toLowerCase())).map((car) => {
-                        const carSeg = getCarSegment(car.brand, car.name);
-                        return (
-                          <motion.div
-                            key={car.name}
-                            whileHover={{ scale: 1.03, y: -2 }}
-                            whileTap={{ scale: 0.96 }}
-                            onClick={() => setSelectedCar({ brand: car.brand, model: car.name, segment: carSeg })}
+                    !sidebarBrand ? (
+                      /* STEP 1: Select Brand / Manufacturer using prebuilt ManufacturerGrid */
+                      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                        {/* Search Brands */}
+                        <div style={{ position: "relative" }}>
+                          <Search size={16} color="var(--text-muted)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
+                          <input
+                            type="text"
+                            placeholder="Search Brands (e.g. Maruti, Hyundai)"
+                            value={modelSearchQuery}
+                            onChange={(e) => setModelSearchQuery(e.target.value)}
                             style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              alignItems: "center",
-                              padding: "8px 4px",
-                              borderRadius: 12,
+                              width: "100%",
+                              padding: "10px 12px 10px 36px",
+                              borderRadius: 8,
                               border: "1px solid var(--border)",
-                              background: "var(--bg)",
-                              cursor: "pointer",
-                              textAlign: "center",
-                              boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
-                              gap: 2,
+                              background: "var(--bg-secondary)",
+                              color: "var(--text)",
+                              fontSize: "0.85rem",
+                              outline: "none",
                             }}
-                          >
-                            <div style={{ width: 56, height: 38, marginBottom: 4, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                              <img src={car.image} alt={car.name} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
-                            </div>
-                            <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.2 }}>{car.name}</span>
-                            <span
-                              style={{
-                                fontSize: "0.62rem",
-                                fontWeight: 800,
-                                color: carSeg.badgeText,
-                                background: carSeg.badgeBg,
-                                padding: "1px 5px",
-                                borderRadius: 4,
-                                marginTop: 2,
-                              }}
-                            >
-                              {carSeg.code}
-                            </span>
-                          </motion.div>
-                        );
-                      })}
-                    </div>
+                          />
+                        </div>
+
+                        {/* Prebuilt ManufacturerGrid Component */}
+                        <div style={{ maxHeight: 380, overflowY: "auto", overflowX: "hidden", paddingRight: 4 }}>
+                          <ManufacturerGrid
+                            brands={CAR_BRANDS_CATALOG.map((b) => b.name)}
+                            searchQuery={modelSearchQuery}
+                            onSelectBrand={(b) => {
+                              setSidebarBrand(b);
+                              setModelSearchQuery("");
+                            }}
+                            className="p-0"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      /* STEP 2: Select Model for Selected Brand */
+                      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                        {/* Search Models */}
+                        <div style={{ position: "relative" }}>
+                          <Search size={16} color="var(--text-muted)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
+                          <input
+                            type="text"
+                            placeholder={`Search ${sidebarBrand} models...`}
+                            value={modelSearchQuery}
+                            onChange={(e) => setModelSearchQuery(e.target.value)}
+                            style={{
+                              width: "100%",
+                              padding: "10px 12px 10px 36px",
+                              borderRadius: 8,
+                              border: "1px solid var(--border)",
+                              background: "var(--bg-secondary)",
+                              color: "var(--text)",
+                              fontSize: "0.85rem",
+                              outline: "none",
+                            }}
+                          />
+                        </div>
+
+                        {/* Models List */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 380, overflowY: "auto", paddingRight: 4 }}>
+                          {(CAR_BRANDS_CATALOG.find((b) => b.name.toLowerCase() === sidebarBrand.toLowerCase())?.models || [])
+                            .filter((m) => m.name.toLowerCase().includes(modelSearchQuery.toLowerCase()))
+                            .map((m) => {
+                              const carSeg = getCarSegment(sidebarBrand, m.name);
+                              return (
+                                <button
+                                  key={m.name}
+                                  onClick={() => {
+                                    setSelectedCar({ brand: sidebarBrand, model: m.name, segment: carSeg });
+                                    setModelSearchQuery("");
+                                  }}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    padding: "11px 14px",
+                                    borderRadius: 10,
+                                    background: "var(--bg-secondary)",
+                                    border: "1px solid var(--border)",
+                                    color: "var(--text)",
+                                    cursor: "pointer",
+                                    textAlign: "left",
+                                    transition: "all 0.15s ease",
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.style.borderColor = "#E2001A";
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.style.borderColor = "var(--border)";
+                                  }}
+                                >
+                                  <span style={{ fontSize: "0.88rem", fontWeight: 800, color: "var(--text)" }}>
+                                    {m.name}
+                                  </span>
+                                  <span
+                                    style={{
+                                      background: carSeg.badgeBg,
+                                      color: carSeg.badgeText,
+                                      fontSize: "0.7rem",
+                                      fontWeight: 800,
+                                      padding: "2px 8px",
+                                      borderRadius: 6,
+                                    }}
+                                  >
+                                    {carSeg.shortLabel}
+                                  </span>
+                                </button>
+                              );
+                            })}
+                        </div>
+                      </div>
+                    )
                   ) : (
-                    /* Booking Form & Cart Summary */
+                    /* STEP 3: Booking Form & Instant Price / Callback Request */
                     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                      <div style={{ background: currentSegment.badgeBg, border: `1px solid ${currentSegment.badgeText}40`, borderRadius: 12, padding: "14px", display: "flex", alignItems: "center", gap: 10 }}>
-                        <CheckCircle2 size={22} color={currentSegment.badgeText} />
+                      <div style={{ background: "rgba(226, 0, 26, 0.06)", border: "1px solid rgba(226, 0, 26, 0.18)", borderRadius: 12, padding: "14px", display: "flex", alignItems: "center", gap: 10 }}>
+                        <CheckCircle2 size={22} color="#E2001A" />
                         <div>
-                          <div style={{ fontSize: "0.9rem", fontWeight: 900, color: "var(--text)" }}>{selectedCar.brand} - {selectedCar.model}</div>
-                          <div style={{ fontSize: "0.75rem", color: currentSegment.badgeText, fontWeight: 700 }}>
-                            {currentSegment.mainGroup} · {currentSegment.subGroup} ({currentSegment.code})
+                          <div style={{ fontSize: "0.9rem", fontWeight: 900, color: "var(--text)" }}>{selectedCar.brand} {selectedCar.model}</div>
+                          <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+                            {currentSegment.shortLabel} · Bosch Standardized Rates
                           </div>
                         </div>
                       </div>
@@ -2992,7 +3154,8 @@ interface ViewingPackage {
                         type="tel"
                         placeholder="Enter 10-digit mobile number"
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        maxLength={10}
+                        onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
                         style={{
                           width: "100%",
                           padding: "12px",
@@ -3005,9 +3168,11 @@ interface ViewingPackage {
                         }}
                       />
 
-                      <button
+                      <motion.button
                         onClick={handleCheckPrices}
-                        disabled={loadingSubmit}
+                        disabled={loadingSubmit || isPriceRecalculating}
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
                         style={{
                           width: "100%",
                           padding: "14px",
@@ -3016,13 +3181,37 @@ interface ViewingPackage {
                           color: "white",
                           border: "none",
                           fontWeight: 900,
-                          fontSize: "0.95rem",
-                          cursor: "pointer",
+                          fontSize: "0.92rem",
+                          cursor: (loadingSubmit || isPriceRecalculating) ? "wait" : "pointer",
                           boxShadow: "0 4px 14px rgba(226,0,26,0.3)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: 8,
                         }}
                       >
-                        {loadingSubmit ? "PROCESSING..." : "CHECK PRICES FOR FREE →"}
-                      </button>
+                        {(loadingSubmit || isPriceRecalculating) ? (
+                          <div style={{ color: "#ffffff", fontWeight: 800, display: "inline-flex", alignItems: "center", gap: 8 }}>
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{ repeat: Infinity, duration: 0.7, ease: "linear" }}
+                              style={{
+                                width: 16,
+                                height: 16,
+                                borderRadius: "50%",
+                                border: "2px solid rgba(255, 255, 255, 0.3)",
+                                borderTopColor: "#ffffff",
+                              }}
+                            />
+                            <span>REQUESTING CALLBACK...</span>
+                          </div>
+                        ) : (
+                          <span style={{ color: "#ffffff", fontWeight: 800, display: "inline-flex", alignItems: "center", gap: 8 }}>
+                            GET A FREE CALLBACK & ENQUIRY
+                            <ArrowRight size={16} color="#ffffff" />
+                          </span>
+                        )}
+                      </motion.button>
                     </div>
                   )}
                 </div>
@@ -3070,49 +3259,82 @@ interface ViewingPackage {
                     <motion.div
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      style={{ textAlign: "center", padding: "20px 0" }}
+                      style={{
+                        padding: "20px 14px",
+                        borderRadius: 12,
+                        background: "rgba(16, 185, 129, 0.08)",
+                        border: "1px solid rgba(16, 185, 129, 0.3)",
+                        textAlign: "center",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 10,
+                      }}
                     >
                       <div
                         style={{
-                          width: 52,
-                          height: 52,
+                          width: 46,
+                          height: 46,
                           borderRadius: "50%",
-                          background: "rgba(16, 185, 129, 0.12)",
-                          border: "1.5px solid #10B981",
+                          background: "#10B981",
+                          color: "#ffffff",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          margin: "0 auto 14px",
-                          color: "#10B981",
                         }}
                       >
-                        <CheckCircle2 size={26} />
+                        <CheckCircle2 size={24} />
                       </div>
-                      <h4 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text)", margin: "0 0 6px 0" }}>
-                        Quote Requested!
-                      </h4>
-                      <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: "0 0 18px 0" }}>
-                        Our service manager in <strong>{selectedCity}</strong> will contact you at <strong>+91 {phone}</strong> shortly.
-                      </p>
-                      <button
-                        onClick={() => {
-                          setBookingSuccess(false);
-                          setPhone("");
-                          setSelectedCar(null);
-                        }}
-                        style={{
-                          padding: "10px 18px",
-                          borderRadius: 8,
-                          background: "var(--bg-secondary)",
-                          border: "1px solid var(--border)",
-                          color: "var(--text)",
-                          fontSize: "0.82rem",
-                          fontWeight: 700,
-                          cursor: "pointer",
-                        }}
-                      >
-                        Check Another Quote
-                      </button>
+                      <div>
+                        <h4 style={{ fontSize: "1.05rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0", fontFamily: "Outfit, sans-serif" }}>
+                          Prices Updated for {selectedCar?.brand} {selectedCar?.model}!
+                        </h4>
+                        <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.45, margin: 0 }}>
+                          Exact Bosch Standardised rates for <strong>{selectedCity}</strong> are loaded below.
+                        </p>
+                      </div>
+
+                      <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%", marginTop: 6 }}>
+                        <button
+                          onClick={() => {
+                            document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                          }}
+                          style={{
+                            width: "100%",
+                            padding: "11px 16px",
+                            borderRadius: 8,
+                            background: "#E2001A",
+                            color: "#ffffff",
+                            fontSize: "0.85rem",
+                            fontWeight: 800,
+                            border: "none",
+                            cursor: "pointer",
+                            boxShadow: "0 4px 12px rgba(226, 0, 26, 0.3)",
+                          }}
+                        >
+                          View Custom Packages ↓
+                        </button>
+                        <button
+                          onClick={() => {
+                            setBookingSuccess(false);
+                            setPhone("");
+                            setSelectedCar(null);
+                          }}
+                          style={{
+                            width: "100%",
+                            padding: "9px 16px",
+                            borderRadius: 8,
+                            background: "var(--bg-secondary)",
+                            border: "1px solid var(--border)",
+                            color: "var(--text)",
+                            fontSize: "0.78rem",
+                            fontWeight: 700,
+                            cursor: "pointer",
+                          }}
+                        >
+                          Check Another Vehicle
+                        </button>
+                      </div>
                     </motion.div>
                   ) : (
                     /* Form Fields */
@@ -3218,7 +3440,7 @@ interface ViewingPackage {
                       {/* 4. Action Button */}
                       <motion.button
                         onClick={handleCheckPrices}
-                        disabled={loadingSubmit}
+                        disabled={loadingSubmit || isPriceRecalculating}
                         whileHover={{ scale: 1.01 }}
                         whileTap={{ scale: 0.99 }}
                         style={{
@@ -3229,7 +3451,7 @@ interface ViewingPackage {
                           background: "#E2001A",
                           color: "#ffffff",
                           border: "none",
-                          cursor: loadingSubmit ? "wait" : "pointer",
+                          cursor: (loadingSubmit || isPriceRecalculating) ? "wait" : "pointer",
                           fontFamily: "Outfit, sans-serif",
                           fontSize: "0.95rem",
                           fontWeight: 800,
@@ -3244,11 +3466,24 @@ interface ViewingPackage {
                           textAlign: "center",
                         }}
                       >
-                        {loadingSubmit ? (
-                          <span style={{ color: "#ffffff", fontWeight: 800 }}>PROCESSING...</span>
+                        {(loadingSubmit || isPriceRecalculating) ? (
+                          <div style={{ color: "#ffffff", fontWeight: 800, display: "inline-flex", alignItems: "center", gap: 8 }}>
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{ repeat: Infinity, duration: 0.7, ease: "linear" }}
+                              style={{
+                                width: 18,
+                                height: 18,
+                                borderRadius: "50%",
+                                border: "2.5px solid rgba(255, 255, 255, 0.3)",
+                                borderTopColor: "#ffffff",
+                              }}
+                            />
+                            <span>REQUESTING CALLBACK...</span>
+                          </div>
                         ) : (
                           <span style={{ color: "#ffffff", fontWeight: 800, display: "inline-flex", alignItems: "center", gap: 8 }}>
-                            CHECK PRICES FOR FREE
+                            GET A FREE CALLBACK & ENQUIRY
                             <ArrowRight size={17} color="#ffffff" />
                           </span>
                         )}

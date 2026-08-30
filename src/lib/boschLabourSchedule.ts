@@ -1031,7 +1031,7 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           timeTaken: "45 Mins",
           warranty: "Up to 55 Months Official Warranty",
           recommendedInterval: "Battery Age > 3 Years or Starting Trouble",
-          thumbnail: "/summer/14.png",
+          thumbnail: "/images/exide-epiq.png",
           originalPrice: Math.round(batteryPrice * 1.25),
           basePrice: batteryPrice,
           checklist: [
@@ -1054,7 +1054,7 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           timeTaken: "1.5 Hours",
           warranty: "Detailed Electrical Report",
           recommendedInterval: "Battery Drain or Slow Engine Cranking",
-          thumbnail: "/packages/basic.jpg",
+          thumbnail: "/packages/ecu_scanner_inspection.png",
           originalPrice: Math.round(alternatorCheckPrice * 1.3),
           basePrice: alternatorCheckPrice,
           checklist: [
@@ -1090,7 +1090,7 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           timeTaken: "3 Hours",
           warranty: "Mirror Gloss Finish",
           recommendedInterval: "Every 6 Months for Paint Longevity",
-          thumbnail: "/summer/car_spa.png",
+          thumbnail: "/summer/rubbing_polishing.png",
           originalPrice: Math.round(rubbingBase * 1.3),
           basePrice: rubbingBase,
           checklist: [
@@ -1113,7 +1113,7 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           timeTaken: "4 Hours",
           warranty: "6 Months Paint Warranty",
           recommendedInterval: "Before Summer or Monsoon Season",
-          thumbnail: "/summer/car_spa.png",
+          thumbnail: "/packages/meguiars_teflon_coating.png",
           originalPrice: Math.round(teflonBase * 1.3),
           basePrice: teflonBase,
           checklist: [
@@ -1136,7 +1136,7 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           timeTaken: "2 Days",
           warranty: "2 Years Official Warranty",
           recommendedInterval: "Ultimate Long-Term Paint Armor",
-          thumbnail: "/summer/car_spa.png",
+          thumbnail: "/packages/meguiars_ceramic_coating.png",
           originalPrice: Math.round(ceramicBase * 1.3),
           basePrice: ceramicBase,
           checklist: [
@@ -1173,7 +1173,7 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           timeTaken: "3 Hours",
           warranty: "1 Year Leakage Warranty",
           recommendedInterval: "Cracked or Chipped Windshield",
-          thumbnail: "/summer/10new.png",
+          thumbnail: "/packages/front_windshield_replacement.png",
           originalPrice: Math.round(windshieldBase * 1.25),
           basePrice: windshieldBase,
           checklist: [
@@ -1196,7 +1196,7 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           timeTaken: "20 Mins",
           warranty: "Streak-Free Guarantee",
           recommendedInterval: "Before Monsoon or Every 12 Months",
-          thumbnail: "/summer/10new.png",
+          thumbnail: "/packages/windshield_spray.png",
           originalPrice: Math.round(wiperBase * 1.3),
           basePrice: wiperBase,
           checklist: [
@@ -1219,7 +1219,7 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           timeTaken: "1 Hour",
           warranty: "6 Months Clarity Warranty",
           recommendedInterval: "Foggy, Yellowed or Dull Headlights",
-          thumbnail: "/summer/10new.png",
+          thumbnail: "/packages/front_headlight.png",
           originalPrice: Math.round(headlightBase * 1.35),
           basePrice: headlightBase,
           checklist: [
@@ -1251,7 +1251,7 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           timeTaken: "Same Day Intimation",
           warranty: "Seamless Claim Processing",
           recommendedInterval: "Post-Accident Damage or Dents",
-          thumbnail: "/summer/denting1.svg",
+          thumbnail: "/packages/full_body_dent_paint.png",
           originalPrice: 1500,
           basePrice: 0,
           checklist: [
@@ -1275,7 +1275,7 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           timeTaken: "2 - 5 Days",
           warranty: "OEM Structural Warranty",
           recommendedInterval: "Structural or Body Impact",
-          thumbnail: "/summer/denting1.svg",
+          thumbnail: "/summer/bumper_paint.png",
           originalPrice: 2500,
           basePrice: 1500,
           checklist: [

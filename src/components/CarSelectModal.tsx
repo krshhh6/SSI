@@ -226,12 +226,12 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
                         </span>
                         <span
                           style={{
-                            fontSize: "0.72rem",
-                            fontWeight: 600,
+                            fontSize: "0.74rem",
+                            fontWeight: 500,
                             color: "#6b7280",
                           }}
                         >
-                          {seg.mainGroup} · {seg.subGroup}
+                          {selectedBrand} {item.name}
                         </span>
                       </div>
 
@@ -247,7 +247,7 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
                             letterSpacing: "0.02em",
                           }}
                         >
-                          {seg.code}
+                          {seg.shortLabel}
                         </span>
                         {isCurrent && <Check size={18} color="#E2001A" />}
                       </div>

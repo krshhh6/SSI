@@ -829,10 +829,213 @@ body::after {
   }
 }
 
+/* ─── Service Package Cards (Desktop & Mobile) ────────── */
+.category-header-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.package-card {
+  padding: 24px 22px 18px;
+  gap: 16px;
+}
+
+.package-card-inner {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.package-card-thumb {
+  width: 100%;
+  height: 140px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.package-card-body {
+  min-width: 0;
+}
+
+.package-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.package-card-title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--text);
+  margin: 0;
+  font-family: Outfit, sans-serif;
+}
+
+.package-card-time {
+  font-size: 0.75rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 100px;
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.package-card-specs {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.package-checklist {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+}
+
+.package-checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.package-card-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.package-book-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #25D366;
+  color: #ffffff;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.86rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.28);
+  white-space: nowrap;
+}
+
+.package-book-btn:hover {
+  background: #1ebd58;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+}
+
+.package-summer-bar {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 /* Mobile (<768px): 2 columns, stacked form, reduced card/form dimensions */
 @media (max-width: 767px) {
   body {
     padding-bottom: 80px !important; /* Prevents fixed bottom FloatingContact bar from overlapping page content */
+  }
+
+  .category-header-wrap {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .package-card {
+    padding: 16px 14px 14px !important;
+    gap: 14px !important;
+  }
+
+  .package-card-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .package-card-thumb {
+    width: 100% !important;
+    height: 180px !important;
+    border-radius: 10px !important;
+  }
+
+  .package-card-header {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .package-card-title {
+    font-size: 1.15rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .package-card-time {
+    font-size: 0.72rem !important;
+    padding: 3px 8px !important;
+  }
+
+  .package-card-specs {
+    font-size: 0.75rem !important;
+    margin-bottom: 10px !important;
+  }
+
+  .package-checklist {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .package-checklist-item {
+    font-size: 0.82rem !important;
+    gap: 8px !important;
+  }
+
+  .package-card-footer {
+    padding-top: 12px !important;
+    gap: 10px !important;
+  }
+
+  .package-book-btn {
+    padding: 8px 14px !important;
+    font-size: 0.82rem !important;
   }
 
   .gomechanic-services-layout {

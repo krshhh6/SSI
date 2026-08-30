@@ -1014,16 +1014,300 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
     },
   ];
 
+  // 9. BATTERIES
+  const batteryMultiplier = segmentId.startsWith("1") ? 0 : segmentId.startsWith("2") ? 600 : segmentId.startsWith("3") ? 1400 : 3200;
+  const batteryPrice = 3850 + batteryMultiplier;
+  const alternatorCheckPrice = Math.round((scanRate + 350) / 50) * 50;
+
+  const batteryPackages: ServiceCategorySection[] = [
+    {
+      sectionTitle: "Batteries & Electrical",
+      packages: [
+        {
+          id: "bosch-battery-replace",
+          title: "Bosch Maintenance-Free Heavy Duty Battery",
+          badge: "55M WARRANTY",
+          badgeColor: "#10B981",
+          timeTaken: "45 Mins",
+          warranty: "Up to 55 Months Official Warranty",
+          recommendedInterval: "Battery Age > 3 Years or Starting Trouble",
+          thumbnail: "/summer/14.png",
+          originalPrice: Math.round(batteryPrice * 1.25),
+          basePrice: batteryPrice,
+          checklist: [
+            "Genuine Bosch High-Cranking Maintenance-Free Battery",
+            "Free Doorstep Delivery & Installation",
+            "Old Battery Buyback Rebate Included",
+            "Anti-Corrosion Petroleum Terminal Gel Treatment",
+          ],
+          moreCount: 2,
+          allDetails: [
+            "High-Cranking Bosch Silver Alloy Technology",
+            "Alternator Charging Rate & Voltage Regulator Test",
+          ],
+        },
+        {
+          id: "alternator-starter-check",
+          title: "Alternator & Starter Motor Health Diagnostic",
+          badge: "ELECTRICAL",
+          badgeColor: "#E2001A",
+          timeTaken: "1.5 Hours",
+          warranty: "Detailed Electrical Report",
+          recommendedInterval: "Battery Drain or Slow Engine Cranking",
+          thumbnail: "/packages/basic.jpg",
+          originalPrice: Math.round(alternatorCheckPrice * 1.3),
+          basePrice: alternatorCheckPrice,
+          checklist: [
+            "Alternator Output Voltage & Diode Ripple Check",
+            "Starter Motor Load Test & Solenoid Operation",
+            "Parasitic Dark Current Battery Drain Test",
+            "Drive Belt Tension & Pulley Alignment Check",
+          ],
+          moreCount: 2,
+          allDetails: [
+            "Complete Electrical Charging & Starting System Diagnosis",
+            "Wiring Harness Inspection for Short Circuits",
+          ],
+        },
+      ],
+    },
+  ];
+
+  // 10. DETAILING & CERAMIC COATING
+  const rubbingBase = segmentId.startsWith("1") ? 1850 : segmentId.startsWith("2") ? 2450 : segmentId.startsWith("3") ? 2950 : 3950;
+  const teflonBase = Math.round((rubbingBase * 1.35) / 50) * 50;
+  const ceramicBase = segmentId.startsWith("1") ? 7500 : segmentId.startsWith("2") ? 9500 : segmentId.startsWith("3") ? 12000 : 16500;
+
+  const detailingPackages: ServiceCategorySection[] = [
+    {
+      sectionTitle: "Paint Protection & Detailing",
+      packages: [
+        {
+          id: "exterior-rubbing-polish",
+          title: "Full Exterior 3M Machine Rubbing & High-Gloss Polish",
+          badge: "SWIRL REMOVAL",
+          badgeColor: "#10B981",
+          timeTaken: "3 Hours",
+          warranty: "Mirror Gloss Finish",
+          recommendedInterval: "Every 6 Months for Paint Longevity",
+          thumbnail: "/summer/car_spa.png",
+          originalPrice: Math.round(rubbingBase * 1.3),
+          basePrice: rubbingBase,
+          checklist: [
+            "Multi-Stage Rotary Machine Compound Rubbing",
+            "Swirl Mark & Minor Scratch Removal",
+            "High-Gloss Carnauba Wax Protective Glaze",
+            "Tyre Dressing & Chrome Trim Restoration",
+          ],
+          moreCount: 2,
+          allDetails: [
+            "3-Stage Paint Correction & Surface Decontamination",
+            "Mirror-Like Optical Clarity Enhancement",
+          ],
+        },
+        {
+          id: "teflon-coating",
+          title: "Bosch All-Weather Teflon Paint Protection Coating",
+          badge: "POPULAR",
+          badgeColor: "#E2001A",
+          timeTaken: "4 Hours",
+          warranty: "6 Months Paint Warranty",
+          recommendedInterval: "Before Summer or Monsoon Season",
+          thumbnail: "/summer/car_spa.png",
+          originalPrice: Math.round(teflonBase * 1.3),
+          basePrice: teflonBase,
+          checklist: [
+            "Complete Surface Clay-Bar Decontamination",
+            "Hydrophobic Teflon Sealant Application",
+            "UV Ray & Road Tar Chemical Protection Barrier",
+            "Water Beading & Paint Fading Prevention",
+          ],
+          moreCount: 2,
+          allDetails: [
+            "Hydrophobic Sealant Layer for High Repellency",
+            "Enhanced Gloss & Protection Against Bird Droppings",
+          ],
+        },
+        {
+          id: "9h-ceramic-coating",
+          title: "9H Ultra-Gloss Nano Ceramic Coating (2-Year Warranty)",
+          badge: "PREMIUM 9H",
+          badgeColor: "#AA66FF",
+          timeTaken: "2 Days",
+          warranty: "2 Years Official Warranty",
+          recommendedInterval: "Ultimate Long-Term Paint Armor",
+          thumbnail: "/summer/car_spa.png",
+          originalPrice: Math.round(ceramicBase * 1.3),
+          basePrice: ceramicBase,
+          checklist: [
+            "Full Multi-Stage Paint Correction & Surface Levelling",
+            "Dual-Layer 9H Hardness Nano Ceramic Application",
+            "Extreme 110° Hydrophobic Water Repellency",
+            "Free 6-Month Ceramic Maintenance Top-Up",
+          ],
+          moreCount: 3,
+          allDetails: [
+            "Deep Diamond Gloss & 9H Scratch Resistance",
+            "Protection Against Chemical Etching, Oxidation & UV Rays",
+            "Official Warranty Certificate with Periodic Inspections",
+          ],
+        },
+      ],
+    },
+  ];
+
+  // 11. WINDSHIELDS & LIGHTS
+  const windshieldBase = segmentId.startsWith("1") ? 4250 : segmentId.startsWith("2") ? 5450 : segmentId.startsWith("3") ? 6950 : 11500;
+  const wiperBase = segmentId.startsWith("1") ? 750 : segmentId.startsWith("2") ? 950 : segmentId.startsWith("3") ? 1250 : 1650;
+  const headlightBase = 650;
+
+  const windshieldPackages: ServiceCategorySection[] = [
+    {
+      sectionTitle: "Windshield, Glass & Lights",
+      packages: [
+        {
+          id: "front-windshield-replace",
+          title: "Front Windshield OEM Glass Replacement & Bonding",
+          badge: "AIS OEM GLASS",
+          badgeColor: "#10B981",
+          timeTaken: "3 Hours",
+          warranty: "1 Year Leakage Warranty",
+          recommendedInterval: "Cracked or Chipped Windshield",
+          thumbnail: "/summer/10new.png",
+          originalPrice: Math.round(windshieldBase * 1.25),
+          basePrice: windshieldBase,
+          checklist: [
+            "AIS / Saint-Gobain OEM Certified Laminated Safety Glass",
+            "High-Tensile Polyurethane Adhesive Sealant",
+            "1-Year Water Leakage & Bonding Seal Warranty",
+            "Rear View Mirror & Fastag Precision Re-Fitment",
+          ],
+          moreCount: 2,
+          allDetails: [
+            "OEM Standard Glass with Acoustic & UV Filtering",
+            "Curing & Water Leak Test Guaranteed",
+          ],
+        },
+        {
+          id: "wiper-blade-pair",
+          title: "Bosch Aerotwin Frameless Wiper Blades (Pair)",
+          badge: "BOSCH AEROTWIN",
+          badgeColor: "#E2001A",
+          timeTaken: "20 Mins",
+          warranty: "Streak-Free Guarantee",
+          recommendedInterval: "Before Monsoon or Every 12 Months",
+          thumbnail: "/summer/10new.png",
+          originalPrice: Math.round(wiperBase * 1.3),
+          basePrice: wiperBase,
+          checklist: [
+            "Genuine Bosch Aerotwin Dual-Rubber Blades",
+            "Streak-Free & Silent All-Weather Wiping",
+            "Free Installation & Washer Jet Calibration",
+            "Windshield Washer Reservoir Fluid Top-Up",
+          ],
+          moreCount: 2,
+          allDetails: [
+            "Aerodynamic Spoiler for High-Speed Performance",
+            "Precision Cut Natural Rubber with Graphite Coating",
+          ],
+        },
+        {
+          id: "headlight-restoration",
+          title: "Headlight De-Yellowing & UV Clarity Restoration",
+          badge: "NIGHT VISION",
+          badgeColor: "#F59E0B",
+          timeTaken: "1 Hour",
+          warranty: "6 Months Clarity Warranty",
+          recommendedInterval: "Foggy, Yellowed or Dull Headlights",
+          thumbnail: "/summer/10new.png",
+          originalPrice: Math.round(headlightBase * 1.35),
+          basePrice: headlightBase,
+          checklist: [
+            "Multi-Stage Wet Sanding of Oxidation Layer",
+            "Rotary Optical Lens Compounding & Polish",
+            "UV Shield Clear Polymer Sealant Coating",
+            "30%+ Improved Night Driving Beam Throw",
+          ],
+          moreCount: 2,
+          allDetails: [
+            "Restores 95%+ of Original Lens Clarity",
+            "Prevents Fast Re-Yellowing from Sun Exposure",
+          ],
+        },
+      ],
+    },
+  ];
+
+  // 12. INSURANCE CLAIMS
+  const insurancePackages: ServiceCategorySection[] = [
+    {
+      sectionTitle: "Insurance Claims & Accidental Repair",
+      packages: [
+        {
+          id: "cashless-claim-assistance",
+          title: "Cashless Accidental Insurance Claim & Survey Assistance",
+          badge: "ZERO DEPOSIT",
+          badgeColor: "#10B981",
+          timeTaken: "Same Day Intimation",
+          warranty: "Seamless Claim Processing",
+          recommendedInterval: "Post-Accident Damage or Dents",
+          thumbnail: "/summer/denting1.svg",
+          originalPrice: 1500,
+          basePrice: 0,
+          checklist: [
+            "100% Cashless Tie-ups with All Major Insurance Companies",
+            "Digital Claim Registration & On-Site Surveyor Coordination",
+            "Genuine Bosch OEM Parts Replacement",
+            "Zero Deductible Advice & Claim Assistance",
+          ],
+          moreCount: 3,
+          allDetails: [
+            "End-to-end documentation & claim filing",
+            "Surveyor assessment & digital approval follow-up",
+            "Quality paint booth finishing with color match warranty",
+          ],
+        },
+        {
+          id: "accidental-damage-assessment",
+          title: "Accidental Damage Repair & Structural Alignment",
+          badge: "CERTIFIED REPAIR",
+          badgeColor: "#E2001A",
+          timeTaken: "2 - 5 Days",
+          warranty: "OEM Structural Warranty",
+          recommendedInterval: "Structural or Body Impact",
+          thumbnail: "/summer/denting1.svg",
+          originalPrice: 2500,
+          basePrice: 1500,
+          checklist: [
+            "Laser Chassis Measurement & Alignment Inspection",
+            "Internal Mechanical & Suspension Impact Assessment",
+            "Itemized Surveyor Repair & Parts Cost Estimate",
+            "Free Inspection Waiver with Claim Execution",
+          ],
+          moreCount: 2,
+          allDetails: [
+            "Full structural integrity inspection",
+            "Complete repair estimate with genuine part numbers",
+          ],
+        },
+      ],
+    },
+  ];
+
   return {
     "car-services": [{ sectionTitle: "Service Packages", packages: scheduledPackages }],
     "ac-service": acPackages,
-    "denting-painting": dentingPackages,
-    "suspension-fitments": suspensionPackages,
+    "batteries": batteryPackages,
     "tyres-wheel": tyresPackages,
     "tyres": tyresPackages,
+    "denting-painting": dentingPackages,
+    "detailing": detailingPackages,
+    "car-spa": carSpaPackages,
     "car-inspections": inspectionPackages,
     "inspection": inspectionPackages,
+    "windshield-glass": windshieldPackages,
+    "suspension-fitments": suspensionPackages,
     "clutch-body": clutchPackages,
-    "car-spa": carSpaPackages,
+    "insurance-claims": insurancePackages,
   };
 }

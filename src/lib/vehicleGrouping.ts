@@ -100,8 +100,8 @@ export const BOSCH_SEGMENTS: Record<BoschSegmentId, BoschVehicleSegment> = {
     title: "Luxury Premium",
     shortLabel: "Premium Luxury",
     description: "All Mercedes-Benz, BMW, Audi, Range Rover, Land Rover, Jaguar, Porsche, Volvo",
-    badgeBg: "rgba(226, 0, 26, 0.12)",
-    badgeText: "#E2001A",
+    badgeBg: "rgba(0, 142, 207, 0.12)",
+    badgeText: "#008ECF",
   },
 };
 

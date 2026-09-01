@@ -96,7 +96,7 @@ export function CategoryCard({
         style={{
           fontSize: 14,
           fontWeight: 600,
-          color: isSelected ? "#E2001A" : "#1a1a1a",
+          color: isSelected ? "#008ECF" : "#1a1a1a",
           textAlign: "center",
           lineHeight: 1.25,
           display: "-webkit-box",

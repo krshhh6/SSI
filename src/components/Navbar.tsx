@@ -50,7 +50,7 @@ const MENU_ITEMS: MenuItem[] = [
       {
         title: "Periodic Maintenance",
         description: "Comprehensive oil, filter, and multi-point inspections",
-        icon: <MaterialSymbol name="build" size={17} fill color="#E2001A" />,
+        icon: <MaterialSymbol name="build" size={17} fill color="#008ECF" />,
         url: "/services/car-services",
       },
       {
@@ -80,7 +80,7 @@ const MENU_ITEMS: MenuItem[] = [
       {
         title: "Bosch Advantage",
         description: "Why SAM Wheels Bosch certified workshop leads the industry",
-        icon: <MaterialSymbol name="verified" size={17} fill color="#E2001A" />,
+        icon: <MaterialSymbol name="verified" size={17} fill color="#008ECF" />,
         url: "/bosch-advantage",
       },
       {
@@ -92,7 +92,7 @@ const MENU_ITEMS: MenuItem[] = [
       {
         title: "Booking Guide",
         description: "Simple step-by-step appointment & doorstep pickup",
-        icon: <MaterialSymbol name="calendar_month" size={17} fill color="#E2001A" />,
+        icon: <MaterialSymbol name="calendar_month" size={17} fill color="#008ECF" />,
         url: "/booking",
       },
       {
@@ -248,7 +248,7 @@ export default function Navbar() {
               <span style={{
                 fontSize: '0.66rem',
                 fontWeight: 700,
-                color: '#E2001A',
+                color: '#008ECF',
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 whiteSpace: 'nowrap',
@@ -285,7 +285,7 @@ export default function Navbar() {
                       gap: 4,
                       fontSize: '0.87rem',
                       fontWeight: isItemActive ? 700 : 600,
-                      color: isItemActive ? '#E2001A' : (isOpen ? 'var(--text)' : 'var(--text-secondary)'),
+                      color: isItemActive ? '#008ECF' : (isOpen ? 'var(--text)' : 'var(--text-secondary)'),
                       padding: '7px 13px',
                       background: isOpen ? 'var(--border)' : 'transparent',
                       border: 0,
@@ -300,13 +300,13 @@ export default function Navbar() {
                     }}
                     onMouseEnter={(e) => {
                       const el = e.currentTarget;
-                      el.style.color = isItemActive ? '#E2001A' : 'var(--text)';
+                      el.style.color = isItemActive ? '#008ECF' : 'var(--text)';
                       el.style.background = 'var(--border)';
                     }}
                     onMouseLeave={(e) => {
                       const el = e.currentTarget;
                       if (!isOpen) {
-                        el.style.color = isItemActive ? '#E2001A' : 'var(--text-secondary)';
+                        el.style.color = isItemActive ? '#008ECF' : 'var(--text-secondary)';
                         el.style.background = 'transparent';
                       }
                     }}
@@ -335,7 +335,7 @@ export default function Navbar() {
                           right: 10,
                           height: 2,
                           borderRadius: 2,
-                          background: '#E2001A',
+                          background: '#008ECF',
                         }}
                         transition={{
                           type: 'spring',
@@ -435,7 +435,7 @@ export default function Navbar() {
                   style={{
                     fontSize: '0.87rem',
                     fontWeight: isItemActive ? 700 : 600,
-                    color: isItemActive ? '#E2001A' : 'var(--text-secondary)',
+                    color: isItemActive ? '#008ECF' : 'var(--text-secondary)',
                     textDecoration: 'none',
                     padding: '7px 13px',
                     borderRadius: 8,
@@ -451,12 +451,12 @@ export default function Navbar() {
                   }}
                   onMouseEnter={(e) => {
                     const el = e.currentTarget as HTMLElement;
-                    el.style.color = isItemActive ? '#E2001A' : 'var(--text)';
+                    el.style.color = isItemActive ? '#008ECF' : 'var(--text)';
                     el.style.background = 'var(--border)';
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget as HTMLElement;
-                    el.style.color = isItemActive ? '#E2001A' : 'var(--text-secondary)';
+                    el.style.color = isItemActive ? '#008ECF' : 'var(--text-secondary)';
                     el.style.background = 'transparent';
                   }}
                 >
@@ -473,7 +473,7 @@ export default function Navbar() {
                         right: 10,
                         height: 2,
                         borderRadius: 2,
-                        background: '#E2001A',
+                        background: '#008ECF',
                       }}
                       transition={{
                         type: 'spring',
@@ -667,7 +667,7 @@ export default function Navbar() {
           <Link
             href={user ? "/my-bookings" : "/sign-in"}
             aria-label={user ? "Account" : "Sign In"}
-            style={{ width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: user ? '#E2001A' : 'var(--text)', background: 'transparent', border: 0, textDecoration: 'none' }}
+            style={{ width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: user ? '#008ECF' : 'var(--text)', background: 'transparent', border: 0, textDecoration: 'none' }}
           >
             <MaterialSymbol name="account_circle" size={22} fill={Boolean(user)} />
           </Link>
@@ -679,7 +679,7 @@ export default function Navbar() {
             style={{
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'linear-gradient(180deg, #E81A2F 0%, #C40016 100%)',
+              background: 'linear-gradient(135deg, #005691 0%, #008ECF 100%)',
               color: '#ffffff',
               border: 'none',
               outline: 'none',
@@ -690,7 +690,7 @@ export default function Navbar() {
               textDecoration: 'none',
               height: 31,
               whiteSpace: 'nowrap',
-              boxShadow: '0 2px 8px rgba(226,0,26,0.3)',
+              boxShadow: '0 2px 8px rgba(0, 142, 207, 0.35)',
             }}
           >
             Book
@@ -776,7 +776,7 @@ export default function Navbar() {
                           BOSCH CAR SERVICE
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
-                          <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#E2001A', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                          <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#008ECF', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                             SAM WHEELS
                           </span>
                           <span style={{ width: 3, height: 3, borderRadius: '50%', background: '#CBD5E1' }} />
@@ -809,12 +809,12 @@ export default function Navbar() {
                                     padding: '12px 0',
                                     fontSize: '1.02rem',
                                     fontWeight: 700,
-                                    color: isCurrent ? '#E2001A' : '#0F172A',
+                                    color: isCurrent ? '#008ECF' : '#0F172A',
                                     fontFamily: 'Outfit, sans-serif',
                                   }}
                                 >
                                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                                    {isCurrent && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#E2001A' }} />}
+                                    {isCurrent && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#008ECF' }} />}
                                     <span>{item.title}</span>
                                   </div>
                                 </AccordionTrigger>
@@ -830,8 +830,8 @@ export default function Navbar() {
                                           borderRadius: 8,
                                           padding: '8px 10px',
                                           textDecoration: 'none',
-                                          background: pathname === subItem.url ? 'rgba(226, 0, 26, 0.06)' : '#F8FAFC',
-                                          border: `1px solid ${pathname === subItem.url ? 'rgba(226, 0, 26, 0.25)' : '#E2E8F0'}`,
+                                          background: pathname === subItem.url ? 'rgba(0, 142, 207, 0.06)' : '#F8FAFC',
+                                          border: `1px solid ${pathname === subItem.url ? 'rgba(0, 142, 207, 0.25)' : '#E2E8F0'}`,
                                           transition: 'all 0.18s ease',
                                         }}
                                         href={subItem.url}
@@ -848,7 +848,7 @@ export default function Navbar() {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             flexShrink: 0,
-                                            color: '#E2001A',
+                                            color: '#008ECF',
                                           }}
                                         >
                                           {subItem.icon}
@@ -886,7 +886,7 @@ export default function Navbar() {
                             style={{
                               fontSize: '1.02rem',
                               fontWeight: 700,
-                              color: isCurrent ? '#E2001A' : '#0F172A',
+                              color: isCurrent ? '#008ECF' : '#0F172A',
                               fontFamily: 'Outfit, sans-serif',
                               padding: '12px 0',
                               textDecoration: 'none',
@@ -896,7 +896,7 @@ export default function Navbar() {
                               transition: 'color 0.18s ease',
                             }}
                           >
-                            {isCurrent && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#E2001A' }} />}
+                            {isCurrent && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#008ECF' }} />}
                             <span>{item.title}</span>
                           </Link>
                         </motion.div>
@@ -996,13 +996,13 @@ export default function Navbar() {
                           alignItems: 'center',
                           justifyContent: 'center',
                           gap: 6,
-                          border: '1px solid rgba(226, 0, 26, 0.25)',
-                          color: '#E2001A',
+                          border: '1px solid rgba(0, 142, 207, 0.25)',
+                          color: '#008ECF',
                           borderRadius: 8,
                           height: 40,
                           fontSize: '0.82rem',
                           fontWeight: 700,
-                          background: 'rgba(226, 0, 26, 0.06)',
+                          background: 'rgba(0, 142, 207, 0.06)',
                           cursor: 'pointer',
                         }}
                       >
@@ -1043,14 +1043,14 @@ export default function Navbar() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: 8,
-                      background: '#E2001A',
+                      background: 'linear-gradient(135deg, #005691 0%, #008ECF 100%)',
                       color: '#ffffff',
                       borderRadius: 8,
                       height: 42,
                       fontSize: '0.86rem',
                       fontWeight: 800,
                       textDecoration: 'none',
-                      boxShadow: '0 4px 16px rgba(226, 0, 26, 0.28)',
+                      boxShadow: '0 4px 16px rgba(0, 142, 207, 0.35)',
                       letterSpacing: '0.01em',
                     }}
                   >

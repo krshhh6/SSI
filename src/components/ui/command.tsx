@@ -47,7 +47,7 @@ const CommandInput = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
   <div className="flex items-center border border-neutral-200 rounded-xl px-4 py-2 mb-4 bg-white relative shadow-sm" cmdk-input-wrapper="">
-    <MagnifyingGlassIcon width={20} height={20} className="me-3 text-[#E2001A] shrink-0" />
+    <MagnifyingGlassIcon width={20} height={20} className="me-3 text-[#008ECF] shrink-0" />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
@@ -118,7 +118,7 @@ const CommandItem = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-pointer select-none items-center gap-3 rounded-lg px-3.5 py-2.5 mb-1 text-[14.5px] font-semibold leading-relaxed text-neutral-800 outline-none transition-all duration-150 ease-out data-[disabled=true]:pointer-events-none data-[selected=true]:pl-5 data-[selected=true]:bg-[#fdeaea] data-[selected=true]:text-[#E2001A] hover:pl-5 hover:bg-[#fdeaea] hover:text-[#E2001A] active:scale-[0.98] data-[disabled=true]:opacity-50",
+      "relative flex cursor-pointer select-none items-center gap-3 rounded-lg px-3.5 py-2.5 mb-1 text-[14.5px] font-semibold leading-relaxed text-neutral-800 outline-none transition-all duration-150 ease-out data-[disabled=true]:pointer-events-none data-[selected=true]:pl-5 data-[selected=true]:bg-[rgba(0,142,207,0.08)] data-[selected=true]:text-[#008ECF] hover:pl-5 hover:bg-[rgba(0,142,207,0.08)] hover:text-[#008ECF] active:scale-[0.98] data-[disabled=true]:opacity-50",
       className,
     )}
     {...props}

@@ -191,12 +191,12 @@ export default function Footer() {
                 gap: 8,
                 padding: "7px 14px",
                 borderRadius: 8,
-                border: "1px solid rgba(226, 0, 26, 0.25)",
-                background: "rgba(226, 0, 26, 0.05)",
+                border: "1px solid rgba(0, 142, 207, 0.25)",
+                background: "rgba(0, 142, 207, 0.08)",
                 marginBottom: 24,
               }}
             >
-              <MaterialSymbol name="verified" size={16} fill color="#E2001A" />
+              <MaterialSymbol name="verified" size={16} fill color="#008ECF" />
               <span style={{ fontSize: "0.76rem", fontWeight: 800, color: "var(--text)", letterSpacing: "0.04em" }}>
                 Bosch Authorized Car Service
               </span>

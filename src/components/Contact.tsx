@@ -90,7 +90,7 @@ export default function Contact() {
                   fontSize: "0.72rem",
                   fontWeight: 800,
                   letterSpacing: "0.1em",
-                  color: "#E2001A",
+                  color: "#008ECF",
                   textTransform: "uppercase",
                 }}>
                   BOSCH AUTHORIZED WORKSHOP
@@ -126,15 +126,15 @@ export default function Contact() {
                   style={{
                     width: 38, height: 38,
                     borderRadius: 10,
-                    background: "rgba(226, 0, 26, 0.08)",
-                    border: "1px solid rgba(226, 0, 26, 0.18)",
+                    background: "rgba(0, 142, 207, 0.08)",
+                    border: "1px solid rgba(0, 142, 207, 0.2)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     flexShrink: 0,
                   }}
                 >
-                  <MaterialSymbol name="location_on" size={20} fill color="#E2001A" />
+                  <MaterialSymbol name="location_on" size={20} fill color="#008ECF" />
                 </div>
                 <div>
                   <div style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", color: "var(--text-muted)", textTransform: "uppercase", marginBottom: 4 }}>Workshop Address</div>
@@ -336,7 +336,7 @@ export default function Contact() {
                   boxShadow: "0 6px 18px rgba(0, 0, 0, 0.1)",
                 }}
               >
-                <MaterialSymbol name="location_on" size={18} fill color="#E2001A" />
+                <MaterialSymbol name="location_on" size={18} fill color="#008ECF" />
                 <div>
                   <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--text)" }}>
                     SAM Wheels · Bosch Car Service

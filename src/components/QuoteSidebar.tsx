@@ -147,7 +147,7 @@ export default function QuoteSidebar({
                   border: "1px solid #e5e7eb",
                 }}
               >
-                <MapPin size={16} color="#E2001A" />
+                <MapPin size={16} color="#008ECF" />
                 <select
                   value={selectedCity}
                   onChange={(e) => setSelectedCity(e.target.value)}
@@ -188,8 +188,8 @@ export default function QuoteSidebar({
                 justifyContent: "space-between",
                 padding: "11px 14px",
                 borderRadius: 6,
-                background: selectedCar ? "rgba(226, 0, 26, 0.05)" : "#f9fafb",
-                border: selectedCar ? "1.5px solid #E2001A" : "1px solid #e5e7eb",
+                background: selectedCar ? "rgba(0, 142, 207, 0.08)" : "#f9fafb",
+                border: selectedCar ? "1.5px solid #008ECF" : "1px solid #e5e7eb",
                 color: "#1a1a1a",
                 cursor: "pointer",
                 textAlign: "left",
@@ -198,7 +198,7 @@ export default function QuoteSidebar({
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 8, overflow: "hidden" }}>
-                <Car size={16} color="#E2001A" style={{ flexShrink: 0 }} />
+                <Car size={16} color="#008ECF" style={{ flexShrink: 0 }} />
                 <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
                   <span style={{ fontSize: "0.85rem", fontWeight: selectedCar ? 800 : 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                     {selectedCar ? `${selectedCar.brand} ${selectedCar.model}` : "SELECT YOUR CAR"}
@@ -263,7 +263,7 @@ export default function QuoteSidebar({
                 height: 44,
                 padding: "0 14px",
                 borderRadius: 8,
-                background: "#E2001A",
+                background: "linear-gradient(135deg, #005691 0%, #008ECF 100%)",
                 color: "#ffffff",
                 border: "none",
                 cursor: loadingSubmit ? "wait" : "pointer",
@@ -272,7 +272,7 @@ export default function QuoteSidebar({
                 fontWeight: 800,
                 letterSpacing: "0.04em",
                 textTransform: "uppercase",
-                boxShadow: "0 6px 20px rgba(226, 0, 26, 0.3)",
+                boxShadow: "0 6px 20px rgba(0, 142, 207, 0.35)",
                 marginTop: 4,
                 display: "flex",
                 alignItems: "center",

@@ -64,7 +64,7 @@ const ARTICLES = [
     subtitle: "How computerized color matching and dust-free booths bring back your car's showroom look.",
     readTime: "4 min read",
     date: "June 20, 2026",
-    color: "#E2001A",
+    color: "#008ECF",
     icon: Paintbrush,
     summary: "Dents and paint scratches compromise your car's aesthetics and expose the underlying steel to rust. Learn how factory-grade paint matching restores a seamless, mirror-like finish.",
     sections: [

@@ -869,7 +869,7 @@ export default function AdminClient() {
                               </span>
                             </td>
                             <td style={{ padding: "15px 20px" }}>
-                              <span style={{ padding: "4px 10px", borderRadius: 100, fontSize: "0.72rem", fontWeight: 700, background: u.role === "admin" ? "rgba(226,0,26,0.12)" : "rgba(37,99,235,0.08)", color: u.role === "admin" ? "#E2001A" : "#2563EB", textTransform: "uppercase" }}>
+                              <span style={{ padding: "4px 10px", borderRadius: 100, fontSize: "0.72rem", fontWeight: 700, background: u.role === "admin" ? "rgba(0,142,207,0.12)" : "rgba(37,99,235,0.08)", color: u.role === "admin" ? "#008ECF" : "#2563EB", textTransform: "uppercase" }}>
                                 {u.role || "user"}
                               </span>
                             </td>

@@ -1793,7 +1793,7 @@ interface ViewingPackage {
                   }}
                   style={{
                     position: "relative",
-                    background: isActive ? "#E2001A" : "transparent",
+                    background: isActive ? "linear-gradient(135deg, #005691 0%, #008ECF 100%)" : "transparent",
                     border: "none",
                     padding: "6px 14px",
                     borderRadius: 8,
@@ -1803,7 +1803,7 @@ interface ViewingPackage {
                     cursor: "pointer",
                     whiteSpace: "nowrap",
                     transition: "all 0.2s ease",
-                    boxShadow: isActive ? "0 4px 12px rgba(226, 0, 26, 0.35)" : "none",
+                    boxShadow: isActive ? "0 4px 12px rgba(0, 142, 207, 0.35)" : "none",
                   }}
                   onMouseEnter={(e) => {
                     if (!isActive) {
@@ -1857,7 +1857,7 @@ interface ViewingPackage {
               fontSize: "0.72rem",
               fontWeight: 800,
               letterSpacing: "0.12em",
-              color: "#E2001A",
+              color: "#008ECF",
               textTransform: "uppercase",
               marginBottom: 6,
             }}
@@ -1876,7 +1876,7 @@ interface ViewingPackage {
             }}
           >
             Car Services Available In{" "}
-            <span style={{ color: "#E2001A" }}>{selectedCity}</span>
+            <span style={{ color: "#008ECF" }}>{selectedCity}</span>
           </h2>
           <p
             style={{
@@ -1923,7 +1923,7 @@ interface ViewingPackage {
                           style={{
                             background: "none",
                             border: "none",
-                            color: "#E2001A",
+                            color: "#008ECF",
                             fontWeight: 700,
                             fontSize: "0.88rem",
                             cursor: "pointer",
@@ -1944,13 +1944,13 @@ interface ViewingPackage {
                         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                           <div
                             style={{
-                              background: "rgba(226, 0, 26, 0.08)",
-                              border: "1px solid rgba(226, 0, 26, 0.2)",
+                              background: "rgba(0, 142, 207, 0.08)",
+                              border: "1px solid rgba(0, 142, 207, 0.25)",
                               borderRadius: 100,
                               padding: "6px 14px",
                               fontSize: "0.82rem",
                               fontWeight: 800,
-                              color: "#E2001A",
+                              color: "#008ECF",
                               display: "flex",
                               alignItems: "center",
                               gap: 6,
@@ -1978,7 +1978,7 @@ interface ViewingPackage {
                         <button
                           onClick={() => setIsCarModalOpen(true)}
                           style={{
-                            background: "#E2001A",
+                            background: "linear-gradient(135deg, #005691 0%, #008ECF 100%)",
                             color: "#ffffff",
                             border: "none",
                             borderRadius: 100,
@@ -2029,8 +2029,8 @@ interface ViewingPackage {
                                 width: 44,
                                 height: 44,
                                 borderRadius: "50%",
-                                border: "3.5px solid rgba(226, 0, 26, 0.15)",
-                                borderTopColor: "#E2001A",
+                                border: "3.5px solid rgba(0, 142, 207, 0.15)",
+                                borderTopColor: "#008ECF",
                               }}
                             />
                             <span style={{ fontSize: "0.9rem", fontWeight: 800, color: "#111827", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -2198,7 +2198,7 @@ interface ViewingPackage {
                                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                                     <span style={{ fontSize: "1.2rem" }}>☀️</span>
                                     <span style={{ fontSize: "0.86rem", color: "var(--text)", fontWeight: 700 }}>
-                                      Get at <strong style={{ color: "#E2001A", fontSize: "1rem" }}>₹ {pkg.summerPrice}</strong>
+                                      Get at <strong style={{ color: "#008ECF", fontSize: "1rem" }}>₹ {pkg.summerPrice}</strong>
                                     </span>
                                   </div>
                                   <span
@@ -2249,9 +2249,9 @@ interface ViewingPackage {
                           }}
                           style={{
                             position: "relative",
-                            background: isSelected ? "rgba(226,0,26,0.06)" : "var(--card)",
-                            border: isSelected ? "1.5px solid #E2001A" : "1px solid var(--border)",
-                            boxShadow: isSelected ? "0 6px 16px rgba(226,0,26,0.12)" : "0 2px 8px rgba(0,0,0,0.03)",
+                            background: isSelected ? "rgba(0, 142, 207, 0.06)" : "var(--card)",
+                            border: isSelected ? "1.5px solid #008ECF" : "1px solid var(--border)",
+                            boxShadow: isSelected ? "0 6px 16px rgba(0, 142, 207, 0.15)" : "0 2px 8px rgba(0,0,0,0.03)",
                             borderRadius: 12,
                             padding: "16px 10px",
                             display: "flex",
@@ -2334,7 +2334,7 @@ interface ViewingPackage {
                 {/* Miles Roadside Assistance Red Promo Banner */}
                 <div
                   style={{
-                    background: "linear-gradient(135deg, #E2001A 0%, #B30014 100%)",
+                    background: "linear-gradient(135deg, #005691 0%, #008ECF 100%)",
                     borderRadius: 14,
                     padding: "16px 20px",
                     color: "white",
@@ -2342,7 +2342,7 @@ interface ViewingPackage {
                     alignItems: "center",
                     justifyContent: "space-between",
                     gap: 12,
-                    boxShadow: "0 8px 24px rgba(226, 0, 26, 0.25)",
+                    boxShadow: "0 8px 24px rgba(0, 142, 207, 0.3)",
                     position: "relative",
                     overflow: "hidden",
                   }}
@@ -2367,7 +2367,7 @@ interface ViewingPackage {
                       height: 40,
                       borderRadius: "50%",
                       background: "white",
-                      color: "#E2001A",
+                      color: "#008ECF",
                       border: "none",
                       display: "flex",
                       alignItems: "center",
@@ -2390,7 +2390,7 @@ interface ViewingPackage {
                     </h3>
                     <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                       <motion.button
-                        whileHover={{ scale: 1.08, background: "#E2001A", color: "#ffffff", borderColor: "#E2001A" }}
+                        whileHover={{ scale: 1.08, background: "#008ECF", color: "#ffffff", borderColor: "#008ECF" }}
                         whileTap={{ scale: 0.92 }}
                         onClick={() => {
                           prevCurated();
@@ -2417,7 +2417,7 @@ interface ViewingPackage {
                         <ChevronLeft size={16} />
                       </motion.button>
                       <motion.button
-                        whileHover={{ scale: 1.08, background: "#E2001A", color: "#ffffff", borderColor: "#E2001A" }}
+                        whileHover={{ scale: 1.08, background: "#008ECF", color: "#ffffff", borderColor: "#008ECF" }}
                         whileTap={{ scale: 0.92 }}
                         onClick={() => {
                           nextCurated();
@@ -2496,7 +2496,7 @@ interface ViewingPackage {
                                   position: "absolute",
                                   top: 6,
                                   right: 6,
-                                  background: item.badge === "SALE" ? "#E2001A" : item.badge === "POPULAR" ? "#FF8800" : "#10B981",
+                                  background: item.badge === "SALE" ? "#008ECF" : item.badge === "POPULAR" ? "#FF8800" : "#10B981",
                                   color: "white",
                                   fontSize: "0.55rem",
                                   fontWeight: 800,
@@ -2553,7 +2553,7 @@ interface ViewingPackage {
                     </h3>
                     <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                       <motion.button
-                        whileHover={{ scale: 1.08, background: "#E2001A", color: "#ffffff", borderColor: "#E2001A" }}
+                        whileHover={{ scale: 1.08, background: "#008ECF", color: "#ffffff", borderColor: "#008ECF" }}
                         whileTap={{ scale: 0.92 }}
                         onClick={() => {
                           prevSummer();
@@ -2580,7 +2580,7 @@ interface ViewingPackage {
                         <ChevronLeft size={16} />
                       </motion.button>
                       <motion.button
-                        whileHover={{ scale: 1.08, background: "#E2001A", color: "#ffffff", borderColor: "#E2001A" }}
+                        whileHover={{ scale: 1.08, background: "#008ECF", color: "#ffffff", borderColor: "#008ECF" }}
                         whileTap={{ scale: 0.92 }}
                         onClick={() => {
                           nextSummer();
@@ -2754,7 +2754,7 @@ interface ViewingPackage {
                             position: "absolute",
                             top: 8,
                             right: 8,
-                            background: item.badge === "SALE" ? "#E2001A" : item.badge === "POPULAR" ? "#FF8800" : "#10B981",
+                            background: item.badge === "SALE" ? "#008ECF" : item.badge === "POPULAR" ? "#FF8800" : "#10B981",
                             color: "white",
                             fontSize: "0.6rem",
                             fontWeight: 800,
@@ -2862,7 +2862,7 @@ interface ViewingPackage {
                             position: "absolute",
                             top: 8,
                             right: 8,
-                            background: "#E2001A",
+                            background: "#008ECF",
                             color: "white",
                             fontSize: "0.6rem",
                             fontWeight: 800,
@@ -2927,8 +2927,8 @@ interface ViewingPackage {
                           width: 36,
                           height: 36,
                           borderRadius: 8,
-                          background: "rgba(226, 0, 26, 0.1)",
-                          color: "#E2001A",
+                          background: "rgba(0, 142, 207, 0.1)",
+                          color: "#008ECF",
                           fontWeight: 900,
                           fontSize: "0.95rem",
                           display: "flex",
@@ -2990,7 +2990,7 @@ interface ViewingPackage {
                         gap: 8,
                       }}
                     >
-                      <MaterialSymbol name="directions_car" size={20} color="#E2001A" fill />
+                      <MaterialSymbol name="directions_car" size={20} color="#008ECF" fill />
                       {selectedCar
                         ? "Selected Model"
                         : sidebarBrand
@@ -3004,7 +3004,7 @@ interface ViewingPackage {
                           setSidebarBrand("");
                           setModelSearchQuery("");
                         }}
-                        style={{ background: "none", border: "none", color: "#E2001A", fontWeight: 800, fontSize: "0.8rem", cursor: "pointer" }}
+                        style={{ background: "none", border: "none", color: "#008ECF", fontWeight: 800, fontSize: "0.8rem", cursor: "pointer" }}
                       >
                         Change
                       </button>
@@ -3014,7 +3014,7 @@ interface ViewingPackage {
                           setSidebarBrand("");
                           setModelSearchQuery("");
                         }}
-                        style={{ background: "none", border: "none", color: "#E2001A", fontWeight: 700, fontSize: "0.78rem", cursor: "pointer" }}
+                        style={{ background: "none", border: "none", color: "#008ECF", fontWeight: 700, fontSize: "0.78rem", cursor: "pointer" }}
                       >
                         ← Brands
                       </button>
@@ -3110,7 +3110,7 @@ interface ViewingPackage {
                                     transition: "all 0.15s ease",
                                   }}
                                   onMouseEnter={(e) => {
-                                    e.currentTarget.style.borderColor = "#E2001A";
+                                    e.currentTarget.style.borderColor = "#008ECF";
                                   }}
                                   onMouseLeave={(e) => {
                                     e.currentTarget.style.borderColor = "var(--border)";
@@ -3140,8 +3140,8 @@ interface ViewingPackage {
                   ) : (
                     /* STEP 3: Booking Form & Instant Price / Callback Request */
                     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                      <div style={{ background: "rgba(226, 0, 26, 0.06)", border: "1px solid rgba(226, 0, 26, 0.18)", borderRadius: 12, padding: "14px", display: "flex", alignItems: "center", gap: 10 }}>
-                        <MaterialSymbol name="check_circle" size={22} color="#E2001A" fill />
+                      <div style={{ background: "rgba(0, 142, 207, 0.06)", border: "1px solid rgba(0, 142, 207, 0.22)", borderRadius: 12, padding: "14px", display: "flex", alignItems: "center", gap: 10 }}>
+                        <MaterialSymbol name="check_circle" size={22} color="#008ECF" fill />
                         <div>
                           <div style={{ fontSize: "0.9rem", fontWeight: 900, color: "var(--text)" }}>{selectedCar.brand} {selectedCar.model}</div>
                           <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600 }}>
@@ -3177,13 +3177,13 @@ interface ViewingPackage {
                           width: "100%",
                           padding: "14px",
                           borderRadius: 8,
-                          background: "#E2001A",
+                          background: "linear-gradient(135deg, #005691 0%, #008ECF 100%)",
                           color: "white",
                           border: "none",
                           fontWeight: 900,
                           fontSize: "0.92rem",
                           cursor: (loadingSubmit || isPriceRecalculating) ? "wait" : "pointer",
-                          boxShadow: "0 4px 14px rgba(226,0,26,0.3)",
+                          boxShadow: "0 4px 14px rgba(0, 142, 207, 0.35)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
@@ -3303,13 +3303,13 @@ interface ViewingPackage {
                             width: "100%",
                             padding: "11px 16px",
                             borderRadius: 8,
-                            background: "#E2001A",
+                            background: "linear-gradient(135deg, #005691 0%, #008ECF 100%)",
                             color: "#ffffff",
                             fontSize: "0.85rem",
                             fontWeight: 800,
                             border: "none",
                             cursor: "pointer",
-                            boxShadow: "0 4px 12px rgba(226, 0, 26, 0.3)",
+                            boxShadow: "0 4px 12px rgba(0, 142, 207, 0.35)",
                           }}
                         >
                           View Custom Packages ↓
@@ -3353,7 +3353,7 @@ interface ViewingPackage {
                             border: "1px solid var(--border)",
                           }}
                         >
-                          <MaterialSymbol name="location_on" size={18} color="#E2001A" fill />
+                          <MaterialSymbol name="location_on" size={18} color="#008ECF" fill />
                           <select
                             value={selectedCity}
                             onChange={(e) => setSelectedCity(e.target.value)}
@@ -3449,7 +3449,7 @@ interface ViewingPackage {
                           height: 56,
                           padding: "0 16px",
                           borderRadius: 8,
-                          background: "#E2001A",
+                          background: "linear-gradient(135deg, #005691 0%, #008ECF 100%)",
                           color: "#ffffff",
                           border: "none",
                           cursor: (loadingSubmit || isPriceRecalculating) ? "wait" : "pointer",
@@ -3458,7 +3458,7 @@ interface ViewingPackage {
                           fontWeight: 800,
                           letterSpacing: "0.03em",
                           textTransform: "uppercase",
-                          boxShadow: "0 6px 18px rgba(226, 0, 26, 0.35)",
+                          boxShadow: "0 6px 18px rgba(0, 142, 207, 0.38)",
                           marginTop: 8,
                           display: "flex",
                           alignItems: "center",

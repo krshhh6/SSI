@@ -60,7 +60,7 @@ export default function FloatingContact() {
               width: "100%",
             }}
           >
-            {/* Call Now Button (Primary Bosch Red) */}
+            {/* Call Now Button (Bosch Cyan-Blue) */}
             <motion.a
               href="tel:+919028384499"
               whileHover={{ scale: 1.02 }}
@@ -72,14 +72,14 @@ export default function FloatingContact() {
                 gap: 6,
                 padding: "9px 15px",
                 borderRadius: 100,
-                background: "linear-gradient(180deg, #E81A2F 0%, #C40016 100%)",
+                background: "linear-gradient(135deg, #005691 0%, #008ECF 100%)",
                 color: "#ffffff",
                 fontWeight: 800,
                 fontSize: "0.8rem",
                 letterSpacing: "-0.01em",
                 textDecoration: "none",
                 flex: 1,
-                boxShadow: "0 2px 10px rgba(226, 0, 26, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.28)",
+                boxShadow: "0 2px 10px rgba(0, 142, 207, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.28)",
                 border: "1px solid rgba(255, 255, 255, 0.16)",
                 transition: "all 0.2s ease",
                 textAlign: "center",

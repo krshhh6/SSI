@@ -1616,8 +1616,8 @@ body::after {
 
 [cmdk-item][data-selected="true"],
 [cmdk-item]:hover {
-  background-color: #fdeaea !important;
-  color: #E2001A !important;
+  background-color: rgba(0, 142, 207, 0.08) !important;
+  color: #008ECF !important;
   padding-left: 16px !important;
 }
 

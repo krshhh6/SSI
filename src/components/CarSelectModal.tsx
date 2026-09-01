@@ -158,7 +158,7 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
                   marginTop: 12,
                   background: "none",
                   border: "none",
-                  color: "#E2001A",
+                  color: "#008ECF",
                   fontSize: "0.9rem",
                   fontWeight: 600,
                   cursor: "pointer",
@@ -202,16 +202,16 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
                         justifyContent: "space-between",
                         padding: "12px 16px",
                         borderRadius: 12,
-                        background: isCurrent ? "rgba(226,0,26,0.04)" : "#fafafa",
-                        border: isCurrent ? "1.5px solid #E2001A" : "1px solid #e5e7eb",
+                        background: isCurrent ? "rgba(0, 142, 207, 0.08)" : "#fafafa",
+                        border: isCurrent ? "1.5px solid #008ECF" : "1px solid #e5e7eb",
                         color: "#111827",
                         cursor: "pointer",
                         textAlign: "left",
                         transition: "all 0.15s ease",
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = "#E2001A";
-                        e.currentTarget.style.background = "rgba(226,0,26,0.02)";
+                        e.currentTarget.style.borderColor = "#008ECF";
+                        e.currentTarget.style.background = "rgba(0, 142, 207, 0.04)";
                       }}
                       onMouseLeave={(e) => {
                         if (!isCurrent) {
@@ -249,7 +249,7 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
                         >
                           {seg.shortLabel}
                         </span>
-                        {isCurrent && <Check size={18} color="#E2001A" />}
+                        {isCurrent && <Check size={18} color="#008ECF" />}
                       </div>
                     </button>
                   );

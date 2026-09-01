@@ -224,9 +224,9 @@ export default function Journey() {
               letterSpacing: "0.1em",
               textTransform: "uppercase",
               marginBottom: 12,
-              color: "#E2001A",
-              background: "rgba(226, 0, 26, 0.06)",
-              border: "1px solid rgba(226, 0, 26, 0.18)",
+              color: "#008ECF",
+              background: "rgba(0, 142, 207, 0.08)",
+              border: "1px solid rgba(0, 142, 207, 0.22)",
             }}
           >
             SEAMLESS SERVICE EXPERIENCE

@@ -14,7 +14,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     title: "Car Services",
     desc: "Periodic oil change, filter replacement & total engine health check.",
     iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/car%20service%204.png",
-    color: "#E2001A",
+    color: "#008ECF",
     badge: null,
   },
   {
@@ -94,7 +94,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     title: "Clutch & Body Parts",
     desc: "Clutch plate replacement, flywheel overhaul & body panel fitments.",
     iconUrl: "https://gomechprod.blob.core.windows.net/gomech-retail/gomechanic_assets/category_icons_new/new_icons/11new.png",
-    color: "#E2001A",
+    color: "#008ECF",
     badge: "New",
   },
   {

@@ -88,25 +88,25 @@ export default function Navbar({
         {
           title: "Periodic Maintenance",
           description: "Comprehensive oil, filter, and multi-point inspections",
-          icon: <Boxes className="size-4 text-[#E2001A]" />,
+          icon: <Boxes className="size-4 text-[#008ECF]" />,
           url: "/services/car-services",
         },
         {
           title: "AC Service & Repair",
           description: "Cooling diagnostics, refrigerant recharge & evaporator deep clean",
-          icon: <LayoutDashboard className="size-4 text-[#E2001A]" />,
+          icon: <LayoutDashboard className="size-4 text-[#008ECF]" />,
           url: "/services/ac-service",
         },
         {
           title: "Batteries & Electrical",
           description: "Genuine Bosch batteries with free testing & warranty",
-          icon: <Sparkles className="size-4 text-[#E2001A]" />,
+          icon: <Sparkles className="size-4 text-[#008ECF]" />,
           url: "/services/batteries",
         },
         {
           title: "Denting & Painting",
           description: "Grade-A paint booth, flawless color match & scratch removal",
-          icon: <Palette className="size-4 text-[#E2001A]" />,
+          icon: <Palette className="size-4 text-[#008ECF]" />,
           url: "/services/denting-painting",
         },
       ],
@@ -118,25 +118,25 @@ export default function Navbar({
         {
           title: "Bosch Advantage",
           description: "Why SAM Wheels Bosch certified workshop leads the industry",
-          icon: <Book className="size-4 text-[#E2001A]" />,
+          icon: <Book className="size-4 text-[#008ECF]" />,
           url: "/bosch-advantage",
         },
         {
           title: "About Us",
           description: "Certified technicians and advanced diagnostic equipment",
-          icon: <Users className="size-4 text-[#E2001A]" />,
+          icon: <Users className="size-4 text-[#008ECF]" />,
           url: "/why-different",
         },
         {
           title: "Booking Guide",
           description: "Simple step-by-step appointment & doorstep pickup",
-          icon: <GraduationCap className="size-4 text-[#E2001A]" />,
+          icon: <GraduationCap className="size-4 text-[#008ECF]" />,
           url: "/booking",
         },
         {
           title: "Blog & Tips",
           description: "Expert car care tips and maintenance advice",
-          icon: <History className="size-4 text-[#E2001A]" />,
+          icon: <History className="size-4 text-[#008ECF]" />,
           url: "/blog",
         },
       ],
@@ -236,7 +236,7 @@ export default function Navbar({
                                 onClick={() => setActiveDropdown(null)}
                                 className="flex items-start gap-3.5 p-2.5 rounded-xl hover:bg-white/[0.06] transition-colors no-underline group/sub"
                               >
-                                <div className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center shrink-0 mt-0.5 group-hover/sub:bg-[#E2001A]/15 transition-colors">
+                                <div className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center shrink-0 mt-0.5 group-hover/sub:bg-[#008ECF]/15 transition-colors">
                                   {subItem.icon}
                                 </div>
                                 <div className="flex flex-col min-w-0">
@@ -465,7 +465,7 @@ export default function Navbar({
                 window.location.href = "/services/car-services";
               }}
             >
-              <Boxes className="size-4 mr-2 text-[#E2001A]" />
+              <Boxes className="size-4 mr-2 text-[#008ECF]" />
               Periodic Maintenance & Comprehensive Car Service
             </CommandItem>
             <CommandItem
@@ -475,7 +475,7 @@ export default function Navbar({
                 window.location.href = "/services/ac-service";
               }}
             >
-              <LayoutDashboard className="size-4 mr-2 text-[#E2001A]" />
+              <LayoutDashboard className="size-4 mr-2 text-[#008ECF]" />
               AC Gas Recharge & Deep Evaporator Cleaning
             </CommandItem>
             <CommandItem
@@ -485,7 +485,7 @@ export default function Navbar({
                 window.location.href = "/services/batteries";
               }}
             >
-              <Sparkles className="size-4 mr-2 text-[#E2001A]" />
+              <Sparkles className="size-4 mr-2 text-[#008ECF]" />
               Bosch Genuine Battery Replacement & Electrical Check
             </CommandItem>
             <CommandItem
@@ -495,7 +495,7 @@ export default function Navbar({
                 window.location.href = "/services/denting-painting";
               }}
             >
-              <Palette className="size-4 mr-2 text-[#E2001A]" />
+              <Palette className="size-4 mr-2 text-[#008ECF]" />
               Premium Denting & Painting (Grade A Booth)
             </CommandItem>
           </CommandGroup>

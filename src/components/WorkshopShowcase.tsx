@@ -46,14 +46,14 @@ export default function WorkshopShowcase() {
               display: "inline-block",
               padding: "4px 16px",
               borderRadius: 100,
-              border: "1px solid var(--border-hover)",
-              color: "#E2001A",
+              border: "1px solid rgba(0, 142, 207, 0.22)",
+              color: "#008ECF",
               fontSize: "0.75rem",
               fontWeight: 800,
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               marginBottom: 14,
-              background: "rgba(226, 0, 26, 0.05)",
+              background: "rgba(0, 142, 207, 0.08)",
             }}
           >
             OUR WORKSHOP FACILITY
@@ -68,7 +68,7 @@ export default function WorkshopShowcase() {
               lineHeight: 1.2,
             }}
           >
-            State-Of-The-Art Bosch Workshop In <span style={{ color: "#E2001A" }}>Patna</span>
+            State-Of-The-Art Bosch Workshop In <span style={{ color: "#008ECF" }}>Patna</span>
           </h2>
           <p
             style={{
@@ -259,7 +259,7 @@ export default function WorkshopShowcase() {
                   position: "absolute",
                   top: 16,
                   left: 16,
-                  background: "rgba(226, 0, 26, 0.85)",
+                  background: "rgba(0, 142, 207, 0.9)",
                   backdropFilter: "blur(8px)",
                   color: "white",
                   fontSize: "0.72rem",
@@ -319,7 +319,7 @@ export default function WorkshopShowcase() {
                     gap: 6,
                   }}
                 >
-                  <ShieldCheck size={15} color="#E2001A" /> Bosch Certified Master Technicians
+                  <ShieldCheck size={15} color="#008ECF" /> Bosch Certified Master Technicians
                 </span>
                 <span
                   style={{

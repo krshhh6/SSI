@@ -401,7 +401,7 @@ export default function AdminClient() {
           <div style={{ width: 56, height: 56, borderRadius: 14, background: "var(--bosch-red)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", boxShadow: "0 8px 24px rgba(226,0,26,0.3)" }}>
             <Wrench size={26} color="white" />
           </div>
-          <h1 style={{ fontFamily: "Outfit, sans-serif", fontWeight: 800, fontSize: "1.75rem", color: "var(--text)", marginBottom: 4 }}>Admin Portal</h1>
+          <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: "1.75rem", color: "var(--text)", marginBottom: 4 }}>Admin Portal</h1>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.88rem" }}>SAM Wheels · Bosch Car Service</p>
         </div>
         {loginError && (
@@ -415,7 +415,7 @@ export default function AdminClient() {
           <input type="password" required value={passwordInput} onChange={e => setPasswordInput(e.target.value)} placeholder="Password"
             style={{ width: "100%", padding: "14px 16px", borderRadius: 10, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text)", fontFamily: "Inter, sans-serif", fontSize: "0.9rem", outline: "none" }} />
           <motion.button type="submit" disabled={loginLoading} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-            style={{ marginTop: 6, padding: "14px", borderRadius: 10, background: "var(--bosch-red)", color: "#ffffff", border: "none", cursor: loginLoading ? "wait" : "pointer", fontFamily: "Outfit, sans-serif", fontWeight: 700, fontSize: "0.95rem", letterSpacing: "0.04em", boxShadow: "0 6px 20px rgba(226,0,26,0.3)" }}>
+            style={{ marginTop: 6, padding: "14px", borderRadius: 10, background: "var(--bosch-red)", color: "#ffffff", border: "none", cursor: loginLoading ? "wait" : "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, fontSize: "0.95rem", letterSpacing: "0.04em", boxShadow: "0 6px 20px rgba(226,0,26,0.3)" }}>
             {loginLoading ? "Authenticating…" : "Sign In to Admin"}
           </motion.button>
         </form>
@@ -450,7 +450,7 @@ export default function AdminClient() {
               <div style={{ width: 34, height: 34, borderRadius: 10, background: "var(--bosch-red)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(226,0,26,0.3)" }}>
                 <Wrench size={18} color="white" />
               </div>
-              <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: "1rem", color: "var(--text)", letterSpacing: "0.03em" }}>SAM WHEELS</span>
+              <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: "1rem", color: "var(--text)", letterSpacing: "0.03em" }}>SAM WHEELS</span>
             </div>
           ) : (
             <div style={{ width: 34, height: 34, borderRadius: 10, background: "var(--bosch-red)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -1078,7 +1078,7 @@ export default function AdminClient() {
               style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 20, padding: 32, width: "100%", maxWidth: 540, boxShadow: "0 24px 60px rgba(0,0,0,0.2)", position: "relative" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
                 <div>
-                  <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: "1.4rem", margin: 0 }}>{selectedBooking.name}</h2>
+                  <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: "1.4rem", margin: 0 }}>{selectedBooking.name}</h2>
                   <div style={{ color: "var(--text-secondary)", fontSize: "0.85rem", marginTop: 4 }}>{selectedBooking.phone} · {selectedBooking.userEmail || "No Email"}</div>
                 </div>
                 <StatusBadge status={selectedBooking.status} size="lg" />
@@ -1314,3 +1314,4 @@ function BookingTable({ bookings, onSelect, onStatus, updatingId, onSort, SortIc
     </div>
   );
 }
+

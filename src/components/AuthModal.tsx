@@ -176,7 +176,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
 
           <h2
             style={{
-              fontFamily: "Outfit, sans-serif",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontSize: "1.6rem",
               fontWeight: 800,
               color: "var(--text)",
@@ -302,7 +302,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                 color: "white",
                 border: "none",
                 cursor: loading ? "wait" : "pointer",
-                fontFamily: "Outfit, sans-serif",
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontSize: "0.95rem",
                 fontWeight: 700,
                 boxShadow: "0 4px 16px rgba(0,102,255,0.3)",
@@ -378,3 +378,4 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
     </AnimatePresence>
   );
 }
+

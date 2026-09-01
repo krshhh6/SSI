@@ -172,7 +172,7 @@ export default function SignInClient() {
           </motion.div>
 
           {/* Heading */}
-          <h1 style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.75rem", fontWeight: 800, color: "var(--text)", textAlign: "center", marginBottom: 8, lineHeight: 1.2 }}>
+          <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "1.75rem", fontWeight: 800, color: "var(--text)", textAlign: "center", marginBottom: 8, lineHeight: 1.2 }}>
             {isSignUp ? "Create an Account" : "Welcome Back"}
           </h1>
           <p style={{ color: "var(--text-secondary)", textAlign: "center", fontSize: "0.9rem", lineHeight: 1.6, marginBottom: 28 }}>
@@ -248,7 +248,7 @@ export default function SignInClient() {
                 width: "100%", padding: "14px", borderRadius: 12,
                 background: "var(--accent)", color: "white", border: "none",
                 cursor: authLoading ? "wait" : "pointer",
-                fontFamily: "Outfit, sans-serif", fontSize: "1rem", fontWeight: 700,
+                fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "1rem", fontWeight: 700,
                 boxShadow: "0 4px 20px rgba(0,102,255,0.3)",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                 marginTop: 8,
@@ -333,3 +333,4 @@ export default function SignInClient() {
     </section>
   );
 }
+

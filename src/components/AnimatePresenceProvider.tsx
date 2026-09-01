@@ -1,18 +1,10 @@
 "use client";
-import { AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
-import PageTransition from "./PageTransition";
+import * as React from "react";
 
 export default function AnimatePresenceProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-
-  return (
-    <AnimatePresence mode="wait" initial={false}>
-      <PageTransition key={pathname}>{children}</PageTransition>
-    </AnimatePresence>
-  );
+  return <>{children}</>;
 }

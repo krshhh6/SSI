@@ -1,4 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+/* Google Material Symbols (Local Variable TTF Fonts from Downloads) */
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 100 700;
+  src: url('/fonts/material-symbols/MaterialSymbolsOutlined.ttf') format('truetype');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Material Symbols Rounded';
+  font-style: normal;
+  font-weight: 100 700;
+  src: url('/fonts/material-symbols/MaterialSymbolsRounded.ttf') format('truetype');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Material Symbols Sharp';
+  font-style: normal;
+  font-weight: 100 700;
+  src: url('/fonts/material-symbols/MaterialSymbolsSharp.ttf') format('truetype');
+  font-display: block;
+}
 
 @import "tailwindcss";
 
@@ -82,9 +107,10 @@
   --text: #111111;
   --text-secondary: #555555;
   --text-muted: #888888;
-  --glass-bg: rgba(255, 255, 255, 0.65);
-  --glass-border: rgba(255, 255, 255, 0.5);
-  --navbar-bg: rgba(255, 255, 255, 0.75);
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --navbar-bg: #FFFFFF;
+  --dropdown-bg: #FFFFFF;
   --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.03);
   --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.04);
   --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.08);
@@ -99,8 +125,8 @@
   --bg-secondary: #050505;
   --bg-hero: #101010;
   --bg-footer: #16181A;
-  --card: rgba(20, 22, 28, 0.6);
-  --card-hover: rgba(30, 33, 42, 0.85);
+  --card: rgba(20, 22, 28, 0.95);
+  --card-hover: rgba(30, 33, 42, 0.98);
   --border: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(255, 255, 255, 0.15);
   --accent: #0066FF;
@@ -111,9 +137,10 @@
   --text: #FFFFFF;
   --text-secondary: #AAAAAA;
   --text-muted: #777777;
-  --glass-bg: rgba(15, 16, 17, 0.65);
+  --glass-bg: rgba(15, 16, 17, 0.95);
   --glass-border: rgba(255, 255, 255, 0.08);
-  --navbar-bg: rgba(15, 16, 17, 0.75);
+  --navbar-bg: #11141A;
+  --dropdown-bg: #161A22;
   --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.1);
   --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
   --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.5);
@@ -199,17 +226,17 @@ body::after {
   color: white;
 }
 
-/* Typography */
+/* Typography - Preserved Homepage Style (Outfit) */
 .font-outfit {
   font-family: 'Outfit', sans-serif;
 }
 
 .display-xl {
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(3rem, 8vw, 7rem);
+  font-size: clamp(2.2rem, 3.8vw, 3.85rem);
   font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: -0.03em;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
 }
 
 .display-lg {
@@ -228,9 +255,92 @@ body::after {
   letter-spacing: -0.02em;
 }
 
+.font-jakarta {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Google Material Symbols Configurations (Outlined, Rounded, Sharp) */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  vertical-align: middle;
+  user-select: none;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-rounded {
+  font-family: 'Material Symbols Rounded' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  vertical-align: middle;
+  user-select: none;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-sharp {
+  font-family: 'Material Symbols Sharp' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  vertical-align: middle;
+  user-select: none;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-fill {
+  font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24 !important;
+}
+
+.material-symbols-bold {
+  font-variation-settings: 'FILL' 0, 'wght' 700, 'GRAD' 0, 'opsz' 24 !important;
+}
+
 /* Gradient Text */
 .gradient-text {
-  background: linear-gradient(135deg, #FFFFFF 0%, var(--accent) 50%, var(--accent-secondary) 100%);
+  background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="dark"] .gradient-text {
+  background: linear-gradient(135deg, #FFFFFF 0%, #38BDF8 60%, #0066FF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -605,19 +715,30 @@ body::after {
     display: block !important;
   }
 
-  /* Stats bar: 2-column grid on mobile */
+  /* Stats bar: 2-column grid on mobile with matte finish */
   .hero-stats {
     position: relative !important;
     bottom: auto !important;
     width: 100% !important;
     max-width: 100% !important;
-    margin: 16px 0 0 0 !important;
+    margin: 14px 0 0 0 !important;
+    background: #14171E !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+    border-radius: 12px !important;
   }
 
   .hero-stats-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 8px !important;
-    padding: 16px !important;
+    gap: 1px !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    padding: 0 !important;
+  }
+
+  .hero-stat-card {
+    background: #14171E !important;
+    padding: 12px 6px !important;
+    border: none !important;
   }
 }
 
@@ -657,8 +778,10 @@ body::after {
 
 @media (min-width: 1024px) {
   .navbar-container {
-    display: grid !important;
-    grid-template-columns: 1fr auto 1fr !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
   }
 }
 
@@ -686,8 +809,9 @@ body::after {
 /* Display Typography Mobile Scale */
 @media (max-width: 768px) {
   .display-xl {
-    font-size: clamp(2.2rem, 9vw, 3.2rem) !important;
-    line-height: 1.0 !important;
+    font-size: clamp(1.75rem, 8vw, 2.25rem) !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.02em !important;
   }
   .hero-badges-grid {
     grid-template-columns: repeat(2, 1fr) !important;
@@ -704,8 +828,8 @@ body::after {
 
 .categories-grid-container {
   display: grid !important;
-  grid-template-columns: repeat(5, 1fr) !important;
-  gap: 24px !important;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 135px), 1fr)) !important;
+  gap: 14px !important;
   width: 100% !important;
   box-sizing: border-box !important;
 }
@@ -713,18 +837,19 @@ body::after {
 .category-card-item {
   position: relative !important;
   border-radius: 12px !important;
-  padding: 20px 12px !important;
+  padding: 16px 10px !important;
   width: 100% !important;
   margin: 0 !important;
   box-sizing: border-box !important;
-  aspect-ratio: 0.9 / 1 !important;
-  min-height: 175px !important;
+  aspect-ratio: auto !important;
+  min-height: auto !important;
+  height: auto !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   text-align: center !important;
-  gap: 12px !important;
+  gap: 8px !important;
   overflow: hidden !important;
   cursor: pointer !important;
   transition: all 0.2s ease !important;
@@ -779,31 +904,31 @@ body::after {
   }
 }
 
-/* Ultra-Wide Screens (>= 1440px): 5 columns */
+/* Ultra-Wide Screens (>= 1440px): auto-fill columns */
 @media (min-width: 1440px) {
   .categories-grid-container {
     display: grid !important;
-    grid-template-columns: repeat(5, 1fr) !important;
-    gap: 24px !important;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+    gap: 16px !important;
     width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
   }
 }
 
-/* Standard Laptops & Desktop Monitors (1024px – 1439px): 4 columns */
+/* Standard Laptops & Desktop Monitors (1024px – 1439px): auto-fill columns */
 @media (min-width: 1024px) and (max-width: 1439px) {
   .categories-grid-container {
     display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 20px !important;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+    gap: 14px !important;
     width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
   }
 }
 
-/* Tablet (768px – 1023px): 3 columns, stacked form */
+/* Tablet (768px – 1023px): auto-fill columns, stacked form */
 @media (min-width: 768px) and (max-width: 1023px) {
   .gomechanic-services-layout {
     display: grid !important;
@@ -813,8 +938,8 @@ body::after {
 
   .categories-grid-container {
     display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 20px !important;
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)) !important;
+    gap: 14px !important;
     width: 100% !important;
     min-width: 0 !important;
   }
@@ -878,7 +1003,8 @@ body::after {
   font-weight: 900;
   color: var(--text);
   margin: 0;
-  font-family: Outfit, sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -0.02em;
 }
 
 .package-card-time {
@@ -1046,17 +1172,18 @@ body::after {
 
   .categories-grid-container {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 125px), 1fr)) !important;
+    gap: 10px !important;
     width: 100% !important;
     min-width: 0 !important;
   }
 
   .category-card-item {
-    aspect-ratio: 0.95 / 1 !important;
-    min-height: 140px !important;
-    padding: 16px 12px !important;
-    gap: 10px !important;
+    aspect-ratio: auto !important;
+    min-height: auto !important;
+    height: auto !important;
+    padding: 14px 8px !important;
+    gap: 6px !important;
   }
 
   .service-card__icon {
@@ -1141,8 +1268,8 @@ body::after {
 
 @media (max-width: 340px) {
   .categories-grid-container {
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 4px !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
   }
 }
 
@@ -1297,7 +1424,8 @@ body::after {
 
 .page-loader {
   color: var(--text);
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -0.03em;
   font-weight: 800; /* Premium bold font */
   font-size: clamp(32px, 5vw, 48px);
   box-sizing: content-box;
@@ -1499,5 +1627,6 @@ body::after {
   border-top: 1px solid #eeeeee !important;
   height: 0 !important;
 }
+
 
 

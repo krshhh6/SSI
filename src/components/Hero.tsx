@@ -4,22 +4,14 @@ import {
   motion,
   useScroll,
   useTransform,
-  useInView,
 } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Phone, CalendarCheck, Star, Users, Car, ShieldCheck } from "lucide-react";
+import { Phone, CalendarCheck, Star, Car, ShieldCheck } from "lucide-react";
+import MaterialSymbol from "./core/MaterialSymbol";
 import CountUp from "./ReactBits/CountUp";
-import GlareHover from "./GlareHover";
 import MagneticButton from "./MagneticButton";
-
-const TRUST_BADGES = [
-  { icon: Star, value: "4.7", label: "Google Rating", color: "#FFB800" },
-  { icon: Users, value: "535+", label: "Customer Reviews", color: "#0066FF" },
-  { icon: Car, value: "All", label: "Multi-Brand Service", color: "#00C896" },
-  { icon: ShieldCheck, value: "100%", label: "Bosch Authorized", color: "#E2001A" },
-];
 
 const STATS = [
   { target: 4.7, suffix: "★", label: "Google Rating", decimals: 1 },
@@ -36,9 +28,6 @@ export default function Hero() {
 
   // Hero scroll fade: starts at 100% full opacity on load, stays solid as you scroll, and fades out later towards services
   const heroOpacity = useTransform(scrollYProgress, [0, 0.35, 0.8], [1, 1, 0]);
-
-  const badgesRef = useRef<HTMLDivElement>(null);
-  const badgesInView = useInView(badgesRef, { once: true });
 
   return (
     <section
@@ -79,12 +68,13 @@ export default function Hero() {
         style={{
           position: "absolute",
           right: "0%",
-          top: "40%",
+          top: "47%",
           translateY: "-50%",
-          width: "45%",
-          maxWidth: 650,
-          height: "55vh",
-          minHeight: 400,
+          width: "48%",
+          maxWidth: 680,
+          height: "52vh",
+          minHeight: 380,
+          maxHeight: 520,
           opacity: heroOpacity,
           zIndex: 2,
           pointerEvents: "auto",
@@ -104,7 +94,7 @@ export default function Hero() {
           }}
         />
         <motion.div
-          animate={{ y: [0, -15, 0] }}
+          animate={{ y: [0, -12, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           style={{ position: "relative", zIndex: 2, width: "100%", height: "100%" }}
         >
@@ -135,8 +125,8 @@ export default function Hero() {
           maxWidth: 1280,
           margin: "0 auto",
           padding: "0 24px",
-          paddingTop: 100,
-          paddingBottom: 80,
+          paddingTop: 80,
+          paddingBottom: 88,
           width: "100%",
         }}
         className="hero-content"
@@ -147,50 +137,105 @@ export default function Hero() {
           animate={{ y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* Top Unified Verification & Rating Pill */}
+          {/* Top German Precision Bosch Credential Badge */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            style={{ marginBottom: 20, display: "inline-flex", alignItems: "center" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            style={{ marginBottom: 16, display: "inline-flex", alignItems: "center", maxWidth: "100%" }}
           >
             <div
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 8,
-                padding: "5px 12px 5px 10px",
-                borderRadius: 100,
-                border: "1px solid rgba(255, 255, 255, 0.14)",
-                background: "rgba(255, 255, 255, 0.05)",
-                backdropFilter: "blur(16px)",
-                WebkitBackdropFilter: "blur(16px)",
-                boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-                whiteSpace: "nowrap",
+                padding: "4px 10px 4px 5px",
+                borderRadius: 8,
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                background: "rgba(22, 25, 34, 0.95)",
+                boxShadow: "0 6px 20px -4px rgba(0, 0, 0, 0.5)",
                 maxWidth: "100%",
+                boxSizing: "border-box",
               }}
             >
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
+              {/* Official Bosch Workshop Tag */}
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
+                  background: "#E2001A",
+                  padding: "3px 7px",
+                  borderRadius: 5,
+                  flexShrink: 0,
+                }}
+              >
+                <MaterialSymbol name="verified" size={12} fill color="#FFFFFF" />
                 <span
                   style={{
-                    width: 6,
-                    height: 6,
-                    borderRadius: "50%",
-                    background: "#E2001A",
-                    boxShadow: "0 0 8px #E2001A",
-                    display: "inline-block",
-                    flexShrink: 0,
+                    fontSize: "0.66rem",
+                    fontWeight: 800,
+                    letterSpacing: "0.07em",
+                    color: "#FFFFFF",
+                    textTransform: "uppercase",
+                    fontFamily: "'Outfit', sans-serif",
+                    lineHeight: 1,
                   }}
-                />
-                <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.06em", color: "#ffffff", textTransform: "uppercase", whiteSpace: "nowrap" }}>
-                  Bosch Authorized · Patna
+                >
+                  BOSCH CERTIFIED
                 </span>
               </div>
-              <div style={{ width: 1, height: 12, background: "rgba(255, 255, 255, 0.18)", flexShrink: 0 }} />
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 4, whiteSpace: "nowrap", flexShrink: 0 }}>
-                <Star size={12} fill="#FFC107" color="#FFC107" style={{ flexShrink: 0 }} />
-                <span style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FFD54F", whiteSpace: "nowrap" }}>4.7</span>
-                <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.65)", fontWeight: 500, whiteSpace: "nowrap" }}>(535+ Reviews)</span>
+
+              {/* Patna Region Text — hidden on small mobile screens to prevent overflow */}
+              <span
+                className="hidden sm:inline"
+                style={{
+                  fontSize: "0.74rem",
+                  fontWeight: 600,
+                  color: "rgba(255, 255, 255, 0.85)",
+                  letterSpacing: "0.01em",
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Patna Workshop
+              </span>
+
+              {/* Fine hairline divider — hidden on small mobile screens */}
+              <div className="hidden sm:block" style={{ width: 1, height: 12, background: "rgba(255, 255, 255, 0.15)", flexShrink: 0 }} />
+
+              {/* Google Verified Customer Rating Lockup */}
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 5, flexShrink: 0, whiteSpace: "nowrap" }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
+                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17Z" />
+                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24Z" />
+                  <path fill="#FBBC05" d="M5.28 14.27A7.06 7.06 0 0 1 4.9 12c0-.79.14-1.56.38-2.27V6.58H1.25A11.97 11.97 0 0 0 0 12c0 1.92.45 3.74 1.25 5.42l4.03-3.15Z" />
+                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98Z" />
+                </svg>
+                <span
+                  style={{
+                    fontSize: "0.76rem",
+                    fontWeight: 800,
+                    color: "#FFFFFF",
+                    fontFamily: "'Outfit', sans-serif",
+                    lineHeight: 1,
+                  }}
+                >
+                  4.7
+                </span>
+                <span className="hidden sm:inline" style={{ color: "#F59E0B", fontSize: "0.72rem", letterSpacing: "1px", lineHeight: 1 }}>
+                  ★★★★★
+                </span>
+                <span
+                  style={{
+                    fontSize: "0.7rem",
+                    color: "rgba(255, 255, 255, 0.6)",
+                    fontWeight: 500,
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  }}
+                >
+                  (535+ Reviews)
+                </span>
               </div>
             </div>
           </motion.div>
@@ -198,12 +243,12 @@ export default function Hero() {
           {/* Headline */}
           <div
             className="display-xl"
-            style={{ maxWidth: 640, marginBottom: 12, display: "flex", flexDirection: "column" }}
+            style={{ maxWidth: 640, marginBottom: 8, display: "flex", flexDirection: "column" }}
           >
             <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
               BOSCH CERTIFIED
             </motion.span>
-            <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} style={{ color: "var(--bosch-red)", textShadow: "0 0 35px rgba(226,0,26,0.3)" }}>
+            <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} style={{ color: "var(--bosch-red)" }}>
               CAR CARE EXCELLENCE
             </motion.span>
           </div>
@@ -215,12 +260,12 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.4 }}
             style={{
               color: "rgba(255, 255, 255, 0.7)",
-              fontSize: "clamp(0.92rem, 1.4vw, 1.05rem)",
+              fontSize: "clamp(0.82rem, 1.05vw, 0.94rem)",
               fontWeight: 400,
-              marginTop: 14,
-              marginBottom: 28,
-              maxWidth: 460,
-              lineHeight: 1.6,
+              marginTop: 6,
+              marginBottom: 16,
+              maxWidth: 480,
+              lineHeight: 1.55,
             }}
           >
             Patna's premier multi-brand workshop equipped with advanced Bosch KTS diagnostics, genuine OEM parts, and certified master technicians.
@@ -231,54 +276,60 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.5 }}
-            style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}
+            style={{ display: "flex", gap: 10, flexWrap: "wrap", width: "100%", maxWidth: 380, marginBottom: 14 }}
           >
             <Link
               href="/booking"
               style={{
+                flex: "1 1 140px",
+                height: 40,
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: 8,
+                gap: 7,
                 background: "#E2001A",
                 color: "#ffffff",
-                padding: "13px 26px",
-                borderRadius: 9,
+                padding: "0 18px",
+                borderRadius: 8,
                 fontWeight: 800,
-                fontSize: "0.9rem",
+                fontSize: "0.85rem",
                 textDecoration: "none",
-                boxShadow: "0 6px 20px rgba(226, 0, 26, 0.4)",
+                boxShadow: "0 4px 16px rgba(226, 0, 26, 0.35)",
                 transition: "all 0.2s ease",
+                whiteSpace: "nowrap",
               }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#c0001a"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#E2001A"; }}
             >
-              <CalendarCheck size={17} />
+              <CalendarCheck size={16} />
               <span>Book Service</span>
             </Link>
 
             <a
               href="tel:+919028384499"
               style={{
+                flex: "1 1 120px",
+                height: 40,
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: 8,
+                gap: 7,
                 background: "rgba(255, 255, 255, 0.07)",
                 border: "1px solid rgba(255, 255, 255, 0.16)",
                 color: "#ffffff",
-                padding: "13px 22px",
-                borderRadius: 9,
+                padding: "0 16px",
+                borderRadius: 8,
                 fontWeight: 700,
-                fontSize: "0.9rem",
+                fontSize: "0.85rem",
                 textDecoration: "none",
                 backdropFilter: "blur(10px)",
                 transition: "all 0.2s ease",
+                whiteSpace: "nowrap",
               }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.12)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.07)"; }}
             >
-              <Phone size={16} />
+              <Phone size={15} />
               <span>Call Now</span>
             </a>
           </motion.div>
@@ -291,22 +342,22 @@ export default function Hero() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 16,
+              gap: "8px 14px",
               flexWrap: "wrap",
-              fontSize: "0.76rem",
-              color: "rgba(255, 255, 255, 0.55)",
+              fontSize: "0.74rem",
+              color: "rgba(255, 255, 255, 0.65)",
               fontWeight: 500,
-              marginBottom: 32,
+              marginBottom: 0,
             }}
           >
-            <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
-              <ShieldCheck size={13} color="#10B981" /> 100% Genuine Bosch Parts
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, whiteSpace: "nowrap" }}>
+              <ShieldCheck size={13} color="#10B981" /> Genuine Bosch Parts
             </span>
-            <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
-              <Car size={13} color="#0066FF" /> Doorstep Pickup Available
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, whiteSpace: "nowrap" }}>
+              <Car size={13} color="#0066FF" /> Doorstep Pickup
             </span>
-            <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
-              <Star size={13} color="#FFB800" /> 6-Month Service Warranty
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, whiteSpace: "nowrap" }}>
+              <Star size={13} color="#FFB800" /> 6-Month Warranty
             </span>
           </motion.div>
 
@@ -317,8 +368,9 @@ export default function Hero() {
               display: "none",
               position: "relative",
               width: "100%",
-              height: "260px",
-              marginBottom: 24,
+              height: "210px",
+              marginTop: 14,
+              marginBottom: 14,
               zIndex: 2,
             }}
             initial={{ opacity: 0, y: 20 }}
@@ -332,15 +384,15 @@ export default function Hero() {
                 bottom: "8%",
                 left: "8%",
                 right: "8%",
-                height: "36px",
-                background: "radial-gradient(ellipse, rgba(226, 0, 26, 0.3) 0%, rgba(0, 102, 255, 0.15) 50%, transparent 75%)",
-                filter: "blur(18px)",
+                height: "30px",
+                background: "radial-gradient(ellipse, rgba(226, 0, 26, 0.25) 0%, rgba(0, 102, 255, 0.12) 50%, transparent 75%)",
+                filter: "blur(16px)",
                 zIndex: 1,
                 pointerEvents: "none",
               }}
             />
             <motion.div
-              animate={{ y: [0, -8, 0] }}
+              animate={{ y: [0, -6, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               style={{ position: "relative", zIndex: 2, width: "100%", height: "100%" }}
             >
@@ -363,69 +415,25 @@ export default function Hero() {
               </video>
             </motion.div>
           </motion.div>
-
-          {/* Trust Badges */}
-          <div ref={badgesRef}>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={badgesInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 10,
-                maxWidth: 560,
-              }}
-            >
-              {TRUST_BADGES.map((badge, i) => (
-                <motion.div
-                  key={badge.label}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={badgesInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ duration: 0.4, delay: 0.4 + i * 0.1 }}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "7px 12px",
-                    borderRadius: 8,
-                    background: "rgba(255, 255, 255, 0.04)",
-                    border: "1px solid rgba(255, 255, 255, 0.08)",
-                    backdropFilter: "blur(10px)",
-                  }}
-                >
-                  <badge.icon size={13} color={badge.color} strokeWidth={2.5} />
-                  <span style={{ fontSize: "0.8rem", fontWeight: 700, color: badge.color }}>
-                    {badge.value}
-                  </span>
-                  <span style={{ fontSize: "0.75rem", color: "rgba(255, 255, 255, 0.6)", fontWeight: 500 }}>
-                    {badge.label}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
         </motion.div>
       </div>
 
-      {/* Luxury Glossy Center-Aligned Stats Row */}
+      {/* Matte Precision Stats Row — No shiny glare, pure executive matte finish */}
       <motion.div
         className="hero-stats"
         style={{
           position: "absolute",
-          bottom: 20,
+          bottom: 14,
           left: 0,
           right: 0,
           margin: "0 auto",
           zIndex: 10,
-          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)",
-          border: "1px solid rgba(255, 255, 255, 0.14)",
-          boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.7), inset 0 1px 1px 0 rgba(255, 255, 255, 0.28), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          borderRadius: 18,
+          background: "#14171E",
+          border: "1px solid rgba(255, 255, 255, 0.08)",
+          boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.6)",
+          borderRadius: 12,
           width: "calc(100% - 48px)",
-          maxWidth: 740,
+          maxWidth: 680,
           overflow: "hidden",
           opacity: heroOpacity,
         }}
@@ -441,48 +449,40 @@ export default function Hero() {
           {STATS.map((stat, i) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
+              transition={{ duration: 0.4, delay: 0.2 + i * 0.08 }}
               className="hero-stat-card"
               style={{ 
                 position: "relative",
-                borderRight: i !== STATS.length - 1 ? "1px solid rgba(255, 255, 255, 0.09)" : "none"
+                borderRight: i !== STATS.length - 1 ? "1px solid rgba(255, 255, 255, 0.07)" : "none",
+                padding: "10px 6px",
+                textAlign: "center",
+                background: "transparent",
               }}
             >
-              <GlareHover
-                glareColor="#ffffff"
-                glareOpacity={0.12}
-                glareAngle={-45}
-                glareSize={160}
-                transitionDuration={500}
-                playOnce={false}
-                style={{ width: "100%", height: "100%", padding: "12px 10px", boxSizing: "border-box", textAlign: "center" }}
+              <div
+                style={{
+                  fontSize: "clamp(1.12rem, 1.65vw, 1.35rem)",
+                  fontWeight: 900,
+                  color: "#FFFFFF",
+                  fontFamily: "Outfit, sans-serif",
+                  lineHeight: 1.1,
+                  marginBottom: 2,
+                  letterSpacing: "-0.01em",
+                }}
               >
-                <div
-                  style={{
-                    fontSize: "clamp(1.18rem, 2.2vw, 1.55rem)",
-                    fontWeight: 900,
-                    color: "#38BDF8",
-                    fontFamily: "Outfit, sans-serif",
-                    lineHeight: 1.1,
-                    marginBottom: 3,
-                    textShadow: "0 0 16px rgba(56, 189, 248, 0.45)",
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  <CountUp
-                    to={stat.target}
-                    from={0}
-                    direction="up"
-                    duration={2.5}
-                    separator=","
-                  />{stat.suffix}
-                </div>
-                <div style={{ fontSize: "0.66rem", color: "rgba(255, 255, 255, 0.8)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
-                  {stat.label}
-                </div>
-              </GlareHover>
+                <CountUp
+                  to={stat.target}
+                  from={0}
+                  direction="up"
+                  duration={2.5}
+                  separator=","
+                />{stat.suffix}
+              </div>
+              <div style={{ fontSize: "0.62rem", color: "rgba(255, 255, 255, 0.55)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                {stat.label}
+              </div>
             </motion.div>
           ))}
         </div>

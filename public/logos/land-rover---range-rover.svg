@@ -1,0 +1,27 @@
+<svg viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lrGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E5A35" />
+      <stop offset="100%" stop-color="#04381F" />
+    </linearGradient>
+    <linearGradient id="lrGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8C872" />
+      <stop offset="50%" stop-color="#C5A059" />
+      <stop offset="100%" stop-color="#9A7B38" />
+    </linearGradient>
+  </defs>
+  <!-- Outer Gold Border -->
+  <ellipse cx="100" cy="55" rx="94" ry="49" fill="url(#lrGold)" />
+  <!-- Inner Green Oval -->
+  <ellipse cx="100" cy="55" rx="90" ry="45" fill="url(#lrGreen)" />
+  <ellipse cx="100" cy="55" rx="86" ry="41" fill="none" stroke="url(#lrGold)" stroke-width="1.5" />
+  <!-- Chevron Accents Left & Right -->
+  <path d="M 22 55 L 36 50 L 36 53 L 26 55 L 36 57 L 36 60 Z" fill="url(#lrGold)" />
+  <path d="M 178 55 L 164 50 L 164 53 L 174 55 L 164 57 L 164 60 Z" fill="url(#lrGold)" />
+  <!-- LAND Text -->
+  <text x="100" y="46" text-anchor="middle" font-family="'Plus Jakarta Sans', Arial, Helvetica, sans-serif" font-weight="900" font-size="21" fill="#FFFFFF" letter-spacing="4">LAND</text>
+  <!-- Center separator line -->
+  <line x1="42" y1="55" x2="158" y2="55" stroke="url(#lrGold)" stroke-width="1.2" opacity="0.8" />
+  <!-- ROVER Text -->
+  <text x="100" y="76" text-anchor="middle" font-family="'Plus Jakarta Sans', Arial, Helvetica, sans-serif" font-weight="900" font-size="21" fill="#FFFFFF" letter-spacing="4">ROVER</text>
+</svg>

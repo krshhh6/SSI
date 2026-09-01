@@ -1,8 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
-import CurvedLoop from "./CurvedLoop";
+import MaterialSymbol from "./core/MaterialSymbol";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
@@ -51,6 +50,11 @@ const FALLBACK_REVIEWS: ReviewData[] = [
   },
 ];
 
+const CAR_BRANDS = [
+  "Maruti Suzuki", "Hyundai", "Tata Motors", "Mahindra", "Toyota", "Honda",
+  "Kia", "Volkswagen", "Skoda", "MG Motors", "Renault", "BMW", "Mercedes-Benz", "Audi", "Ford", "Jeep"
+];
+
 export default function Reviews() {
   const [reviews, setReviews] = useState<ReviewData[]>(FALLBACK_REVIEWS);
   const [current, setCurrent] = useState(0);
@@ -78,7 +82,7 @@ export default function Reviews() {
     if (!isAutoPlaying || reviews.length === 0) return;
     const timer = setInterval(() => {
       setCurrent((c) => (c + 1) % reviews.length);
-    }, 4500);
+    }, 5000);
     return () => clearInterval(timer);
   }, [isAutoPlaying, reviews.length]);
 
@@ -94,7 +98,7 @@ export default function Reviews() {
       className="section-padding"
       style={{ background: "var(--bg-secondary)", position: "relative", overflow: "hidden" }}
     >
-      {/* Ambient */}
+      {/* Ambient Glow */}
       <div
         style={{
           position: "absolute",
@@ -114,7 +118,7 @@ export default function Reviews() {
         <div style={{
           position: "relative",
           zIndex: 4,
-          marginBottom: 32,
+          marginBottom: 24,
           marginTop: -20,
           overflow: "hidden",
           WebkitMaskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
@@ -123,21 +127,21 @@ export default function Reviews() {
           <div style={{
             display: "flex",
             width: "max-content",
-            animation: "marquee-straight 28s linear infinite",
+            animation: "marquee-straight 30s linear infinite",
           }}>
             {[0, 1].map((key) => (
               <div key={key} style={{ display: "flex", alignItems: "center", gap: 0, whiteSpace: "nowrap" }}>
                 {["4.7★ GOOGLE RATING", "535+ HAPPY CUSTOMERS", "15+ YEARS EXPERIENCE", "30+ CAR BRANDS SERVICED", "BOSCH AUTHORIZED CENTER", "100% GENUINE PARTS"].map((item, i) => (
                   <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
                     <span style={{
-                      fontSize: "0.85rem",
-                      fontWeight: 700,
-                      letterSpacing: "0.12em",
+                      fontSize: "0.82rem",
+                      fontWeight: 800,
+                      letterSpacing: "0.1em",
                       color: "var(--accent)",
                       fontFamily: "Outfit, sans-serif",
-                      padding: "0 32px",
+                      padding: "0 28px",
                     }}>{item}</span>
-                    <span style={{ color: "var(--accent)", fontSize: "0.7rem", opacity: 0.6 }}>✦</span>
+                    <span style={{ color: "var(--accent)", fontSize: "0.7rem", opacity: 0.5 }}>✦</span>
                   </span>
                 ))}
               </div>
@@ -145,11 +149,11 @@ export default function Reviews() {
           </div>
         </div>
 
-        {/* Car Brand Logos Marquee */}
+        {/* Car Brand Partner Badges Marquee (Sleek Automotive Monochrome) */}
         <div style={{
           position: "relative",
           zIndex: 4,
-          marginBottom: 56,
+          marginBottom: 52,
           overflow: "hidden",
           WebkitMaskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
           maskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
@@ -160,46 +164,27 @@ export default function Reviews() {
             animation: "marquee-straight-reverse 35s linear infinite",
           }}>
             {[0, 1].map((key) => (
-              <div key={key} style={{ display: "flex", alignItems: "center", gap: 32, paddingRight: 32 }}>
-                {[
-                  { name: "Maruti Suzuki", color: "#0033A0" },
-                  { name: "Hyundai", color: "#002C5F" },
-                  { name: "Tata Motors", color: "#1A5BA7" },
-                  { name: "Mahindra", color: "#CC0000" },
-                  { name: "Toyota", color: "#EB0A1E" },
-                  { name: "Honda", color: "#E40521" },
-                  { name: "Kia", color: "#05141F" },
-                  { name: "Volkswagen", color: "#001E50" },
-                  { name: "Skoda", color: "#4BA82E" },
-                  { name: "MG Motors", color: "#B5121B" },
-                  { name: "Renault", color: "#FFCC00" },
-                  { name: "BMW", color: "#1C6DC1" },
-                  { name: "Mercedes", color: "#A0A0A0" },
-                  { name: "Audi", color: "#BB0A30" },
-                  { name: "Ford", color: "#003476" },
-                  { name: "Jeep", color: "#2C3E50" },
-                ].map((brand) => (
-                  <div key={brand.name} style={{
+              <div key={key} style={{ display: "flex", alignItems: "center", gap: 12, paddingRight: 12 }}>
+                {CAR_BRANDS.map((brandName) => (
+                  <div key={brandName} style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: "10px 24px",
-                    borderRadius: 12,
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    minWidth: 120,
+                    padding: "7px 18px",
+                    borderRadius: 8,
+                    background: "var(--card)",
+                    border: "1px solid var(--border)",
                     flexShrink: 0,
-                    transition: "all 0.3s ease",
+                    transition: "all 0.2s ease",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
                   }}>
                     <span style={{
-                      fontSize: "0.95rem",
+                      fontSize: "0.8rem",
                       fontWeight: 800,
-                      letterSpacing: "0.08em",
-                      color: brand.color,
-                      fontFamily: "Outfit, sans-serif",
+                      letterSpacing: "0.05em",
+                      color: "var(--text-secondary)",
                       textTransform: "uppercase",
-                      filter: "brightness(1.3)",
-                    }}>{brand.name}</span>
+                    }}>{brandName}</span>
                   </div>
                 ))}
               </div>
@@ -207,27 +192,27 @@ export default function Reviews() {
           </div>
         </div>
 
-
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          style={{ textAlign: "center", marginBottom: 64 }}
+          style={{ textAlign: "center", marginBottom: 48 }}
         >
           <span
             style={{
               display: "inline-block",
               padding: "5px 16px",
               borderRadius: 100,
-              border: "1px solid var(--border-hover)",
+              border: "1px solid var(--border)",
+              background: "var(--card)",
               color: "var(--accent)",
               fontSize: "0.75rem",
-              fontWeight: 600,
+              fontWeight: 700,
               letterSpacing: "0.12em",
               textTransform: "uppercase",
-              marginBottom: 16,
+              marginBottom: 14,
             }}
           >
             Customer Stories
@@ -236,156 +221,153 @@ export default function Reviews() {
             WHAT OUR{" "}
             <span className="gradient-text">CUSTOMERS SAY</span>
           </h2>
+
+          {/* Authentic Google Reviews Trust Badge */}
           <div
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: 8,
-              marginTop: 16,
-              padding: "6px 16px",
+              gap: 10,
+              marginTop: 18,
+              padding: "8px 20px",
               borderRadius: 100,
-              background: "rgba(255, 184, 0, 0.1)",
-              border: "1px solid rgba(255, 184, 0, 0.3)",
+              background: "var(--card)",
+              border: "1px solid var(--border)",
+              boxShadow: "0 4px 18px rgba(0, 0, 0, 0.05)",
             }}
           >
-            <span style={{ color: "#FFB800", fontSize: "1rem" }}>★★★★★</span>
-            <span style={{ color: "var(--text)", fontWeight: 700 }}>4.7</span>
-            <span style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>based on 535+ Google reviews</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <div style={{ display: "flex", gap: 2 }}>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <MaterialSymbol key={i} name="star" size={15} fill color="#F59E0B" />
+              ))}
+            </div>
+            <span style={{ color: "var(--text)", fontWeight: 800, fontSize: "0.92rem" }}>4.7</span>
+            <span style={{ color: "var(--text-muted)", fontSize: "0.82rem", fontWeight: 600 }}>· 535+ Google Reviews</span>
           </div>
         </motion.div>
 
-        {/* Carousel */}
-        <div ref={ref} style={{ position: "relative", maxWidth: 800, margin: "0 auto" }}>
+        {/* Carousel Main Testimonial Card */}
+        <div ref={ref} style={{ position: "relative", maxWidth: 820, margin: "0 auto" }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
-              initial={{ opacity: 0, x: 40, scale: 0.96 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: -40, scale: 0.96 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
               style={{
                 background: "var(--card)",
                 border: "1px solid var(--border)",
-                borderRadius: 20,
-                padding: "44px 48px",
+                borderRadius: 18,
+                padding: "36px 42px",
                 position: "relative",
-                overflow: "hidden",
+                boxShadow: "0 14px 40px rgba(0, 0, 0, 0.08)",
               }}
               className="review-card-main"
             >
-              {/* Blue accent border top */}
+              {/* Top Accent Line */}
               <div
                 style={{
                   position: "absolute",
-                  top: 0, left: 48, right: 48,
-                  height: 2,
+                  top: 0, left: 32, right: 32,
+                  height: 3,
                   background: "linear-gradient(90deg, transparent, var(--accent), transparent)",
+                  borderRadius: "3px 3px 0 0",
                 }}
               />
 
-              {/* Quote icon */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: 24, right: 32,
-                  opacity: 0.07,
-                }}
-              >
-                <Quote size={80} color="var(--accent)" />
+              {/* Stars & Verified Badge Header */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
+                <div style={{ display: "flex", gap: 2 }}>
+                  {Array.from({ length: reviews[current]?.rating || 5 }).map((_, i) => (
+                    <MaterialSymbol key={i} name="star" size={18} fill color="#F59E0B" />
+                  ))}
+                </div>
+                <div style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
+                  padding: "3px 10px",
+                  borderRadius: 100,
+                  background: "rgba(16, 185, 129, 0.1)",
+                  border: "1px solid rgba(16, 185, 129, 0.25)",
+                  color: "#10B981",
+                  fontSize: "0.74rem",
+                  fontWeight: 700,
+                }}>
+                  <MaterialSymbol name="verified" size={14} fill color="#10B981" />
+                  <span>Verified Google Review</span>
+                </div>
               </div>
 
-              {/* Stars */}
-              <div style={{ marginBottom: 20 }}>
-                {"★".repeat(reviews[current]?.rating || 5).split("").map((s, i) => (
-                  <motion.span
-                    key={i}
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: i * 0.05, type: "spring" }}
-                    style={{ color: "#FFB800", fontSize: "1.2rem" }}
-                  >
-                    {s}
-                  </motion.span>
-                ))}
-              </div>
-
-              {/* Review text */}
+              {/* Review Text */}
               <p
                 style={{
-                  fontSize: "clamp(1rem, 1.8vw, 1.15rem)",
+                  fontSize: "clamp(1.05rem, 1.8vw, 1.2rem)",
                   color: "var(--text)",
-                  lineHeight: 1.75,
-                  marginBottom: 28,
-                  fontStyle: "italic",
-                  fontWeight: 400,
+                  lineHeight: 1.7,
+                  marginBottom: 24,
+                  fontWeight: 500,
                 }}
               >
                 &ldquo;{reviews[current]?.text}&rdquo;
               </p>
 
-              {/* Author */}
-              <div style={{ display: "flex", alignItems: "center", gap: 14 }} className="review-author-row">
+              {/* Author Row */}
+              <div style={{ display: "flex", alignItems: "center", gap: 14, borderTop: "1px solid var(--border)", paddingTop: 18 }} className="review-author-row">
                 <div
                   style={{
-                    width: 48,
-                    height: 48,
+                    width: 44,
+                    height: 44,
                     borderRadius: "50%",
-                    background: "linear-gradient(135deg, var(--accent), #00AAFF)",
+                    background: "linear-gradient(135deg, var(--accent), #0044CC)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontWeight: 800,
-                    fontSize: "1.1rem",
+                    fontWeight: 900,
+                    fontSize: "1rem",
                     color: "white",
                     flexShrink: 0,
+                    boxShadow: "0 2px 8px rgba(0, 102, 255, 0.3)",
                   }}
                 >
                   {reviews[current]?.name?.[0] || "?"}
                 </div>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: "1rem", color: "var(--text)" }}>
+                  <div style={{ fontWeight: 800, fontSize: "0.98rem", color: "var(--text)" }}>
                     {reviews[current]?.name}
                   </div>
-                  <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>
+                  <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: 500 }}>
                     {reviews[current]?.service} · {reviews[current]?.date}
                   </div>
-                </div>
-                <div style={{ marginLeft: "auto" }} className="review-google-badge">
-                  <span
-                    style={{
-                      padding: "4px 10px",
-                      borderRadius: 100,
-                      background: "var(--accent-glow)",
-                      border: "1px solid var(--border-hover)",
-                      color: "var(--accent)",
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Google Review ✓
-                  </span>
                 </div>
               </div>
             </motion.div>
           </AnimatePresence>
 
-          {/* Navigation */}
+          {/* Navigation Controls */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 16,
-              marginTop: 32,
+              gap: 14,
+              marginTop: 24,
             }}
           >
             <motion.button
               onClick={() => navigate(-1)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               style={{
-                width: 44,
-                height: 44,
+                width: 40,
+                height: 40,
                 borderRadius: "50%",
                 background: "var(--card)",
                 border: "1px solid var(--border)",
@@ -393,27 +375,27 @@ export default function Reviews() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "var(--text-secondary)",
+                color: "var(--text)",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
               }}
             >
-              <ChevronLeft size={18} />
+              <MaterialSymbol name="arrow_back" size={18} />
             </motion.button>
 
-            <div style={{ display: "flex", gap: 8 }}>
+            <div style={{ display: "flex", gap: 6 }}>
               {reviews.map((_, i) => (
-                <motion.button
+                <button
                   key={i}
                   onClick={() => { setIsAutoPlaying(false); setCurrent(i); }}
-                  animate={{
-                    width: i === current ? 24 : 8,
-                    background: i === current ? "var(--accent)" : "var(--border)",
-                  }}
                   style={{
-                    height: 8,
+                    width: i === current ? 22 : 7,
+                    height: 7,
                     borderRadius: 100,
+                    background: i === current ? "var(--accent)" : "var(--border)",
                     border: "none",
                     cursor: "pointer",
                     padding: 0,
+                    transition: "all 0.25s ease",
                   }}
                 />
               ))}
@@ -421,11 +403,11 @@ export default function Reviews() {
 
             <motion.button
               onClick={() => navigate(1)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               style={{
-                width: 44,
-                height: 44,
+                width: 40,
+                height: 40,
                 borderRadius: "50%",
                 background: "var(--card)",
                 border: "1px solid var(--border)",
@@ -433,22 +415,22 @@ export default function Reviews() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "var(--text-secondary)",
+                color: "var(--text)",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
               }}
             >
-              <ChevronRight size={18} />
+              <MaterialSymbol name="arrow_forward" size={18} />
             </motion.button>
           </div>
         </div>
 
-        {/* Mini review cards background */}
+        {/* 3 Solid Secondary Review Cards */}
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
             gap: 16,
-            marginTop: 40,
-            opacity: 0.5,
+            marginTop: 36,
           }}
           className="review-mini-grid"
         >
@@ -458,18 +440,40 @@ export default function Reviews() {
               style={{
                 background: "var(--card)",
                 border: "1px solid var(--border)",
-                borderRadius: 12,
-                padding: "14px 16px",
+                borderRadius: 14,
+                padding: "18px 20px",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.03)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
               }}
             >
-              <div style={{ color: "#FFB800", fontSize: "0.75rem", marginBottom: 6 }}>
-                {"★".repeat(rev.rating)}
+              <div>
+                <div style={{ display: "flex", gap: 2, marginBottom: 8 }}>
+                  {Array.from({ length: rev.rating }).map((_, rIdx) => (
+                    <MaterialSymbol key={rIdx} name="star" size={14} fill color="#F59E0B" />
+                  ))}
+                </div>
+                <p style={{
+                  fontSize: "0.85rem",
+                  color: "var(--text)",
+                  lineHeight: 1.55,
+                  margin: 0,
+                  display: "-webkit-box",
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                }}>
+                  &ldquo;{rev.text}&rdquo;
+                </p>
               </div>
-              <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-                {rev.text}
-              </p>
-              <div style={{ marginTop: 8, fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)" }}>
-                — {rev.name}
+              <div style={{ marginTop: 12, paddingTop: 10, borderTop: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--text)" }}>
+                  {rev.name}
+                </span>
+                <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
+                  {rev.service}
+                </span>
               </div>
             </div>
           ))}

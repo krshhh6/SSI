@@ -99,7 +99,7 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
               marginBottom: 20,
             }}
           >
-            <h3 style={{ fontSize: "1.45rem", fontWeight: 700, color: "#1a1a1a", margin: 0, fontFamily: "Outfit, sans-serif" }}>
+            <h3 style={{ fontSize: "1.45rem", fontWeight: 700, color: "#1a1a1a", margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {selectedBrand ? `Select ${selectedBrand} Model` : "Select Manufacturer"}
             </h3>
             <button
@@ -262,3 +262,4 @@ export default function CarSelectModal({ isOpen, onClose, onSelectCar, initialCa
     </AnimatePresence>
   );
 }
+

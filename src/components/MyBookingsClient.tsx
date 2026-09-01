@@ -307,7 +307,7 @@ export default function MyBookingsClient() {
             }}
           >
             <div style={{ fontSize: "4rem", marginBottom: 20 }}>🚗</div>
-            <h3 style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.4rem", fontWeight: 700, color: "var(--text)", marginBottom: 12 }}>No Bookings Yet</h3>
+            <h3 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "1.4rem", fontWeight: 700, color: "var(--text)", marginBottom: 12 }}>No Bookings Yet</h3>
             <p style={{ color: "var(--text-secondary)", fontFamily: "Inter, sans-serif", maxWidth: 320, margin: "0 auto 28px", lineHeight: 1.6 }}>
               You haven&apos;t made any service bookings yet. Schedule your first one now!
             </p>
@@ -423,7 +423,7 @@ export default function MyBookingsClient() {
               padding: "32px",
               boxShadow: "0 12px 40px rgba(0,0,0,0.15)" 
             }}>
-              <h2 style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.6rem", fontWeight: 800, margin: "0 0 8px 0" }}>Profile Details</h2>
+              <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "1.6rem", fontWeight: 800, margin: "0 0 8px 0" }}>Profile Details</h2>
               <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: 32 }}>
                 Manage your account information and contact details. Saving your phone number will automatically pre-fill it when making new bookings.
               </p>
@@ -504,7 +504,7 @@ export default function MyBookingsClient() {
               
               <button onClick={() => setFeedbackModal(null)} style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer" }}><X size={20} /></button>
               
-              <h2 style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.4rem", fontWeight: 800, marginBottom: 8 }}>Rate Your Service</h2>
+              <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "1.4rem", fontWeight: 800, marginBottom: 8 }}>Rate Your Service</h2>
               <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: 24 }}>How was your experience with the {feedbackModal.service} for your {feedbackModal.brand} {feedbackModal.model}?</p>
               
               <form onSubmit={submitFeedback} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -543,3 +543,4 @@ export default function MyBookingsClient() {
     </section>
   );
 }
+

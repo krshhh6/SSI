@@ -24,6 +24,9 @@ export const DEFAULT_MANUFACTURERS: Manufacturer[] = [
   { id: "mercedes-benz",    name: "Mercedes-Benz",    logoUrl: "/18.avif", href: "/mercedes-benz" },
   { id: "mg",               name: "MG",               logoUrl: "/19.avif", href: "/mg" },
   { id: "porsche",          name: "Porsche",          logoUrl: "/20.avif", href: "/porsche" },
+  { id: "land-rover",       name: "Land Rover / Range Rover", logoUrl: "/logos/land-rover.svg", href: "/land-rover" },
+  { id: "jaguar",           name: "Jaguar",                   logoUrl: "/logos/jaguar.svg",     href: "/jaguar" },
+  { id: "volvo",            name: "Volvo",                    logoUrl: "/logos/volvo.svg",      href: "/volvo" },
   { id: "hindustan-motors", name: "Hindustan Motors", logoUrl: "/21.avif", href: "/hindustan-motors" },
 ];
 
@@ -50,15 +53,20 @@ export default function ManufacturerGrid({
     if (manufacturers && manufacturers.length > 0) return manufacturers;
     if (brands && brands.length > 0) {
       return brands.map((name) => {
-        const match = DEFAULT_MANUFACTURERS.find(
-          (m) => m.name.toLowerCase() === name.toLowerCase()
-        );
+        const match = DEFAULT_MANUFACTURERS.find((m) => {
+          const mNorm = m.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+          const nameNorm = name.toLowerCase().replace(/[^a-z0-9]/g, "");
+          return (
+            mNorm === nameNorm ||
+            (m.id === "land-rover" && (nameNorm.includes("landrover") || nameNorm.includes("rangerover")))
+          );
+        });
         if (match) return match;
         const slug = name.toLowerCase().replace(/[^a-z0-9]/g, "-");
         return {
           id: slug,
           name: name,
-          logoUrl: `/logos/${slug}.jpeg`,
+          logoUrl: `/logos/${slug}.svg`,
           href: `/${slug}`,
         };
       });

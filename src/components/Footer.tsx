@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
-import { Phone, MessageCircle, Award, ArrowUp } from "lucide-react";
+import MaterialSymbol from "./core/MaterialSymbol";
 
 const QUICK_LINKS = ["Home", "Services", "Bosch Advantage", "Blog", "Reviews", "Gallery", "Contact", "Privacy Policy"];
 const SERVICES_LIST = [
@@ -142,7 +142,7 @@ export default function Footer() {
                   boxShadow: "0 0 16px var(--bosch-red-glow)",
                 }}
               >
-                <Award size={20} color="white" strokeWidth={2} />
+                <MaterialSymbol name="verified" size={22} fill color="white" />
               </div>
               <div>
                 <div
@@ -183,22 +183,22 @@ export default function Footer() {
               Patna&apos;s trusted Bosch Authorized Multi-Brand Car Service Center. Delivering international quality standards since 2009.
             </p>
 
-            {/* Bosch Badge */}
+            {/* Bosch Authorized Partner Badge */}
             <div
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 8,
-                padding: "8px 16px",
+                padding: "7px 14px",
                 borderRadius: 8,
-                border: "1px solid rgba(226, 0, 26, 0.3)",
-                background: "rgba(226, 0, 26, 0.06)",
+                border: "1px solid rgba(226, 0, 26, 0.25)",
+                background: "rgba(226, 0, 26, 0.05)",
                 marginBottom: 24,
               }}
             >
-              <span style={{ fontSize: "1rem" }}>🏆</span>
-              <span style={{ fontSize: "0.78rem", fontWeight: 600, color: "#0066FF", letterSpacing: "0.06em" }}>
-                Bosch Authorized Workshop
+              <MaterialSymbol name="verified" size={16} fill color="#E2001A" />
+              <span style={{ fontSize: "0.76rem", fontWeight: 800, color: "var(--text)", letterSpacing: "0.04em" }}>
+                Bosch Authorized Car Service
               </span>
             </div>
 
@@ -331,11 +331,11 @@ export default function Footer() {
                   gap: 8,
                   color: "var(--accent)",
                   textDecoration: "none",
-                  fontWeight: 600,
+                  fontWeight: 700,
                   fontSize: "0.9rem",
                 }}
               >
-                <Phone size={14} />
+                <MaterialSymbol name="call" size={16} fill color="var(--accent)" />
                 +91 90283 84499
               </a>
               <a
@@ -346,13 +346,15 @@ export default function Footer() {
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
-                  color: "#25D366",
+                  color: "#1DA851",
                   textDecoration: "none",
-                  fontWeight: 600,
+                  fontWeight: 700,
                   fontSize: "0.9rem",
                 }}
               >
-                <MessageCircle size={14} />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51h-.57c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                </svg>
                 WhatsApp Us
               </a>
             </div>
@@ -360,11 +362,11 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Bar */}
+      {/* Bottom Bar (with bottom buffer so floating dock does not cover content) */}
       <div
         style={{
           borderTop: "1px solid var(--border)",
-          padding: "20px 24px",
+          padding: "24px 24px 76px",
         }}
       >
         <div
@@ -374,33 +376,35 @@ export default function Footer() {
             alignItems: "center",
             justifyContent: "space-between",
             flexWrap: "wrap",
-            gap: 12,
+            gap: 16,
           }}
         >
           <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
             © 2024 SAM Wheels Pvt Ltd · Bosch Car Service, Patna · All rights reserved.
           </span>
           <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Privacy Policy</span>
-            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Terms of Service</span>
+            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", cursor: "pointer" }}>Privacy Policy</span>
+            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", cursor: "pointer" }}>Terms of Service</span>
             <motion.button
               onClick={scrollToTop}
-              whileHover={{ scale: 1.1, y: -2 }}
+              whileHover={{ scale: 1.08, y: -2 }}
               whileTap={{ scale: 0.95 }}
+              aria-label="Scroll to top"
               style={{
-                width: 36,
-                height: 36,
-                borderRadius: 8,
-                background: "var(--accent)",
-                border: "none",
+                width: 38,
+                height: 38,
+                borderRadius: 10,
+                background: "var(--card)",
+                border: "1px solid var(--border)",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 0 16px var(--accent-glow)",
+                color: "var(--text)",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
               }}
             >
-              <ArrowUp size={16} color="white" />
+              <MaterialSymbol name="arrow_upward" size={18} weight={700} />
             </motion.button>
           </div>
         </div>

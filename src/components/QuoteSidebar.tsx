@@ -65,7 +65,7 @@ export default function QuoteSidebar({
             fontSize: "1.2rem",
             fontWeight: 900,
             color: "#1a1a1a",
-            fontFamily: "Outfit, sans-serif",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             margin: "0 0 4px 0",
             lineHeight: 1.3,
           }}
@@ -267,7 +267,7 @@ export default function QuoteSidebar({
                 color: "#ffffff",
                 border: "none",
                 cursor: loadingSubmit ? "wait" : "pointer",
-                fontFamily: "Outfit, sans-serif",
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontSize: "0.86rem",
                 fontWeight: 800,
                 letterSpacing: "0.04em",
@@ -326,3 +326,4 @@ export default function QuoteSidebar({
     </div>
   );
 }
+

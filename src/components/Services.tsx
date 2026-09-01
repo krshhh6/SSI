@@ -24,6 +24,7 @@ import CarSelectModal, { SelectedCar } from "./CarSelectModal";
 import AuthModal from "./AuthModal";
 import BrandLogo from "./core/BrandLogos";
 import ManufacturerGrid from "./ManufacturerGrid";
+import MaterialSymbol from "./core/MaterialSymbol";
 import { CAR_BRANDS_CATALOG, getCarSegment, BoschSegmentId, BoschVehicleSegment, BOSCH_SEGMENTS } from "@/lib/vehicleGrouping";
 import { buildSegmentPackages } from "@/lib/boschLabourSchedule";
 
@@ -1869,7 +1870,7 @@ interface ViewingPackage {
               fontWeight: 800,
               color: "var(--text)",
               margin: "0 0 8px 0",
-              fontFamily: "Outfit, sans-serif",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               lineHeight: 1.25,
               letterSpacing: "-0.02em",
             }}
@@ -1935,7 +1936,7 @@ interface ViewingPackage {
                         >
                           <ArrowLeft size={16} /> Back to All Categories
                         </button>
-                        <h3 style={{ fontSize: "clamp(1.25rem, 3.5vw, 1.6rem)", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif" }}>
+                        <h3 style={{ fontSize: "clamp(1.25rem, 3.5vw, 1.6rem)", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                           {selectedCategory} Packages
                         </h3>
                       </div>
@@ -2032,7 +2033,7 @@ interface ViewingPackage {
                                 borderTopColor: "#E2001A",
                               }}
                             />
-                            <span style={{ fontSize: "0.9rem", fontWeight: 800, color: "#111827", fontFamily: "Outfit, sans-serif" }}>
+                            <span style={{ fontSize: "0.9rem", fontWeight: 800, color: "#111827", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                               Updating rates for {selectedCar?.brand} {selectedCar?.model}...
                             </span>
                           </motion.div>
@@ -2041,7 +2042,7 @@ interface ViewingPackage {
 
                       {getCategoryPackages(selectedCategory, currentSegment.id).map((sec, secIdx) => (
                         <div key={secIdx} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                          <h3 style={{ fontSize: "1.35rem", fontWeight: 900, color: "var(--text)", margin: "8px 0 0 0", fontFamily: "Outfit, sans-serif" }}>
+                          <h3 style={{ fontSize: "1.35rem", fontWeight: 900, color: "var(--text)", margin: "8px 0 0 0", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                             {sec.sectionTitle}
                           </h3>
 
@@ -2101,7 +2102,8 @@ interface ViewingPackage {
                                       {pkg.title}
                                     </h4>
                                     <span className="package-card-time">
-                                      ⏱️ {pkg.timeTaken}
+                                      <MaterialSymbol name="schedule" size={14} weight={600} />
+                                      {pkg.timeTaken}
                                     </span>
                                   </div>
 
@@ -2114,7 +2116,7 @@ interface ViewingPackage {
                                   <div className="package-checklist">
                                     {pkg.checklist.map((item, idx) => (
                                       <div key={idx} className="package-checklist-item">
-                                        <CheckCircle2 size={16} color="#10B981" style={{ flexShrink: 0, marginTop: 2 }} />
+                                        <MaterialSymbol name="check_circle" size={16} color="#10B981" fill style={{ flexShrink: 0, marginTop: 1 }} />
                                         <span>{item}</span>
                                       </div>
                                     ))}
@@ -2125,7 +2127,7 @@ interface ViewingPackage {
                                     {pkg.rating && (
                                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                         <span style={{ background: "#FF6B6B", color: "white", padding: "2px 8px", borderRadius: 100, fontSize: "0.75rem", fontWeight: 800, display: "flex", alignItems: "center", gap: 4 }}>
-                                          <Star size={12} fill="white" /> {pkg.rating}
+                                          <MaterialSymbol name="star" size={12} color="white" fill /> {pkg.rating}
                                         </span>
                                         <span style={{ color: "#4285F4", fontSize: "0.85rem", fontWeight: 600 }}>Expert Rating</span>
                                       </div>
@@ -2251,7 +2253,7 @@ interface ViewingPackage {
                             border: isSelected ? "1.5px solid #E2001A" : "1px solid var(--border)",
                             boxShadow: isSelected ? "0 6px 16px rgba(226,0,26,0.12)" : "0 2px 8px rgba(0,0,0,0.03)",
                             borderRadius: 12,
-                            padding: "24px 16px",
+                            padding: "16px 10px",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
@@ -2259,9 +2261,7 @@ interface ViewingPackage {
                             textAlign: "center",
                             cursor: "pointer",
                             width: "100%",
-                            aspectRatio: "0.9 / 1",
-                            minHeight: 190,
-                            gap: 16,
+                            gap: 8,
                             boxSizing: "border-box",
                             margin: 0,
                           }}
@@ -2348,7 +2348,7 @@ interface ViewingPackage {
                   }}
                 >
                   <div style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: "1.35rem", fontWeight: 900, fontFamily: "Outfit, sans-serif", marginBottom: 2, lineHeight: 1.1 }}>
+                    <div style={{ fontSize: "1.35rem", fontWeight: 900, fontFamily: "'Plus Jakarta Sans', sans-serif", marginBottom: 2, lineHeight: 1.1 }}>
                       Miles RSA
                     </div>
                     <div style={{ fontSize: "0.82rem", fontWeight: 600, opacity: 0.95, lineHeight: 1.3 }}>
@@ -2385,7 +2385,7 @@ interface ViewingPackage {
                 {/* Curated Custom Services Section displaying 4 parts at a time with > navigation */}
                 <div>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                    <h3 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif" }}>
+                    <h3 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--text)", margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                       Curated Custom Services
                     </h3>
                     <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
@@ -2548,7 +2548,7 @@ interface ViewingPackage {
                 {/* Get Summer Ready With Bosch Section with GoMechanic Banner Style & Carousel < > */}
                 <div>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                    <h3 style={{ fontSize: "1.25rem", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif" }}>
+                    <h3 style={{ fontSize: "1.25rem", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                       Get Summer Ready With Bosch
                     </h3>
                     <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
@@ -2702,7 +2702,7 @@ interface ViewingPackage {
             {activeTab === 1 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                 <div style={{ marginBottom: 4 }}>
-                  <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0", fontFamily: "Outfit, sans-serif" }}>
+                  <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                     Curated Custom Services
                   </h3>
                   <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", margin: 0 }}>
@@ -2800,7 +2800,7 @@ interface ViewingPackage {
             {activeTab === 2 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                 <div style={{ marginBottom: 4 }}>
-                  <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0", fontFamily: "Outfit, sans-serif" }}>
+                  <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                     Get Summer Ready With Bosch
                   </h3>
                   <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", margin: 0 }}>
@@ -2892,7 +2892,7 @@ interface ViewingPackage {
             {activeTab === 3 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                 <div style={{ marginBottom: 4 }}>
-                  <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0", fontFamily: "Outfit, sans-serif" }}>
+                  <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                     How Bosch Car Service Works
                   </h3>
                   <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", margin: 0 }}>
@@ -2983,14 +2983,14 @@ interface ViewingPackage {
                         fontSize: "1.05rem",
                         fontWeight: 900,
                         color: "var(--text)",
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "'Plus Jakarta Sans', sans-serif",
                         margin: 0,
                         display: "flex",
                         alignItems: "center",
                         gap: 8,
                       }}
                     >
-                      <Car size={20} color="#E2001A" />
+                      <MaterialSymbol name="directions_car" size={20} color="#E2001A" fill />
                       {selectedCar
                         ? "Selected Model"
                         : sidebarBrand
@@ -3027,7 +3027,7 @@ interface ViewingPackage {
                       <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                         {/* Search Brands */}
                         <div style={{ position: "relative" }}>
-                          <Search size={16} color="var(--text-muted)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
+                          <MaterialSymbol name="search" size={18} color="var(--text-muted)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
                           <input
                             type="text"
                             placeholder="Search Brands (e.g. Maruti, Hyundai)"
@@ -3035,7 +3035,7 @@ interface ViewingPackage {
                             onChange={(e) => setModelSearchQuery(e.target.value)}
                             style={{
                               width: "100%",
-                              padding: "10px 12px 10px 36px",
+                              padding: "10px 12px 10px 38px",
                               borderRadius: 8,
                               border: "1px solid var(--border)",
                               background: "var(--bg-secondary)",
@@ -3064,7 +3064,7 @@ interface ViewingPackage {
                       <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                         {/* Search Models */}
                         <div style={{ position: "relative" }}>
-                          <Search size={16} color="var(--text-muted)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
+                          <MaterialSymbol name="search" size={18} color="var(--text-muted)" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
                           <input
                             type="text"
                             placeholder={`Search ${sidebarBrand} models...`}
@@ -3072,7 +3072,7 @@ interface ViewingPackage {
                             onChange={(e) => setModelSearchQuery(e.target.value)}
                             style={{
                               width: "100%",
-                              padding: "10px 12px 10px 36px",
+                              padding: "10px 12px 10px 38px",
                               borderRadius: 8,
                               border: "1px solid var(--border)",
                               background: "var(--bg-secondary)",
@@ -3141,7 +3141,7 @@ interface ViewingPackage {
                     /* STEP 3: Booking Form & Instant Price / Callback Request */
                     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                       <div style={{ background: "rgba(226, 0, 26, 0.06)", border: "1px solid rgba(226, 0, 26, 0.18)", borderRadius: 12, padding: "14px", display: "flex", alignItems: "center", gap: 10 }}>
-                        <CheckCircle2 size={22} color="#E2001A" />
+                        <MaterialSymbol name="check_circle" size={22} color="#E2001A" fill />
                         <div>
                           <div style={{ fontSize: "0.9rem", fontWeight: 900, color: "var(--text)" }}>{selectedCar.brand} {selectedCar.model}</div>
                           <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600 }}>
@@ -3208,7 +3208,7 @@ interface ViewingPackage {
                         ) : (
                           <span style={{ color: "#ffffff", fontWeight: 800, display: "inline-flex", alignItems: "center", gap: 8 }}>
                             GET A FREE CALLBACK & ENQUIRY
-                            <ArrowRight size={16} color="#ffffff" />
+                            <MaterialSymbol name="arrow_forward" size={18} color="#ffffff" weight={700} />
                           </span>
                         )}
                       </motion.button>
@@ -3235,7 +3235,7 @@ interface ViewingPackage {
                       fontSize: "1.4rem",
                       fontWeight: 800,
                       color: "var(--text)",
-                      fontFamily: "Outfit, sans-serif",
+                      fontFamily: "'Plus Jakarta Sans', sans-serif",
                       margin: "0 0 6px 0",
                       lineHeight: 1.25,
                       letterSpacing: "-0.01em",
@@ -3283,10 +3283,10 @@ interface ViewingPackage {
                           justifyContent: "center",
                         }}
                       >
-                        <CheckCircle2 size={24} />
+                        <MaterialSymbol name="check_circle" size={24} color="#ffffff" fill />
                       </div>
                       <div>
-                        <h4 style={{ fontSize: "1.05rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0", fontFamily: "Outfit, sans-serif" }}>
+                        <h4 style={{ fontSize: "1.05rem", fontWeight: 800, color: "var(--text)", margin: "0 0 4px 0", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                           Prices Updated for {selectedCar?.brand} {selectedCar?.model}!
                         </h4>
                         <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.45, margin: 0 }}>
@@ -3353,7 +3353,7 @@ interface ViewingPackage {
                             border: "1px solid var(--border)",
                           }}
                         >
-                          <MapPin size={18} color="#E2001A" />
+                          <MaterialSymbol name="location_on" size={18} color="#E2001A" fill />
                           <select
                             value={selectedCity}
                             onChange={(e) => setSelectedCity(e.target.value)}
@@ -3377,8 +3377,9 @@ interface ViewingPackage {
                               </option>
                             ))}
                           </select>
-                          <ChevronDown
-                            size={16}
+                          <MaterialSymbol
+                            name="expand_more"
+                            size={18}
                             color="var(--text-muted)"
                             style={{ position: "absolute", right: 14, pointerEvents: "none" }}
                           />
@@ -3405,17 +3406,17 @@ interface ViewingPackage {
                         }}
                       >
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <Car size={18} color="var(--accent)" />
+                          <MaterialSymbol name="directions_car" size={18} color="var(--accent)" fill />
                           <span style={{ fontSize: "0.92rem", fontWeight: selectedCar ? 700 : 600, color: selectedCar ? "var(--text)" : "var(--text-secondary)" }}>
                             {selectedCar ? `${selectedCar.brand} ${selectedCar.model}` : "Select your car model"}
                           </span>
                         </div>
-                        <ChevronDown size={16} color="var(--text-muted)" />
+                        <MaterialSymbol name="expand_more" size={18} color="var(--text-muted)" />
                       </button>
 
                       {/* 3. Mobile Number Input */}
                       <div style={{ position: "relative" }}>
-                        <Phone size={18} color="var(--text-muted)" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }} />
+                        <MaterialSymbol name="call" size={18} color="var(--text-muted)" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }} />
                         <input
                           type="tel"
                           placeholder="Enter 10-digit mobile number"
@@ -3452,7 +3453,7 @@ interface ViewingPackage {
                           color: "#ffffff",
                           border: "none",
                           cursor: (loadingSubmit || isPriceRecalculating) ? "wait" : "pointer",
-                          fontFamily: "Outfit, sans-serif",
+                          fontFamily: "'Plus Jakarta Sans', sans-serif",
                           fontSize: "0.95rem",
                           fontWeight: 800,
                           letterSpacing: "0.03em",
@@ -3484,7 +3485,7 @@ interface ViewingPackage {
                         ) : (
                           <span style={{ color: "#ffffff", fontWeight: 800, display: "inline-flex", alignItems: "center", gap: 8 }}>
                             GET A FREE CALLBACK & ENQUIRY
-                            <ArrowRight size={17} color="#ffffff" />
+                            <MaterialSymbol name="arrow_forward" size={18} color="#ffffff" weight={700} />
                           </span>
                         )}
                       </motion.button>
@@ -3504,7 +3505,7 @@ interface ViewingPackage {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-                      <Star size={18} color="#F59E0B" fill="#F59E0B" />
+                      <MaterialSymbol name="star" size={18} color="#F59E0B" fill />
                       <div>
                         <div style={{ fontSize: "0.92rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.1 }}>4.7 / 5</div>
                         <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", whiteSpace: "nowrap" }}>535+ Maps Reviews</div>
@@ -3514,7 +3515,7 @@ interface ViewingPackage {
                     <div style={{ height: 28, width: 1, background: "var(--border)", flexShrink: 0 }} />
 
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-                      <Users size={18} color="#0066FF" />
+                      <MaterialSymbol name="group" size={18} color="#0066FF" fill />
                       <div>
                         <div style={{ fontSize: "0.92rem", fontWeight: 800, color: "var(--text)", lineHeight: 1.1 }}>5,000+</div>
                         <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", whiteSpace: "nowrap" }}>Happy Customers</div>
@@ -3574,7 +3575,7 @@ interface ViewingPackage {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, borderBottom: "1px solid var(--border)", paddingBottom: 12 }}>
-                <h3 style={{ fontSize: "1.25rem", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "Outfit, sans-serif" }}>
+                <h3 style={{ fontSize: "1.25rem", fontWeight: 900, color: "var(--text)", margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                   {viewingPackage.title} Full Checklist
                 </h3>
                 <button
@@ -3621,3 +3622,4 @@ interface ViewingPackage {
     </section>
   );
 }
+

@@ -1,0 +1,27 @@
+<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="volvoSilver" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C2CED6" />
+      <stop offset="35%" stop-color="#FFFFFF" />
+      <stop offset="70%" stop-color="#8A9AA5" />
+      <stop offset="100%" stop-color="#556470" />
+    </linearGradient>
+    <linearGradient id="volvoBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#003566" />
+      <stop offset="100%" stop-color="#001C38" />
+    </linearGradient>
+    <filter id="volvoShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <!-- Iron Mark Circle -->
+  <circle cx="68" cy="74" r="46" fill="none" stroke="url(#volvoSilver)" stroke-width="10" filter="url(#volvoShadow)" />
+  <!-- Diagonal Arrow at Top Right (45 deg) -->
+  <g transform="translate(101, 41) rotate(45)">
+    <polygon points="0,-16 13,0 -13,0" fill="url(#volvoSilver)" />
+  </g>
+  <!-- Classic Blue Banner Across Center -->
+  <rect x="14" y="62" width="108" height="24" rx="2" fill="url(#volvoBlue)" stroke="url(#volvoSilver)" stroke-width="1.5" filter="url(#volvoShadow)" />
+  <!-- VOLVO Serif Typography -->
+  <text x="68" y="79" text-anchor="middle" font-family="'Plus Jakarta Sans', Arial, Helvetica, sans-serif" font-weight="900" font-size="13.5" fill="#FFFFFF" letter-spacing="3.5">VOLVO</text>
+</svg>

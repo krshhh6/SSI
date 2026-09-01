@@ -213,11 +213,37 @@ export default function BrandLogo({ brand, size = 32 }: BrandLogoProps) {
       );
     case "volvo":
       return (
-        <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="45" cy="55" r="35" stroke="#102A45" strokeWidth="6" fill="none" />
-          <path d="M68 32 L88 12 M88 12 H72 M88 12 V28" stroke="#102A45" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-          <rect x="18" y="46" width="54" height="18" fill="#102A45" />
-          <text x="45" y="60" fontFamily="Arial, sans-serif" fontSize="12" fontWeight="900" fill="#FFFFFF" textAnchor="middle" letterSpacing="1">VOLVO</text>
+        <svg width={size} height={size} viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="68" cy="74" r="46" fill="none" stroke="#8A9AA5" strokeWidth="10" />
+          <g transform="translate(101, 41) rotate(45)">
+            <polygon points="0,-16 13,0 -13,0" fill="#8A9AA5" />
+          </g>
+          <rect x="14" y="62" width="108" height="24" rx="2" fill="#003566" stroke="#8A9AA5" strokeWidth="1.5" />
+          <text x="68" y="79" textAnchor="middle" fontFamily="'Plus Jakarta Sans', Arial, sans-serif" fontWeight="900" fontSize="13.5" fill="#FFFFFF" letterSpacing="3.5">VOLVO</text>
+        </svg>
+      );
+    case "landrover":
+    case "rangerover":
+    case "landroverrangerover":
+      return (
+        <svg width={size * 1.5} height={size * 0.85} viewBox="0 0 200 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="100" cy="55" rx="94" ry="49" fill="#C5A059" />
+          <ellipse cx="100" cy="55" rx="90" ry="45" fill="#0B4A2D" />
+          <ellipse cx="100" cy="55" rx="86" ry="41" fill="none" stroke="#C5A059" strokeWidth="1.5" />
+          <path d="M 22 55 L 36 50 L 36 53 L 26 55 L 36 57 L 36 60 Z" fill="#C5A059" />
+          <path d="M 178 55 L 164 50 L 164 53 L 174 55 L 164 57 L 164 60 Z" fill="#C5A059" />
+          <text x="100" y="46" textAnchor="middle" fontFamily="'Plus Jakarta Sans', Arial, sans-serif" fontWeight="900" fontSize="21" fill="#FFFFFF" letterSpacing="4">LAND</text>
+          <line x1="42" y1="55" x2="158" y2="55" stroke="#C5A059" strokeWidth="1.2" opacity="0.8" />
+          <text x="100" y="76" textAnchor="middle" fontFamily="'Plus Jakarta Sans', Arial, sans-serif" fontWeight="900" fontSize="21" fill="#FFFFFF" letterSpacing="4">ROVER</text>
+        </svg>
+      );
+    case "jaguar":
+      return (
+        <svg width={size * 1.4} height={size * 0.85} viewBox="0 0 200 125" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(14, 8) scale(7.2)" fill="#11141A">
+            <path d="M5.241 6.609a6.93 6.93 0 0 0-.293.01s-1.6.072-2.1.798c0 0-.085.098-.037.203 0 0 .01.03-.01.05 0 0-.27.24-.406.455-.048.078-.102.209 0 .3 0 0 .045.035.063.065.039.064.075.159.123.215.07.084.211.228.41.193.073-.013.09-.04.09-.04.1.099.26.096.26.096-.02-.064-.09-.188-.1-.263a.421.421 0 0 1 .015-.162.701.701 0 0 1 .145-.271c.054-.054.192-.115.303-.038.088.063.194.268.106.56 0 .022-.1.23-.205.26 0 0-.01.004-.03.004-.07 0-.2-.073-.2-.073s0 .018.015.094c.012.043.027.09.04.127 0 0-.025.046-.042.072-.025.045-.046.131.01.17 0 0 .23.157.455.171.154.01.212-.095.212-.095.114-.156.2-.29.32-.399.327-.3.786-.38.786-.38.03-.004.533-.144 1.386.539-.244.02-.534.078-.756.117-.632.113-1.037.71-1.155.952-.307.633.32.851.32.851.01-.006.6-.052.886-.683 0 0 .104-.279.383-.188.182.059 1.79.62 2.152.716 0 0 1.077.28 1.482-.215.649.213 1.257.316 2.85.11.277-.036.495-.027.495-.027.372.027.712.278.815.442.42.671.95 2.003 2.796 1.841l.835-.076c.51-.03.924-.05 1.345.172.183.096.285.131.596.428.425.404.816.842 1.336.603.185-.085.393-.415.393-.415a.598.598 0 0 0-.253-.419c.473.113 1.54.185 1.952-.536.107-.168.118-.318.078-.408-.113-.253-.426-.17-.426-.17-.148.03-.317.2-.568.274-.538.16-.968-.026-.968-.026-.829-.359-3.493-1.884-4.848-2.55 0 0-1.555-.78-3.839-1.684 0 0-4.148-1.823-7.212-1.77z"/>
+          </g>
+          <text x="100" y="112" textAnchor="middle" fontFamily="'Cinzel', 'Trajan Pro', 'Georgia', serif" fontWeight="800" fontSize="20" fill="#11141A" letterSpacing="7">JAGUAR</text>
         </svg>
       );
     case "porsche":

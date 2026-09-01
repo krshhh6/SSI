@@ -111,8 +111,10 @@ export default function WorkshopShowcase() {
             {/* Image Box */}
             <div style={{ position: "relative", width: "100%", height: 320, overflow: "hidden" }}>
               <img
-                src="/images/ref1.jpg"
+                src="/images/ref1.webp"
                 alt="Bosch Multi-Brand Service Workshop Floor in Patna"
+                loading="lazy"
+                decoding="async"
                 style={{
                   width: "100%",
                   height: "100%",
@@ -236,8 +238,10 @@ export default function WorkshopShowcase() {
             {/* Image Box */}
             <div style={{ position: "relative", width: "100%", height: 320, overflow: "hidden" }}>
               <img
-                src="/images/ref2.jpg"
+                src="/images/ref2.webp"
                 alt="Hydraulic Lifts & Engine Overhaul Bay at SAM Wheels Patna"
+                loading="lazy"
+                decoding="async"
                 style={{
                   width: "100%",
                   height: "100%",

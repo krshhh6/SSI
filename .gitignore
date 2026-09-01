@@ -42,3 +42,11 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# scratch & temp files
+scripts/
+backup_original_images/
+temp_bosch/
+temp_icons_crop/
+components/
+

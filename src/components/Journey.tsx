@@ -9,28 +9,28 @@ const STEPS = [
     title: "Book Your Service",
     desc: "Simply choose the service & book an appointment in just a few clicks.",
     color: "#00C896",
-    image: "/images/book-service-promo.jpg",
+    image: "/images/book-service-promo.webp",
   },
   {
     icon: Truck,
     title: "Pickup & Drop",
     desc: "Our team will arrive at your location to pick up your car from your home or office at your convenience.",
     color: "#C0CA33",
-    image: "/images/pickup-drop-promo.png",
+    image: "/images/pickup-drop-promo.webp",
   },
   {
     icon: Smartphone,
     title: "Real-Time Updates",
     desc: "Track your car's service progress digitally and get notified at every step.",
     color: "#AA66FF",
-    image: "/images/real-time-updates-promo.jpg",
+    image: "/images/real-time-updates-promo.webp",
   },
   {
     icon: ThumbsUp,
     title: "Hassle-Free Delivery",
     desc: "Once the service is complete, we'll deliver your car back to you, sparkling clean and ready to go.",
     color: "#00AAFF",
-    image: "/images/hassle-free-delivery-promo.jpg",
+    image: "/images/hassle-free-delivery-promo.webp",
   }
 ];
 
@@ -116,12 +116,13 @@ function JourneyCard({ step, index }: { step: typeof STEPS[0], index: number }) 
 
         {/* Card Content - Promo Image */}
         {step.image ? (
-          <img
-            src={step.image}
-            alt={step.title}
-            className="w-full h-full object-cover relative z-0"
-            loading="lazy"
-          />
+            <img
+              src={step.image}
+              alt={step.title}
+              className="w-full h-full object-cover relative z-0"
+              loading="lazy"
+              decoding="async"
+            />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center p-4 sm:p-6 text-center">
             <div

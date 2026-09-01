@@ -1,14 +1,22 @@
 "use client";
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import Journey from "@/components/Journey";
-import WorkshopShowcase from "@/components/WorkshopShowcase";
-import Reviews from "@/components/Reviews";
-import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import FloatingContact from "@/components/FloatingContact";
+
+const WorkshopShowcase = dynamic(() => import("@/components/WorkshopShowcase"), {
+  ssr: true,
+});
+const Reviews = dynamic(() => import("@/components/Reviews"), {
+  ssr: true,
+});
+const Contact = dynamic(() => import("@/components/Contact"), {
+  ssr: true,
+});
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);

@@ -102,28 +102,28 @@ const SUMMER_SERVICES = [
   {
     title: "Front Bumper Paint",
     desc: "Grade A paint booth finish for front bumper scratch & scuff removal.",
-    bannerUrl: "/summer/bumper_paint.png",
+    bannerUrl: "/summer/bumper_paint.webp",
     tag: "Cooling Offer",
     categoryId: "denting-painting",
   },
   {
     title: "Rubbing & Polishing",
     desc: "High-shine Teflon paint restoration, anti-scratch sealant & swirl removal.",
-    bannerUrl: "/summer/rubbing_polishing.png",
+    bannerUrl: "/summer/rubbing_polishing.webp",
     tag: "Popular",
     categoryId: "detailing-services",
   },
   {
     title: "Deep All Round Spa",
     desc: "Deep interior foam wash + anti-bacterial cabin sanitization & leather polish.",
-    bannerUrl: "/summer/car_spa.png",
+    bannerUrl: "/summer/car_spa.webp",
     tag: "Summer Special",
     categoryId: "car-spa-cleaning",
   },
   {
     title: "AC Gas Top-Up & Chill Check",
     desc: "Cooling coil cleaning, AC gas refill & 100% compressor performance boost.",
-    bannerUrl: "/summer/ac_topup.png",
+    bannerUrl: "/summer/ac_topup.webp",
     tag: "Best Seller",
     categoryId: "ac-service",
   },
@@ -2237,8 +2237,8 @@ interface ViewingPackage {
                       return (
                         <motion.div
                           key={cat.id}
-                          className="category-card-item"
-                          whileHover={{ y: -3, scale: 1.02 }}
+                          className="category-card-item group"
+                          whileHover={{ y: -4, scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => {
                             if (onCategorySelect) {
@@ -2249,82 +2249,145 @@ interface ViewingPackage {
                           }}
                           style={{
                             position: "relative",
-                            background: isSelected ? "rgba(0, 142, 207, 0.06)" : "var(--card)",
-                            border: isSelected ? "1.5px solid #008ECF" : "1px solid var(--border)",
-                            boxShadow: isSelected ? "0 6px 16px rgba(0, 142, 207, 0.15)" : "0 2px 8px rgba(0,0,0,0.03)",
-                            borderRadius: 12,
-                            padding: "16px 10px",
+                            background: isSelected 
+                              ? "rgba(0, 142, 207, 0.07)" 
+                              : "var(--card, #FFFFFF)",
+                            border: isSelected 
+                              ? "1.5px solid #008ECF" 
+                              : "1px solid var(--border)",
+                            boxShadow: isSelected
+                              ? "0 12px 28px -6px rgba(0, 142, 207, 0.22), 0 0 0 1px #008ECF"
+                              : "0 2px 10px -2px rgba(15, 23, 42, 0.05), 0 0 1px rgba(15, 23, 42, 0.08)",
+                            borderRadius: 16,
+                            padding: "18px 12px 14px 12px",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
-                            justifyContent: "center",
+                            justifyContent: "space-between",
                             textAlign: "center",
                             cursor: "pointer",
                             width: "100%",
-                            gap: 8,
+                            minHeight: 166,
                             boxSizing: "border-box",
                             margin: 0,
+                            overflow: "hidden",
+                            transition: "all 0.24s cubic-bezier(0.16, 1, 0.3, 1)",
                           }}
                         >
-                          {/* Badge */}
+                          {/* Subtle Top Ambient Glow Accent Bar */}
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              left: "15%",
+                              right: "15%",
+                              height: 2.5,
+                              borderRadius: "0 0 4px 4px",
+                              background: isSelected
+                                ? "linear-gradient(90deg, #008ECF 0%, #00C896 100%)"
+                                : "transparent",
+                              transition: "all 0.25s ease",
+                            }}
+                            className="card-top-accent group-hover:bg-gradient-to-r group-hover:from-[#008ECF] group-hover:to-[#00C896]"
+                          />
+
+                          {/* Modern Badge with Dot */}
                           {cat.badge && (
                             <span
                               style={{
                                 position: "absolute",
-                                top: 8,
-                                right: 8,
+                                top: 10,
+                                right: 10,
                                 background: "#ECFDF5",
                                 color: "#059669",
                                 fontSize: "0.62rem",
                                 fontWeight: 800,
-                                padding: "2px 6px",
-                                borderRadius: 4,
-                                border: "1px solid rgba(5,150,105,0.2)",
+                                padding: "2px 7px",
+                                borderRadius: 9999,
+                                border: "1px solid rgba(16, 185, 129, 0.25)",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 4,
+                                letterSpacing: "0.02em",
+                                textTransform: "uppercase",
                               }}
                             >
+                              <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#10B981" }} />
                               {cat.badge}
                             </span>
                           )}
 
-                          {/* 56px Clean Icon */}
+                          {/* 70px Dedicated Icon Squircle Container */}
                           <div
-                            className="service-card__icon"
                             style={{
-                              width: 56,
-                              height: 56,
+                              width: 70,
+                              height: 70,
+                              borderRadius: 16,
+                              background: isSelected
+                                ? "rgba(0, 142, 207, 0.12)"
+                                : `color-mix(in srgb, ${cat.color || "#008ECF"} 8%, transparent)`,
+                              border: `1px solid color-mix(in srgb, ${cat.color || "#008ECF"} 16%, transparent)`,
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
                               flexShrink: 0,
+                              transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+                              boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.6)",
                             }}
+                            className="group-hover:scale-105 group-hover:shadow-sm"
                           >
                             <img
                               src={cat.iconUrl}
                               alt={cat.title}
+                              loading="lazy"
+                              decoding="async"
                               style={{
-                                width: "100%",
-                                height: "100%",
+                                width: 52,
+                                height: 52,
                                 objectFit: "contain",
+                                filter: "drop-shadow(0 3px 6px rgba(0, 0, 0, 0.08))",
+                                transition: "transform 0.22s ease",
                               }}
+                              className="group-hover:scale-110"
                             />
                           </div>
 
-                          <h3
-                            className="service-card__label"
-                            style={{
-                              fontSize: "15px",
-                              fontWeight: 600,
-                              color: "var(--text)",
-                              margin: 0,
-                              lineHeight: 1.3,
-                              letterSpacing: "-0.01em",
-                              textAlign: "center",
-                              maxWidth: 120,
-                              wordBreak: "break-word",
-                            }}
-                          >
-                            {cat.title}
-                          </h3>
+                          {/* Label & Micro-Action */}
+                          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, width: "100%", marginTop: 8 }}>
+                            <h3
+                              style={{
+                                fontSize: "0.88rem",
+                                fontWeight: 700,
+                                color: isSelected ? "#008ECF" : "var(--text)",
+                                margin: 0,
+                                lineHeight: 1.25,
+                                letterSpacing: "-0.01em",
+                                textAlign: "center",
+                                maxWidth: 130,
+                                wordBreak: "break-word",
+                                transition: "color 0.2s ease",
+                              }}
+                            >
+                              {cat.title}
+                            </h3>
+                            
+                            {/* Subtle micro-hint "Explore →" that highlights on hover */}
+                            <span
+                              style={{
+                                fontSize: "0.68rem",
+                                fontWeight: 600,
+                                color: isSelected ? "#008ECF" : "var(--text-muted, #94A3B8)",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 2,
+                                opacity: isSelected ? 1 : 0.75,
+                                transition: "all 0.2s ease",
+                              }}
+                              className="group-hover:text-[#008ECF] group-hover:opacity-100 group-hover:translate-x-0.5"
+                            >
+                              Explore <span style={{ fontSize: "0.75rem", lineHeight: 1 }}>→</span>
+                            </span>
+                          </div>
                         </motion.div>
                       );
                     })}
@@ -2525,6 +2588,8 @@ interface ViewingPackage {
                               <img
                                 src={item.iconUrl}
                                 alt={item.title}
+                                loading="lazy"
+                                decoding="async"
                                 style={{
                                   maxHeight: "100%",
                                   maxWidth: "100%",
@@ -2661,6 +2726,8 @@ interface ViewingPackage {
                               <img
                                 src={item.bannerUrl}
                                 alt={item.title}
+                                loading="lazy"
+                                decoding="async"
                                 style={{
                                   width: "100%",
                                   height: "100%",

@@ -1,19 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import * as React from "react";
 
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
+      initial={{ opacity: 0, y: 8, filter: "blur(2px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       transition={{
-        duration: 0.34,
-        ease: [0.22, 1, 0.36, 1], // Smooth luxury automotive cubic-bezier
+        duration: 0.32,
+        ease: [0.22, 1, 0.36, 1],
       }}
-      style={{ width: "100%", minHeight: "100vh" }}
+      style={{ minHeight: "100%", display: "flex", flexDirection: "column", flex: 1 }}
     >
       {children}
     </motion.div>

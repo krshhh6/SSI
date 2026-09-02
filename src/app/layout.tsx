@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import AnimatePresenceProvider from "@/components/AnimatePresenceProvider";
 import InitialLoader from "@/components/InitialLoader";
+import NavigationProgress from "@/components/NavigationProgress";
 
 export const viewport: Viewport = {
   themeColor: [
@@ -81,6 +83,9 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning>
+        <Suspense fallback={null}>
+          <NavigationProgress />
+        </Suspense>
         <InitialLoader />
         <ThemeProvider>
           <CartProvider>

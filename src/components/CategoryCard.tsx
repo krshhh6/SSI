@@ -24,9 +24,7 @@ export function CategoryCard({
   onClick,
 }: CategoryCardProps) {
   return (
-    <motion.div
-      whileHover={{ y: -4, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+    <div
       onClick={onClick}
       style={{
         width: 157,
@@ -47,9 +45,11 @@ export function CategoryCard({
         boxSizing: "border-box",
         userSelect: "none",
         overflow: "hidden",
-        transition: "all 0.24s cubic-bezier(0.16, 1, 0.3, 1)",
+        touchAction: "manipulation",
+        WebkitTapHighlightColor: "transparent",
+        transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
-      className="shrink-0 group"
+      className="shrink-0 group hover:-translate-y-1 active:scale-[0.98]"
     >
       {/* Subtle Top Ambient Glow Accent Bar */}
       <div
@@ -168,7 +168,7 @@ export function CategoryCard({
           Explore <span style={{ fontSize: "0.72rem", lineHeight: 1 }}>→</span>
         </span>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

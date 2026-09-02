@@ -171,6 +171,7 @@ export default function Navbar() {
   const handleLinkClick = (url: string, e?: React.MouseEvent) => {
     setSheetOpen(false);
     setActiveDropdown(null);
+
     if (url === "/") {
       if (pathname === "/") {
         if (e) e.preventDefault();
@@ -180,13 +181,25 @@ export default function Navbar() {
       }
       return;
     }
-    if (url.startsWith("/#")) {
+
+    if (url.startsWith("/#") || url.startsWith("#")) {
       if (e) e.preventDefault();
-      const anchor = url.split("#")[1];
+      const anchor = url.replace(/^\/?#/, "");
+
+      const performScroll = () => {
+        const el = document.getElementById(anchor);
+        if (el) {
+          const navOffset = 70;
+          const targetY = el.getBoundingClientRect().top + window.pageYOffset - navOffset;
+          window.scrollTo({ top: targetY, behavior: "smooth" });
+        }
+      };
+
       if (pathname === "/") {
-        document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth" });
+        // Wait 60ms for Radix Sheet to unmount overlay and restore body scroll
+        setTimeout(performScroll, 60);
       } else {
-        router.push(url);
+        router.push(`/#${anchor}`);
       }
       return;
     }
@@ -396,10 +409,12 @@ export default function Navbar() {
                                 <Link
                                   key={subItem.title}
                                   href={subItem.url}
+                                  prefetch={true}
                                   onClick={() => setActiveDropdown(null)}
                                   style={{
                                     display: 'flex',
                                     alignItems: 'flex-start',
+                                    touchAction: 'manipulation',
                                     gap: 12,
                                     padding: '10px 12px',
                                     borderRadius: 10,
@@ -647,7 +662,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     aria-label="Open menu"
-                    style={{ width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text)', background: 'transparent', border: 0, cursor: 'pointer' }}
+                    style={{ width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text)', background: 'transparent', border: 0, cursor: 'pointer', touchAction: 'manipulation' }}
                   >
                     <IconMenu2 size={24} className="text-slate-800" />
                   </button>
@@ -680,8 +695,9 @@ export default function Navbar() {
                       >
                         <Link
                           href="/"
+                          prefetch={true}
                           onClick={(e) => handleLinkClick("/", e)}
-                          style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}
+                          style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none', touchAction: 'manipulation' }}
                         >
                           <div style={{
                             width: 36, height: 36, borderRadius: 9, padding: 4,
@@ -719,7 +735,7 @@ export default function Navbar() {
                               >
                                 <Accordion type="single" collapsible className="w-full">
                                   <AccordionItem value={item.title} style={{ borderBottom: '1px solid #F1F5F9' }}>
-                                    <AccordionTrigger style={{ padding: '12px 0', fontSize: '1.02rem', fontWeight: 700, color: isCurrent ? '#008ECF' : '#0F172A', fontFamily: 'Outfit, sans-serif' }}>
+                                    <AccordionTrigger style={{ padding: '12px 0', fontSize: '1.02rem', fontWeight: 700, color: isCurrent ? '#008ECF' : '#0F172A', fontFamily: 'Outfit, sans-serif', touchAction: 'manipulation' }}>
                                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                                         {isCurrent && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#008ECF' }} />}
                                         <span>{item.title}</span>
@@ -730,11 +746,13 @@ export default function Navbar() {
                                         {item.items.map((subItem) => (
                                           <Link
                                             key={subItem.title}
+                                            prefetch={true}
                                             style={{
                                               display: 'flex', alignItems: 'center', gap: 12,
                                               borderRadius: 8, padding: '8px 10px', textDecoration: 'none',
                                               background: pathname === subItem.url ? 'rgba(0,142,207,0.06)' : '#F8FAFC',
                                               border: `1px solid ${pathname === subItem.url ? 'rgba(0,142,207,0.25)' : '#E2E8F0'}`,
+                                              touchAction: 'manipulation',
                                               transition: 'all 0.18s ease',
                                             }}
                                             href={subItem.url}
@@ -772,12 +790,14 @@ export default function Navbar() {
                             >
                               <Link
                                 href={item.url}
+                                prefetch={true}
                                 onClick={(e) => handleLinkClick(item.url, e)}
                                 style={{
                                   fontSize: '1.02rem', fontWeight: 700,
                                   color: isCurrent ? '#008ECF' : '#0F172A',
                                   fontFamily: 'Outfit, sans-serif', padding: '12px 0',
                                   textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10,
+                                  touchAction: 'manipulation',
                                   transition: 'color 0.18s ease',
                                 }}
                               >

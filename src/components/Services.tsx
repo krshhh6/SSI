@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
@@ -2235,16 +2236,22 @@ interface ViewingPackage {
                       const isSelected = selectedCategory === cat.title;
 
                       return (
-                        <motion.div
+                        <Link
                           key={cat.id}
-                          className="category-card-item group"
-                          whileHover={{ y: -4, scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={() => {
+                          href={`/services/${cat.id}`}
+                          prefetch={true}
+                          className="category-card-item group hover:-translate-y-1 active:scale-[0.98]"
+                          onClick={(e) => {
                             if (onCategorySelect) {
+                              e.preventDefault();
                               onCategorySelect(cat);
-                            } else {
-                              router.push(`/services/${cat.id}`);
+                            } else if (setSelectedCategory && !isDedicatedPage) {
+                              e.preventDefault();
+                              setSelectedCategory(cat.title);
+                              const target = document.getElementById("services");
+                              if (target) {
+                                target.scrollIntoView({ behavior: "smooth" });
+                              }
                             }
                           }}
                           style={{
@@ -2271,7 +2278,10 @@ interface ViewingPackage {
                             boxSizing: "border-box",
                             margin: 0,
                             overflow: "hidden",
-                            transition: "all 0.24s cubic-bezier(0.16, 1, 0.3, 1)",
+                            textDecoration: "none",
+                            touchAction: "manipulation",
+                            WebkitTapHighlightColor: "transparent",
+                            transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
                           }}
                         >
                           {/* Subtle Top Ambient Glow Accent Bar */}
@@ -2388,7 +2398,7 @@ interface ViewingPackage {
                               Explore <span style={{ fontSize: "0.75rem", lineHeight: 1 }}>→</span>
                             </span>
                           </div>
-                        </motion.div>
+                        </Link>
                       );
                     })}
                   </div>
@@ -2473,15 +2483,17 @@ interface ViewingPackage {
                         }}
                       >
                         {CURATED_SERVICES.map((item) => (
-                          <motion.div
+                          <div
                             key={item.title}
-                            className="curated-card-item"
-                            whileHover={{ y: -4, scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                            className="curated-card-item hover:-translate-y-1 active:scale-[0.98]"
                             onClick={() => {
                               const match = getCategoryByIdOrTitle(item.title);
-                              if (match) {
-                                router.push(`/services/${match.id}`);
+                              if (onCategorySelect && match) {
+                                onCategorySelect(match);
+                              } else if (match) {
+                                setSelectedCategory(match.title);
+                                if (!selectedCar) setIsCarModalOpen(true);
+                                document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
                               } else {
                                 setSelectedCategory(item.title);
                                 if (!selectedCar) setIsCarModalOpen(true);
@@ -2501,6 +2513,8 @@ interface ViewingPackage {
                               cursor: "pointer",
                               position: "relative",
                               boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
+                              touchAction: "manipulation",
+                              WebkitTapHighlightColor: "transparent",
                               transition: "all 0.2s ease",
                             }}
                           >
@@ -2554,7 +2568,7 @@ interface ViewingPackage {
                             <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text)", lineHeight: 1.2 }}>
                               {item.title}
                             </span>
-                          </motion.div>
+                          </div>
                         ))}
                       </motion.div>
                     </div>
@@ -2638,17 +2652,16 @@ interface ViewingPackage {
                         }}
                       >
                         {SUMMER_SERVICES.map((item) => (
-                          <motion.div
+                          <div
                             key={item.title}
-                            className="summer-card-item"
-                            whileHover={{ y: -4, scale: 1.01 }}
-                            whileTap={{ scale: 0.98 }}
+                            className="summer-card-item hover:-translate-y-1 active:scale-[0.98]"
                             onClick={() => {
                               const match = getCategoryByIdOrTitle(item.categoryId || item.title);
                               if (onCategorySelect && match) {
                                 onCategorySelect(match);
                               } else if (match) {
                                 setSelectedCategory(match.title);
+                                document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
                               } else {
                                 router.push(`/services/${item.categoryId}`);
                               }
@@ -2659,6 +2672,9 @@ interface ViewingPackage {
                               display: "flex",
                               flexDirection: "column",
                               cursor: "pointer",
+                              touchAction: "manipulation",
+                              WebkitTapHighlightColor: "transparent",
+                              transition: "all 0.2s ease",
                             }}
                           >
                             {/* Top Cyan Tropical Banner Card */}
@@ -2707,7 +2723,7 @@ interface ViewingPackage {
                                 {item.title}
                               </h4>
                             </div>
-                          </motion.div>
+                          </div>
                         ))}
                       </motion.div>
                     </div>
@@ -2737,16 +2753,16 @@ interface ViewingPackage {
                   }}
                 >
                   {CURATED_SERVICES.map((item) => (
-                    <motion.div
+                    <div
                       key={item.title}
-                      whileHover={{ y: -4, scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      className="hover:-translate-y-1 active:scale-[0.98]"
                       onClick={() => {
                         const match = getCategoryByIdOrTitle(item.categoryId || item.title);
                         if (onCategorySelect && match) {
                           onCategorySelect(match);
                         } else if (match) {
                           setSelectedCategory(match.title);
+                          document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
                         } else {
                           router.push(`/services/${item.categoryId}`);
                         }
@@ -2763,6 +2779,8 @@ interface ViewingPackage {
                         cursor: "pointer",
                         position: "relative",
                         boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
+                        touchAction: "manipulation",
+                        WebkitTapHighlightColor: "transparent",
                         transition: "all 0.2s ease",
                       }}
                     >
@@ -2808,7 +2826,7 @@ interface ViewingPackage {
                       <span style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text)", lineHeight: 1.2 }}>
                         {item.title}
                       </span>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -2835,16 +2853,16 @@ interface ViewingPackage {
                   }}
                 >
                   {SUMMER_SERVICES.map((item) => (
-                    <motion.div
+                    <div
                       key={item.title}
-                      whileHover={{ y: -4, scale: 1.01 }}
-                      whileTap={{ scale: 0.98 }}
+                      className="hover:-translate-y-1 active:scale-[0.98]"
                       onClick={() => {
                         const match = getCategoryByIdOrTitle(item.categoryId || item.title);
                         if (onCategorySelect && match) {
                           onCategorySelect(match);
                         } else if (match) {
                           setSelectedCategory(match.title);
+                          document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
                         } else {
                           router.push(`/services/${item.categoryId}`);
                         }
@@ -2856,6 +2874,9 @@ interface ViewingPackage {
                         overflow: "hidden",
                         cursor: "pointer",
                         boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
+                        touchAction: "manipulation",
+                        WebkitTapHighlightColor: "transparent",
+                        transition: "all 0.2s ease",
                       }}
                     >
                       <div
@@ -2900,7 +2921,7 @@ interface ViewingPackage {
                           {item.desc}
                         </p>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </div>

@@ -51,8 +51,22 @@ const FALLBACK_REVIEWS: ReviewData[] = [
 ];
 
 const CAR_BRANDS = [
-  "Maruti Suzuki", "Hyundai", "Tata Motors", "Mahindra", "Toyota", "Honda",
-  "Kia", "Volkswagen", "Skoda", "MG Motors", "Renault", "BMW", "Mercedes-Benz", "Audi", "Ford", "Jeep"
+  { name: "Maruti Suzuki", slug: "maruti-suzuki" },
+  { name: "Hyundai", slug: "hyundai" },
+  { name: "Tata Motors", slug: "tata-motors" },
+  { name: "Mahindra", slug: "mahindra" },
+  { name: "Toyota", slug: "toyota" },
+  { name: "Honda", slug: "honda" },
+  { name: "Kia", slug: "kia" },
+  { name: "Volkswagen", slug: "volkswagen" },
+  { name: "Skoda", slug: "skoda" },
+  { name: "MG Motors", slug: "mg-motors" },
+  { name: "Renault", slug: "renault" },
+  { name: "BMW", slug: "bmw" },
+  { name: "Mercedes-Benz", slug: "mercedes-benz" },
+  { name: "Audi", slug: "audi" },
+  { name: "Ford", slug: "ford" },
+  { name: "Jeep", slug: "jeep" },
 ];
 
 export default function Reviews() {
@@ -164,27 +178,33 @@ export default function Reviews() {
             animation: "marquee-straight-reverse 35s linear infinite",
           }}>
             {[0, 1].map((key) => (
-              <div key={key} style={{ display: "flex", alignItems: "center", gap: 12, paddingRight: 12 }}>
-                {CAR_BRANDS.map((brandName) => (
-                  <div key={brandName} style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "7px 18px",
-                    borderRadius: 8,
-                    background: "var(--card)",
-                    border: "1px solid var(--border)",
-                    flexShrink: 0,
-                    transition: "all 0.2s ease",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
-                  }}>
-                    <span style={{
-                      fontSize: "0.8rem",
-                      fontWeight: 800,
-                      letterSpacing: "0.05em",
-                      color: "var(--text-secondary)",
-                      textTransform: "uppercase",
-                    }}>{brandName}</span>
+              <div key={key} style={{ display: "flex", alignItems: "center", gap: 40, paddingRight: 40 }}>
+                {CAR_BRANDS.map((brand) => (
+                  <div
+                    key={brand.slug}
+                    title={brand.name}
+                    className="brand-logo-item"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                      cursor: "pointer",
+                      padding: "6px 10px",
+                    }}
+                  >
+                    <img
+                      src={`/brand-logos/${brand.slug}.svg?v=vibrant_v3`}
+                      alt={brand.name}
+                      loading="lazy"
+                      style={{
+                        height: 38,
+                        maxWidth: 72,
+                        width: "auto",
+                        objectFit: "contain",
+                        display: "block",
+                      }}
+                    />
                   </div>
                 ))}
               </div>

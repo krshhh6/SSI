@@ -2394,56 +2394,7 @@ interface ViewingPackage {
                   </div>
                 )}
 
-                {/* Miles Roadside Assistance Red Promo Banner */}
-                <div
-                  style={{
-                    background: "linear-gradient(135deg, #005691 0%, #008ECF 100%)",
-                    borderRadius: 14,
-                    padding: "16px 20px",
-                    color: "white",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 12,
-                    boxShadow: "0 8px 24px rgba(0, 142, 207, 0.3)",
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: "1.35rem", fontWeight: 900, fontFamily: "'Plus Jakarta Sans', sans-serif", marginBottom: 2, lineHeight: 1.1 }}>
-                      Miles RSA
-                    </div>
-                    <div style={{ fontSize: "0.82rem", fontWeight: 600, opacity: 0.95, lineHeight: 1.3 }}>
-                      Free Roadside Assistance & 24×7 Emergency Towing
-                    </div>
-                  </div>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                      setSelectedCategory("Road Side Assistance");
-                      if (!selectedCar) setIsCarModalOpen(true);
-                    }}
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: "50%",
-                      background: "white",
-                      color: "#008ECF",
-                      border: "none",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                      flexShrink: 0,
-                    }}
-                    aria-label="Request Roadside Assistance"
-                  >
-                    <ArrowRight size={20} />
-                  </motion.button>
-                </div>
+
 
                 {/* Curated Custom Services Section displaying 4 parts at a time with > navigation */}
                 <div>

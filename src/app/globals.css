@@ -805,8 +805,8 @@ body::after {
 
 .categories-grid-container {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 135px), 1fr)) !important;
-  gap: 14px !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 16px !important;
   width: 100% !important;
   box-sizing: border-box !important;
 }
@@ -881,23 +881,23 @@ body::after {
   }
 }
 
-/* Ultra-Wide Screens (>= 1440px): auto-fill columns */
+/* Ultra-Wide Screens (>= 1440px): 4-column balanced grid (4x3 = 12) */
 @media (min-width: 1440px) {
   .categories-grid-container {
     display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
-    gap: 16px !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 18px !important;
     width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
   }
 }
 
-/* Standard Laptops & Desktop Monitors (1024px – 1439px): auto-fill columns */
+/* Standard Laptops & Desktop Monitors (1024px – 1439px): 4-column balanced grid (4x3 = 12) */
 @media (min-width: 1024px) and (max-width: 1439px) {
   .categories-grid-container {
     display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     gap: 14px !important;
     width: 100% !important;
     min-width: 0 !important;
@@ -905,7 +905,7 @@ body::after {
   }
 }
 
-/* Tablet (768px – 1023px): auto-fill columns, stacked form */
+/* Tablet (768px – 1023px): 3-column balanced grid (3x4 = 12) */
 @media (min-width: 768px) and (max-width: 1023px) {
   .gomechanic-services-layout {
     display: grid !important;
@@ -915,7 +915,7 @@ body::after {
 
   .categories-grid-container {
     display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)) !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 14px !important;
     width: 100% !important;
     min-width: 0 !important;
@@ -1149,10 +1149,17 @@ body::after {
 
   .categories-grid-container {
     display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 125px), 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 10px !important;
     width: 100% !important;
     min-width: 0 !important;
+  }
+
+  @media (min-width: 480px) and (max-width: 767px) {
+    .categories-grid-container {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 12px !important;
+    }
   }
 
   .category-card-item {
@@ -1605,5 +1612,13 @@ body::after {
   height: 0 !important;
 }
 
+/* Car Brand Partner Marquee Floating Logos */
+.brand-logo-item {
+  transition: transform 0.25s ease;
+  opacity: 1;
+}
 
+.brand-logo-item:hover {
+  transform: scale(1.18);
+}
 

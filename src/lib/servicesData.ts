@@ -110,7 +110,19 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
 export function getCategoryByIdOrTitle(slugOrTitle: string): ServiceCategory | undefined {
   if (!slugOrTitle) return undefined;
   const lower = slugOrTitle.toLowerCase().trim();
-  return SERVICE_CATEGORIES.find(
+  const direct = SERVICE_CATEGORIES.find(
     (c) => c.id.toLowerCase() === lower || c.title.toLowerCase() === lower
+  );
+  if (direct) return direct;
+
+  // Match normalized slug variations (e.g., clutch-body-parts -> clutch-body)
+  const clean = (str: string) => str.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const target = clean(slugOrTitle);
+  return SERVICE_CATEGORIES.find(
+    (c) =>
+      clean(c.id) === target ||
+      clean(c.title) === target ||
+      clean(c.id).includes(target) ||
+      target.includes(clean(c.id))
   );
 }

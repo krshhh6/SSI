@@ -1790,7 +1790,6 @@ interface ViewingPackage {
                   key={tab}
                   onClick={() => {
                     setActiveTab(idx);
-                    setSelectedCategory(null);
                   }}
                   style={{
                     position: "relative",
@@ -2245,13 +2244,6 @@ interface ViewingPackage {
                             if (onCategorySelect) {
                               e.preventDefault();
                               onCategorySelect(cat);
-                            } else if (setSelectedCategory && !isDedicatedPage) {
-                              e.preventDefault();
-                              setSelectedCategory(cat.title);
-                              const target = document.getElementById("services");
-                              if (target) {
-                                target.scrollIntoView({ behavior: "smooth" });
-                              }
                             }
                           }}
                           style={{
@@ -2487,16 +2479,13 @@ interface ViewingPackage {
                             key={item.title}
                             className="curated-card-item hover:-translate-y-1 active:scale-[0.98]"
                             onClick={() => {
-                              const match = getCategoryByIdOrTitle(item.title);
+                              const match = getCategoryByIdOrTitle(item.title) || getCategoryByIdOrTitle(item.categoryId);
                               if (onCategorySelect && match) {
                                 onCategorySelect(match);
                               } else if (match) {
-                                setSelectedCategory(match.title);
-                                if (!selectedCar) setIsCarModalOpen(true);
-                                document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                                router.push(`/services/${match.id}`);
                               } else {
-                                setSelectedCategory(item.title);
-                                if (!selectedCar) setIsCarModalOpen(true);
+                                router.push(`/services/${item.categoryId || "car-services"}`);
                               }
                             }}
                             style={{
@@ -2660,10 +2649,9 @@ interface ViewingPackage {
                               if (onCategorySelect && match) {
                                 onCategorySelect(match);
                               } else if (match) {
-                                setSelectedCategory(match.title);
-                                document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                                router.push(`/services/${match.id}`);
                               } else {
-                                router.push(`/services/${item.categoryId}`);
+                                router.push(`/services/${item.categoryId || "ac-service"}`);
                               }
                             }}
                             style={{
@@ -2761,8 +2749,7 @@ interface ViewingPackage {
                         if (onCategorySelect && match) {
                           onCategorySelect(match);
                         } else if (match) {
-                          setSelectedCategory(match.title);
-                          document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                          router.push(`/services/${match.id}`);
                         } else {
                           router.push(`/services/${item.categoryId}`);
                         }
@@ -2861,8 +2848,7 @@ interface ViewingPackage {
                         if (onCategorySelect && match) {
                           onCategorySelect(match);
                         } else if (match) {
-                          setSelectedCategory(match.title);
-                          document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                          router.push(`/services/${match.id}`);
                         } else {
                           router.push(`/services/${item.categoryId}`);
                         }

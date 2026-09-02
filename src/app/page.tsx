@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -20,16 +20,33 @@ const Contact = dynamic(() => import("@/components/Contact"), {
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const isNavigatingToTopRef = useRef(false);
+
+  useEffect(() => {
+    const handleResetHome = () => {
+      isNavigatingToTopRef.current = true;
+      setSelectedCategory(null);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.addEventListener("resetHome", handleResetHome);
+    return () => window.removeEventListener("resetHome", handleResetHome);
+  }, []);
 
   useEffect(() => {
     if (selectedCategory) {
       // Scroll to top of the window when a category is selected
       window.scrollTo({ top: 0, behavior: "instant" });
     } else {
-      // Scroll back to the services section when coming back to home
-      const servicesSection = document.getElementById("services");
-      if (servicesSection) {
-        servicesSection.scrollIntoView({ behavior: "instant" });
+      if (isNavigatingToTopRef.current) {
+        isNavigatingToTopRef.current = false;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        // Scroll back to the services section when coming back from inside services
+        const servicesSection = document.getElementById("services");
+        if (servicesSection) {
+          servicesSection.scrollIntoView({ behavior: "instant" });
+        }
       }
     }
   }, [selectedCategory]);

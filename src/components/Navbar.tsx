@@ -173,6 +173,9 @@ export default function Navbar() {
     setActiveDropdown(null);
 
     if (url === "/") {
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("resetHome"));
+      }
       if (pathname === "/") {
         if (e) e.preventDefault();
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -261,8 +264,9 @@ export default function Navbar() {
             <div className="navbar-logo-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
               <Link
                 href="/"
+                prefetch={true}
                 onClick={(e) => handleLinkClick("/", e)}
-                style={{ display: 'flex', alignItems: 'center', gap: 11, textDecoration: 'none', flexShrink: 0, cursor: 'pointer' }}
+                style={{ display: 'flex', alignItems: 'center', gap: 11, textDecoration: 'none', flexShrink: 0, cursor: 'pointer', touchAction: 'manipulation' }}
               >
                 <div style={{
                   width: 36,

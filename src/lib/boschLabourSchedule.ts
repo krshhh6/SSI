@@ -15,7 +15,7 @@ export interface ServicePackage {
   note?: string;
   freePickup?: boolean;
   thumbnail: string;
-  originalPrice: number;
+  originalPrice?: number;
   basePrice: number;
   summerPrice?: number;
   summerDiscount?: string;
@@ -1091,7 +1091,6 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           warranty: "Mirror Gloss Finish",
           recommendedInterval: "Every 6 Months for Paint Longevity",
           thumbnail: "/summer/rubbing_polishing.png",
-          originalPrice: Math.round(rubbingBase * 1.3),
           basePrice: rubbingBase,
           checklist: [
             "Multi-Stage Rotary Machine Compound Rubbing",
@@ -1114,7 +1113,6 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           warranty: "6 Months Paint Warranty",
           recommendedInterval: "Before Summer or Monsoon Season",
           thumbnail: "/packages/meguiars_teflon_coating.png",
-          originalPrice: Math.round(teflonBase * 1.3),
           basePrice: teflonBase,
           checklist: [
             "Complete Surface Clay-Bar Decontamination",
@@ -1137,7 +1135,6 @@ export function buildSegmentPackages(segmentId: BoschSegmentId = "1.2"): Record<
           warranty: "2 Years Official Warranty",
           recommendedInterval: "Ultimate Long-Term Paint Armor",
           thumbnail: "/packages/meguiars_ceramic_coating.png",
-          originalPrice: Math.round(ceramicBase * 1.3),
           basePrice: ceramicBase,
           checklist: [
             "Full Multi-Stage Paint Correction & Surface Levelling",

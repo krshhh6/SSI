@@ -853,10 +853,7 @@ const DETAILING_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = 
         warranty: "3 Years Warranty (Includes 2 Free Top-ups)",
         recommendedInterval: "Ultimate Hydrophobic & UV Shield",
         thumbnail: "/packages/ceramic_coating_bottle.png",
-        originalPrice: 19999,
         basePrice: 14999,
-        summerPrice: 12999,
-        summerDiscount: "Save ₹2,000 Extra",
         isRecommended: true,
         checklist: [
           "3-Stage Paint Correction & Swirl Removal",
@@ -879,7 +876,6 @@ const DETAILING_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = 
         warranty: "2 Years Paint Warranty",
         recommendedInterval: "Deep Gloss & Hydrophobic Shield",
         thumbnail: "/packages/meguiars_ceramic_coating.png",
-        originalPrice: 16500,
         basePrice: 12499,
         isRecommended: false,
         checklist: [
@@ -906,7 +902,6 @@ const DETAILING_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = 
         warranty: "6 Months Warranty",
         recommendedInterval: "Every 6 Months (Recommended)",
         thumbnail: "/packages/meguiars_teflon_coating.png",
-        originalPrice: 6500,
         basePrice: 4999,
         isRecommended: false,
         checklist: [
@@ -928,7 +923,6 @@ const DETAILING_PACKAGES: { sectionTitle: string; packages: PackageItem[] }[] = 
         warranty: "3 Months Gloss Guarantee",
         recommendedInterval: "Pre-Monsoon & Post-Summer",
         thumbnail: "/packages/teflon_polishing_buffer.png",
-        originalPrice: 3999,
         basePrice: 2999,
         isRecommended: false,
         checklist: [
@@ -2156,7 +2150,7 @@ interface ViewingPackage {
                                     style={{ display: "flex", flexDirection: "column", gap: 3 }}
                                   >
                                     <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-                                      {pkg.originalPrice && (
+                                      {pkg.originalPrice && pkg.originalPrice > pkg.basePrice && (
                                         <span style={{ fontSize: "0.88rem", color: "#888", textDecoration: "line-through" }}>
                                           Rs. {pkg.originalPrice}
                                         </span>

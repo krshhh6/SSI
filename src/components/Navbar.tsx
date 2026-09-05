@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { motion, useScroll, useMotionValueEvent } from "motion/react";
+import { motion } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
@@ -130,16 +130,18 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const { cartCount } = useCart();
   const navRef = React.useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = React.useState(false);
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    if (latest > 25 && !isScrolled) {
-      setIsScrolled(true);
-    } else if (latest <= 10 && isScrolled) {
-      setIsScrolled(false);
-    }
-  });
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const scrollPos = window.scrollY || document.documentElement.scrollTop || 0;
+      setIsScrolled(scrollPos > 20);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Close dropdown on click outside or route change
   React.useEffect(() => {
@@ -227,17 +229,18 @@ export default function Navbar() {
         {/* Animated capsule — single motion.div, all transitions owned here */}
         <motion.div
           ref={navRef}
+          initial={false}
           animate={{
             width: isScrolled ? 'min(92%, 1160px)' : '100%',
             y: isScrolled ? 16 : 0,
             borderRadius: isScrolled ? 9999 : 0,
-            backdropFilter: isScrolled ? 'blur(12px) saturate(180%)' : 'blur(0px)',
+            backdropFilter: isScrolled ? 'blur(16px) saturate(180%)' : 'blur(0px)',
             backgroundColor: isScrolled ? 'rgba(255,255,255,0.92)' : 'rgba(255,255,255,1)',
             boxShadow: isScrolled
               ? '0 0 24px rgba(34,42,53,0.06), 0 1px 1px rgba(0,0,0,0.05), 0 0 0 1px rgba(34,42,53,0.04), 0 0 4px rgba(34,42,53,0.08), 0 16px 68px rgba(47,48,55,0.05), inset 0 1px 0 rgba(255,255,255,0.9)'
               : '0 1px 0 rgba(0,0,0,0.08)',
           }}
-          transition={{ type: 'spring', stiffness: 200, damping: 50, mass: 1 }}
+          transition={{ type: 'spring', stiffness: 220, damping: 28 }}
           style={{
             pointerEvents: 'auto',
             height: 60,
